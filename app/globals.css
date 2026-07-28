@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0b0d;
+  --foreground: #ededed;
+  --accent: #2bbfc4;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-poppins);
+
+  /* People First brand palette (used by the About page + future content pages).
+     Tailwind v4 exposes each as a colour utility, e.g. bg-pf-purple or
+     text-pf-gold. This is the v4 equivalent of a tailwind.config
+     theme.extend.colors block. */
+  --color-pf-purple: #491557; /* hero / deep purple background */
+  --color-pf-plum: #4a1942; /* maroon/plum — Key Stats background */
+  --color-pf-magenta: #e0409a; /* primary pink/magenta CTA */
+  --color-pf-magenta-dark: #c22f83; /* magenta hover */
+  --color-pf-gold: #f5c518; /* "STATS" accent */
+  --color-pf-teal: #2dbe9e; /* LEARN accent */
+  --color-pf-orange: #f5a623; /* GROW accent */
+  --color-pf-lead: #7a5cf0; /* LEAD accent (purple) */
+  --color-pf-lavender: #ece7fb; /* light lavender container fill */
+}
+
+/* The off-canvas SideNav drawer parks itself just past the right edge
+   (`translate: 100%`), which would otherwise widen the document and let the
+   whole site scroll sideways on mobile. `clip` (not `hidden`) trims that
+   bleed WITHOUT turning the root into a scroll container, so the pages'
+   `position: sticky` swipe-over sections keep working. */
+html {
+  overflow-x: clip;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+  /* NOTE: do NOT set `transform-style: preserve-3d` (or `perspective`) here.
+     Either one makes <body> a containing block for fixed-position descendants,
+     which breaks the SideNav rail — it resolves `fixed` against the document
+     instead of the viewport and scrolls away with the page. The recede effects
+     don't need it: ScrollFx/PinnedRecede each apply their own
+     `perspective(1200px)` inside their own `transform`. */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Liveliness: keyframes ---- */
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* NOTE: Tailwind's -translate-x/y-1/2 uses the CSS `translate` property for
+   centering. These keyframes animate only `transform` (scale) so the two never
+   collide — otherwise the -50% offsets would stack and shift elements off-center. */
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+}
+
+/* ---- utility classes ---- */
+.animate-floaty {
+  animation: floaty 6s ease-in-out infinite;
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out both;
+}
+.animate-pop-in {
+  animation: pop-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-glow-pulse {
+  animation: glow-pulse 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-floaty,
+  .animate-fade-in-up,
+  .animate-pop-in,
+  .animate-glow-pulse {
+    animation: none;
+  }
+}

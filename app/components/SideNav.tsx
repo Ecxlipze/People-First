@@ -1,0 +1,240 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
+import { navItems } from "@/app/lib/nav";
+
+const DESKTOP_MIN = 1024; // Tailwind `lg`
+const EDGE_ZONE = 40; // px from the right edge that can start an opening drag
+const AXIS_LOCK = 8; // px of travel before we commit to horizontal vs vertical
+
+export default function SideNav() {
+  const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
+  const [open, setOpen] = useState(false);
+  // Live drag state. `x` is the offset in px (0 = fully open, w = fully
+  // closed) and `w` the drawer width it's measured against. null = not
+  // dragging. Width lives here (not just in the gesture ref) so render can
+  // derive the backdrop opacity without reading a ref mid-render.
+  const [drag, setDrag] = useState<{ x: number; w: number } | null>(null);
+
+  // Mutable gesture bookkeeping
+  const g = useRef({
+    active: false,
+    axis: "" as "" | "h" | "v",
+    startX: 0,
+    startY: 0,
+    base: 0,
+    width: 0,
+    tx: 0,
+  });
+
+  // Close whenever the route changes. Done as a render-phase adjustment
+  // (React's "adjusting state when a prop changes" pattern) rather than an
+  // effect, so the drawer is never painted open on the new page.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    if (open) setOpen(false);
+    if (drag) setDrag(null);
+  }
+
+  // `open` is read inside long-lived listeners; mirror it into a ref so the
+  // gesture effect can register once instead of re-subscribing on every change.
+  const openRef = useRef(open);
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
+
+  // Track the lg breakpoint so we only trap focus in the drawer on mobile —
+  // on desktop the rail is always on screen and must stay tabbable.
+  const [isDesktop, setIsDesktop] = useState(true);
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${DESKTOP_MIN}px)`);
+    const sync = () => setIsDesktop(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  // Lock background scrolling while the drawer is open (mobile only).
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    const onStart = (e: TouchEvent) => {
+      if (window.innerWidth >= DESKTOP_MIN) return;
+      const t = e.touches[0];
+      const isOpen = openRef.current;
+      const width = navRef.current?.offsetWidth || 280;
+      const canOpen = !isOpen && t.clientX > window.innerWidth - EDGE_ZONE;
+      if (!canOpen && !isOpen) return;
+      g.current = {
+        active: true,
+        axis: "",
+        startX: t.clientX,
+        startY: t.clientY,
+        base: isOpen ? 0 : width,
+        width,
+        tx: isOpen ? 0 : width,
+      };
+    };
+
+    const onMove = (e: TouchEvent) => {
+      const s = g.current;
+      if (!s.active) return;
+      const t = e.touches[0];
+      const dx = t.clientX - s.startX;
+      const dy = t.clientY - s.startY;
+
+      if (s.axis === "") {
+        if (Math.abs(dx) < AXIS_LOCK && Math.abs(dy) < AXIS_LOCK) return;
+        s.axis = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
+        // Vertical intent → let the page scroll; abandon the gesture.
+        if (s.axis === "v") {
+          s.active = false;
+          setDrag(null);
+          return;
+        }
+      }
+
+      if (s.axis === "h") {
+        e.preventDefault();
+        const tx = Math.max(0, Math.min(s.width, s.base + dx));
+        s.tx = tx;
+        setDrag({ x: tx, w: s.width });
+      }
+    };
+
+    const onEnd = () => {
+      const s = g.current;
+      // Only a committed horizontal drag decides open/closed.
+      if (s.active && s.axis === "h") {
+        setOpen(s.tx < s.width / 2);
+      }
+      s.active = false;
+      s.axis = "";
+      setDrag(null);
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchmove", onMove, { passive: false });
+    window.addEventListener("touchend", onEnd, { passive: true });
+    window.addEventListener("touchcancel", onEnd, { passive: true });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
+      window.removeEventListener("touchcancel", onEnd);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  const dragging = drag !== null;
+  const backdropOpacity = drag
+    ? Math.max(0, Math.min(1, (drag.w - drag.x) / (drag.w || 1)))
+    : open
+      ? 1
+      : 0;
+
+  return (
+    <>
+      {/* pull tab — affordance to open (hidden on desktop and while open/dragging) */}
+      <button
+        type="button"
+        aria-label="Open menu"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
+        className={`fixed right-0 top-1/2 z-[100] -translate-y-1/2 rounded-l-xl bg-white/90 py-4 pl-1.5 pr-1 text-zinc-700 shadow-md ring-1 ring-black/10 backdrop-blur-md transition-opacity lg:hidden ${
+          open || dragging ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+
+      {/* backdrop — opacity tracks the drag; tap to close */}
+      <div
+        onClick={() => setOpen(false)}
+        aria-hidden
+        style={{ opacity: backdropOpacity }}
+        className={`fixed inset-0 z-[95] bg-black/30 backdrop-blur-[2px] lg:hidden ${
+          dragging ? "" : "transition-opacity duration-300"
+        } ${backdropOpacity > 0 ? "" : "pointer-events-none"}`}
+      />
+
+      {/* nav panel: off-canvas drawer below lg, static floating rail on lg+ */}
+      <nav
+        ref={navRef}
+        aria-label="Primary"
+        /* Closed off-canvas drawer must not be reachable by keyboard or
+           screen readers; the desktop rail always stays interactive. */
+        inert={!isDesktop && !open && !dragging}
+        style={{ translate: drag ? `${drag.x}px 0` : undefined }}
+        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col justify-center gap-5 overflow-y-auto overscroll-contain rounded-l-2xl bg-white/95 pl-6 pr-5 shadow-2xl ring-1 ring-black/5 backdrop-blur-md lg:right-6 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:ring-0 lg:backdrop-blur-none ${
+          dragging ? "" : "transition-[translate] duration-300 ease-out"
+        } ${
+          dragging
+            ? ""
+            : open
+              ? "[translate:0_0]"
+              : "[translate:100%_0] lg:[translate:0_-50%]"
+        }`}
+      >
+        {navItems.map((item) => {
+          const active = pathname === item.href;
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className="group flex items-center justify-end gap-3"
+            >
+              {/* Label chip. Light, brand-tinted surface instead of a heavy
+                  black slab; the active item carries the magenta CTA colour.
+                  On the lg+ rail it's revealed on hover/focus only (including
+                  the active item) so the rail stays a clean row of icons — but
+                  it stays visible in the mobile drawer, where there's no hover
+                  and the icons alone wouldn't be identifiable. */}
+              <span
+                aria-hidden
+                className={`pointer-events-none whitespace-nowrap rounded-full px-3 py-1 text-right text-xs font-bold leading-tight tracking-wide shadow-sm ring-1 backdrop-blur-sm transition-all duration-200 lg:opacity-0 lg:[translate:-0.25rem_0] lg:group-hover:opacity-100 lg:group-hover:[translate:0_0] lg:group-focus-visible:opacity-100 lg:group-focus-visible:[translate:0_0] ${
+                  active
+                    ? "bg-pf-magenta/15 text-pf-magenta-dark ring-pf-magenta/30"
+                    : "bg-white/90 text-zinc-700 ring-black/5 lg:group-hover:text-pf-magenta-dark"
+                }`}
+              >
+                {item.label}
+              </span>
+              <Image
+                src={item.icon}
+                alt={item.label}
+                width={64}
+                height={64}
+                priority
+                className={`shrink-0 rounded-full transition-all duration-300 group-hover:scale-110 ${
+                  active
+                    ? "h-12 w-12 shadow-lg shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-14 lg:w-14"
+                    : "h-10 w-10 opacity-90 group-hover:opacity-100 lg:h-11 lg:w-11"
+                }`}
+              />
+            </Link>
+          );
+        })}
+      </nav>
+    </>
+  );
+}

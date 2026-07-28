@@ -1,0 +1,318 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import Image from "next/image";
+import * as Lucide from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { SECTORS, type Sector } from "@/app/components/ecosystem";
+import PinnedRecede from "@/app/components/PinnedRecede";
+
+function prefersReduced() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+
+function Icon({ name, className }: { name: string; className?: string }) {
+  const Cmp = (Lucide as unknown as Record<string, LucideIcon>)[name];
+  return Cmp ? <Cmp className={className} strokeWidth={1.75} /> : null;
+}
+
+/* Decorative background layer — the real design assets: the teal blob (with its
+   baked-in dotted texture + swoosh curves) bottom-left, the purple blob (flipped
+   to sit bottom-right), and the faceted paper-plane pairs in the top corners.
+   Purely aesthetic; sits behind the content and ignores pointer events. */
+function Decor() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      {/* teal blob + dotted texture, bottom-left corner (flipped from the
+          top-left source art) */}
+      <Image
+        src="/images/icons/blob3.png"
+        alt=""
+        width={739}
+        height={552}
+        className="absolute -bottom-2 -left-4 w-[42vw] max-w-[560px] -scale-y-100 select-none sm:-left-2"
+      />
+      {/* purple blob + dotted texture, bottom-right corner */}
+      <Image
+        src="/images/icons/blob4.png"
+        alt=""
+        width={859}
+        height={430}
+        className="absolute -bottom-2 -right-2 w-[46vw] max-w-[640px] select-none"
+      />
+      {/* paper-plane pair, top-left (blue + teal, pointing down) */}
+      <Image
+        src="/images/icons/left-plane.png"
+        alt=""
+        width={392}
+        height={353}
+        className="absolute left-6 top-8 w-24 select-none sm:left-12 sm:top-10 sm:w-32"
+      />
+      {/* paper-plane pair, top-right (teal + blue, pointing up) */}
+      <Image
+        src="/images/icons/right-plane.png"
+        alt=""
+        width={256}
+        height={227}
+        className="absolute right-6 top-6 w-20 select-none sm:right-12 sm:top-8 sm:w-24"
+      />
+    </div>
+  );
+}
+
+/* One orbiting node + its flanking label. Positioned by clock angle around the
+   hub using the same trig as RadialNav (left = sin·r, top = -cos·r). Labels sit
+   on the outer side (right half → label to the right, left half → to the left).
+   Desktop only — the orbit is decorative and needs room. */
+function OrbitNode({ s }: { s: Sector }) {
+  const rad = (s.angle * Math.PI) / 180;
+  const x = Math.sin(rad);
+  const y = -Math.cos(rad);
+  // Right half → label flanks right (outward, away from the copy). Left half →
+  // label stacks centred (flanking left would spill into the left copy column):
+  // above the node if it's in the top arc, below if in the bottom arc.
+  let placement: string;
+  if (x > 0.34) {
+    placement = "left-full ml-3 top-1/2 -translate-y-1/2 text-left";
+  } else if (y < 0) {
+    placement = "bottom-full mb-2 left-1/2 -translate-x-1/2 text-center";
+  } else {
+    placement = "top-full mt-2 left-1/2 -translate-x-1/2 text-center";
+  }
+  return (
+    <div
+      data-node
+      className="absolute -translate-x-1/2 -translate-y-1/2"
+      style={{
+        left: `calc(50% + ${x.toFixed(4)} * var(--orbit-r))`,
+        top: `calc(50% + ${y.toFixed(4)} * var(--orbit-r))`,
+        opacity: 0,
+        willChange: "transform, opacity",
+      }}
+    >
+      <div className="relative flex items-center justify-center">
+        <span
+          className="flex h-16 w-16 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-8px_rgba(20,20,50,0.5)] xl:h-[4.75rem] xl:w-[4.75rem]"
+          style={{ backgroundColor: s.color }}
+        >
+          <Icon name={s.icon} className="h-7 w-7 xl:h-8 xl:w-8" />
+        </span>
+
+        <div className={`absolute w-36 ${placement}`}>
+          <p
+            className="text-sm font-bold leading-tight"
+            style={{ color: s.color }}
+          >
+            {s.label}
+          </p>
+          <p className="mt-0.5 text-xs leading-tight text-zinc-500">
+            {s.tagline}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Ecosystem section (6). Swipes up over the pinned Testimonials section (5) —
+   outer track carries the negative margin + rounded opaque bg + upward shadow
+   (the swipe-over recipe). PinnedRecede pins it too. Left column of copy, right
+   column an orbit of sector nodes around a People First hub (desktop); the
+   sectors stack as a legend on mobile. Content scrubs in as the block rises. */
+export default function EcosystemShowcase() {
+  const leftRef = useRef<HTMLDivElement>(null);
+  const orbitRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const left = leftRef.current;
+    const orbit = orbitRef.current;
+    if (!left || !orbit) return;
+
+    const leftItems = Array.from(
+      left.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
+    const nodes = Array.from(
+      orbit.querySelectorAll<HTMLElement>("[data-node], [data-hub]"),
+    );
+
+    if (prefersReduced()) {
+      [...leftItems, ...nodes].forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      return;
+    }
+
+    let raf = 0;
+    const update = () => {
+      const vh = window.innerHeight;
+
+      leftItems.forEach((el, i) => {
+        const top = el.getBoundingClientRect().top;
+        const p = clamp01((vh * 0.9 - top - i * 12) / (vh * 0.45));
+        el.style.opacity = String(p);
+        el.style.transform = `translateY(${lerp(34, 0, p)}px)`;
+      });
+
+      // orbit nodes pop in from the centre, staggered around the ring.
+      const oTop = orbit.getBoundingClientRect().top;
+      nodes.forEach((el, i) => {
+        const p = clamp01((vh * 0.88 - oTop - i * 40) / (vh * 0.4));
+        el.style.opacity = String(p);
+        el.style.transform = `scale(${lerp(0.4, 1, p)})`;
+      });
+      raf = 0;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return (
+    <div className="relative z-50 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
+      <PinnedRecede className="relative flex items-center py-10 sm:py-12 md:min-h-screen">
+        {/* decorative layer — pinned+receding with the content */}
+        <Decor />
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-8 sm:px-12 lg:grid-cols-2 lg:gap-8 lg:px-16 lg:pr-32">
+          {/* ── left column ── */}
+          <div ref={leftRef} className="max-w-xl">
+            <h2
+              data-reveal
+              style={{ opacity: 0, willChange: "transform, opacity" }}
+              className="text-2xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-3xl lg:text-[2.4rem] lg:leading-[1.1]"
+            >
+              Welcome to a Compounding Corporate{" "}
+              <span className="text-[#3a6ea5]">Ecosystem</span> Built Around
+              You.
+            </h2>
+
+            <p
+              data-reveal
+              style={{ opacity: 0, willChange: "transform, opacity" }}
+              className="mt-4 text-sm leading-relaxed text-zinc-600 sm:text-base"
+            >
+              We bring together essential sectors into one collaborative
+              ecosystem, working in synergy to create lasting impact, shared
+              growth, and limitless opportunities for you.
+            </p>
+
+            {/* People First callout */}
+            <div
+              data-reveal
+              style={{ opacity: 0, willChange: "transform, opacity" }}
+              className="mt-6 flex items-start gap-3.5"
+            >
+              <span className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[radial-gradient(circle,#e7edf7_0%,#d7e2f2_100%)] p-2">
+                <Image
+                  src="/images/peoplefirst.svg"
+                  alt="People First"
+                  width={44}
+                  height={44}
+                  className="h-full w-full object-contain"
+                />
+              </span>
+              <div>
+                <h3 className="text-lg font-bold text-[#3a6ea5]">
+                  People First
+                </h3>
+                <p className="mt-0.5 text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                  We don&apos;t just build companies; we build a self-sustaining
+                  infrastructure where every sector accelerates the next.
+                </p>
+              </div>
+            </div>
+
+            {/* struggling-alone callout */}
+            <div
+              data-reveal
+              style={{ opacity: 0, willChange: "transform, opacity" }}
+              className="mt-6 border-l-2 border-[#2f7d78] pl-4"
+            >
+              <h3 className="text-xl font-bold text-[#2f7d78] sm:text-2xl">
+                No more struggling alone.
+              </h3>
+              <p className="mt-1 text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                Grow, scale, and thrive with a system designed to uplift you.
+              </p>
+            </div>
+          </div>
+
+          {/* ── right column: orbit (desktop) ── */}
+          <div
+            ref={orbitRef}
+            className="relative mx-auto hidden aspect-square w-full max-w-[450px] lg:block [--orbit-r:155px] xl:[--orbit-r:180px]"
+          >
+            {/* faint ring */}
+            <span
+              aria-hidden
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-zinc-200"
+              style={{
+                width: "calc(var(--orbit-r) * 2)",
+                height: "calc(var(--orbit-r) * 2)",
+              }}
+            />
+            {/* hub */}
+            <div
+              data-hub
+              className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-6 shadow-[0_18px_40px_-14px_rgba(15,61,102,0.7)] xl:h-32 xl:w-32"
+              style={{ opacity: 0, willChange: "transform, opacity" }}
+            >
+              <Image
+                src="/images/peoplefirst.svg"
+                alt="People First"
+                width={96}
+                height={96}
+                className="h-full w-full object-contain brightness-0 invert"
+              />
+            </div>
+            {/* orbiting sector nodes */}
+            {SECTORS.map((s) => (
+              <OrbitNode key={s.label} s={s} />
+            ))}
+          </div>
+
+          {/* ── right column: legend (mobile) ── */}
+          <ul className="flex flex-col gap-4 lg:hidden">
+            {SECTORS.map((s) => (
+              <li key={s.label} className="flex items-start gap-3">
+                <span
+                  className="flex h-11 w-11 flex-none items-center justify-center rounded-full text-white"
+                  style={{ backgroundColor: s.color }}
+                >
+                  <Icon name={s.icon} className="h-5 w-5" />
+                </span>
+                <div>
+                  <p
+                    className="text-sm font-bold leading-tight"
+                    style={{ color: s.color }}
+                  >
+                    {s.label}
+                  </p>
+                  <p className="text-xs leading-tight text-zinc-500">
+                    {s.tagline}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </PinnedRecede>
+    </div>
+  );
+}
