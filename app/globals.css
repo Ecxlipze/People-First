@@ -4,6 +4,26 @@
   --background: #0b0b0d;
   --foreground: #ededed;
   --accent: #2bbfc4;
+
+  /* ---- Motion system ----
+     One timing/easing vocabulary for the whole site so hover, press, panel and
+     route animations all feel like the same product. Anything new should reach
+     for these rather than inventing a duration.
+
+     --ease-out-soft is the house curve (a gentle overshoot-free decelerate);
+     --ease-spring adds a slight overshoot for things that "arrive" (panels,
+     success ticks). */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --dur-fast: 150ms; /* micro-feedback: press, icon nudge */
+  --dur-base: 220ms; /* the default hover/colour transition */
+  --dur-slow: 380ms; /* panel + modal entrances */
+
+  /* Route transitions: the exit is quick so it stops competing for attention,
+     the enter is slower and delayed until the exit finishes. */
+  --dur-exit: 150ms;
+  --dur-enter: 220ms;
 }
 
 @theme inline {
@@ -65,13 +85,68 @@ body {
    avoids disturbing positioned artwork and scroll-driven transforms. */
 .pf-interactive {
   transition-property:
-    transform, color, background-color, border-color, box-shadow, opacity;
-  transition-duration: 220ms;
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    transform, color, background-color, border-color, box-shadow, opacity,
+    filter;
+  transition-duration: var(--dur-base);
+  transition-timing-function: var(--ease-out-soft);
 }
 
-.pf-interactive:active {
+/* :not(:disabled) so a disabled/busy control doesn't give press feedback for an
+   action it isn't going to perform. */
+.pf-interactive:active:not(:disabled):not([aria-disabled="true"]) {
   transform: translateY(1px) scale(0.985);
+  transition-duration: var(--dur-fast);
+}
+
+/* ---- .pf-card: the shared "lift on hover" treatment for content cards ----
+   Cards across the site (ventures, episodes, stages, articles) previously
+   either sat completely static or hand-rolled their own hover. This gives them
+   one consistent lift + shadow bloom.
+
+   The lift is opt-in per card because several sections drive `transform` from
+   scroll (Reveal/PinnedRecede write inline transforms); applying a hover
+   transform to those same elements would fight the scrubber. Use .pf-card on a
+   child of the scrubbed element, never on the element itself. */
+.pf-card {
+  transition-property: transform, box-shadow, border-color;
+  transition-duration: var(--dur-base);
+  transition-timing-function: var(--ease-out-soft);
+}
+
+@media (hover: hover) {
+  .pf-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 45px -20px rgba(60, 50, 110, 0.45);
+  }
+}
+
+/* Keyboard parity: a card containing a focused link gets the same lift. */
+.pf-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 45px -20px rgba(60, 50, 110, 0.45);
+}
+
+/* ---- .pf-media: smooth image reveal after decode ----
+   Paired with <SmartImage>, which flips data-loaded to "true" once the bitmap is
+   ready. Animating opacity/scale (never layout) means no CLS: the box is already
+   reserved by `fill`/width+height, so only the pixels fade up.
+
+   IMPORTANT: the hidden state is keyed off `data-loaded="false"`, which
+   SmartImage only sets *after* it has mounted — it server-renders with no
+   attribute at all. That ordering matters: if the hidden state were the
+   unqualified default, an image would stay invisible forever whenever JS is
+   disabled or hydration fails, since nothing would ever flip it. Rendering
+   visible-by-default and opting into the animation on mount means the worst
+   case is "no fade", not "no image". */
+.pf-media {
+  transition:
+    opacity 600ms var(--ease-out-soft),
+    transform 900ms var(--ease-out-soft);
+}
+
+.pf-media[data-loaded="false"] {
+  opacity: 0;
+  transform: scale(1.04);
 }
 
 /* ---- Liveliness: keyframes ---- */
@@ -169,6 +244,47 @@ body {
   }
 }
 
+/* Skeleton shimmer — a sheen sweeping across a placeholder block. Animating
+   `translate` on a child sheen (not background-position on the box) keeps it on
+   the compositor. */
+@keyframes skeleton-sheen {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 100% 0;
+  }
+}
+
+/* Indeterminate top-of-page progress bar for route changes. */
+@keyframes route-progress {
+  0% {
+    transform: scaleX(0);
+  }
+  55% {
+    transform: scaleX(0.72);
+  }
+  85% {
+    transform: scaleX(0.9);
+  }
+  100% {
+    transform: scaleX(0.97);
+  }
+}
+
+/* Staggered entrance for lists/grids rendered on mount (not scroll-driven).
+   Each child sets --i and inherits the same curve. */
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---- utility classes ---- */
 .animate-floaty {
   animation: floaty 6s ease-in-out infinite;
@@ -186,13 +302,115 @@ body {
   animation: modal-backdrop-in 260ms ease-out both;
 }
 .animate-modal-panel {
-  animation: modal-panel-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: modal-panel-in var(--dur-slow) var(--ease-out-soft) both;
+}
+
+/* Closing counterparts. The modal used to vanish the instant it unmounted,
+   which reads as a glitch next to its animated entrance. The provider keeps the
+   dialog mounted for the duration of these (see ContactModal.tsx) and swaps
+   these classes in. Exits run faster than entrances — a slow dismissal makes
+   the UI feel unresponsive to a close the user already committed to. */
+.animate-modal-backdrop-out {
+  animation: modal-backdrop-in 180ms ease-in both reverse;
+}
+.animate-modal-panel-out {
+  animation: modal-panel-in 200ms ease-in both reverse;
 }
 .animate-success-in {
   animation: success-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .animate-feedback-in {
-  animation: feedback-in 220ms ease-out both;
+  animation: feedback-in var(--dur-base) ease-out both;
+}
+
+/* A skeleton placeholder block. Put `.pf-skeleton` on the grey box; it draws its
+   own sheen via ::after, so no extra markup per skeleton. */
+.pf-skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(120, 120, 150, 0.16);
+}
+
+.pf-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 100%
+  );
+  animation: skeleton-sheen 1.5s ease-in-out infinite;
+}
+
+/* Stagger helper: `.pf-stagger > *` fades up in sequence. Children may override
+   the index with `style={{ "--i": n }}`; the nth-child fallback covers the
+   common case of a static list. */
+.pf-stagger > * {
+  animation: stagger-in 520ms var(--ease-out-soft) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+.pf-stagger > *:nth-child(1) {
+  --i: 0;
+}
+.pf-stagger > *:nth-child(2) {
+  --i: 1;
+}
+.pf-stagger > *:nth-child(3) {
+  --i: 2;
+}
+.pf-stagger > *:nth-child(4) {
+  --i: 3;
+}
+.pf-stagger > *:nth-child(5) {
+  --i: 4;
+}
+.pf-stagger > *:nth-child(6) {
+  --i: 5;
+}
+
+/* ---- Route transitions ----
+   Applied by app/template.tsx, which Next.js remounts on every navigation — so
+   this animation replays each time a new page's content appears.
+
+   Deliberately restrained (a 260ms fade with a 8px lift) because it runs on
+   every single navigation: anything showier gets tiring, and a long enter would
+   delay the user reaching the page they asked for. It animates only opacity and
+   translate, so it never blocks interaction or shifts layout.
+
+   Note this is a page-*enter* animation only. Animating an exit would require
+   holding the old page on screen after the click, which delays navigation — the
+   opposite of what the site should do. */
+/* CRITICAL: this animation must never leave a transform/translate/filter value
+   applied to the element once it finishes.
+
+   Any of those properties turns the element into a containing block for
+   `position: fixed` descendants — and this class sits on a wrapper around EVERY
+   page, including the fixed SideNav rail. A lingering `translate` makes the rail
+   resolve `fixed` against this wrapper instead of the viewport, so it scrolls
+   away with the page and appears stuck mid-document.
+
+   Two things keep that from happening:
+     1. `forwards` is NOT used, and the keyframes animate `opacity` ONLY. No
+        positional property appears here. (An 8px lift was tried and caused
+        exactly the bug described above.)
+     2. `backwards` (not `both`) — it applies the from-state before the animation
+        starts to avoid a flash, but leaves NOTHING applied afterwards. */
+/* Targets the children, not the wrapper: the wrapper is `display: contents` and
+   so generates no box to animate. */
+.pf-page-enter > * {
+  animation: pf-page-in 260ms var(--ease-out-soft) backwards;
+}
+
+@keyframes pf-page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,12 +433,43 @@ body {
   .animate-glow-pulse,
   .animate-modal-backdrop,
   .animate-modal-panel,
+  .animate-modal-backdrop-out,
+  .animate-modal-panel-out,
   .animate-success-in,
-  .animate-feedback-in {
+  .animate-feedback-in,
+  .pf-stagger > *,
+  .pf-skeleton::after {
     animation: none;
   }
 
-  .pf-interactive:active {
+  /* Skeletons still need to read as placeholders without the sweep, so keep the
+     grey fill and just drop the moving sheen. */
+  .pf-skeleton::after {
+    opacity: 0;
+  }
+
+  /* Never leave a staggered child stuck at opacity 0 once its animation is off. */
+  .pf-stagger > * {
+    opacity: 1;
     transform: none;
+  }
+
+  .pf-interactive:active:not(:disabled):not([aria-disabled="true"]),
+  .pf-card:hover,
+  .pf-card:focus-within {
+    transform: none;
+  }
+
+  /* Images should appear immediately rather than fading/scaling in. */
+  .pf-media,
+  .pf-media[data-loaded="true"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  /* Route changes swap instantly rather than fading. */
+  .pf-page-enter > * {
+    animation: none;
   }
 }

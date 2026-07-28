@@ -3,7 +3,10 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { MediaFrame, StatCard } from "@/app/components/media";
-import { prefersReducedMotion } from "@/app/lib/motion";
+import {
+  prefersReducedMotion,
+  subscribeScrollFrame,
+} from "@/app/lib/motion";
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
@@ -44,8 +47,11 @@ export default function MediaShowcase() {
       }
     };
 
-    let raf = 0;
-    let attached = false;
+    // `unsubscribe` is non-null exactly while this section is subscribed to the
+    // site-wide scroll frame. Sharing that one listener+RAF pair with every
+    // other scroll effect (see app/lib/motion.ts) keeps a long page from
+    // stacking up a listener per section.
+    let unsubscribe: (() => void) | null = null;
     let pinned = false;
     const update = () => {
       const vh = window.innerHeight;
@@ -91,12 +97,6 @@ export default function MediaShowcase() {
           s,
         )})`;
       }
-
-      raf = 0;
-    };
-
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
     };
 
     const apply = () => {
@@ -109,10 +109,8 @@ export default function MediaShowcase() {
         text.style.transform = "none";
         stat.style.opacity = "1";
         stat.style.transform = "none";
-        if (attached) {
-          window.removeEventListener("scroll", onScroll);
-          attached = false;
-        }
+        unsubscribe?.();
+        unsubscribe = null;
         return;
       }
 
@@ -129,21 +127,26 @@ export default function MediaShowcase() {
         disable();
       }
 
-      if (!attached) {
-        window.addEventListener("scroll", onScroll, { passive: true });
-        attached = true;
-      }
-      update();
+      // subscribeScrollFrame invokes `update` immediately on subscribe, so the
+      // already-subscribed branch calls it directly to re-sync after a
+      // breakpoint change.
+      if (unsubscribe) update();
+      else unsubscribe = subscribeScrollFrame(update);
     };
 
     apply();
+    // The md breakpoint crossing is what flips pinning on/off, so `change` is
+    // the event that matters. A plain resize only needs the scrub re-measured,
+    // which the shared scroll frame already does on its own resize listener.
     desktop.addEventListener("change", apply);
-    window.addEventListener("resize", apply);
+    // Reduced-motion can be toggled while the page is open; re-apply so the
+    // effect turns off (or back on) without a reload.
+    const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    reduceMq.addEventListener("change", apply);
     return () => {
       desktop.removeEventListener("change", apply);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", apply);
-      cancelAnimationFrame(raf);
+      reduceMq.removeEventListener("change", apply);
+      unsubscribe?.();
     };
   }, []);
 

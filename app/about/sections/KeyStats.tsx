@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { CountUp, Reveal } from "@/app/components/ScrollFx";
 
 /* About → Key Stats. Plum/maroon panel: a "Trust & Credibility" pill, the
    KEY STATS heading (STATS in gold), supporting copy, and a set of light stat
@@ -58,10 +58,14 @@ export default function KeyStats() {
 
           {/* right: stat cards */}
           <div className="flex flex-col gap-4">
-            <div className="rounded-2xl bg-white px-7 py-8 text-right shadow-xl">
-              <span className="block text-5xl font-extrabold text-pf-plum sm:text-6xl">
-                {STATS.big.value}
-              </span>
+            {/* The three figures count up the first time they scroll into
+                view — the payoff of a "Key Stats" panel is the numbers, so
+                they earn the emphasis. */}
+            <div className="pf-card rounded-2xl bg-white px-7 py-8 text-right shadow-xl">
+              <CountUp
+                value={STATS.big.value}
+                className="block text-5xl font-extrabold text-pf-plum sm:text-6xl"
+              />
               <span className="mt-1 block text-sm font-semibold text-zinc-500">
                 {STATS.big.label}
               </span>
@@ -70,11 +74,12 @@ export default function KeyStats() {
               {STATS.small.map((s) => (
                 <div
                   key={s.label}
-                  className="flex items-center justify-between gap-2 rounded-2xl bg-white px-5 py-5 shadow-xl"
+                  className="pf-card flex items-center justify-between gap-2 rounded-2xl bg-white px-5 py-5 shadow-xl"
                 >
-                  <span className="text-3xl font-extrabold text-pf-plum sm:text-4xl">
-                    {s.value}
-                  </span>
+                  <CountUp
+                    value={s.value}
+                    className="text-3xl font-extrabold text-pf-plum sm:text-4xl"
+                  />
                   <span className="text-right text-xs font-semibold leading-tight text-zinc-500">
                     {s.label}
                   </span>
@@ -93,7 +98,7 @@ export default function KeyStats() {
             {PARTNERS.map((p, i) => (
               <div
                 key={`${p.name}-${i}`}
-                className="flex h-24 items-center justify-center rounded-xl bg-white px-5 shadow-md"
+                className="pf-card flex h-24 items-center justify-center rounded-xl bg-white px-5 shadow-md"
               >
                 <Image
                   src={p.logo}

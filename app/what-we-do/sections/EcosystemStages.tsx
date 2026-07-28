@@ -45,7 +45,7 @@ function Contours() {
 
 function VentureCard({ name, blurb }: { name: string; blurb: string }) {
   return (
-    <li className="rounded-md border border-zinc-200 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+    <li className="pf-card rounded-md border border-zinc-200 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:border-zinc-300">
       <p className="text-[0.88rem] font-bold leading-tight text-[#1a1a2e]">
         {name}
       </p>
@@ -60,7 +60,10 @@ function StageColumn({ stage }: { stage: Stage }) {
   return (
     /* h-full + flex-col so all three columns match height on desktop even
        though the middle one holds a single card rather than a list */
-    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-zinc-200 bg-white/70 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.4)] backdrop-blur-sm">
+    /* pf-card is safe here: <Reveal> writes its scroll transform to the grid
+       wrapper above, not to these columns, so the hover lift has the transform
+       property to itself. */
+    <div className="pf-card flex h-full flex-col overflow-hidden rounded-lg border border-zinc-200 bg-white/70 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.4)] backdrop-blur-sm">
       <div
         className="flex items-center gap-3 px-4 py-3"
         style={{ backgroundColor: stage.headerBg }}

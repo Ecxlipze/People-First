@@ -31,7 +31,10 @@ export default function OurPodcasts() {
             EPISODES.map((ep) => (
               <article
                 key={ep.title}
-                className="group grid gap-6 rounded-lg bg-white p-5 shadow-[0_18px_44px_-20px_rgba(0,0,0,0.5)] sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8 sm:p-6"
+                /* pf-card supplies the lift + timing; the explicit hover shadow
+                   overrides pf-card's default purple bloom, which would read as
+                   grey haze against this deep-purple band. */
+                className="group pf-card grid gap-6 rounded-lg bg-white p-5 shadow-[0_18px_44px_-20px_rgba(0,0,0,0.5)] hover:shadow-[0_28px_60px_-22px_rgba(0,0,0,0.65)] sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8 sm:p-6"
               >
                 {/* thumbnail + play overlay + corner badge */}
                 <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-zinc-900 sm:-ml-9 sm:self-center">

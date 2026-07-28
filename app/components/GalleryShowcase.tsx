@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Image as ImageIcon } from "lucide-react";
+import SmartImage from "@/app/components/SmartImage";
 import { GALLERY } from "@/app/components/gallery";
 import PinnedRecede from "@/app/components/PinnedRecede";
 
@@ -137,7 +137,10 @@ export default function GalleryShowcase() {
                   }}
                 >
                   {photo.src && photo.hasImage ? (
-                    <Image
+                    /* Fades up once decoded, with a shimmer standing in until
+                       then — carousel slides are frequently still loading when
+                       they first swing into view. */
+                    <SmartImage
                       src={photo.src}
                       alt={photo.alt}
                       fill
@@ -145,6 +148,7 @@ export default function GalleryShowcase() {
                       className="object-cover"
                       draggable={false}
                       priority={i === 0}
+                      skeleton
                     />
                   ) : (
                     /* styled placeholder until real photos are dropped in */

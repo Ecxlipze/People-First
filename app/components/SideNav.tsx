@@ -1,11 +1,32 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { navItems } from "@/app/lib/nav";
+
+/* A ring that spins around the nav icon while its route is being fetched.
+   Must be rendered inside a <Link> — that's where useLinkStatus reads from.
+
+   Most navigations here are prefetched and resolve instantly, in which case
+   `pending` never flips and nothing is shown. This is the honest signal for the
+   slow case (cold cache, poor connection) so a tap doesn't feel ignored.
+
+   Rendered always-present and toggled by opacity: an element appearing from
+   nothing would shift the icon it sits on. */
+function NavPending() {
+  const { pending } = useLinkStatus();
+  return (
+    <span
+      aria-hidden
+      className={`pointer-events-none absolute -inset-1 rounded-full border-2 border-pf-magenta/70 border-t-transparent transition-opacity duration-150 ${
+        pending ? "animate-spin opacity-100" : "opacity-0"
+      }`}
+    />
+  );
+}
 
 const DESKTOP_MIN = 1024; // Tailwind `lg`
 const EDGE_ZONE = 40; // px from the right edge that can start an opening drag
@@ -196,15 +217,24 @@ export default function SideNav() {
       >
         {/* Auto block margins centre the items when height allows, but collapse
             to zero when a short landscape viewport needs scrolling. */}
-        <div className="my-auto flex flex-col gap-5">
-          {navItems.map((item) => {
+        {/* `key` on `open` remounts the list each time the drawer opens, which
+            restarts the per-item entrance animation below. Cheap: it is seven
+            links, and only on mobile where the drawer exists. */}
+        <div key={isDesktop ? "rail" : `drawer-${open}`} className="my-auto flex flex-col gap-5">
+          {navItems.map((item, i) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.label}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className="group flex items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4"
+                /* Mobile drawer only: items cascade in behind the sliding panel
+                   so opening reads as a considered reveal rather than a block of
+                   icons arriving at once. Keyed on `open` (below) so it replays
+                   each time the drawer opens. On lg+ the rail is always present,
+                   so there is nothing to animate — hence lg:animate-none. */
+                className="group flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none"
+                style={{ animationDelay: `${i * 45}ms`, animationDuration: "420ms" }}
               >
               {/* Label chip. Light, brand-tinted surface instead of a heavy
                   black slab; the active item carries the magenta CTA colour.
@@ -222,18 +252,23 @@ export default function SideNav() {
               >
                 {item.label}
               </span>
-              <Image
-                src={item.icon}
-                alt={item.label}
-                width={64}
-                height={64}
-                priority
-                className={`shrink-0 rounded-full transition-all duration-300 group-hover:scale-110 group-active:scale-95 ${
-                  active
-                    ? "h-12 w-12 shadow-lg shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-14 lg:w-14"
-                    : "h-11 w-11 opacity-90 group-hover:opacity-100"
-                }`}
-              />
+              {/* Wrapper is the positioning context for the pending ring and
+                  keeps the icon's own scale transition independent of it. */}
+              <span className="relative flex shrink-0 items-center justify-center">
+                <Image
+                  src={item.icon}
+                  alt={item.label}
+                  width={64}
+                  height={64}
+                  priority
+                  className={`shrink-0 rounded-full transition-all duration-300 group-hover:scale-110 group-active:scale-95 ${
+                    active
+                      ? "h-12 w-12 shadow-lg shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-14 lg:w-14"
+                      : "h-11 w-11 opacity-90 group-hover:opacity-100"
+                  }`}
+                />
+                <NavPending />
+              </span>
               </Link>
             );
           })}

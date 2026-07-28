@@ -10,6 +10,7 @@ import {
 } from "react";
 import { X } from "lucide-react";
 import ContactPanel from "./ContactPanel";
+import { prefersReducedMotion } from "@/app/lib/motion";
 
 /* Site-wide contact modal.
 
@@ -47,16 +48,53 @@ export function ContactModalProvider({
   const [state, setState] = useState<{ open: boolean; role?: string }>({
     open: false,
   });
+  /* `closing` keeps the dialog mounted just long enough to play its exit
+     animation. Without it the overlay vanished instantly, which looked like a
+     glitch next to the animated entrance. */
+  const [closing, setClosing] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   // Element that had focus before opening, so we can hand it back on close.
   const restoreRef = useRef<HTMLElement | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const open = useCallback((role?: string) => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setClosing(false);
     restoreRef.current = document.activeElement as HTMLElement | null;
     setState({ open: true, role });
   }, []);
 
-  const close = useCallback(() => setState({ open: false }), []);
+  const close = useCallback(() => {
+    // Already dismissing — don't restart the exit or stack up timers (e.g. a
+    // second Escape press, or Escape then a backdrop click).
+    if (closeTimer.current) return;
+    // Reduced motion (or no animation support): unmount immediately.
+    if (prefersReducedMotion()) {
+      setClosing(false);
+      setState({ open: false });
+      return;
+    }
+    setClosing(true);
+    // Matches the 200ms exit animations in globals.css. Focus is handed back in
+    // the effect below as soon as `open` flips, so dismissal never feels laggy
+    // for keyboard users even though the pixels take a moment to leave.
+    closeTimer.current = setTimeout(() => {
+      closeTimer.current = null;
+      setClosing(false);
+      setState({ open: false });
+    }, 200);
+  }, []);
+
+  // Clear any pending exit timer if the provider unmounts mid-animation.
+  useEffect(
+    () => () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    },
+    [],
+  );
 
   const isOpen = state.open;
 
@@ -128,15 +166,25 @@ export function ContactModalProvider({
     <Ctx.Provider value={{ open, close, isOpen }}>
       {children}
 
-      {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center pb-[max(1rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,env(safe-area-inset-top))] sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:pl-[max(1.5rem,env(safe-area-inset-left))] sm:pr-[max(1.5rem,env(safe-area-inset-right))] sm:pt-[max(1.5rem,env(safe-area-inset-top))]">
+      {(isOpen || closing) && (
+        /* While `closing`, the overlay is mid-exit: pointer-events are dropped so
+           a click can't land on a dialog that is already dismissed. */
+        <div
+          className={`fixed inset-0 z-[200] flex items-center justify-center pb-[max(1rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,env(safe-area-inset-top))] sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:pl-[max(1.5rem,env(safe-area-inset-left))] sm:pr-[max(1.5rem,env(safe-area-inset-right))] sm:pt-[max(1.5rem,env(safe-area-inset-top))] ${
+            closing ? "pointer-events-none" : ""
+          }`}
+        >
           {/* dimmed page behind */}
           <button
             type="button"
             aria-label="Close contact form"
             tabIndex={-1}
             onClick={close}
-            className="animate-modal-backdrop absolute inset-0 cursor-default bg-black/45 backdrop-blur-[3px]"
+            className={`absolute inset-0 cursor-default bg-black/45 backdrop-blur-[3px] ${
+              closing
+                ? "animate-modal-backdrop-out"
+                : "animate-modal-backdrop"
+            }`}
           />
 
           <div
@@ -145,7 +193,9 @@ export function ContactModalProvider({
             aria-modal="true"
             aria-labelledby="contact-modal-title"
             tabIndex={-1}
-            className="animate-modal-panel relative max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none sm:max-h-[calc(100dvh-3rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))]"
+            className={`relative max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none sm:max-h-[calc(100dvh-3rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] ${
+              closing ? "animate-modal-panel-out" : "animate-modal-panel"
+            }`}
           >
             <button
               type="button"

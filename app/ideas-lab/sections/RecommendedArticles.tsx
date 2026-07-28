@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Play } from "lucide-react";
-import { Reveal } from "@/app/components/ScrollFx";
+import SmartImage from "@/app/components/SmartImage";
+import { CountUp, Reveal } from "@/app/components/ScrollFx";
 import { ARTICLES, type Article } from "@/app/ideas-lab/articles";
 
 /* Ideas Lab → "Recommended Article" (SECTION 2).
@@ -66,18 +67,21 @@ function Media({
         }`}
       />
 
-      {/* video still + play button */}
-      <div className="relative ml-auto aspect-[16/10] w-[85%] overflow-hidden rounded-sm bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)]">
-        <Image
+      {/* video still + play button. The still fades up once decoded rather than
+          snapping in — see SmartImage. The shadow deepens with the row's hover
+          so the whole card reads as one target. */}
+      <div className="relative ml-auto aspect-[16/10] w-[85%] overflow-hidden rounded-sm bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
+        <SmartImage
           src={article.thumb}
           alt={article.thumbAlt}
           fill
           sizes="(max-width: 768px) 85vw, 24rem"
+          skeleton
           style={{ objectPosition: article.thumbPosition ?? "center" }}
           className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
         />
         <span className="absolute inset-0 grid place-items-center">
-          <span className="grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110">
+          <span className="grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:ring-4 group-hover:ring-white/40">
             <Play
               className="ml-0.5 h-4 w-4 text-zinc-800"
               fill="currentColor"
@@ -91,9 +95,10 @@ function Media({
           stills are photographs of people, and a card sitting inside the frame
           covers the subjects' faces. */}
       <div className="absolute -bottom-5 left-0 z-10 w-[8.5rem] bg-[#6cb5a6] px-4 py-4 text-white shadow-[0_14px_30px_-14px_rgba(40,80,70,0.7)] sm:w-[9.5rem] sm:py-5">
-        <p className="text-lg font-extrabold leading-none sm:text-xl">
-          {article.cardValue}
-        </p>
+        <CountUp
+          value={article.cardValue}
+          className="block text-lg font-extrabold leading-none sm:text-xl"
+        />
         <p className="mt-1.5 whitespace-pre-line text-[0.65rem] font-semibold leading-tight sm:text-[0.7rem]">
           {article.cardLabel}
         </p>
@@ -105,16 +110,19 @@ function Media({
 function Copy({ article }: { article: Article }) {
   return (
     <div className="max-w-sm">
-      <h3 className="text-xl font-extrabold leading-snug tracking-tight text-[#1a1a2e] sm:text-[1.4rem]">
+      {/* The row is a link, so the title picks up the brand colour on hover to
+          signal that — the row's group-hover drives it. */}
+      <h3 className="text-xl font-extrabold leading-snug tracking-tight text-[#1a1a2e] transition-colors duration-200 group-hover:text-[#e0325a] sm:text-[1.4rem]">
         {article.title}
       </h3>
       <p className="mt-3 text-[0.7rem] leading-relaxed text-zinc-500 sm:text-[0.75rem]">
         {article.blurb}
       </p>
       <div className="mt-6 flex items-center gap-3">
-        <span className="text-2xl font-extrabold text-[#e0325a] sm:text-[1.75rem]">
-          {article.metric}
-        </span>
+        <CountUp
+          value={article.metric}
+          className="text-2xl font-extrabold text-[#e0325a] sm:text-[1.75rem]"
+        />
         <span className="whitespace-pre-line text-[0.65rem] font-medium leading-tight text-zinc-500">
           {article.metricLabel}
         </span>

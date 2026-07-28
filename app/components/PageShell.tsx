@@ -24,7 +24,10 @@ export default function PageShell({
           <ArrowLeft className="h-4 w-4" />
           Back
         </Link>
-        <div className="animate-fade-in-up flex flex-1 flex-col items-center justify-center text-center">
+        {/* pf-stagger cascades the heading and the copy beneath it instead of
+            fading the block in as one slab — the same entrance, but it reads as
+            composed rather than abrupt. */}
+        <div className="pf-stagger flex flex-1 flex-col items-center justify-center text-center">
           <h1 className="text-4xl font-bold text-white sm:text-6xl">{title}</h1>
           <div className="mt-4 max-w-xl text-zinc-400">{children}</div>
         </div>
