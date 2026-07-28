@@ -19,12 +19,12 @@ export default function PageShell({
       <div className="relative flex min-h-screen flex-col bg-[radial-gradient(ellipse_at_center_top,#2a2a30_0%,#141417_45%,#0b0b0d_100%)] px-8 py-10 sm:px-14 lg:pr-32">
         <Link
           href="/"
-          className="inline-flex w-fit items-center gap-2 text-sm text-zinc-400 hover:text-white"
+          className="pf-interactive inline-flex w-fit items-center gap-2 rounded-sm text-sm text-zinc-400 hover:-translate-x-0.5 hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" />
           Back
         </Link>
-        <div className="flex flex-1 flex-col items-center justify-center text-center">
+        <div className="animate-fade-in-up flex flex-1 flex-col items-center justify-center text-center">
           <h1 className="text-4xl font-bold text-white sm:text-6xl">{title}</h1>
           <div className="mt-4 max-w-xl text-zinc-400">{children}</div>
         </div>

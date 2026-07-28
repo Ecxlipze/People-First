@@ -116,7 +116,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
 
 export default function BrandArchitecture() {
   return (
-    <section className="relative z-40 -mt-6 overflow-hidden rounded-t-[2rem] bg-white pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:-mt-8 sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
+    <section className="relative z-40 overflow-hidden rounded-t-[2rem] bg-white pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
       {/* Corner swoosh — the mockup's own artwork, bleeding off the top-left.
           Extracted from the PDF and flipped vertically, because its placement
           matrix there has a negative height (d=-435.1); the stored raster is
@@ -144,7 +144,7 @@ export default function BrandArchitecture() {
         className="pointer-events-none absolute -left-[5.4vw] -top-[1.7vw] hidden w-[40.3%] max-w-[580px] select-none md:block"
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
         <Reveal className="text-center">
           {/* heading flanked by rules that fade outward — the mockup's are
               gradients running from #8454ff at the heading to transparent at

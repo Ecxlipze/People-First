@@ -7,7 +7,6 @@ import GalleryShowcase from "@/app/components/GalleryShowcase";
 import TestimonialsShowcase from "@/app/components/TestimonialsShowcase";
 import EcosystemShowcase from "@/app/components/EcosystemShowcase";
 import StoryShowcase from "@/app/components/StoryShowcase";
-import SiteFooter from "@/app/components/SiteFooter";
 import { Recede } from "@/app/components/ScrollFx";
 import ContactTrigger from "@/app/contact/ContactTrigger";
 
@@ -21,9 +20,9 @@ export default function HomePage() {
         {/* ── SECTION 1: HERO ──
           Pinned to the top so the next section slides up and overlaps it.
           The tall track gives the sticky hero room to pin while FeaturedWork
-          swipes up over it with md:-mt-[100vh]. */}
-        <div className="relative max-md:h-auto md:h-[200vh]">
-          <section className="sticky top-0 h-screen overflow-hidden bg-[linear-gradient(135deg,#e6ebfb_0%,#f1eefb_38%,#f6f3fc_70%,#f7f5fd_100%)]">
+          swipes up over it by one viewport at every responsive size. */}
+        <div className="relative h-[200svh] md:h-[200vh]">
+          <section className="sticky top-0 h-[100svh] overflow-hidden bg-[linear-gradient(135deg,#e6ebfb_0%,#f1eefb_38%,#f6f3fc_70%,#f7f5fd_100%)] md:h-screen">
             {/* soft blue glow, top-left */}
             <div
               aria-hidden
@@ -138,16 +137,12 @@ export default function HomePage() {
           Testimonials section. Left copy + right radial orbit of sectors. */}
         <EcosystemShowcase />
 
-        {/* ── SECTION 7: THE STORY ──
+        {/* ── SECTION 7: THE STORY + FOOTER ──
           Opaque rounded block, negative margin → swipes up over the pinned
           Ecosystem section. Left founder story + right circular photo with an
-          overlapping "born out of a simple conclusion" callout. */}
+          overlapping "born out of a simple conclusion" callout. The footer
+          continues inside this final white panel. */}
         <StoryShowcase />
-
-        {/* ── FOOTER ──
-          Not a swipe-over block — sits in normal flow at the page bottom. CTA
-          band + logo/socials + Pages/Support/Legal link columns. */}
-        <SiteFooter swipeOver />
       </div>
     </>
   );

@@ -4,7 +4,10 @@ import { navItems } from "@/app/lib/nav";
 
 export default function RadialNav() {
   return (
-    <nav className="pointer-events-none absolute left-1/2 top-[58%] h-0 w-0 -translate-x-1/2 [--nav-r:120px] sm:[--nav-r:180px] lg:[--nav-r:290px]">
+    <nav
+      aria-label="Explore"
+      className="pointer-events-none absolute left-1/2 top-[58%] h-0 w-0 -translate-x-1/2 [--nav-r:120px] sm:[--nav-r:180px] lg:[--nav-r:290px]"
+    >
       {navItems.map((item, i) => {
         const rad = (item.angle * Math.PI) / 180;
         const sin = Math.sin(rad).toFixed(4);

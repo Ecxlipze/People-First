@@ -5,13 +5,10 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { VENTURES } from "@/app/components/ventures";
 import PinnedRecede from "@/app/components/PinnedRecede";
-
-function prefersReduced() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
+import {
+  prefersReducedMotion,
+  subscribeScrollFrame,
+} from "@/app/lib/motion";
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
@@ -35,17 +32,18 @@ export default function VenturesShowcase() {
       cardsWrap.querySelectorAll<HTMLElement>("[data-card]"),
     );
 
-    if (prefersReduced()) {
+    if (prefersReducedMotion()) {
       heading.style.opacity = "1";
       heading.style.transform = "none";
+      heading.style.willChange = "auto";
       cards.forEach((c) => {
         c.style.opacity = "1";
         c.style.transform = "none";
+        c.style.willChange = "auto";
       });
       return;
     }
 
-    let raf = 0;
     const update = () => {
       const vh = window.innerHeight;
       const headTop = heading.getBoundingClientRect().top;
@@ -67,19 +65,8 @@ export default function VenturesShowcase() {
           cp,
         )})`;
       });
-      raf = 0;
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(raf);
-    };
+    return subscribeScrollFrame(update);
   }, []);
 
   return (

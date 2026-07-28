@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
-function prefersReduced() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
+import {
+  prefersReducedMotion,
+  subscribeScrollFrame,
+} from "@/app/lib/motion";
 
 /* Reveal — scrubbed to scroll. As the element rises through the viewport its
    progress maps 0→1 to opacity, a translateY lift, and a subtle scale-up.
@@ -29,12 +26,11 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (prefersReduced()) {
+    if (prefersReducedMotion()) {
       el.style.opacity = "1";
       el.style.transform = "none";
       return;
     }
-    let raf = 0;
     const update = () => {
       const r = el.getBoundingClientRect();
       const vh = window.innerHeight;
@@ -45,26 +41,16 @@ export function Reveal({
       el.style.transform = `translateY(${(1 - p) * y}px) scale(${
         scale + p * (1 - scale)
       })`;
-      raf = 0;
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(raf);
-    };
+    const unsubscribe = subscribeScrollFrame(update);
+    return unsubscribe;
   }, [y, scale]);
 
   return (
     <div
       ref={ref}
       className={className}
-      style={{ opacity: 0, willChange: "transform, opacity" }}
+      style={{ opacity: 0 }}
     >
       {children}
     </div>
@@ -86,8 +72,7 @@ export function Recede({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (prefersReduced()) return;
-    let raf = 0;
+    if (prefersReducedMotion()) return;
     const update = () => {
       const vh = window.innerHeight;
       const p = Math.max(0, Math.min(1, window.scrollY / (vh * 0.9)));
@@ -96,19 +81,9 @@ export function Recede({
       el.style.opacity = String(1 - ease * 0.92);
       el.style.transform = `perspective(1200px) rotateX(${ease * 3.5}deg) scale(${1 - ease * 0.07}) translateY(${-ease * 55}px)`;
       el.style.filter = `blur(${ease * 3}px)`;
-      raf = 0;
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(raf);
-    };
+    const unsubscribe = subscribeScrollFrame(update);
+    return unsubscribe;
   }, []);
 
   return (

@@ -25,8 +25,13 @@ export default function GalleryShowcase() {
   );
   const to = useCallback((i: number) => setActive(((i % n) + n) % n), [n]);
 
-  // auto-advance, paused on hover / drag / reduced-motion.
-  const [paused, setPaused] = useState(false);
+  // Auto-advance pauses for every direct interaction mode. Separate flags
+  // avoid a pointer-up resuming the timer while the mouse or keyboard focus is
+  // still inside the carousel.
+  const [hovered, setHovered] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const paused = hovered || dragging || focused;
   useEffect(() => {
     if (paused || n <= 1) return;
     const reduce = window.matchMedia(
@@ -47,13 +52,13 @@ export default function GalleryShowcase() {
   const drag = useRef<{ x: number; active: boolean }>({ x: 0, active: false });
   const onPointerDown = (e: React.PointerEvent) => {
     drag.current = { x: e.clientX, active: true };
-    setPaused(true);
+    setDragging(true);
   };
   const onPointerUp = (e: React.PointerEvent) => {
     if (!drag.current.active) return;
     const dx = e.clientX - drag.current.x;
     drag.current.active = false;
-    setPaused(false);
+    setDragging(false);
     if (dx > 40) go(-1);
     else if (dx < -40) go(1);
   };
@@ -74,13 +79,19 @@ export default function GalleryShowcase() {
           aria-label="Gallery photos"
           tabIndex={0}
           onKeyDown={onKey}
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          onFocusCapture={() => setFocused(true)}
+          onBlurCapture={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+              setFocused(false);
+            }
+          }}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerCancel={() => {
             drag.current.active = false;
-            setPaused(false);
+            setDragging(false);
           }}
           className="relative mt-6 w-full touch-pan-y select-none outline-none sm:mt-8 lg:pr-24"
           style={{ perspective: "1600px" }}

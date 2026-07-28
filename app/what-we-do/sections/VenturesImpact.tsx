@@ -76,7 +76,7 @@ function TierCard({ tier }: { tier: VentureTier }) {
 
 export default function VenturesImpact() {
   return (
-    <section className="relative z-20 -mt-6 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(170deg,#fbf7ff_0%,#f9f5fe_45%,#f6f1fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:-mt-8 sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
+    <section className="relative z-20 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(170deg,#fbf7ff_0%,#f9f5fe_45%,#f6f1fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
       {/* soft cyan bloom, lower-right — the large blurred disc in the mockup */}
       <div
         aria-hidden
@@ -86,7 +86,7 @@ export default function VenturesImpact() {
       {/* No right padding on the container — it would pull the centred
           headings off the page's true centre. The bands that actually sit
           under the icon rail reserve that room themselves. */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
         {/* ── venture tiers ── */}
         <Reveal className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:pr-[11rem]">
           {VENTURE_TIERS.map((t) => (

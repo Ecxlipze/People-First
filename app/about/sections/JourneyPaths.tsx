@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import ContactTrigger from "@/app/contact/ContactTrigger";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* About → "Where Are You In Your Journey". Three path cards (Learn / Grow /
    Lead), each with a coloured top-left accent, a lead line, a checked list of
@@ -63,16 +64,16 @@ export default function JourneyPaths() {
        continuation of the hero, with white copy and the cards floating on it. */
     <section className="bg-pf-purple px-6 pb-20 pt-4 sm:px-10 sm:pb-24">
       <div className="mx-auto max-w-6xl">
-        <div className="text-center">
+        <Reveal className="text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             WHERE ARE YOU IN YOUR JOURNEY
           </h2>
           <p className="mt-3 text-base text-white/60 sm:text-lg">
             Choose your path and let us help you grow.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <Reveal className="mt-14 grid gap-6 md:grid-cols-3">
           {PATHS.map((p, i) => (
             <div
               key={p.title}
@@ -129,7 +130,7 @@ export default function JourneyPaths() {
               })()}
             </div>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

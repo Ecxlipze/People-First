@@ -109,7 +109,7 @@ function StageCard({ stage }: { stage: PipelineStage }) {
 
 export default function EvolutionPipeline() {
   return (
-    <section className="relative z-30 -mt-6 overflow-hidden rounded-t-[2rem] bg-white pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:-mt-8 sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
+    <section className="relative z-30 overflow-hidden rounded-t-[2rem] bg-white pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
       {/* purple swoosh, flush to the top-right corner as in the mockup — real
           artwork rather than a CSS approximation, since it carries fine line
           work a gradient can't reproduce. The asset is cropped to the corner
@@ -147,7 +147,7 @@ export default function EvolutionPipeline() {
         className="pointer-events-none absolute -right-24 -top-24 hidden h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.75)_45%,rgba(255,255,255,0)_72%)] lg:block"
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
         {/* ── intro ── left-aligned; the right half is the swoosh's space, so
             the copy is held to a column rather than centred */}
         <Reveal className="max-w-2xl">

@@ -34,6 +34,7 @@
    `position: sticky` swipe-over sections keep working. */
 html {
   overflow-x: clip;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -47,6 +48,30 @@ body {
      don't need it: ScrollFx/PinnedRecede each apply their own
      `perspective(1200px)` inside their own `transform`. */
   -webkit-font-smoothing: antialiased;
+}
+
+/* A consistent, high-contrast keyboard focus treatment across links, buttons
+   and fields. Individual form controls can still add their branded rings. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 82%, white);
+  outline-offset: 3px;
+}
+
+:where(a, button) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Shared tactile feedback for the site's primary controls. Keeping it opt-in
+   avoids disturbing positioned artwork and scroll-driven transforms. */
+.pf-interactive {
+  transition-property:
+    transform, color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pf-interactive:active {
+  transform: translateY(1px) scale(0.985);
 }
 
 /* ---- Liveliness: keyframes ---- */
@@ -100,6 +125,50 @@ body {
   }
 }
 
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(3px);
+  }
+}
+
+@keyframes modal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes success-in {
+  from {
+    opacity: 0;
+    transform: scale(0.78);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes feedback-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---- utility classes ---- */
 .animate-floaty {
   animation: floaty 6s ease-in-out infinite;
@@ -113,12 +182,45 @@ body {
 .animate-glow-pulse {
   animation: glow-pulse 5s ease-in-out infinite;
 }
+.animate-modal-backdrop {
+  animation: modal-backdrop-in 260ms ease-out both;
+}
+.animate-modal-panel {
+  animation: modal-panel-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-success-in {
+  animation: success-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-feedback-in {
+  animation: feedback-in 220ms ease-out both;
+}
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
   .animate-floaty,
   .animate-fade-in-up,
   .animate-pop-in,
-  .animate-glow-pulse {
+  .animate-glow-pulse,
+  .animate-modal-backdrop,
+  .animate-modal-panel,
+  .animate-success-in,
+  .animate-feedback-in {
     animation: none;
+  }
+
+  .pf-interactive:active {
+    transform: none;
   }
 }

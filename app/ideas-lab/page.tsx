@@ -3,6 +3,7 @@ import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
 import Hero from "@/app/ideas-lab/sections/Hero";
 import RecommendedArticles from "@/app/ideas-lab/sections/RecommendedArticles";
+import TallSwipePanel from "@/app/components/TallSwipePanel";
 
 export const metadata: Metadata = {
   title: "Ideas Lab — People First",
@@ -25,14 +26,14 @@ export default function IdeasLabPage() {
         <Hero />
 
         {/* ── SECTION 2: RECOMMENDED ARTICLES ──
-            Opaque rounded block with a negative top margin → swipes over the
-            pinned hero. */}
-        <RecommendedArticles />
-
-        {/* Footer sits in normal flow below section 2, as on every other page.
-            Section 2 already ends the page's own content, so the footer keeps its
-            "Let's Get in Touch" band. */}
-        <SiteFooter />
+            Starts fully below the initial viewport, then swipes over the
+            pinned hero once scrolling begins. */}
+        <TallSwipePanel holdForNext={false}>
+          <RecommendedArticles />
+          {/* Footer belongs to section 2 and continues in the same white panel;
+              it is not a separate swipe-over section. */}
+          <SiteFooter />
+        </TallSwipePanel>
       </div>
     </>
   );

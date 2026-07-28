@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import { CheckCircle2, ChevronDown } from "lucide-react";
+import { CheckCircle2, ChevronDown, LoaderCircle } from "lucide-react";
 import { submitContact } from "./actions";
 import { initialContactState } from "./state";
 
@@ -49,7 +49,10 @@ function Field({
       </label>
       {children}
       {error && (
-        <p role="alert" className="mt-1 text-xs font-medium text-red-600">
+        <p
+          role="alert"
+          className="animate-feedback-in mt-1 text-xs font-medium text-red-600"
+        >
           {error}
         </p>
       )}
@@ -81,7 +84,10 @@ export default function ContactForm({
   if (state.status === "success") {
     return (
       <div className="flex min-h-[22rem] flex-col items-center justify-center px-6 py-12 text-center">
-        <CheckCircle2 className="h-14 w-14 text-pf-teal" aria-hidden />
+        <CheckCircle2
+          className="animate-success-in h-14 w-14 text-pf-teal"
+          aria-hidden
+        />
         <h3 className="mt-5 text-xl font-bold text-zinc-900">Message sent</h3>
         <p className="mt-2 max-w-xs text-sm leading-relaxed text-zinc-600">
           {state.message}
@@ -90,7 +96,7 @@ export default function ContactForm({
           <button
             type="button"
             onClick={onSuccess}
-            className="mt-7 rounded-md bg-[#8f1d3f] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#7a1836]"
+            className="pf-interactive mt-7 rounded-md bg-[#8f1d3f] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#7a1836]"
           >
             Close
           </button>
@@ -229,7 +235,7 @@ export default function ContactForm({
         <p
           role="alert"
           aria-live="polite"
-          className="text-sm font-medium text-red-600"
+          className="animate-feedback-in text-sm font-medium text-red-600"
         >
           {state.message}
         </p>
@@ -238,9 +244,16 @@ export default function ContactForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-1 w-full rounded-md bg-[#8f1d3f] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#7a1836] disabled:cursor-not-allowed disabled:opacity-70"
+        className="pf-interactive mt-1 w-full rounded-md bg-[#8f1d3f] px-5 py-3 text-sm font-semibold text-white hover:bg-[#7a1836] disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {pending ? "Sending…" : "Submit"}
+        {pending ? (
+          <span className="inline-flex items-center justify-center gap-2">
+            <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />
+            Sending…
+          </span>
+        ) : (
+          "Submit"
+        )}
       </button>
     </form>
   );

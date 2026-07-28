@@ -7,6 +7,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* About → Vision & Mission. Two rows (Vision / Mission), each a circular icon +
    heading + rich copy, with a dotted world-map illustration flanking them. Below
@@ -64,16 +65,16 @@ export default function VisionMission() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl">
-        <div className="text-center">
+        <Reveal className="text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl">
             VISION &amp; MISSION
           </h2>
           <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400 sm:text-sm">
             Our Purpose. Our Promise. Our Path Forward.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="mt-14 grid items-center gap-12 lg:grid-cols-[1fr_0.9fr]">
+        <Reveal className="mt-14 grid items-center gap-12 lg:grid-cols-[1fr_0.9fr]">
           {/* ── vision + mission rows ── */}
           <div className="space-y-10">
             <div className="flex items-start gap-5">
@@ -143,10 +144,10 @@ export default function VisionMission() {
               className="mx-auto w-full max-w-[16rem] select-none lg:max-w-sm"
             />
           </div>
-        </div>
+        </Reveal>
 
         {/* ── Learn × Grow × Lead × Transform step row ── */}
-        <div className="mt-16 rounded-2xl bg-pf-lavender px-4 py-6 sm:px-8 sm:py-8">
+        <Reveal className="mt-16 rounded-2xl bg-pf-lavender px-4 py-6 sm:px-8 sm:py-8">
           <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
             {STEPS.map((s, i) => (
               <div key={s.label} className="flex items-center gap-4 sm:flex-1">
@@ -168,7 +169,7 @@ export default function VisionMission() {
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

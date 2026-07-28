@@ -4,13 +4,10 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { TESTIMONIALS, type Testimonial } from "@/app/components/testimonials";
 import PinnedRecede from "@/app/components/PinnedRecede";
-
-function prefersReduced() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
+import {
+  prefersReducedMotion,
+  subscribeScrollFrame,
+} from "@/app/lib/motion";
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
@@ -89,17 +86,18 @@ export default function TestimonialsShowcase() {
 
     const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-card]"));
 
-    if (prefersReduced()) {
+    if (prefersReducedMotion()) {
       heading.style.opacity = "1";
       heading.style.transform = "none";
+      heading.style.willChange = "auto";
       cards.forEach((c) => {
         c.style.opacity = "1";
         c.style.transform = "none";
+        c.style.willChange = "auto";
       });
       return;
     }
 
-    let raf = 0;
     const update = () => {
       const vh = window.innerHeight;
       const headTop = heading.getBoundingClientRect().top;
@@ -118,26 +116,18 @@ export default function TestimonialsShowcase() {
           cp,
         )})`;
       });
-      raf = 0;
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(raf);
-    };
+    return subscribeScrollFrame(update);
   }, []);
 
   return (
     /* Outer track: swipes up over the pinned Gallery section. Light near-white
        background matches the design (distinct from the lavender sections). */
     <div className="relative z-40 rounded-t-[2rem] bg-[linear-gradient(180deg,#ffffff_0%,#f6faf8_100%)] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
-      <PinnedRecede className="flex flex-col items-center justify-center py-10 sm:py-14">
+      <PinnedRecede
+        overlapFrom="xl"
+        className="flex flex-col items-center justify-center py-10 sm:py-14"
+      >
         <h2
           ref={headingRef}
           className="px-6 text-center text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl"

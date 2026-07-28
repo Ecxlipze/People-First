@@ -114,7 +114,7 @@ function StageColumn({ stage }: { stage: Stage }) {
 
 export default function EcosystemStages() {
   return (
-    <section className="relative z-10 -mt-6 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(160deg,#fdfbff_0%,#fbf8fe_55%,#f7f3fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:-mt-8 sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
+    <section className="relative z-10 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(160deg,#fdfbff_0%,#fbf8fe_55%,#f7f3fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20">
       <Contours />
 
       {/* cyan wash, upper-left — carries the tint through from section 1 */}
@@ -165,7 +165,7 @@ export default function EcosystemStages() {
           from the right and pull the centred heading off the page's true
           centre. Only the grid and CTAs need to clear the icon rail, so they
           reserve that space themselves. max-w-7xl so the columns run wide. */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10">
         <Reveal className="text-center">
           <h2 className="text-xl font-extrabold tracking-tight text-[#1a1a2e] sm:text-2xl lg:text-[1.75rem]">
             THE PEOPLE FIRST ECOSYSTEM

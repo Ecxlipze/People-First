@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ContactTrigger from "@/app/contact/ContactTrigger";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* About → CTA banner. Rounded deep-purple band with a faint wireframe globe on
    the right; "Let's Get in Touch" copy on the left, the three CTAs on the right.
@@ -9,7 +10,11 @@ export default function CTABanner() {
   return (
     <section className="bg-white px-6 pb-16 sm:px-10">
       <div className="mx-auto w-full max-w-6xl">
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]">
+        <Reveal
+          y={36}
+          scale={0.975}
+          className="relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]"
+        >
           {/* wireframe globe, right side, clipped by the rounded corner */}
           <Image
             src="/images/icons/globe.webp"
@@ -36,14 +41,14 @@ export default function CTABanner() {
               <div className="flex flex-col gap-3.5 sm:flex-row">
                 <ContactTrigger
                   href="/contact"
-                  className="flex-1 whitespace-nowrap rounded-lg border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white transition-colors hover:bg-white/10"
+                  className="pf-interactive flex-1 whitespace-nowrap rounded-lg border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white hover:-translate-y-0.5 hover:bg-white/10"
                 >
                   Book a Consultation
                 </ContactTrigger>
                 <ContactTrigger
                   href="/training"
                   role="Student"
-                  className="flex-1 whitespace-nowrap rounded-lg bg-[#dfd3ef] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] transition-colors hover:bg-white"
+                  className="pf-interactive flex-1 whitespace-nowrap rounded-lg bg-[#dfd3ef] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
                 >
                   Join a Training Program
                 </ContactTrigger>
@@ -51,13 +56,13 @@ export default function CTABanner() {
               <ContactTrigger
                 href="/partner"
                 role="Training Partner"
-                className="w-full rounded-lg bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-[#1a1a2e] transition-colors hover:bg-white/90"
+                className="pf-interactive w-full rounded-lg bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-[#1a1a2e] hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
               >
                 Partner With Us
               </ContactTrigger>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

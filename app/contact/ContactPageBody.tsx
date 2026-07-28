@@ -36,7 +36,7 @@ export default function ContactPageBody({
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-white"
+            className="pf-interactive inline-flex items-center gap-2 rounded-sm text-sm text-zinc-400 hover:-translate-x-0.5 hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             Back
@@ -50,7 +50,7 @@ export default function ContactPageBody({
                 {eyebrow}
               </p>
             )}
-            <div className="overflow-hidden rounded-xl shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)]">
+            <div className="animate-modal-panel overflow-hidden rounded-xl shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)]">
               <ContactPanel defaultRole={defaultRole} />
             </div>
           </div>

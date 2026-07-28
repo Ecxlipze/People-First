@@ -6,13 +6,10 @@ import * as Lucide from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { SECTORS, type Sector } from "@/app/components/ecosystem";
 import PinnedRecede from "@/app/components/PinnedRecede";
-
-function prefersReduced() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
+import {
+  prefersReducedMotion,
+  subscribeScrollFrame,
+} from "@/app/lib/motion";
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
@@ -143,15 +140,15 @@ export default function EcosystemShowcase() {
       orbit.querySelectorAll<HTMLElement>("[data-node], [data-hub]"),
     );
 
-    if (prefersReduced()) {
+    if (prefersReducedMotion()) {
       [...leftItems, ...nodes].forEach((el) => {
         el.style.opacity = "1";
         el.style.transform = "none";
+        el.style.willChange = "auto";
       });
       return;
     }
 
-    let raf = 0;
     const update = () => {
       const vh = window.innerHeight;
 
@@ -169,24 +166,16 @@ export default function EcosystemShowcase() {
         el.style.opacity = String(p);
         el.style.transform = `scale(${lerp(0.4, 1, p)})`;
       });
-      raf = 0;
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(raf);
-    };
+    return subscribeScrollFrame(update);
   }, []);
 
   return (
-    <div className="relative z-50 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
-      <PinnedRecede className="relative flex items-center py-10 sm:py-12 md:min-h-screen">
+    <div className="relative z-50 -mt-8 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]">
+      <PinnedRecede
+        overlapFrom="xl"
+        className="relative flex items-center py-10 sm:py-12 md:min-h-screen"
+      >
         {/* decorative layer — pinned+receding with the content */}
         <Decor />
         <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-8 sm:px-12 lg:grid-cols-2 lg:gap-8 lg:px-16 lg:pr-32">

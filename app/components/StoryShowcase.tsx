@@ -3,14 +3,11 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { User, Briefcase, Network } from "lucide-react";
-import PinnedRecede from "@/app/components/PinnedRecede";
-
-function prefersReduced() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
+import SiteFooter from "@/app/components/SiteFooter";
+import {
+  prefersReducedMotion,
+  subscribeScrollFrame,
+} from "@/app/lib/motion";
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
@@ -30,7 +27,7 @@ function Decor() {
         alt=""
         width={739}
         height={552}
-        className="absolute -left-4 -top-4 w-[42vw] max-w-[560px] select-none sm:-left-2 sm:-top-2"
+        className="absolute -left-4 -top-4 w-[42vw] max-w-[560px] select-none opacity-25 sm:-left-2 sm:-top-2 xl:opacity-100"
       />
       {/* purple blob + dotted texture, bottom-right corner */}
       <Image
@@ -38,7 +35,7 @@ function Decor() {
         alt=""
         width={859}
         height={430}
-        className="absolute -bottom-2 -right-2 w-[46vw] max-w-[640px] select-none"
+        className="absolute -bottom-2 -right-2 w-[46vw] max-w-[640px] select-none opacity-25 xl:opacity-100"
       />
       {/* paper-plane pair, top-left (blue + teal, pointing down) */}
       <Image
@@ -46,7 +43,7 @@ function Decor() {
         alt=""
         width={392}
         height={353}
-        className="absolute left-6 top-24 w-24 select-none sm:left-12 sm:top-28 sm:w-32"
+        className="absolute left-6 top-24 hidden w-24 select-none sm:left-12 sm:top-28 sm:w-32 xl:block"
       />
       {/* paper-plane pair, top-right (teal + blue, pointing up) */}
       <Image
@@ -54,7 +51,7 @@ function Decor() {
         alt=""
         width={256}
         height={227}
-        className="absolute right-6 top-8 w-20 select-none sm:right-10 sm:top-10 sm:w-24"
+        className="absolute right-6 top-8 hidden w-20 select-none sm:right-10 sm:top-10 sm:w-24 xl:block"
       />
     </div>
   );
@@ -74,12 +71,9 @@ const GAPS = [
   },
 ];
 
-/* Story section (7). Swipes up over the pinned Ecosystem section (6) — outer
-   track carries the negative margin + rounded opaque bg + upward shadow (the
-   swipe-over recipe). PinnedRecede pins it too. Left column of copy (founder
-   story + the three "lacks…" gaps), right column a circular founder photo with
-   an overlapping "born out of a simple conclusion" callout, mirroring the
-   design. Content scrubs in as the block rises. */
+/* Story section (7). Swipes up over the pinned Ecosystem section (6). It is the
+   terminal homepage panel, so the footer continues inside the same white panel
+   rather than becoming another pinned/swipe-over section. */
 export default function StoryShowcase() {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -91,16 +85,31 @@ export default function StoryShowcase() {
       root.querySelectorAll<HTMLElement>("[data-reveal]"),
     );
 
-    if (prefersReduced()) {
+    const wideDesktop = window.matchMedia("(min-width: 1280px)");
+
+    const revealAll = () => {
       items.forEach((el) => {
         el.style.opacity = "1";
         el.style.transform = "none";
+        el.style.willChange = "auto";
       });
+    };
+
+    if (prefersReducedMotion()) {
+      revealAll();
       return;
     }
 
-    let raf = 0;
     const update = () => {
+      // The one-column iPad/mobile layout is taller than the viewport. Keeping
+      // desktop's opacity scrub there makes content near the lower edge look
+      // disabled and leaves an apparent blank section. In normal-flow layouts,
+      // keep every item readable and reserve the full scrub for wide desktop.
+      if (!wideDesktop.matches) {
+        revealAll();
+        return;
+      }
+
       const vh = window.innerHeight;
       items.forEach((el, i) => {
         const top = el.getBoundingClientRect().top;
@@ -108,24 +117,18 @@ export default function StoryShowcase() {
         el.style.opacity = String(p);
         el.style.transform = `translateY(${lerp(34, 0, p)}px)`;
       });
-      raf = 0;
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    const unsubscribe = subscribeScrollFrame(update);
+    wideDesktop.addEventListener("change", update);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(raf);
+      wideDesktop.removeEventListener("change", update);
+      unsubscribe();
     };
   }, []);
 
   return (
-    <div className="relative z-[60] overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
-      <PinnedRecede className="relative flex items-center py-10 sm:py-12 md:min-h-screen">
+    <div className="relative z-[60] -mt-8 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]">
+      <div className="relative flex items-center py-10 sm:py-12 md:min-h-screen">
         {/* decorative layer — pinned+receding with the content */}
         <Decor />
         <div
@@ -137,14 +140,14 @@ export default function StoryShowcase() {
             <h2
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="text-[2.2rem] font-extrabold leading-none tracking-tight text-[#1a1a2e] sm:text-[2.5rem]"
+              className="max-xl:!opacity-100 text-[2.2rem] font-extrabold leading-none tracking-tight text-[#1a1a2e] sm:text-[2.5rem]"
             >
               The Story
             </h2>
             <p
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mt-3 text-xl font-semibold text-[#1a1a2e] sm:text-2xl"
+              className="max-xl:!opacity-100 mt-3 text-xl font-semibold text-[#1a1a2e] sm:text-2xl"
             >
               Every Movement Begins with a Question.
             </p>
@@ -153,7 +156,7 @@ export default function StoryShowcase() {
             <div
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mt-4 flex gap-2"
+              className="max-xl:!opacity-100 mt-4 flex gap-2"
             >
               <span className="mt-1 select-none font-serif text-4xl font-bold leading-none text-[#4b2f8c]">
                 &ldquo;
@@ -167,7 +170,7 @@ export default function StoryShowcase() {
             <p
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mt-4 text-sm leading-relaxed text-zinc-700 sm:text-base"
+              className="max-xl:!opacity-100 mt-4 text-sm leading-relaxed text-zinc-700 sm:text-base"
             >
               After more than 25 years working closely with entrepreneurs,
               students, farmers, and investors across diverse sectors, our
@@ -187,7 +190,7 @@ export default function StoryShowcase() {
                   key={strong}
                   data-reveal
                   style={{ opacity: 0, willChange: "transform, opacity" }}
-                  className="flex items-center gap-3"
+                  className="max-xl:!opacity-100 flex items-center gap-3"
                 >
                   <GapIcon
                     className="h-6 w-6 flex-none text-[#2a2a4a]"
@@ -204,7 +207,7 @@ export default function StoryShowcase() {
             <p
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mt-6 text-lg text-[#1a1a2e] sm:text-xl"
+              className="max-xl:!opacity-100 mt-6 text-lg text-[#1a1a2e] sm:text-xl"
             >
               Talent is everywhere, but the{" "}
               <span className="font-bold text-[#5a1f9e]">
@@ -217,7 +220,7 @@ export default function StoryShowcase() {
           <div
             data-reveal
             style={{ opacity: 0, willChange: "transform, opacity" }}
-            className="relative mx-auto w-full max-w-[380px] pb-28 sm:pb-32"
+            className="max-xl:!opacity-100 relative mx-auto w-full max-w-[380px] pb-28 sm:pb-32"
           >
             {/* circular founder photo */}
             <div className="relative aspect-square w-full overflow-hidden rounded-full shadow-[0_24px_60px_-20px_rgba(20,40,80,0.5)] ring-4 ring-white">
@@ -258,7 +261,11 @@ export default function StoryShowcase() {
             </div>
           </div>
         </div>
-      </PinnedRecede>
+      </div>
+
+      {/* The footer is part of the terminal Story panel and follows it without
+          a separate overlap, pin, shadow, or rounded-section transition. */}
+      <SiteFooter />
     </div>
   );
 }

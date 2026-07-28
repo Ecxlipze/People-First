@@ -125,7 +125,7 @@ function Copy({ article }: { article: Article }) {
 
 export default function RecommendedArticles() {
   return (
-    <section className="relative z-10 -mt-6 rounded-t-[2rem] bg-white pb-24 pt-20 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:-mt-8 sm:rounded-t-[3rem] sm:pb-28 sm:pt-24">
+    <section className="relative z-10 rounded-t-[2rem] bg-white pb-24 pt-20 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-24">
       <Reveal className="px-6 text-center">
         <h2 className="text-xl font-extrabold tracking-tight text-[#1a1a2e] sm:text-[1.6rem]">
           Recommended Article

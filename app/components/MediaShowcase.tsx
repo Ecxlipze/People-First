@@ -3,13 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { MediaFrame, StatCard } from "@/app/components/media";
-
-function prefersReduced() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
+import { prefersReducedMotion } from "@/app/lib/motion";
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
@@ -35,45 +29,68 @@ export default function MediaShowcase() {
     const stat = statRef.current;
     if (!track || !media || !text || !stat) return;
 
-    // The pinned scale/fade stage runs from `md` (768px) up; below that
-    // (phones) it flows normally so nothing is clipped above the fold.
+    // The pinned scale/fade stage runs from `md` (768px) up; phones keep normal
+    // flow so nothing clips, while using a lighter element-by-element scrub.
     const desktop = window.matchMedia("(min-width: 768px)");
 
     const disable = () => {
       // No pinning: collapse the track and show everything in place.
       track.style.height = "auto";
-      if (stageRef.current) stageRef.current.style.height = "auto";
-      media.style.transform = "none";
-      text.style.opacity = "1";
-      text.style.transform = "none";
-      stat.style.opacity = "1";
-      stat.style.transform = "none";
+      if (stageRef.current) {
+        stageRef.current.style.height = "auto";
+        stageRef.current.style.position = "static";
+        stageRef.current.style.overflow = "visible";
+        stageRef.current.style.alignItems = "stretch";
+      }
     };
 
     let raf = 0;
     let attached = false;
+    let pinned = false;
     const update = () => {
-      const r = track.getBoundingClientRect();
-      const distance = r.height - window.innerHeight; // scroll travelled while pinned
-      const p = distance > 0 ? clamp01(-r.top / distance) : 0;
+      const vh = window.innerHeight;
 
-      // media scales up through the first ~60% of the pin, then holds.
-      const grow = slice(p, 0, 0.6);
-      media.style.transform = `scale(${lerp(0.62, 1, grow)})`;
+      if (pinned) {
+        const r = track.getBoundingClientRect();
+        const distance = r.height - vh; // scroll travelled while pinned
+        const p = distance > 0 ? clamp01(-r.top / distance) : 0;
 
-      // text fades + rises in over the middle stretch.
-      const t = slice(p, 0.2, 0.55);
-      text.style.opacity = String(t);
-      text.style.transform = `translateY(${lerp(40, 0, t)}px)`;
+        // media scales up through the first ~60% of the pin, then holds.
+        const grow = slice(p, 0, 0.6);
+        media.style.transform = `scale(${lerp(0.62, 1, grow)})`;
 
-      // stat card slides in last.
-      const s = slice(p, 0.55, 0.85);
-      stat.style.opacity = String(s);
-      stat.style.transform = `translateY(${lerp(28, 0, s)}px) scale(${lerp(
-        0.9,
-        1,
-        s,
-      )})`;
+        // text fades + rises in over the middle stretch.
+        const t = slice(p, 0.2, 0.55);
+        text.style.opacity = String(t);
+        text.style.transform = `translateY(${lerp(40, 0, t)}px)`;
+
+        // stat card slides in last.
+        const s = slice(p, 0.55, 0.85);
+        stat.style.opacity = String(s);
+        stat.style.transform = `translateY(${lerp(28, 0, s)}px) scale(${lerp(
+          0.9,
+          1,
+          s,
+        )})`;
+      } else {
+        // Phones keep normal document flow, but each part still scrubs into
+        // place as it enters instead of appearing as a static stack.
+        const mediaTop = media.getBoundingClientRect().top;
+        const textTop = text.getBoundingClientRect().top;
+        const statTop = stat.getBoundingClientRect().top;
+        const grow = clamp01((vh * 0.96 - mediaTop) / (vh * 0.5));
+        const t = clamp01((vh * 0.94 - textTop) / (vh * 0.48));
+        const s = clamp01((vh * 0.94 - statTop) / (vh * 0.42));
+        media.style.transform = `scale(${lerp(0.88, 1, grow)})`;
+        text.style.opacity = String(t);
+        text.style.transform = `translateY(${lerp(34, 0, t)}px)`;
+        stat.style.opacity = String(s);
+        stat.style.transform = `translateY(${lerp(24, 0, s)}px) scale(${lerp(
+          0.94,
+          1,
+          s,
+        )})`;
+      }
 
       raf = 0;
     };
@@ -83,31 +100,49 @@ export default function MediaShowcase() {
     };
 
     const apply = () => {
-      const on = desktop.matches && !prefersReduced();
-      if (on) {
-        track.style.height = "";
-        if (stageRef.current) stageRef.current.style.height = "";
-        if (!attached) {
-          window.addEventListener("scroll", onScroll, { passive: true });
-          attached = true;
-        }
-        update();
-      } else {
+      const reduced = prefersReducedMotion();
+      if (reduced) {
+        pinned = false;
+        disable();
+        media.style.transform = "none";
+        text.style.opacity = "1";
+        text.style.transform = "none";
+        stat.style.opacity = "1";
+        stat.style.transform = "none";
         if (attached) {
           window.removeEventListener("scroll", onScroll);
           attached = false;
         }
+        return;
+      }
+
+      pinned = desktop.matches;
+      if (pinned) {
+        track.style.height = "";
+        if (stageRef.current) {
+          stageRef.current.style.height = "";
+          stageRef.current.style.position = "";
+          stageRef.current.style.overflow = "";
+          stageRef.current.style.alignItems = "";
+        }
+      } else {
         disable();
       }
+
+      if (!attached) {
+        window.addEventListener("scroll", onScroll, { passive: true });
+        attached = true;
+      }
+      update();
     };
 
     apply();
     desktop.addEventListener("change", apply);
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", apply);
     return () => {
       desktop.removeEventListener("change", apply);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", apply);
       cancelAnimationFrame(raf);
     };
   }, []);

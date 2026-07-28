@@ -6,6 +6,7 @@ import EcosystemStages from "@/app/what-we-do/sections/EcosystemStages";
 import VenturesImpact from "@/app/what-we-do/sections/VenturesImpact";
 import EvolutionPipeline from "@/app/what-we-do/sections/EvolutionPipeline";
 import BrandArchitecture from "@/app/what-we-do/sections/BrandArchitecture";
+import TallSwipePanel from "@/app/components/TallSwipePanel";
 
 export const metadata: Metadata = {
   title: "What We Do — People First",
@@ -28,25 +29,31 @@ export default function WhatWeDoPage() {
         <PainPoints />
 
         {/* ── SECTION 2: THE PEOPLE FIRST ECOSYSTEM ──
-            Opaque rounded block with a negative top margin → swipes over the
-            pinned section above. */}
-        <EcosystemStages />
+            Starts fully below the initial viewport, then swipes over the
+            pinned section above once scrolling begins. */}
+        <TallSwipePanel>
+          <EcosystemStages />
+        </TallSwipePanel>
 
         {/* ── SECTION 3: VENTURE TIERS, RESULTS & IMPACT ──
             Swipes up over section 2 the same way section 2 covers section 1.
-            Section 2 is not pinned for this: it is well over a viewport tall, so
-            a pin would either clip it or (via PinnedRecede's own guard) disable
-            itself and just add dead space. The overlap alone carries the
-            transition. */}
-        <VenturesImpact />
+            The tall-section track lets all of section 2 scroll first, then pins
+            only its final viewport while this panel covers it. */}
+        <TallSwipePanel swipeOver>
+          <VenturesImpact />
+        </TallSwipePanel>
 
         {/* ── SECTION 4: THE THREE DIMENSIONS / EVOLUTIONARY PIPELINE ──
             Swipes over section 3, same overlap. */}
-        <EvolutionPipeline />
+        <TallSwipePanel swipeOver>
+          <EvolutionPipeline />
+        </TallSwipePanel>
 
         {/* ── SECTION 5: BRAND ARCHITECTURE ──
             Swipes over section 4, same overlap. */}
-        <BrandArchitecture />
+        <TallSwipePanel swipeOver holdForNext={false}>
+          <BrandArchitecture />
+        </TallSwipePanel>
 
         {/* Footer sits in normal flow below the last section, as on every other
             page. */}

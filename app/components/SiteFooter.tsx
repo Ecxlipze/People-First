@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ContactTrigger from "@/app/contact/ContactTrigger";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* This lucide-react version dropped ALL brand glyphs (no Instagram/Facebook/
    LinkedIn/Twitter exports — the AGENTS.md deprecation warning in action), so
@@ -113,13 +114,17 @@ export default function SiteFooter({
 }) {
   return (
     <footer
-      className={`relative z-[70] bg-white ${swipeOver ? "rounded-t-[2rem] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]" : ""}`}
+      className={`relative z-[70] bg-white ${swipeOver ? "-mt-8 rounded-t-[2rem] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]" : ""}`}
     >
       <div className="mx-auto w-full max-w-[1400px] px-6 py-14 sm:px-10 sm:py-16">
         {/* ── CTA band ── short & wide; globe flush-left and clipped, copy
             slightly right of it, CTAs pinned to the right. */}
         {showCta && (
-          <div className="relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]">
+          <Reveal
+            y={36}
+            scale={0.975}
+            className="relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]"
+          >
             {/* wireframe globe (real asset) — vertically centred, flush to the
               left edge and clipped by the rounded corner, ~1.5× the band height.
               The source art is magenta lines on transparency; the filter tints
@@ -151,14 +156,14 @@ export default function SiteFooter({
                 <div className="flex flex-col gap-3.5 sm:flex-row">
                   <ContactTrigger
                     href="/contact"
-                    className="flex-1 whitespace-nowrap rounded-lg bg-[#dfd3ef] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] transition-colors hover:bg-white"
+                    className="pf-interactive flex-1 whitespace-nowrap rounded-lg bg-[#dfd3ef] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
                   >
                     Book a Consultation
                   </ContactTrigger>
                   <ContactTrigger
                     href="/training"
                     role="Student"
-                    className="flex-1 whitespace-nowrap rounded-lg border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white transition-colors hover:bg-white/10"
+                    className="pf-interactive flex-1 whitespace-nowrap rounded-lg border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white hover:-translate-y-0.5 hover:bg-white/10"
                   >
                     Join a Training Program
                   </ContactTrigger>
@@ -166,17 +171,21 @@ export default function SiteFooter({
                 <ContactTrigger
                   href="/partner"
                   role="Training Partner"
-                  className="w-full rounded-lg bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-[#1a1a2e] transition-colors hover:bg-white/90"
+                  className="pf-interactive w-full rounded-lg bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-[#1a1a2e] hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
                 >
                   Partner With Us
                 </ContactTrigger>
               </div>
             </div>
-          </div>
+          </Reveal>
         )}
 
         {/* ── logo + socials + link columns ── */}
-        <div className="mt-14 grid grid-cols-1 gap-12 sm:mt-16 lg:grid-cols-[1fr_1.1fr]">
+        <Reveal
+          y={36}
+          scale={0.985}
+          className="mt-14 grid grid-cols-1 gap-12 sm:mt-16 lg:grid-cols-[1fr_1.1fr]"
+        >
           {/* logo + socials */}
           <div className="lg:pl-6">
             <Link href="/" aria-label="People First — home">
@@ -196,7 +205,7 @@ export default function SiteFooter({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-[#1a1a2e] transition-colors hover:text-[#5a1f9e]"
+                  className="pf-interactive rounded-sm text-[#1a1a2e] hover:-translate-y-0.5 hover:text-[#5a1f9e]"
                 >
                   <SocialIcon className="h-[1.65rem] w-[1.65rem]" />
                 </a>
@@ -216,7 +225,7 @@ export default function SiteFooter({
                     <li key={l.label}>
                       <Link
                         href={l.href}
-                        className="text-[1.0625rem] text-zinc-600 transition-colors hover:text-[#5a1f9e]"
+                        className="pf-interactive inline-block rounded-sm text-[1.0625rem] text-zinc-600 hover:translate-x-0.5 hover:text-[#5a1f9e]"
                       >
                         {l.label}
                       </Link>
@@ -226,7 +235,7 @@ export default function SiteFooter({
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );

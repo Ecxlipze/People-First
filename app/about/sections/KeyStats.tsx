@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* About → Key Stats. Plum/maroon panel: a "Trust & Credibility" pill, the
    KEY STATS heading (STATS in gold), supporting copy, and a set of light stat
@@ -39,7 +40,7 @@ export default function KeyStats() {
     <section className="bg-pf-plum px-6 py-20 sm:px-10 sm:py-24">
       <div className="mx-auto max-w-6xl">
         {/* ── stats row ── */}
-        <div className="grid items-center gap-10 lg:grid-cols-2">
+        <Reveal className="grid items-center gap-10 lg:grid-cols-2">
           {/* left: heading + copy */}
           <div>
             <span className="inline-block rounded-md bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-pf-plum">
@@ -81,10 +82,10 @@ export default function KeyStats() {
               ))}
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* ── strategic partners ── */}
-        <div className="mt-16 sm:mt-20">
+        <Reveal className="mt-16 sm:mt-20">
           <h3 className="text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
             OUR STRATEGIC PARTNERS
           </h3>
@@ -107,7 +108,7 @@ export default function KeyStats() {
             <div aria-hidden className="hidden sm:block" />
             <div aria-hidden className="hidden sm:block" />
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
