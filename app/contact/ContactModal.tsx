@@ -129,7 +129,7 @@ export function ContactModalProvider({
       {children}
 
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center pb-[max(1rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,env(safe-area-inset-top))] sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:pl-[max(1.5rem,env(safe-area-inset-left))] sm:pr-[max(1.5rem,env(safe-area-inset-right))] sm:pt-[max(1.5rem,env(safe-area-inset-top))]">
           {/* dimmed page behind */}
           <button
             type="button"
@@ -145,13 +145,13 @@ export function ContactModalProvider({
             aria-modal="true"
             aria-labelledby="contact-modal-title"
             tabIndex={-1}
-            className="animate-modal-panel relative max-h-[92dvh] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none"
+            className="animate-modal-panel relative max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none sm:max-h-[calc(100dvh-3rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))]"
           >
             <button
               type="button"
               onClick={close}
               aria-label="Close"
-              className="pf-interactive absolute right-3 top-3 z-10 rounded-full bg-white/15 p-2 text-white/90 hover:bg-white/25 hover:text-white"
+              className="pf-interactive absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white/90 hover:bg-white/25 hover:text-white"
             >
               <X className="h-5 w-5" />
             </button>

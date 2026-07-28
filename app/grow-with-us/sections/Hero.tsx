@@ -17,7 +17,11 @@ export default function Hero() {
 
       {/* logo, top-left */}
       <header className="relative z-20 px-6 pt-8 sm:px-12 sm:pt-10">
-        <Link href="/" aria-label="People First — landing">
+        <Link
+          href="/"
+          aria-label="People First — landing"
+          className="inline-flex min-h-11 items-center"
+        >
           <Image
             src="/images/logo.svg"
             alt="People First"
@@ -103,14 +107,14 @@ export default function Hero() {
         <ContactTrigger
           href="/partner"
           role="Training Partner"
-          className="rounded-lg bg-pf-teal px-5 py-2.5 text-[0.8rem] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(45,190,158,0.8)] transition-all hover:scale-[1.03] hover:brightness-95 sm:text-sm"
+          className="inline-flex min-h-11 items-center rounded-lg bg-pf-teal px-5 py-2.5 text-[0.8rem] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(45,190,158,0.8)] transition-all hover:scale-[1.03] hover:brightness-95 sm:text-sm"
         >
           Partner with Us
         </ContactTrigger>
         <ContactTrigger
           href="/training"
           role="Student"
-          className="rounded-lg bg-[#0f2f47] px-5 py-2.5 text-[0.8rem] font-semibold text-white transition-all hover:scale-[1.03] hover:bg-[#163f5d] sm:text-sm"
+          className="inline-flex min-h-11 items-center rounded-lg bg-[#0f2f47] px-5 py-2.5 text-[0.8rem] font-semibold text-white transition-all hover:scale-[1.03] hover:bg-[#163f5d] sm:text-sm"
         >
           Join Training Program
         </ContactTrigger>

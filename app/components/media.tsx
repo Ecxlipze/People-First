@@ -8,18 +8,26 @@ export function MediaFrame({
   alt = "",
   caption,
   className = "",
+  sizes = "(max-width: 767px) calc(100vw - 3rem), (max-width: 1279px) 45vw, 520px",
 }: {
   src?: string;
   alt?: string;
   caption?: React.ReactNode;
   className?: string;
+  sizes?: string;
 }) {
   return (
     <div
       className={`relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[linear-gradient(135deg,#3a3f52_0%,#242838_100%)] shadow-xl ring-1 ring-black/5 ${className}`}
     >
       {src ? (
-        <Image src={src} alt={alt} fill className="object-cover" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          className="object-cover"
+        />
       ) : (
         <div
           aria-hidden

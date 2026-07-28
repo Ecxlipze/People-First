@@ -6,7 +6,7 @@ export default function RadialNav() {
   return (
     <nav
       aria-label="Explore"
-      className="pointer-events-none absolute left-1/2 top-[58%] h-0 w-0 -translate-x-1/2 [--nav-r:120px] sm:[--nav-r:180px] lg:[--nav-r:290px]"
+      className="pointer-events-none absolute left-1/2 top-[58%] h-0 w-0 -translate-x-1/2 [--nav-r:120px] sm:[--nav-r:180px] lg:[--nav-r:290px] [@media(max-height:500px)]:[--nav-r:90px]"
     >
       {navItems.map((item, i) => {
         const rad = (item.angle * Math.PI) / 180;
@@ -25,7 +25,7 @@ export default function RadialNav() {
             key={item.label}
             href={item.href}
             aria-label={item.label}
-            className="animate-pop-in pointer-events-auto group absolute flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:h-11 sm:w-11"
+            className="animate-pop-in pointer-events-auto group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
             style={{
               left: `calc(${sin} * var(--nav-r))`,
               top: `calc(${cos} * var(--nav-r))`,
@@ -38,7 +38,7 @@ export default function RadialNav() {
               width={44}
               height={44}
               priority
-              className="h-9 w-9 drop-shadow-[0_0_0_rgba(43,191,196,0)] transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(43,191,196,0.65)] sm:h-11 sm:w-11"
+              className="h-10 w-10 drop-shadow-[0_0_0_rgba(43,191,196,0)] transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(43,191,196,0.65)] sm:h-11 sm:w-11"
             />
             <span
               className={`absolute hidden whitespace-nowrap text-sm tracking-wide text-zinc-300 transition-colors group-hover:text-white lg:block ${labelPlacement}`}

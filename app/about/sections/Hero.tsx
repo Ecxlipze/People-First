@@ -18,7 +18,11 @@ export default function Hero() {
 
       {/* logo, top-left (links back to landing) */}
       <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10">
-        <Link href="/" aria-label="People First — landing">
+        <Link
+          href="/"
+          aria-label="People First — landing"
+          className="inline-flex min-h-11 items-center"
+        >
           {/* About-page logo (already light/white — designed for the dark hero,
               so no invert filter needed). */}
           <Image
@@ -74,14 +78,14 @@ export default function Hero() {
             <ContactTrigger
               href="/partner"
               role="Training Partner"
-              className="rounded-full bg-pf-magenta px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(224,64,154,0.6)] transition-all hover:scale-[1.03] hover:bg-pf-magenta-dark sm:text-base"
+              className="inline-flex min-h-11 items-center rounded-full bg-pf-magenta px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(224,64,154,0.6)] transition-all hover:scale-[1.03] hover:bg-pf-magenta-dark sm:text-base"
             >
               Partner with Us
             </ContactTrigger>
             <ContactTrigger
               href="/training"
               role="Student"
-              className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.03] hover:bg-white/10 sm:text-base"
+              className="inline-flex min-h-11 items-center rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.03] hover:bg-white/10 sm:text-base"
             >
               Join Training Program
             </ContactTrigger>
@@ -100,11 +104,11 @@ export default function Hero() {
               priority
             />
             {/* two pill labels, overlapping the bottom of the frame */}
-            <div className="absolute inset-x-0 bottom-4 flex justify-center gap-3 px-4">
-              <span className="rounded-full bg-pf-magenta px-4 py-1.5 text-[11px] font-semibold text-white shadow-lg">
+            <div className="absolute inset-x-0 bottom-4 flex flex-wrap justify-center gap-2 px-3">
+              <span className="rounded-full bg-pf-magenta px-3 py-1.5 text-[10px] font-semibold text-white shadow-lg sm:px-4 sm:text-[11px]">
                 Partner with Us
               </span>
-              <span className="rounded-full bg-white/90 px-4 py-1.5 text-[11px] font-semibold text-pf-purple shadow-lg">
+              <span className="rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-semibold text-pf-purple shadow-lg sm:px-4 sm:text-[11px]">
                 Job Training Program
               </span>
             </div>
@@ -116,7 +120,7 @@ export default function Hero() {
       <div className="relative z-20 flex justify-end px-8 pb-8 sm:px-14">
         <ContactTrigger
           href="/contact"
-          className="group inline-flex items-center gap-2.5 text-lg font-bold text-white transition-colors hover:text-pf-magenta"
+          className="group inline-flex min-h-11 items-center gap-2.5 text-lg font-bold text-white transition-colors hover:text-pf-magenta"
         >
           Say Hello!
           <MessageCircle className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110" />

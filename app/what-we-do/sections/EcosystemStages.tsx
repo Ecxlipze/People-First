@@ -194,14 +194,14 @@ export default function EcosystemStages() {
           <ContactTrigger
             href="/partner"
             role="Training Partner"
-            className="rounded-md bg-[#a02f52] px-7 py-3 text-[0.9rem] font-medium text-white transition-colors hover:bg-[#8c2946]"
+            className="inline-flex min-h-11 items-center rounded-md bg-[#a02f52] px-7 py-3 text-[0.9rem] font-medium text-white transition-colors hover:bg-[#8c2946]"
           >
             Partner with Us
           </ContactTrigger>
           <ContactTrigger
             href="/training"
             role="Student"
-            className="rounded-md bg-zinc-200 px-7 py-3 text-[0.9rem] font-medium text-zinc-700 transition-colors hover:bg-zinc-300"
+            className="inline-flex min-h-11 items-center rounded-md bg-zinc-200 px-7 py-3 text-[0.9rem] font-medium text-zinc-700 transition-colors hover:bg-zinc-300"
           >
             Join Training Program
           </ContactTrigger>

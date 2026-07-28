@@ -97,7 +97,7 @@ export default function OurPodcasts() {
                 type="button"
                 onClick={() => setPage(n)}
                 aria-current={n === page ? "page" : undefined}
-                className={`pf-interactive h-8 w-8 rounded border text-[0.7rem] font-semibold ${
+                className={`pf-interactive h-11 w-11 rounded border text-xs font-semibold ${
                   n === page
                     ? "border-white bg-white text-[#2d0b4e]"
                     : "border-white/30 text-white/70 hover:border-white/60 hover:text-white"
@@ -110,7 +110,7 @@ export default function OurPodcasts() {
               type="button"
               onClick={() => setPage((p) => Math.min(TOTAL_PAGES, p + 1))}
               disabled={page === TOTAL_PAGES}
-              className="pf-interactive ml-1 inline-flex h-8 items-center gap-1 rounded border border-white/30 px-3 text-[0.7rem] font-semibold text-white/70 hover:border-white/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="pf-interactive ml-1 inline-flex min-h-11 items-center gap-1 rounded border border-white/30 px-3 text-xs font-semibold text-white/70 hover:border-white/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Next
               <ChevronRight className="h-3.5 w-3.5" />
@@ -119,7 +119,7 @@ export default function OurPodcasts() {
 
           <Link
             href="/insights"
-            className="pf-interactive rounded border border-white/30 px-4 py-2 text-[0.7rem] font-semibold text-white/80 hover:border-white/60 hover:text-white"
+            className="pf-interactive inline-flex min-h-11 items-center rounded border border-white/30 px-4 py-2 text-xs font-semibold text-white/80 hover:border-white/60 hover:text-white"
           >
             View All
           </Link>

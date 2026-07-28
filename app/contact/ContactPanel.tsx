@@ -151,7 +151,7 @@ export default function ContactPanel({
   headingId?: string;
 }) {
   return (
-    <div className="grid gap-8 bg-pf-plum p-8 sm:p-10 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-12 lg:p-14">
+    <div className="grid gap-8 bg-pf-plum p-5 sm:p-10 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-12 lg:p-14">
       {/* ── left: get in touch ── */}
       <div className="text-white">
         <h2
@@ -175,7 +175,7 @@ export default function ContactPanel({
                 <a
                   key={`${p}-${i}`}
                   href={`tel:${p.replace(/\s/g, "")}`}
-                  className="block text-sm text-white/90 transition-colors hover:text-white"
+                  className="inline-flex min-h-11 items-center text-sm text-white/90 transition-colors hover:text-white"
                 >
                   {p}
                 </a>
@@ -192,7 +192,7 @@ export default function ContactPanel({
                 <a
                   key={e}
                   href={`mailto:${e}`}
-                  className="block text-sm text-white/90 transition-colors hover:text-white"
+                  className="inline-flex min-h-11 items-center text-sm text-white/90 transition-colors hover:text-white"
                 >
                   {e}
                 </a>
@@ -209,7 +209,7 @@ export default function ContactPanel({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-white transition-transform hover:scale-110"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white transition-transform hover:scale-110"
             >
               <Icon className={`h-5 w-5 ${className}`} />
             </a>

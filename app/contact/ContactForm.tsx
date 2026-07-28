@@ -26,7 +26,7 @@ const GENDERS = ["Female", "Male", "Prefer not to say"] as const;
 /* Shared input chrome — flat light-grey fields with a magenta focus ring,
    matching the mockup's form card. */
 const FIELD =
-  "w-full rounded-md border bg-[#f2f2f4] px-3.5 py-2.5 text-sm text-zinc-800 outline-none transition-colors placeholder:text-zinc-400 focus:border-pf-magenta focus:ring-2 focus:ring-pf-magenta/25";
+  "min-h-11 w-full rounded-md border bg-[#f2f2f4] px-3.5 py-2.5 text-sm text-zinc-800 outline-none transition-colors placeholder:text-zinc-400 focus:border-pf-magenta focus:ring-2 focus:ring-pf-magenta/25";
 
 function Field({
   label,
@@ -96,7 +96,7 @@ export default function ContactForm({
           <button
             type="button"
             onClick={onSuccess}
-            className="pf-interactive mt-7 rounded-md bg-[#8f1d3f] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#7a1836]"
+            className="pf-interactive mt-7 min-h-11 rounded-md bg-[#8f1d3f] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#7a1836]"
           >
             Close
           </button>
@@ -108,7 +108,7 @@ export default function ContactForm({
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-4 p-6 sm:p-8"
+      className="flex flex-col gap-4 p-5 sm:p-8"
       noValidate
     >
       {/* honeypot — hidden from users and assistive tech, catnip for bots */}
@@ -244,7 +244,7 @@ export default function ContactForm({
       <button
         type="submit"
         disabled={pending}
-        className="pf-interactive mt-1 w-full rounded-md bg-[#8f1d3f] px-5 py-3 text-sm font-semibold text-white hover:bg-[#7a1836] disabled:cursor-not-allowed disabled:opacity-70"
+        className="pf-interactive mt-1 min-h-11 w-full rounded-md bg-[#8f1d3f] px-5 py-3 text-sm font-semibold text-white hover:bg-[#7a1836] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {pending ? (
           <span className="inline-flex items-center justify-center gap-2">

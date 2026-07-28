@@ -41,34 +41,38 @@ export default function HomePage() {
             />
 
             {/* logo, top-left (links back to landing) */}
-            <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10">
-              <Link href="/" aria-label="People First — landing">
+            <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10 [@media(max-height:500px)]:pt-4">
+              <Link
+                href="/"
+                aria-label="People First — landing"
+                className="inline-flex min-h-11 items-center"
+              >
                 <Image
                   src="/images/logo.svg"
                   alt="People First"
                   width={398}
                   height={100}
                   priority
-                  className="h-11 w-auto sm:h-[52px]"
+                  className="h-11 w-auto sm:h-[52px] [@media(max-height:500px)]:h-9"
                 />
               </Link>
             </header>
 
             {/* hero copy, left */}
             <Recede>
-              <main className="animate-fade-in-up relative z-10 max-w-[min(56rem,72%)] px-8 pt-10 sm:px-14 sm:pt-16">
-                <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+              <main className="animate-fade-in-up relative z-10 w-full max-w-[92%] px-6 pr-12 pt-6 sm:max-w-[min(56rem,72%)] sm:px-14 sm:pt-16 [@media(max-height:500px)]:pt-2">
+                <h1 className="text-3xl font-extrabold leading-[1.05] tracking-tight min-[390px]:text-4xl sm:text-6xl lg:text-7xl [@media(max-height:500px)]:text-3xl">
                   <span className="text-[#f2a7a7]">Why </span>
                   <span className="text-[#9ed2bd]">Struggle Alone?</span>
                 </h1>
 
-                <p className="mt-8 max-w-2xl text-lg font-medium leading-snug text-[#7a86dd] sm:text-xl lg:text-2xl">
+                <p className="mt-5 max-w-2xl text-base font-medium leading-snug text-[#7a86dd] sm:mt-8 sm:text-xl lg:text-2xl [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:text-sm">
                   Isolation Breeds Failure. People First Rewrites the Script.
                   Together We Progress, Together We Win. Across your physical,
                   mind &amp; market journey
                 </p>
 
-                <p className="mt-7 text-2xl font-bold tracking-tight sm:text-3xl">
+                <p className="mt-5 text-xl font-bold tracking-tight sm:mt-7 sm:text-3xl [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:text-lg">
                   <span className="text-[#f2a7a7]">Learn</span>
                   <span className="text-zinc-400"> x </span>
                   <span className="text-[#b9df53]">Grow</span>
@@ -79,19 +83,19 @@ export default function HomePage() {
             </Recede>
 
             {/* bottom-right CTAs (stack on small screens) */}
-            <Recede className="absolute bottom-6 left-4 right-4 z-20 flex flex-col items-end gap-3 sm:bottom-10 sm:left-auto sm:right-8 sm:flex-row sm:items-center sm:gap-4">
+            <Recede className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] right-[max(1rem,env(safe-area-inset-right))] z-20 flex flex-col items-end gap-3 sm:bottom-10 sm:left-auto sm:right-[max(2rem,env(safe-area-inset-right))] sm:flex-row sm:items-center sm:gap-4">
               <div className="flex w-full gap-3 sm:w-auto">
                 <ContactTrigger
                   href="/partner"
                   role="Training Partner"
-                  className="flex-1 whitespace-nowrap rounded-md bg-[#a02f52] px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-[#8c2946] sm:flex-none sm:px-5 sm:text-base"
+                  className="inline-flex min-h-11 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#a02f52] px-3 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#8c2946] min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3 sm:text-base"
                 >
                   Partner with Us
                 </ContactTrigger>
                 <ContactTrigger
                   href="/training"
                   role="Student"
-                  className="flex-1 rounded-md bg-zinc-200 px-4 py-3 text-center text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-300 sm:flex-none sm:px-5 sm:text-base"
+                  className="inline-flex min-h-11 flex-1 items-center justify-center rounded-md bg-zinc-200 px-3 py-2.5 text-center text-xs font-medium leading-tight text-zinc-700 transition-colors hover:bg-zinc-300 min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3 sm:text-base"
                 >
                   Join Training Program
                 </ContactTrigger>

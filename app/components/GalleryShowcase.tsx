@@ -162,7 +162,7 @@ export default function GalleryShowcase() {
         </div>
 
         {/* dots */}
-        <div className="mt-5 flex items-center justify-center gap-2.5">
+        <div className="mt-3 flex items-center justify-center gap-0.5">
           {GALLERY.map((_, i) => (
             <button
               key={i}
@@ -170,19 +170,24 @@ export default function GalleryShowcase() {
               aria-label={`Go to photo ${i + 1}`}
               aria-current={i === active}
               onClick={() => to(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === active
-                  ? "w-6 bg-[#4b2fb3]"
-                  : "w-2 bg-zinc-300 hover:bg-zinc-400"
-              }`}
-            />
+              className="group grid h-11 w-11 place-items-center rounded-full"
+            >
+              <span
+                aria-hidden
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === active
+                    ? "w-6 bg-[#4b2fb3]"
+                    : "w-2 bg-zinc-300 group-hover:bg-zinc-400"
+                }`}
+              />
+            </button>
           ))}
         </div>
 
         {/* CTA */}
         <Link
           href="/gallery"
-          className="mt-6 rounded-md bg-[#2e1a86] px-8 py-2.5 text-sm font-medium text-white shadow-[0_10px_30px_-10px_rgba(46,26,134,0.7)] transition-colors hover:bg-[#241569] sm:text-base"
+          className="mt-6 inline-flex min-h-11 items-center rounded-md bg-[#2e1a86] px-8 py-2.5 text-sm font-medium text-white shadow-[0_10px_30px_-10px_rgba(46,26,134,0.7)] transition-colors hover:bg-[#241569] sm:text-base"
         >
           View our Gallery
         </Link>

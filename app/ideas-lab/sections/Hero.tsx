@@ -15,7 +15,7 @@ import ContactTrigger from "@/app/contact/ContactTrigger";
    with the magnet illustration to its left, and the two CTAs bottom-right. */
 export default function Hero() {
   return (
-    <section className="sticky top-0 h-screen overflow-hidden bg-[linear-gradient(120deg,#ffffff_0%,#fdfdff_55%,#f7f4fd_100%)]">
+    <section className="sticky top-0 h-[100svh] overflow-hidden bg-[linear-gradient(120deg,#ffffff_0%,#fdfdff_55%,#f7f4fd_100%)] md:h-screen">
       {/* soft lavender glow, mid-left — matches the wash in the mockup */}
       <div
         aria-hidden
@@ -91,15 +91,19 @@ export default function Hero() {
       />
 
       {/* logo, top-left (links back to landing) */}
-      <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10">
-        <Link href="/" aria-label="People First — landing">
+      <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10 [@media(max-height:500px)]:pt-4">
+        <Link
+          href="/"
+          aria-label="People First — landing"
+          className="inline-flex min-h-11 items-center"
+        >
           <Image
             src="/images/logo.svg"
             alt="People First"
             width={398}
             height={100}
             priority
-            className="h-11 w-auto sm:h-[52px]"
+            className="h-11 w-auto sm:h-[52px] [@media(max-height:500px)]:h-9"
           />
         </Link>
       </header>
@@ -107,7 +111,7 @@ export default function Hero() {
       {/* ── headline block: magnet illustration + copy ──
           Sits in the lower-left of the viewport, as in the mockup. */}
       <Recede className="absolute inset-x-0 bottom-32 z-10 sm:bottom-32 lg:bottom-36">
-        <div className="flex items-center gap-5 px-8 sm:gap-8 sm:px-14 lg:pr-32">
+        <div className="flex items-center gap-5 px-6 sm:gap-8 sm:px-14 lg:pr-32">
           <Image
             src="/images/ideas-lab/magnet.webp"
             alt=""
@@ -121,10 +125,10 @@ export default function Hero() {
           {/* pr below sm keeps the copy clear of the SideNav pull tab, which is
               fixed at the right edge until the rail goes static at lg */}
           <div className="animate-fade-in-up max-w-2xl pr-8 sm:pr-0">
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#4a1450] sm:text-4xl lg:text-[2.5rem]">
+            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-[#4a1450] min-[390px]:text-3xl sm:text-4xl lg:text-[2.5rem] [@media(max-height:500px)]:text-2xl">
               Insights to Help You Grow in EcoSystem
             </h1>
-            <p className="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-[#6b3f76] sm:text-base">
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#6b3f76] sm:mt-4 sm:text-base [@media(max-height:500px)]:mt-2 [@media(max-height:500px)]:text-xs">
               Practical articles, guides, and perspectives on human
               transformation, economic gateways, startup growth, and skills
               development — written for business owners, entrepreneurs, and
@@ -135,19 +139,19 @@ export default function Hero() {
       </Recede>
 
       {/* ── bottom-right CTAs + say-hello glyph ── */}
-      <Recede className="absolute bottom-10 left-4 right-4 z-20 flex flex-col items-end gap-3 sm:bottom-10 sm:left-auto sm:right-8 sm:flex-row sm:items-center sm:gap-4">
+      <Recede className="absolute bottom-[max(2.5rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] right-[max(1rem,env(safe-area-inset-right))] z-20 flex flex-col items-end gap-3 sm:left-auto sm:right-[max(2rem,env(safe-area-inset-right))] sm:flex-row sm:items-center sm:gap-4">
         <div className="flex w-full gap-3 sm:w-auto">
           <ContactTrigger
             href="/partner"
             role="Training Partner"
-            className="flex-1 whitespace-nowrap rounded-md bg-[#a02f52] px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-[#8c2946] sm:flex-none sm:px-5"
+            className="inline-flex min-h-11 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#a02f52] px-3 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#8c2946] min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3"
           >
             Partner with Us
           </ContactTrigger>
           <ContactTrigger
             href="/training"
             role="Student"
-            className="flex-1 whitespace-nowrap rounded-md bg-zinc-200 px-4 py-3 text-center text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-300 sm:flex-none sm:px-5"
+            className="inline-flex min-h-11 flex-1 items-center justify-center rounded-md bg-zinc-200 px-3 py-2.5 text-center text-xs font-medium leading-tight text-zinc-700 transition-colors hover:bg-zinc-300 min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3"
           >
             Join Training Program
           </ContactTrigger>

@@ -156,7 +156,7 @@ export default function VenturesShowcase() {
 
               <span
                 style={{ color: v.accent }}
-                className="mt-auto flex items-center gap-1.5 pt-4 text-xs font-semibold"
+                className="mt-auto flex min-h-11 items-center gap-1.5 pt-3 text-xs font-semibold"
               >
                 Explore Website
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />

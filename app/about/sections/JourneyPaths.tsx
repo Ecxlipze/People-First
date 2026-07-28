@@ -107,7 +107,7 @@ export default function JourneyPaths() {
               {/* Contact-CTA cards open the modal in place; GROW is a real
                   page, so it stays an ordinary link. */}
               {(() => {
-                const cls = `group mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all ${p.button}`;
+                const cls = `group mt-8 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all ${p.button}`;
                 const inner = (
                   <>
                     Explore Path

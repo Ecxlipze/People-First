@@ -220,7 +220,7 @@ export default function StoryShowcase() {
           <div
             data-reveal
             style={{ opacity: 0, willChange: "transform, opacity" }}
-            className="max-xl:!opacity-100 relative mx-auto w-full max-w-[380px] pb-28 sm:pb-32"
+            className="max-xl:!opacity-100 relative mx-auto w-full max-w-[380px] pb-0 sm:pb-32"
           >
             {/* circular founder photo */}
             <div className="relative aspect-square w-full overflow-hidden rounded-full shadow-[0_24px_60px_-20px_rgba(20,40,80,0.5)] ring-4 ring-white">
@@ -234,7 +234,7 @@ export default function StoryShowcase() {
             </div>
 
             {/* overlapping conclusion callout circle */}
-            <div className="absolute bottom-0 left-1/2 flex aspect-square w-[76%] -translate-x-1/2 flex-col items-center justify-center rounded-full border-[3px] border-[#4b2f8c] bg-white px-8 text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)]">
+            <div className="relative z-10 -mt-12 flex min-h-[17rem] w-full flex-col items-center justify-center rounded-[2rem] border-[3px] border-[#4b2f8c] bg-white px-5 py-6 text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)] sm:absolute sm:bottom-0 sm:left-1/2 sm:mt-0 sm:aspect-square sm:min-h-0 sm:w-[76%] sm:-translate-x-1/2 sm:rounded-full sm:px-8 sm:py-0">
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-3">
                 <Image
                   src="/images/peoplefirst.svg"

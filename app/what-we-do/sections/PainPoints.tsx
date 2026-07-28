@@ -18,7 +18,7 @@ import { PAIN_POINTS } from "@/app/what-we-do/pain-points";
    and must stay in sync with the artwork. */
 export default function PainPoints() {
   return (
-    <section className="sticky top-0 flex h-screen flex-col overflow-hidden bg-[linear-gradient(115deg,#e8f6f8_0%,#f6f3fb_42%,#fbf7fd_100%)]">
+    <section className="sticky top-0 flex h-[100svh] flex-col overflow-hidden bg-[linear-gradient(115deg,#e8f6f8_0%,#f6f3fb_42%,#fbf7fd_100%)] md:h-screen">
       {/* soft cyan wash, upper-left — the corner glow from the mockup. Drawn as
           a gradient rather than the source raster: that asset peaks at an alpha
           of 67/255, so it is a tint, not artwork. */}
@@ -34,7 +34,11 @@ export default function PainPoints() {
 
       {/* logo, top-left */}
       <header className="relative z-20 shrink-0 px-8 pt-8 sm:px-14 sm:pt-10">
-        <Link href="/" aria-label="People First — landing">
+        <Link
+          href="/"
+          aria-label="People First — landing"
+          className="inline-flex min-h-11 items-center"
+        >
           <Image
             src="/images/logo.svg"
             alt="People First"

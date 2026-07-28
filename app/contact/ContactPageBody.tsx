@@ -22,9 +22,13 @@ export default function ContactPageBody({
       <SideNav />
 
       {/* pr on lg+ keeps the panel clear of the fixed nav rail */}
-      <div className="relative flex min-h-screen flex-col bg-[radial-gradient(ellipse_at_center_top,#2a2a30_0%,#141417_45%,#0b0b0d_100%)] px-6 py-8 sm:px-14 sm:py-10 lg:pr-32">
+      <div className="relative flex min-h-svh flex-col bg-[radial-gradient(ellipse_at_center_top,#2a2a30_0%,#141417_45%,#0b0b0d_100%)] px-5 py-6 sm:px-14 sm:py-10 lg:pr-32">
         <div className="flex items-center justify-between gap-6">
-          <Link href="/" aria-label="People First — landing">
+          <Link
+            href="/"
+            aria-label="People First — landing"
+            className="inline-flex min-h-11 items-center"
+          >
             <Image
               src="/images/about-page/logo.png"
               alt="People First"
@@ -36,7 +40,7 @@ export default function ContactPageBody({
           </Link>
           <Link
             href="/"
-            className="pf-interactive inline-flex items-center gap-2 rounded-sm text-sm text-zinc-400 hover:-translate-x-0.5 hover:text-white"
+            className="pf-interactive inline-flex min-h-11 items-center gap-2 rounded-sm text-sm text-zinc-400 hover:-translate-x-0.5 hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             Back

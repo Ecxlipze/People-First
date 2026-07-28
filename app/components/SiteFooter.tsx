@@ -205,7 +205,7 @@ export default function SiteFooter({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="pf-interactive rounded-sm text-[#1a1a2e] hover:-translate-y-0.5 hover:text-[#5a1f9e]"
+                  className="pf-interactive grid h-11 w-11 place-items-center rounded-full text-[#1a1a2e] hover:-translate-y-0.5 hover:text-[#5a1f9e]"
                 >
                   <SocialIcon className="h-[1.65rem] w-[1.65rem]" />
                 </a>
@@ -225,7 +225,7 @@ export default function SiteFooter({
                     <li key={l.label}>
                       <Link
                         href={l.href}
-                        className="pf-interactive inline-block rounded-sm text-[1.0625rem] text-zinc-600 hover:translate-x-0.5 hover:text-[#5a1f9e]"
+                        className="pf-interactive inline-flex min-h-11 items-center rounded-sm text-[1.0625rem] text-zinc-600 hover:translate-x-0.5 hover:text-[#5a1f9e]"
                       >
                         {l.label}
                       </Link>

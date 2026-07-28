@@ -159,7 +159,7 @@ export default function SideNav() {
         aria-label="Open menu"
         aria-expanded={open}
         onClick={() => setOpen(true)}
-        className={`pf-interactive fixed right-0 top-1/2 z-[100] -translate-y-1/2 rounded-l-xl bg-white/90 py-4 pl-1.5 pr-1 text-zinc-700 shadow-md ring-1 ring-black/10 backdrop-blur-md lg:hidden ${
+        className={`pf-interactive fixed right-0 top-1/2 z-[100] min-h-11 min-w-11 -translate-y-1/2 rounded-l-xl bg-white/90 py-3 pl-2 pr-1 text-zinc-700 shadow-md ring-1 ring-black/10 backdrop-blur-md lg:hidden ${
           open || dragging ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
@@ -184,7 +184,7 @@ export default function SideNav() {
            screen readers; the desktop rail always stays interactive. */
         inert={!isDesktop && !open && !dragging}
         style={{ translate: drag ? `${drag.x}px 0` : undefined }}
-        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col justify-center gap-5 overflow-y-auto overscroll-contain rounded-l-2xl bg-white/95 pl-6 pr-5 shadow-2xl ring-1 ring-black/5 backdrop-blur-md lg:right-6 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:ring-0 lg:backdrop-blur-none ${
+        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col overflow-y-auto overscroll-contain rounded-l-2xl bg-white/95 pb-[max(1.25rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.25rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] shadow-2xl ring-1 ring-black/5 backdrop-blur-md lg:right-6 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:ring-0 lg:backdrop-blur-none ${
           dragging ? "" : "transition-[translate] duration-300 ease-out"
         } ${
           dragging
@@ -194,15 +194,18 @@ export default function SideNav() {
               : "[translate:100%_0] lg:[translate:0_-50%]"
         }`}
       >
-        {navItems.map((item) => {
-          const active = pathname === item.href;
-          return (
-            <Link
-              key={item.label}
-              href={item.href}
-              aria-current={active ? "page" : undefined}
-              className="group flex items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4"
-            >
+        {/* Auto block margins centre the items when height allows, but collapse
+            to zero when a short landscape viewport needs scrolling. */}
+        <div className="my-auto flex flex-col gap-5">
+          {navItems.map((item) => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className="group flex items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4"
+              >
               {/* Label chip. Light, brand-tinted surface instead of a heavy
                   black slab; the active item carries the magenta CTA colour.
                   On the lg+ rail it's revealed on hover/focus only (including
@@ -228,12 +231,13 @@ export default function SideNav() {
                 className={`shrink-0 rounded-full transition-all duration-300 group-hover:scale-110 group-active:scale-95 ${
                   active
                     ? "h-12 w-12 shadow-lg shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-14 lg:w-14"
-                    : "h-10 w-10 opacity-90 group-hover:opacity-100 lg:h-11 lg:w-11"
+                    : "h-11 w-11 opacity-90 group-hover:opacity-100"
                 }`}
               />
-            </Link>
-          );
-        })}
+              </Link>
+            );
+          })}
+        </div>
       </nav>
     </>
   );
