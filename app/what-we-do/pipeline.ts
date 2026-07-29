@@ -42,7 +42,7 @@ export const PIPELINE: PipelineStage[] = [
     outcome: {
       title: "Financial Freedom & Stability",
       detail: "Lower expenses. Better living. Stronger communities.",
-      bg: "#8fbfb4",
+      bg: "#97c3c4",
     },
     pillBg: "#2f7d70",
   },
@@ -57,7 +57,7 @@ export const PIPELINE: PipelineStage[] = [
     outcome: {
       title: "Skilled Minds & Confidence",
       detail: "Education. Skills. Strategy. Self-reliance.",
-      bg: "#5b83b8",
+      bg: "#7097ba",
     },
     pillBg: "#12518f",
   },
@@ -71,7 +71,7 @@ export const PIPELINE: PipelineStage[] = [
     outcome: {
       title: "Enterprise Growth & Prosperity",
       detail: "Opportunities. Trade. Scale. Wealth Creation.",
-      bg: "#8f7aa8",
+      bg: "#9383ad",
     },
     pillBg: "#5b2150",
   },

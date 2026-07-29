@@ -33,8 +33,8 @@ export const STAGES: Stage[] = [
     title: "THE PHYSICAL STAGE",
     intro:
       "A strong foundation is essential. We meet basic needs, provide security and ensure access to clean energy, liberating income and creating financial freedom.",
-    headerBg: "#6cb5a6",
-    accent: "#6cb5a6",
+    headerBg: "#60aaaa",
+    accent: "#60aaaa",
     ventures: [
       {
         name: "Agriculture",
@@ -63,8 +63,8 @@ export const STAGES: Stage[] = [
     title: "THE MIND STAGE",
     intro:
       "Once the foundation is stable, we unlock mental potential through education, skills & strategic acumen.",
-    headerBg: "#12518f",
-    accent: "#12518f",
+    headerBg: "#014483",
+    accent: "#014483",
     ventures: [],
     feature: {
       name: "National Agaaz Readiness Programme (NARP)",
@@ -77,8 +77,8 @@ export const STAGES: Stage[] = [
     title: "THE MARKET STAGE",
     intro:
       "We bridge talent to opportunity through commerce, trade and enterprise empowerment.",
-    headerBg: "#5b2150",
-    accent: "#5b2150",
+    headerBg: "#422d77",
+    accent: "#422d77",
     ventures: [
       {
         name: "Merchanity",

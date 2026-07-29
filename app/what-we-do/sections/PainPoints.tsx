@@ -32,8 +32,10 @@ export default function PainPoints() {
         className="pointer-events-none absolute -bottom-56 -right-40 h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(170,150,240,0.22)_0%,rgba(170,150,240,0)_70%)]"
       />
 
-      {/* logo, top-left */}
-      <header className="relative z-20 shrink-0 px-8 pt-8 sm:px-14 sm:pt-10">
+      {/* The desktop mockup opens directly on the composition. Keep the logo as
+          orientation for the mobile fallback, where the side rail becomes a
+          closed drawer and no longer identifies the site at first glance. */}
+      <header className="relative z-20 shrink-0 px-8 pt-8 sm:px-14 sm:pt-10 lg:hidden">
         <Link
           href="/"
           aria-label="People First — landing"
@@ -51,25 +53,28 @@ export default function PainPoints() {
       </header>
 
       <Recede className="relative z-10 flex min-h-0 flex-1 flex-col">
-        {/* pr keeps the heading clear of the SideNav pull tab, which is fixed to
-            the right edge until the rail goes static at lg */}
-        <h2 className="animate-fade-in-up shrink-0 px-8 pr-16 pt-6 text-2xl font-extrabold uppercase tracking-tight text-[#2a1a6e] sm:px-14 sm:pr-20 sm:text-3xl lg:pr-14 lg:text-center lg:text-[2rem]">
-          Pain Points We Address
+        {/* On desktop the PDF places the 40px heading 12% down the canvas. `vw`
+            lets it scale with narrower desktop mockup proportions while the
+            cap preserves the source size at 1920px and above. */}
+        <h2 className="animate-fade-in-up shrink-0 px-8 pr-16 pt-6 text-2xl font-extrabold uppercase tracking-tight text-[#2a1a6e] sm:px-14 sm:pr-20 sm:text-3xl lg:px-0 lg:pt-[12vh] lg:text-center lg:text-[clamp(1.875rem,2.083vw,2.5rem)] lg:leading-none">
+          <span className="inline-block lg:scale-x-[1.16]">
+            Pain Points We Address
+          </span>
         </h2>
 
         {/* ── lg and up: the illustration, whole ──
-            The right padding clears the icon rail, which is static from lg and
-            occupies roughly the last 280px; the illustration's own rightmost
-            label ("Need for a People-Centered…") sits flush to its edge, so
-            there is no slack inside the asset to borrow. */}
-        <div className="relative mt-2 hidden min-h-0 flex-1 items-center justify-center px-10 pb-6 lg:flex lg:pr-[19rem]">
-          <div className="relative h-full w-full">
+            The source artwork occupies about 63.5% of the 1920px PDF canvas,
+            starts 27.5% down it, and is centred in the area left of the nav
+            rail. Keeping those proportions avoids the oversized, edge-to-edge
+            rendering while preserving the illustration as one composed unit. */}
+        <div className="absolute left-0 top-[27.5vh] hidden w-[calc(100%_-_20rem)] justify-center lg:flex">
+          <div className="relative aspect-[2048/1055] w-[63.5vw] max-w-[78rem]">
             <Image
               src="/images/what-we-do/pain-points.webp"
               alt="A winding path marked by eight pins, one for each pain point People First addresses: no one takes responsibility for your failure; people fight their battles alone; lack of coordination among stakeholders; absence of an integrated development approach; limited access to resources; the gap between potential and opportunity; socio-economic challenges remain unaddressed; and the need for a people-centered development model."
               fill
               priority
-              sizes="(max-width: 1024px) 0px, 70rem"
+              sizes="(max-width: 1024px) 0px, (max-width: 1965px) 63.5vw, 78rem"
               className="select-none object-contain"
             />
           </div>
