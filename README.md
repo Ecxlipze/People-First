@@ -1,2 +1,1 @@
-# Peoples First
-
+# People First
