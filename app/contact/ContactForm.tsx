@@ -26,8 +26,6 @@ export const ROLES = [
   "Other",
 ] as const;
 
-const GENDERS = ["Female", "Male", "Prefer not to say"] as const;
-
 /* Shared input chrome — flat light-grey fields with a magenta focus ring,
    matching the mockup's form card. */
 /* The focus treatment does more than change a border colour: the field lifts
@@ -35,7 +33,7 @@ const GENDERS = ["Female", "Male", "Prefer not to say"] as const;
    unmistakable at a glance. `transition-[…]` (not transition-colors) is what
    lets the ring width animate rather than snap. */
 const FIELD =
-  "min-h-11 w-full rounded-md border bg-[#f2f2f4] px-3.5 py-2.5 text-sm text-zinc-800 outline-none transition-[background-color,border-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-zinc-400 hover:bg-[#ececef] focus:bg-white focus:border-pf-magenta focus:ring-4 focus:ring-pf-magenta/20";
+  "min-h-11 w-full rounded-lg border bg-white px-4 py-2.5 text-sm text-zinc-800 outline-none transition-[background-color,border-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-zinc-400 hover:bg-[#fafafa] focus:bg-white focus:border-pf-magenta focus:ring-4 focus:ring-pf-magenta/20";
 
 function Field({
   label,
@@ -176,7 +174,7 @@ export default function ContactForm({
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-4 p-5 sm:p-8"
+      className="flex flex-col gap-4 p-5 sm:p-10"
       noValidate
     >
       {/* honeypot — hidden from users and assistive tech, catnip for bots */}
@@ -232,27 +230,15 @@ export default function ContactForm({
         />
       </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Gender" htmlFor={id("gender")} error={err.gender}>
-          <Select
-            id={id("gender")}
-            name="gender"
-            defaultValue={v.gender ?? ""}
-            placeholder="Select"
-            options={GENDERS}
-          />
-        </Field>
-
-        <Field label="I am a" htmlFor={id("role")} error={err.role}>
-          <Select
-            id={id("role")}
-            name="role"
-            defaultValue={v.role ?? defaultRole ?? ""}
-            placeholder="I am a"
-            options={ROLES}
-          />
-        </Field>
-      </div>
+      <Field label="Gender" htmlFor={id("role")} error={err.role}>
+        <Select
+          id={id("role")}
+          name="role"
+          defaultValue={v.role ?? defaultRole ?? ""}
+          placeholder="I am a"
+          options={ROLES}
+        />
+      </Field>
 
       <Field
         label="How can we help you?"

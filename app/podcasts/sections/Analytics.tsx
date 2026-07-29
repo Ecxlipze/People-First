@@ -6,14 +6,14 @@ import { Reveal } from "@/app/components/ScrollFx";
    bolded phrases match the emphasis in the mockup. */
 export default function Analytics() {
   return (
-    <section className="bg-[#f4f4fc] px-6 py-20 sm:px-12 sm:py-24">
-      <div className="mx-auto max-w-6xl lg:pr-24">
-        <Reveal className="grid items-center gap-10 md:grid-cols-2 md:gap-14">
-          <div>
-            <h2 className="text-xl font-extrabold uppercase tracking-tight text-[#1a1a2e] sm:text-[1.75rem]">
+    <section className="flex min-h-[620px] items-center bg-[#f4f4fc] px-6 py-24 sm:px-10 sm:py-28">
+      <div className="mx-auto w-full max-w-[1400px] lg:px-16 lg:pr-36">
+        <Reveal className="grid min-w-0 items-center gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
+          <div className="min-w-0">
+            <h2 className="text-xl font-extrabold uppercase tracking-tight text-zinc-950 sm:text-[1.75rem]">
               Advanced Podcast Analytics
             </h2>
-            <p className="mt-5 max-w-md text-[0.8rem] leading-relaxed text-zinc-600 sm:text-[0.875rem]">
+            <p className="mt-8 max-w-[32rem] text-[0.8rem] leading-relaxed text-zinc-800 sm:text-[1rem]">
               Track your podcast&rsquo;s downloads with Buzz sprout&rsquo;s
               advanced podcast statistics. Filter by podcast episode, device
               type, date, podcast app, or location.{" "}
@@ -30,7 +30,8 @@ export default function Analytics() {
             aria-hidden
             width={1200}
             height={683}
-            className="w-full select-none"
+            sizes="(max-width: 768px) 100vw, 52vw"
+            className="w-full min-w-0 max-w-full justify-self-end select-none md:max-w-[600px]"
           />
         </Reveal>
       </div>

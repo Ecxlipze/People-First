@@ -285,6 +285,12 @@ body {
   }
 }
 
+@keyframes about-partner-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 /* ---- utility classes ---- */
 .animate-floaty {
   animation: floaty 6s ease-in-out infinite;
@@ -369,6 +375,30 @@ body {
 }
 .pf-stagger > *:nth-child(6) {
   --i: 5;
+}
+
+/* About page partner rail. Two identical groups form a seamless loop; the
+   second group is hidden from assistive technology in the component. */
+.about-partner-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 7%,
+    black 93%,
+    transparent
+  );
+}
+
+.about-partner-track {
+  display: flex;
+  width: max-content;
+  animation: about-partner-scroll 24s linear infinite;
+  will-change: transform;
+}
+
+.about-partner-marquee:hover .about-partner-track {
+  animation-play-state: paused;
 }
 
 /* ---- Route transitions ----
@@ -471,5 +501,16 @@ body {
   /* Route changes swap instantly rather than fading. */
   .pf-page-enter > * {
     animation: none;
+  }
+
+  .about-partner-marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  .about-partner-track {
+    animation: none;
+    transform: none;
+    will-change: auto;
   }
 }

@@ -48,13 +48,13 @@ export default function ContactPageBody({
         </div>
 
         <div className="flex flex-1 items-center justify-center py-10 sm:py-14">
-          <div className="w-full max-w-5xl">
+          <div className="w-full max-w-[1120px]">
             {eyebrow && (
               <p className="mb-4 text-center text-sm font-semibold uppercase tracking-[0.2em] text-pf-magenta">
                 {eyebrow}
               </p>
             )}
-            <div className="animate-modal-panel overflow-hidden rounded-xl shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)]">
+            <div className="animate-modal-panel overflow-hidden rounded-sm shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)]">
               <ContactPanel defaultRole={defaultRole} />
             </div>
           </div>

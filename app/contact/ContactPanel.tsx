@@ -151,31 +151,31 @@ export default function ContactPanel({
   headingId?: string;
 }) {
   return (
-    <div className="grid gap-8 bg-pf-plum p-5 sm:p-10 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-12 lg:p-14">
+    <div className="grid min-w-0 gap-10 bg-[#69205b] p-6 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12 lg:px-16 lg:py-20">
       {/* ── left: get in touch ── */}
       <div className="text-white">
         <h2
           id={headingId}
-          className="text-2xl font-bold uppercase tracking-wide sm:text-[1.75rem]"
+          className="text-3xl font-bold uppercase tracking-wide sm:text-[2.15rem]"
         >
           Get in Touch
         </h2>
-        <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/75">
+        <p className="mt-2 max-w-sm text-base leading-relaxed text-white/85 sm:text-lg">
           Share your thoughts we will help you make it real!
         </p>
 
-        <div className="mt-8 space-y-6">
+        <div className="mt-10 space-y-7">
           {/* phones — one icon, both numbers, as in the design */}
           <div className="flex items-start gap-3.5">
             <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
               <WhatsappIcon className="h-5 w-5 text-[#25d366]" />
             </span>
-            <div className="space-y-0.5">
+            <div className="flex flex-col">
               {PHONES.map((p, i) => (
                 <a
                   key={`${p}-${i}`}
                   href={`tel:${p.replace(/\s/g, "")}`}
-                  className="inline-flex min-h-11 items-center text-sm text-white/90 transition-colors hover:text-white"
+                  className="inline-flex min-h-8 items-center text-sm text-white/90 transition-colors hover:text-white sm:text-base"
                 >
                   {p}
                 </a>
@@ -187,12 +187,12 @@ export default function ContactPanel({
             <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
               <GmailIcon className="h-4 w-4" />
             </span>
-            <div className="space-y-0.5">
+            <div className="flex flex-col">
               {EMAILS.map((e) => (
                 <a
                   key={e}
                   href={`mailto:${e}`}
-                  className="inline-flex min-h-11 items-center text-sm text-white/90 transition-colors hover:text-white"
+                  className="inline-flex min-h-8 items-center text-sm text-white/90 transition-colors hover:text-white sm:text-base"
                 >
                   {e}
                 </a>
@@ -201,7 +201,7 @@ export default function ContactPanel({
           </div>
         </div>
 
-        <div className="mt-8 flex items-center gap-4">
+        <div className="mt-10 flex items-center gap-5">
           {SOCIALS.map(({ label, href, icon: Icon, className }) => (
             <a
               key={label}
@@ -209,16 +209,16 @@ export default function ContactPanel({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white transition-transform hover:scale-110"
+              className="flex h-11 w-11 items-center justify-center rounded-full transition-transform hover:scale-110"
             >
-              <Icon className={`h-5 w-5 ${className}`} />
+              <Icon className={`h-7 w-7 ${className}`} />
             </a>
           ))}
         </div>
       </div>
 
       {/* ── right: form card ── */}
-      <div className="overflow-hidden rounded-lg bg-[#f7f7f8] shadow-2xl">
+      <div className="min-w-0 overflow-hidden rounded-[1.75rem] bg-[#eeeeef] shadow-2xl">
         <ContactForm defaultRole={defaultRole} onSuccess={onSuccess} />
       </div>
     </div>

@@ -23,11 +23,11 @@ export const EPISODES: Episode[] = [
     stats: [
       {
         label: "50+ clients",
-        body: "World's largest agency New York information from Trusted Insights Explore the Best Ads Now",
+        body: "Search Digital Agency New York, Information from Trusted Internet. Explore the Best Info Now.",
       },
       {
         label: "Concept",
-        body: "For more than 25 years, global stage for innovation, and the UK digital's PC 2023 continued forms",
+        body: "For more than 50 years, global stage for innovation. And the all-digital CES 2022 continued to be.",
       },
     ],
   },
@@ -41,11 +41,11 @@ export const EPISODES: Episode[] = [
     stats: [
       {
         label: "50+ clients",
-        body: "World's largest agency New York information from Trusted Insights Explore the Best Ads Now",
+        body: "Search Digital Agency New York, Information from Trusted Internet. Explore the Best Info Now.",
       },
       {
         label: "Concept",
-        body: "For more than 25 years, global stage for innovation, and the UK digital's PC 2023 continued forms",
+        body: "For more than 50 years, global stage for innovation. And the all-digital CES 2022 continued to be.",
       },
     ],
   },
@@ -59,11 +59,11 @@ export const EPISODES: Episode[] = [
     stats: [
       {
         label: "50+ clients",
-        body: "World's largest agency New York information from Trusted Insights Explore the Best Ads Now",
+        body: "Search Digital Agency New York, Information from Trusted Internet. Explore the Best Info Now.",
       },
       {
         label: "Concept",
-        body: "For more than 25 years, global stage for innovation, and the UK digital's PC 2023 continued forms",
+        body: "For more than 50 years, global stage for innovation. And the all-digital CES 2022 continued to be.",
       },
     ],
   },

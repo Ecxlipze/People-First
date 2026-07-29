@@ -41,10 +41,10 @@ const OUTCOMES: Outcome[] = [
 
 export default function ProgramOutcomes() {
   return (
-    <section className="bg-[#0d6b5c] px-6 py-20 sm:px-12 sm:py-24">
-      <div className="mx-auto max-w-5xl">
+    <section className="bg-[#087368] px-6 py-28 sm:px-10 sm:py-32 lg:px-24 xl:px-28">
+      <div className="mx-auto max-w-[1280px]">
         <Reveal>
-          <h2 className="text-center text-2xl font-extrabold tracking-tight text-white sm:text-[2rem]">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-white sm:text-[2.5rem]">
             PROGRAM OUTCOMES
           </h2>
         </Reveal>
@@ -53,11 +53,11 @@ export default function ProgramOutcomes() {
             each tile without clipping at the section boundary; the column gap
             must exceed that same overhang so the right column's illustration
             doesn't land on top of the left column's tile */}
-        <Reveal className="mt-16 grid gap-y-12 pl-10 sm:pl-14 md:grid-cols-2 md:gap-x-20 lg:gap-x-24">
+        <Reveal className="mt-20 grid gap-y-14 pl-10 sm:pl-14 md:grid-cols-2 md:gap-x-24 lg:gap-x-32">
           {OUTCOMES.map((o) => (
             <div
               key={o.lead}
-              className="group relative flex min-h-[6.5rem] items-center rounded-lg bg-white/15 py-6 pl-16 pr-6 backdrop-blur-[1px] transition-transform duration-300 hover:-translate-y-1 sm:pl-20"
+              className="group relative flex min-h-[10rem] items-center rounded-xl bg-[#88b8b4] py-8 pl-20 pr-8 transition-transform duration-300 hover:-translate-y-1 sm:pl-28"
             >
               <Image
                 src={o.icon}
@@ -65,9 +65,9 @@ export default function ProgramOutcomes() {
                 aria-hidden
                 width={640}
                 height={640}
-                className="pointer-events-none absolute -left-10 top-1/2 h-[5.5rem] w-auto -translate-y-1/2 select-none drop-shadow-[0_12px_20px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-105 sm:-left-14 sm:h-[6.5rem]"
+                className="pointer-events-none absolute -left-10 top-1/2 h-28 w-auto -translate-y-1/2 select-none drop-shadow-[0_12px_20px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-105 sm:-left-16 sm:h-36"
               />
-              <p className="text-[0.9rem] leading-snug text-white/85 sm:text-[0.95rem]">
+              <p className="text-base leading-snug text-white sm:text-xl">
                 <span className="font-bold text-white">{o.lead}</span>
                 {o.rest}
               </p>

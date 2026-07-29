@@ -3,10 +3,9 @@ import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 import ContactTrigger from "@/app/contact/ContactTrigger";
 
-/* About → Hero. Deep-purple founder-story panel: label + big heading + the
-   founding question as a quote, the founder story copy, two CTAs on the left;
-   the founder portrait (bordered frame + two pill labels) on the right. A faint
-   wavy pattern band sits at the bottom as a divider into the light section. */
+/* About → Hero. Deep-purple founder-story panel: big heading, founding question,
+   story copy, founder portrait, and two CTAs beneath the portrait. A wavy
+   pattern band divides the story from the journey section. */
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-pf-purple">
@@ -17,7 +16,7 @@ export default function Hero() {
       />
 
       {/* logo, top-left (links back to landing) */}
-      <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10">
+      <header className="relative z-20 mx-auto max-w-[1600px] px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 xl:px-28">
         <Link
           href="/"
           aria-label="People First — landing"
@@ -31,27 +30,25 @@ export default function Hero() {
             width={318}
             height={91}
             priority
-            className="h-11 w-auto sm:h-[52px]"
+            className="h-11 w-auto sm:h-[58px]"
           />
         </Link>
       </header>
 
-      <div className="relative z-10 mx-auto grid max-w-7xl items-start gap-12 px-8 pb-20 pt-10 sm:px-14 sm:pt-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pr-32">
+      <div className="relative z-10 mx-auto grid max-w-[1600px] items-start gap-12 px-6 pb-16 pt-12 sm:px-10 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-20 lg:px-24 xl:gap-24 xl:px-28 xl:pr-44">
         {/* ── left: copy ── */}
-        <div className="animate-fade-in-up max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-pf-lead">
-            Ideas Lab
-          </p>
-          <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Every Movement Begins with a Question.
+        <div className="animate-fade-in-up max-w-[680px]">
+          <h1 className="text-4xl font-extrabold leading-[1.06] tracking-tight text-white sm:text-[2.75rem] lg:text-5xl">
+            Every Movement Begins
+            <br className="hidden sm:block" /> with a Question.
           </h1>
 
-          <p className="mt-6 text-lg font-medium italic leading-snug text-white/70 sm:text-xl">
+          <p className="mt-7 max-w-[650px] text-lg font-semibold leading-snug text-white sm:text-[1.3rem]">
             &ldquo;Why do so many talented people fail, even when they have
             passion and good intentions?&rdquo;
           </p>
 
-          <div className="mt-7 space-y-4 text-[0.95rem] leading-relaxed text-white/65 sm:text-base">
+          <div className="mt-10 max-w-[650px] space-y-4 text-[0.92rem] leading-[1.55] text-white/90 sm:text-[0.98rem]">
             <p>
               After more than 25 years working closely with entrepreneurs,
               students, farmers, and investors across diverse sectors, our
@@ -74,56 +71,47 @@ export default function Hero() {
             </p>
           </div>
 
-          <div className="mt-9 flex flex-wrap gap-4">
+        </div>
+
+        {/* ── right: founder portrait ── */}
+        <div className="animate-fade-in-up relative mx-auto w-full max-w-[390px]">
+          <div className="relative aspect-[498/641] w-full overflow-hidden border-b-4 border-[#3f4bde] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.72)]">
+            <Image
+              src="/images/about-page/founder.png"
+              alt="Rai Salahuddin Ahmad, founder of People First"
+              fill
+              sizes="(max-width: 1024px) 90vw, 390px"
+              className="object-cover object-top"
+              priority
+            />
+          </div>
+          <div className="relative z-10 mt-4 flex flex-wrap items-center justify-center gap-3 px-2">
             <ContactTrigger
               href="/partner"
               role="Training Partner"
-              className="inline-flex min-h-11 items-center rounded-full bg-pf-magenta px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(224,64,154,0.6)] transition-all hover:scale-[1.03] hover:bg-pf-magenta-dark sm:text-base"
+              className="pf-interactive inline-flex min-h-11 items-center rounded bg-[#a63d72] px-5 py-2.5 text-center text-xs font-semibold text-white shadow-lg hover:-translate-y-0.5 hover:bg-pf-magenta-dark"
             >
               Partner with Us
             </ContactTrigger>
             <ContactTrigger
               href="/training"
               role="Student"
-              className="inline-flex min-h-11 items-center rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.03] hover:bg-white/10 sm:text-base"
+              className="pf-interactive inline-flex min-h-11 items-center rounded bg-zinc-100 px-5 py-2.5 text-center text-xs font-semibold text-zinc-900 shadow-lg hover:-translate-y-0.5 hover:bg-white"
             >
               Join Training Program
             </ContactTrigger>
           </div>
         </div>
-
-        {/* ── right: founder portrait ── */}
-        <div className="animate-fade-in-up relative mx-auto w-full max-w-sm lg:mt-2">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border-2 border-white/15 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.7)]">
-            <Image
-              src="/images/about-page/founder.png"
-              alt="Rai Salahuddin Ahmad, founder of People First"
-              fill
-              sizes="(max-width: 1024px) 90vw, 384px"
-              className="object-cover object-top"
-              priority
-            />
-            {/* two pill labels, overlapping the bottom of the frame */}
-            <div className="absolute inset-x-0 bottom-4 flex flex-wrap justify-center gap-2 px-3">
-              <span className="rounded-full bg-pf-magenta px-3 py-1.5 text-[10px] font-semibold text-white shadow-lg sm:px-4 sm:text-[11px]">
-                Partner with Us
-              </span>
-              <span className="rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-semibold text-pf-purple shadow-lg sm:px-4 sm:text-[11px]">
-                Job Training Program
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* "Say Hello!" — bottom-right */}
-      <div className="relative z-20 flex justify-end px-8 pb-8 sm:px-14">
+      <div className="relative z-20 mx-auto flex max-w-[1600px] justify-end px-6 pb-7 sm:px-10 lg:px-24 xl:px-44">
         <ContactTrigger
           href="/contact"
-          className="group inline-flex min-h-11 items-center gap-2.5 text-lg font-bold text-white transition-colors hover:text-pf-magenta"
+          className="group inline-flex min-h-11 items-center gap-2.5 text-xl font-bold text-white transition-colors hover:text-pf-magenta sm:text-2xl"
         >
           Say Hello!
-          <MessageCircle className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110" />
+          <MessageCircle className="h-7 w-7 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110" />
         </ContactTrigger>
       </div>
 
@@ -134,7 +122,7 @@ export default function Hero() {
         aria-hidden
         width={1920}
         height={236}
-        className="pointer-events-none relative z-0 w-full select-none opacity-40"
+        className="pointer-events-none relative z-0 w-full select-none opacity-80"
       />
     </section>
   );

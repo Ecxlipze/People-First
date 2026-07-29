@@ -180,7 +180,7 @@ export function ContactModalProvider({
             aria-label="Close contact form"
             tabIndex={-1}
             onClick={close}
-            className={`absolute inset-0 cursor-default bg-black/45 backdrop-blur-[3px] ${
+            className={`absolute inset-0 cursor-default bg-black/35 backdrop-blur-[5px] ${
               closing
                 ? "animate-modal-backdrop-out"
                 : "animate-modal-backdrop"
@@ -193,7 +193,7 @@ export function ContactModalProvider({
             aria-modal="true"
             aria-labelledby="contact-modal-title"
             tabIndex={-1}
-            className={`relative max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none sm:max-h-[calc(100dvh-3rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] ${
+            className={`relative max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[1120px] overflow-y-auto overscroll-contain rounded-sm shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none sm:max-h-[calc(100dvh-3rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] ${
               closing ? "animate-modal-panel-out" : "animate-modal-panel"
             }`}
           >

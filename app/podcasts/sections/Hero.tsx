@@ -16,7 +16,7 @@ export default function Hero() {
       />
 
       {/* logo, top-left */}
-      <header className="relative z-20 px-6 pt-8 sm:px-12 sm:pt-10">
+      <header className="relative z-20 mx-auto max-w-[1600px] px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 xl:px-28">
         <Link
           href="/"
           aria-label="People First — landing"
@@ -28,14 +28,14 @@ export default function Hero() {
             width={398}
             height={100}
             priority
-            className="h-10 w-auto sm:h-12"
+            className="h-12 w-auto sm:h-16"
           />
         </Link>
       </header>
 
       {/* ── headline row: microphone + copy ── */}
-      <div className="relative z-10 mx-auto max-w-6xl px-6 pt-10 sm:px-12 sm:pt-14 lg:pr-32">
-        <div className="flex flex-col items-start gap-7 sm:flex-row sm:items-center sm:gap-10">
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 pt-16 sm:px-10 sm:pt-24 lg:px-24 lg:pr-44 xl:px-28 xl:pr-48">
+        <div className="flex w-full min-w-0 flex-col items-start gap-8 sm:flex-row sm:items-center sm:gap-12">
           <Image
             src="/images/podcast/mic.webp"
             alt=""
@@ -43,17 +43,17 @@ export default function Hero() {
             width={290}
             height={620}
             priority
-            className="animate-floaty h-24 w-auto shrink-0 select-none drop-shadow-[0_18px_28px_rgba(70,40,120,0.3)] sm:h-32 lg:h-36"
+            className="animate-floaty h-28 w-auto shrink-0 select-none drop-shadow-[0_18px_28px_rgba(70,40,120,0.3)] sm:h-36 lg:h-44"
           />
 
-          <div className="animate-fade-in-up max-w-2xl">
-            <h1 className="text-2xl font-extrabold leading-[1.2] tracking-tight text-[#1a1a2e] sm:text-3xl lg:text-[2.25rem]">
+          <div className="animate-fade-in-up w-full min-w-0 max-w-[980px]">
+            <h1 className="text-2xl font-extrabold leading-[1.18] tracking-tight text-[#6b215b] sm:text-3xl lg:text-[2.15rem]">
               Real{" "}
-              <span className="italic text-pf-magenta">Conversations.</span>{" "}
-              Real <span className="italic text-pf-lead">Insights.</span> Real{" "}
-              <span className="italic text-pf-teal">Growth.</span>
+              <span className="italic">Conversations.</span>{" "}
+              Real <span className="italic">Insights.</span> Real{" "}
+              <span className="italic">Growth.</span>
             </h1>
-            <p className="mt-5 text-[0.95rem] leading-relaxed text-zinc-600 sm:text-base">
+            <p className="mt-6 max-w-[920px] text-[0.95rem] leading-relaxed text-[#6b215b] sm:text-lg">
               The People First Podcast brings together entrepreneurs, industry
               leaders, technology experts, and innovators to share knowledge,
               experience, and honest perspectives on building successful
@@ -64,8 +64,8 @@ export default function Hero() {
       </div>
 
       {/* ── "Podcast Value": guest portrait left, pull-quote right ── */}
-      <div className="relative z-10 mx-auto max-w-6xl px-6 pb-8 pt-14 sm:px-12 sm:pt-20 lg:pr-32">
-        <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:gap-12">
+      <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-4 pt-20 sm:px-10 sm:pt-28 lg:pl-52 lg:pr-36">
+        <div className="flex w-full min-w-0 flex-col items-start gap-9 md:flex-row md:items-center md:gap-12">
           <div className="relative shrink-0">
             {/* hidden below sm: no side margin to hold it, it would be clipped */}
             <Image
@@ -74,11 +74,9 @@ export default function Hero() {
               aria-hidden
               width={253}
               height={500}
-              className="animate-floaty pointer-events-none absolute -top-20 left-[-2.5rem] z-0 hidden h-32 w-auto select-none sm:block"
+              className="animate-floaty pointer-events-none absolute -left-24 -top-8 z-0 hidden h-40 w-auto select-none md:block"
             />
-            {/* the source frame is portrait; the design crops it landscape, so
-                the wrapper fixes the aspect and the image covers it */}
-            <div className="relative z-10 aspect-[4/3] w-[15rem] overflow-hidden rounded-xl border-4 border-white shadow-[0_20px_50px_-20px_rgba(60,50,110,0.45)] sm:w-[18rem]">
+            <div className="relative z-10 aspect-[6/7] w-[15rem] overflow-hidden rounded-xl border-4 border-white shadow-[0_20px_50px_-20px_rgba(60,50,110,0.45)] sm:w-[18rem]">
               <Image
                 src="/images/podcast/value-guest.webp"
                 alt="A guest recording an episode of the People First Podcast"
@@ -89,11 +87,11 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="max-w-xl">
-            <h2 className="text-2xl font-extrabold tracking-tight text-[#1a1a2e] sm:text-3xl">
+          <div className="w-full min-w-0 max-w-xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#1c0878] sm:text-3xl">
               Podcast Value
             </h2>
-            <blockquote className="mt-4 text-[0.95rem] italic leading-relaxed text-zinc-600 sm:text-base">
+            <blockquote className="mt-4 text-[0.95rem] leading-relaxed text-zinc-900 sm:text-lg">
               &ldquo;Whether you&rsquo;re a business owner navigating digital
               change, a startup founder seeking guidance, or a professional
               looking to stay ahead Tech Insights Podcast delivers practical
@@ -104,18 +102,18 @@ export default function Hero() {
       </div>
 
       {/* ── two CTAs, right-aligned ── */}
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap justify-end gap-3 px-6 pb-10 sm:px-12 lg:pr-32">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-wrap justify-end gap-4 px-6 pb-8 pt-8 sm:px-10 lg:px-24 lg:pr-36 xl:px-28 xl:pr-36">
         <ContactTrigger
           href="/partner"
           role="Training Partner"
-          className="inline-flex min-h-11 items-center rounded-lg bg-pf-magenta px-5 py-2.5 text-[0.8rem] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(224,64,154,0.7)] transition-all hover:scale-[1.03] hover:bg-pf-magenta-dark sm:text-sm"
+          className="pf-interactive inline-flex min-h-11 w-full items-center justify-center rounded bg-[#ad3f69] px-7 py-2.5 text-[0.8rem] font-semibold text-white hover:-translate-y-0.5 hover:bg-[#96345a] sm:w-auto sm:text-sm"
         >
           Partner with Us
         </ContactTrigger>
         <ContactTrigger
           href="/training"
           role="Student"
-          className="inline-flex min-h-11 items-center rounded-lg border border-zinc-300 bg-white/70 px-5 py-2.5 text-[0.8rem] font-semibold text-[#3f2a6b] transition-all hover:scale-[1.03] hover:bg-white sm:text-sm"
+          className="pf-interactive inline-flex min-h-11 w-full items-center justify-center rounded bg-zinc-200 px-7 py-2.5 text-[0.8rem] font-semibold text-zinc-900 hover:-translate-y-0.5 hover:bg-white sm:w-auto sm:text-sm"
         >
           Join Training Program
         </ContactTrigger>

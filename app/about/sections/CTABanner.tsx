@@ -8,27 +8,27 @@ import { Reveal } from "@/app/components/ScrollFx";
    one system. */
 export default function CTABanner() {
   return (
-    <section className="bg-white px-6 pb-16 sm:px-10">
-      <div className="mx-auto w-full max-w-6xl">
+    <section className="bg-white px-6 pb-16 pt-8 sm:px-10 sm:pt-12 lg:px-24 xl:px-28">
+      <div className="mx-auto w-full max-w-[1440px]">
         <Reveal
           y={36}
           scale={0.975}
           className="relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]"
         >
-          {/* wireframe globe, right side, clipped by the rounded corner */}
+          {/* wireframe globe, flush-left and clipped by the rounded corner */}
           <Image
             src="/images/icons/globe.webp"
             alt=""
             aria-hidden
             width={500}
             height={500}
-            className="pointer-events-none absolute right-0 top-1/2 h-[150%] w-auto -translate-y-1/2 translate-x-[30%] select-none opacity-25 [filter:brightness(0)_invert(1)]"
+            className="pointer-events-none absolute left-0 top-1/2 h-[150%] w-auto -translate-x-[38%] -translate-y-1/2 select-none opacity-25 [filter:brightness(0)_invert(1)]"
           />
 
-          <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+          <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-14">
             {/* copy */}
-            <div>
-              <h2 className="font-serif text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
+            <div className="lg:pl-60">
+              <h2 className="font-serif text-[1.75rem] italic leading-tight text-white sm:text-[2.2rem]">
                 Let&rsquo;s Get in Touch
               </h2>
               <p className="mt-2 text-base text-white/85 sm:text-[1.0625rem]">
@@ -41,14 +41,14 @@ export default function CTABanner() {
               <div className="flex flex-col gap-3.5 sm:flex-row">
                 <ContactTrigger
                   href="/contact"
-                  className="pf-interactive flex-1 whitespace-nowrap rounded-lg border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white hover:-translate-y-0.5 hover:bg-white/10"
+                  className="pf-interactive flex-1 whitespace-nowrap rounded-lg bg-[#dfd3ef] px-5 py-3 text-center text-[0.95rem] font-medium text-[#28105f] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
                 >
                   Book a Consultation
                 </ContactTrigger>
                 <ContactTrigger
                   href="/training"
                   role="Student"
-                  className="pf-interactive flex-1 whitespace-nowrap rounded-lg bg-[#dfd3ef] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
+                  className="pf-interactive flex-1 whitespace-nowrap rounded-lg border border-white/70 px-5 py-3 text-center text-[0.95rem] font-medium text-white hover:-translate-y-0.5 hover:bg-white/10"
                 >
                   Join a Training Program
                 </ContactTrigger>

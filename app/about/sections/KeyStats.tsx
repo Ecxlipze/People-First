@@ -4,7 +4,7 @@ import { CountUp, Reveal } from "@/app/components/ScrollFx";
 /* About → Key Stats. Plum/maroon panel: a "Trust & Credibility" pill, the
    KEY STATS heading (STATS in gold), supporting copy, and a set of light stat
    cards (a big 100+ card, then 25+ / 20+). Below: "Our Strategic Partners" as a
-   grid of white logo cards. */
+   continuously moving logo rail. */
 
 const STATS = {
   big: { value: "100+", label: "Brands Supported" },
@@ -25,32 +25,24 @@ const PARTNERS: { name: string; logo: string }[] = [
   },
   { name: "SkillX", logo: "/images/about-page/skiilx-logo.png" },
   { name: "KOT Enterprises", logo: "/images/about-page/kot-logo.png" },
-  {
-    name: "National University of Computer & Emerging Sciences",
-    logo: "/images/about-page/nu-logo.png",
-  },
-  {
-    name: "FinTech News Pakistan",
-    logo: "/images/about-page/Fintech-Logo.png",
-  },
 ];
 
 export default function KeyStats() {
   return (
-    <section className="bg-pf-plum px-6 py-20 sm:px-10 sm:py-24">
-      <div className="mx-auto max-w-6xl">
+    <section className="bg-[#67235c] px-6 py-24 sm:px-10 sm:py-28 lg:px-24 xl:px-28">
+      <div className="mx-auto max-w-[1440px]">
         {/* ── stats row ── */}
-        <Reveal className="grid items-center gap-10 lg:grid-cols-2">
+        <Reveal className="grid items-center gap-12 lg:grid-cols-[500px_minmax(0,1fr)] lg:gap-20">
           {/* left: heading + copy */}
           <div>
-            <span className="inline-block rounded-md bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-pf-plum">
+            <span className="inline-block rounded-sm bg-white px-3 py-1 text-sm font-bold uppercase tracking-wide text-[#67235c] sm:text-base">
               Trust &amp; Credibility
             </span>
-            <h2 className="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">
+            <h2 className="mt-6 text-5xl font-extrabold tracking-tight sm:text-7xl">
               <span className="text-white">KEY </span>
               <span className="text-pf-gold">STATS</span>
             </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70 sm:text-base">
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-white/85 sm:text-[1.6rem] sm:leading-[1.35]">
               Our client retention rate is among the highest in the industry,
               reflecting long-term partnerships built on consistent execution.
             </p>
@@ -61,12 +53,12 @@ export default function KeyStats() {
             {/* The three figures count up the first time they scroll into
                 view — the payoff of a "Key Stats" panel is the numbers, so
                 they earn the emphasis. */}
-            <div className="pf-card rounded-2xl bg-white px-7 py-8 text-right shadow-xl">
+            <div className="pf-card flex min-h-36 items-center justify-end rounded-2xl bg-[#f6f8ff] px-10 py-8 text-right shadow-xl">
               <CountUp
                 value={STATS.big.value}
-                className="block text-5xl font-extrabold text-pf-plum sm:text-6xl"
+                className="block text-5xl font-extrabold text-[#67235c] sm:text-6xl"
               />
-              <span className="mt-1 block text-sm font-semibold text-zinc-500">
+              <span className="ml-2 self-end pb-2 text-sm text-zinc-500">
                 {STATS.big.label}
               </span>
             </div>
@@ -74,13 +66,13 @@ export default function KeyStats() {
               {STATS.small.map((s) => (
                 <div
                   key={s.label}
-                  className="pf-card flex items-center justify-between gap-2 rounded-2xl bg-white px-5 py-5 shadow-xl"
+                  className="pf-card flex min-h-28 items-center justify-between gap-3 rounded-2xl bg-[#f6f8ff] px-7 py-6 shadow-xl"
                 >
                   <CountUp
                     value={s.value}
-                    className="text-3xl font-extrabold text-pf-plum sm:text-4xl"
+                    className="text-4xl font-extrabold text-[#18007a] sm:text-5xl"
                   />
-                  <span className="text-right text-xs font-semibold leading-tight text-zinc-500">
+                  <span className="text-right text-xs leading-tight text-zinc-500 sm:text-sm">
                     {s.label}
                   </span>
                 </div>
@@ -90,28 +82,40 @@ export default function KeyStats() {
         </Reveal>
 
         {/* ── strategic partners ── */}
-        <Reveal className="mt-16 sm:mt-20">
-          <h3 className="text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+        <Reveal className="mt-20 sm:mt-28">
+          <h3 className="text-center text-3xl font-extrabold tracking-tight text-[#f6d9ff] sm:text-[2.65rem]">
             OUR STRATEGIC PARTNERS
           </h3>
-          <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
-            {PARTNERS.map((p, i) => (
-              <div
-                key={`${p.name}-${i}`}
-                className="pf-card flex h-24 items-center justify-center rounded-xl bg-white px-5 shadow-md"
-              >
-                <Image
-                  src={p.logo}
-                  alt={p.name}
-                  width={220}
-                  height={80}
-                  className="max-h-12 w-auto object-contain"
-                />
-              </div>
-            ))}
-            {/* trailing empty cell — mirrors the mockup's 2×4 grid with a gap */}
-            <div aria-hidden className="hidden sm:block" />
-            <div aria-hidden className="hidden sm:block" />
+          <div className="about-partner-marquee mt-12">
+            <div className="about-partner-track">
+              {[0, 1].map((copy) => (
+                <div
+                  key={copy}
+                  role={copy === 0 ? "list" : undefined}
+                  aria-label={
+                    copy === 0 ? "People First strategic partners" : undefined
+                  }
+                  aria-hidden={copy === 1}
+                  className="flex shrink-0 gap-6 pr-6"
+                >
+                  {PARTNERS.map((partner) => (
+                    <div
+                      key={`${copy}-${partner.name}`}
+                      role={copy === 0 ? "listitem" : undefined}
+                      className="pf-card flex h-28 w-[250px] shrink-0 items-center justify-center bg-white px-7 shadow-md sm:h-32 sm:w-[310px] lg:w-[340px]"
+                    >
+                      <Image
+                        src={partner.logo}
+                        alt={copy === 0 ? partner.name : ""}
+                        width={337}
+                        height={97}
+                        className="max-h-16 w-auto object-contain sm:max-h-20"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
       </div>

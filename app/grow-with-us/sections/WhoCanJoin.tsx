@@ -8,9 +8,9 @@ type Tile = {
   letter: string;
   n: number;
   label: string;
-  bg: string;
-  /* the small index number sits in the tile's own darker tint */
-  num: string;
+  top: string;
+  bottom: string;
+  accent: string;
 };
 
 const TILES: Tile[] = [
@@ -18,60 +18,68 @@ const TILES: Tile[] = [
     letter: "J",
     n: 1,
     label: "Women seeking flexible, remote work opportunities",
-    bg: "bg-[#b44cf0]",
-    num: "text-[#7d2fae]",
+    top: "bg-[#a72cf3]",
+    bottom: "bg-[#e5c5fb]",
+    accent: "text-[#a72cf3]",
   },
   {
     letter: "O",
     n: 2,
     label: "Youth (18–30) seeking income-generating digital skills",
-    bg: "bg-[#2ec5b6]",
-    num: "text-[#1c8b80]",
+    top: "bg-[#29bdc3]",
+    bottom: "bg-[#acf1f2]",
+    accent: "text-[#16aeb5]",
   },
   {
     letter: "I",
     n: 3,
     label: "Institutions seeking training partnerships",
-    bg: "bg-[#8f7bf0]",
-    num: "text-[#5a48b0]",
+    top: "bg-[#4652e8]",
+    bottom: "bg-[#c8cbfa]",
+    accent: "text-[#4652e8]",
   },
   {
     letter: "N",
     n: 4,
     label: "SME employees wanting to upskill",
-    bg: "bg-[#ef4444]",
-    num: "text-[#a82b2b]",
+    top: "bg-[#ca2037]",
+    bottom: "bg-[#fac1c8]",
+    accent: "text-[#ca2037]",
   },
 ];
 
 export default function WhoCanJoin() {
   return (
-    <section className="bg-[#eef8f5] px-6 pb-28 pt-20 sm:px-12 sm:pb-32 sm:pt-24">
-      <div className="mx-auto max-w-3xl">
+    <section className="bg-[#eefaf9] px-6 pb-40 pt-32 sm:px-10 sm:pb-48 sm:pt-36 lg:px-24 xl:px-28">
+      <div className="mx-auto max-w-[820px]">
         <Reveal>
-          <h2 className="text-center text-2xl font-extrabold tracking-tight text-[#1a1a2e] sm:text-[2rem]">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-[2.5rem]">
             WHO CAN <span className="sr-only">JOIN</span>
           </h2>
         </Reveal>
 
-        <Reveal className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
+        <Reveal className="mt-20 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
           {TILES.map((t) => (
             <div
               key={t.letter}
-              className={`flex flex-col rounded-xl ${t.bg} px-4 pb-5 pt-6 shadow-[0_16px_36px_-18px_rgba(60,60,110,0.5)] transition-transform duration-300 hover:-translate-y-1.5`}
+              className="pf-card flex min-h-[360px] flex-col overflow-hidden rounded-2xl shadow-[0_16px_36px_-18px_rgba(60,60,110,0.5)]"
             >
-              <span
-                aria-hidden
-                className="text-center text-6xl font-extrabold leading-none text-white sm:text-7xl"
-              >
-                {t.letter}
-              </span>
-              <span className={`mt-8 text-[0.7rem] font-bold ${t.num}`}>
-                {t.n}
-              </span>
-              <p className="mt-2 text-[0.7rem] font-semibold leading-snug text-white sm:text-[0.75rem]">
-                {t.label}
-              </p>
+              <div className={`grid h-44 place-items-center ${t.top}`}>
+                <span
+                  aria-hidden
+                  className="text-center text-7xl font-extrabold leading-none text-white sm:text-8xl"
+                >
+                  {t.letter}
+                </span>
+              </div>
+              <div className={`flex flex-1 flex-col px-4 pb-6 pt-7 ${t.bottom}`}>
+                <span className={`text-center text-lg font-bold ${t.accent}`}>
+                  {t.n}
+                </span>
+                <p className="mt-7 text-sm font-semibold leading-snug text-zinc-950 sm:text-[0.95rem]">
+                  {t.label}
+                </p>
+              </div>
             </div>
           ))}
         </Reveal>
