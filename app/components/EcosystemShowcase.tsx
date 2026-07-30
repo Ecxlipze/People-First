@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import * as Lucide from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { SECTORS, type Sector } from "@/app/components/ecosystem";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import {
@@ -13,9 +11,25 @@ import {
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
-function Icon({ name, className }: { name: string; className?: string }) {
-  const Cmp = (Lucide as unknown as Record<string, LucideIcon>)[name];
-  return Cmp ? <Cmp className={className} strokeWidth={1.75} /> : null;
+function SectorIcon({
+  sector,
+  className,
+  sizes,
+}: {
+  sector: Sector;
+  className: string;
+  sizes: string;
+}) {
+  return (
+    <Image
+      src={sector.iconSrc}
+      alt=""
+      width={512}
+      height={512}
+      sizes={sizes}
+      className={`object-contain ${className}`}
+    />
+  );
 }
 
 /* Decorative background layer — the real design assets: the teal blob (with its
@@ -100,7 +114,11 @@ function OrbitNode({ s }: { s: Sector }) {
           className="flex h-16 w-16 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-8px_rgba(20,20,50,0.5)] xl:h-[4.75rem] xl:w-[4.75rem]"
           style={{ backgroundColor: s.color }}
         >
-          <Icon name={s.icon} className="h-7 w-7 xl:h-8 xl:w-8" />
+          <SectorIcon
+            sector={s}
+            sizes="32px"
+            className="h-7 w-7 xl:h-8 xl:w-8"
+          />
         </span>
 
         <div className={`absolute w-36 ${placement}`}>
@@ -284,7 +302,7 @@ export default function EcosystemShowcase() {
                   className="flex h-11 w-11 flex-none items-center justify-center rounded-full text-white"
                   style={{ backgroundColor: s.color }}
                 >
-                  <Icon name={s.icon} className="h-5 w-5" />
+                  <SectorIcon sector={s} sizes="20px" className="h-5 w-5" />
                 </span>
                 <div>
                   <p

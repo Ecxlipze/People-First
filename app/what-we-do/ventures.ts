@@ -11,9 +11,7 @@ export type VentureTier = {
   /* the tier's accent — used for the heading, the icon tint and, at 6% alpha,
      the card wash, exactly as the mockup composes it */
   accent: string;
-  /* Core and Joint Ventures are drawn as vector glyphs in the source, so they
-     render as lucide icons; the other two are raster artwork. */
-  icon?: string;
+  icon: string;
   iconAlt?: string;
 };
 
@@ -24,11 +22,13 @@ export const VENTURE_TIERS: VentureTier[] = [
     name: "CORE VENTURES",
     blurb: "Built and operated by People First.",
     accent: "#7531ac",
+    icon: "/images/what-we-do/s5/icon-core.webp",
   },
   {
     name: "JOINT VENTURES",
     blurb: "Partnered for greater impact",
     accent: "#328b8a",
+    icon: "/images/what-we-do/s5/icon-joint.webp",
   },
   {
     name: "AFFILIATED VENTURES",

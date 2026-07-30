@@ -22,6 +22,7 @@ export default function PinnedRecede({
   hold = 1.6,
   className = "",
   overlapFrom = "md",
+  pinTallContent = false,
 }: {
   children: React.ReactNode;
   hold?: number;
@@ -30,6 +31,10 @@ export default function PinnedRecede({
      Long tablet layouts can use "xl" so iPads keep a compact overlap. "none"
      keeps the animated flow handoff without pinning or overlap compensation. */
   overlapFrom?: "none" | "md" | "lg" | "xl";
+  /* A tall panel cannot safely stick from its top because its lower content
+     would be clipped below the viewport. Opting in makes it scroll normally
+     first, then stick from its bottom for the overlap handoff. */
+  pinTallContent?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -70,6 +75,8 @@ export default function PinnedRecede({
       if (stageRef.current) {
         stageRef.current.style.height = "auto";
         stageRef.current.style.position = "static";
+        stageRef.current.style.top = "";
+        stageRef.current.style.bottom = "";
         stageRef.current.style.overflow = "visible";
         stageRef.current.style.alignItems = "stretch";
       }
@@ -80,16 +87,24 @@ export default function PinnedRecede({
 
     let raf = 0;
     let attached = false;
-    let pinned = false;
+    let pinMode: "none" | "top" | "bottom" = "none";
     const update = () => {
       const r = track.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      if (pinned) {
-        const distance = r.height - vh; // scroll room while pinned
-        // p: 0 as the stage sticks, 1 when the track has been fully scrolled
-        // through (== next section has fully climbed over it).
-        const p = distance > 0 ? clamp01(-r.top / distance) : 0;
+      if (pinMode !== "none") {
+        const contentHeight = inner.scrollHeight;
+        const pinStart =
+          pinMode === "bottom" ? Math.max(0, contentHeight - vh) : 0;
+        const distance =
+          pinMode === "bottom"
+            ? r.height - contentHeight
+            : r.height - vh;
+        // Top-pinned panels recede across their full sticky hold. A tall,
+        // bottom-pinned panel starts the same effect only after its final
+        // viewport has arrived, so every card remains naturally scrollable.
+        const p =
+          distance > 0 ? clamp01((-r.top - pinStart) / distance) : 0;
         // Stay bright for most of the hold, ease out only near the end.
         const q = clamp01((p - 0.35) / 0.65);
         const ease = q * q * (3 - 2 * q);
@@ -139,7 +154,7 @@ export default function PinnedRecede({
     const apply = () => {
       const reduced = prefersReducedMotion();
       if (reduced) {
-        pinned = false;
+        pinMode = "none";
         disable(needsFullOverlapCompensation());
         if (attached) {
           window.removeEventListener("scroll", onScroll);
@@ -152,20 +167,45 @@ export default function PinnedRecede({
       // tall, so allow a small measurement tolerance. Anything materially
       // taller uses the animated flow path, including iPad portrait/landscape.
       const fitsViewport = inner.scrollHeight <= window.innerHeight * 1.02;
-      pinned = needsFullOverlapCompensation() && fitsViewport;
+      const canOverlap = needsFullOverlapCompensation();
+      pinMode = canOverlap
+        ? fitsViewport
+          ? "top"
+          : pinTallContent
+            ? "bottom"
+            : "none"
+        : "none";
 
-      if (pinned) {
+      if (pinMode === "top") {
         // restore the tall track (CSS `md:h-screen` handles the stage), then scrub.
         track.style.height = TRACK_H;
         track.style.marginBottom = "";
         if (stageRef.current) {
           stageRef.current.style.height = "";
           stageRef.current.style.position = "";
+          stageRef.current.style.top = "";
+          stageRef.current.style.bottom = "";
           stageRef.current.style.overflow = "";
           stageRef.current.style.alignItems = "";
         }
+      } else if (pinMode === "bottom") {
+        // Preserve the panel's full natural height, then provide the same hold
+        // distance below it. A negative sticky top equal to viewport minus
+        // content height lets the full panel scroll first, then pins its final
+        // viewport while the next section climbs over.
+        const contentHeight = inner.scrollHeight;
+        track.style.height = `calc(${contentHeight}px + ${hold * 100}vh)`;
+        track.style.marginBottom = "";
+        if (stageRef.current) {
+          stageRef.current.style.height = `${contentHeight}px`;
+          stageRef.current.style.position = "sticky";
+          stageRef.current.style.top = `calc(100vh - ${contentHeight}px)`;
+          stageRef.current.style.bottom = "";
+          stageRef.current.style.overflow = "visible";
+          stageRef.current.style.alignItems = "stretch";
+        }
       } else {
-        disable(needsFullOverlapCompensation());
+        disable(canOverlap);
       }
 
       if (!attached) {
@@ -195,7 +235,7 @@ export default function PinnedRecede({
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf);
     };
-  }, [hold, overlapFrom]);
+  }, [hold, overlapFrom, pinTallContent]);
 
   return (
     <div
