@@ -428,6 +428,17 @@ body {
   }
 }
 
+/* ---- .pf-lead-in: scroll room for a preceding pinned hero ----
+   Set by <TallSwipePanel leadIn={n}>, which passes `n` as --pf-lead-in. The gap
+   lets the pinned section above hold still and then recede before this panel
+   rises over it; without it the next panel starts covering an still-opaque hero.
+
+   `svh` (not `vh`) because mobile browser toolbars make `vh` overshoot, which
+   would leave a visible strip of background between the two sections. */
+.pf-lead-in {
+  margin-top: calc(100svh * var(--pf-lead-in, 0));
+}
+
 /* ---- .pf-wipe: reveal a block left-to-right ----
    Used for the Podcasts waveform, where a straight fade wastes the one element
    on the page that should read as playing back. Driven by `clip-path` so the
@@ -766,6 +777,13 @@ body {
   /* Route changes swap instantly rather than fading. */
   .pf-page-enter > * {
     animation: none;
+  }
+
+  /* The lead-in gap only exists to give the preceding pinned hero room to
+     recede. That recede doesn't run here, so the gap would be blank scrolling —
+     collapse it to the ordinary section spacing. */
+  .pf-lead-in {
+    margin-top: 4rem;
   }
 
   .about-partner-marquee {

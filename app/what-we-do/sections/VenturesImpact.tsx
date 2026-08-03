@@ -70,7 +70,14 @@ function TierCard({ tier }: { tier: VentureTier }) {
 
 export default function VenturesImpact() {
   return (
-    <section className="relative z-20 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(170deg,#fbf7ff_0%,#f9f5fe_45%,#f6f1fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20 xl:min-h-[131.51vw] xl:pb-[18.75vw] xl:pt-[8.85vw]">
+    /* Bottom padding is deliberately much smaller than the mockup's
+       `18.75vw` (270px at 1440) and the `min-h-[131.51vw]` floor is gone.
+       Both came from the flat mockup canvas, where nothing followed this
+       section. On the live page the swipe-over pin already holds the section
+       for a beat after its last card, so that mockup padding stacked on top
+       of the pin and read as a large empty gap below "Impact Focus Areas"
+       before the next section arrived. */
+    <section className="relative z-20 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(170deg,#fbf7ff_0%,#f9f5fe_45%,#f6f1fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20 xl:pb-[7vw] xl:pt-[8.85vw]">
       {/* soft cyan bloom, lower-right — the large blurred disc in the mockup */}
       <div
         aria-hidden

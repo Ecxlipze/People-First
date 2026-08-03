@@ -30,8 +30,13 @@ export default function WhatWeDoPage() {
 
         {/* ── SECTION 2: THE PEOPLE FIRST ECOSYSTEM ──
             Starts fully below the initial viewport, then swipes over the
-            pinned section above once scrolling begins. */}
-        <TallSwipePanel>
+            pinned section above once scrolling begins.
+
+            `leadIn` replaces the default 4rem gap with most of a viewport, which
+            is the scroll room SECTION 1's <Recede> needs to hold still and then
+            recede before this panel arrives over it. With only 4rem the hero was
+            still fully opaque as this section slid up, so the two overlapped. */}
+        <TallSwipePanel leadIn={0.85}>
           <EcosystemStages />
         </TallSwipePanel>
 

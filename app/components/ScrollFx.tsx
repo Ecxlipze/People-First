@@ -135,9 +135,17 @@ export function Reveal({
 export function Recede({
   children,
   className = "",
+  dwell = 0.4,
+  span = 0.9,
 }: {
   children: React.ReactNode;
   className?: string;
+  /* Viewport heights of scroll during which the hero holds completely still
+     before it starts receding. Without a dwell the hero began dissolving on the
+     very first wheel tick, so it never had a moment of being simply *there*. */
+  dwell?: number;
+  /* Viewport heights the recede itself spans once the dwell is over. */
+  span?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -147,7 +155,10 @@ export function Recede({
     if (prefersReducedMotion()) return;
     const update = () => {
       const vh = window.innerHeight;
-      const p = Math.max(0, Math.min(1, window.scrollY / (vh * 0.9)));
+      const p = Math.max(
+        0,
+        Math.min(1, (window.scrollY - vh * dwell) / (vh * span)),
+      );
       // Smoothstep easing for cinematic feel
       const ease = p * p * (3 - 2 * p);
       el.style.opacity = String(1 - ease * 0.92);
@@ -156,7 +167,7 @@ export function Recede({
     };
     const unsubscribe = subscribeScrollFrame(update);
     return unsubscribe;
-  }, []);
+  }, [dwell, span]);
 
   return (
     <div
