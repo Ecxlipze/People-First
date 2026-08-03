@@ -26,9 +26,8 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
        mockup's bar is shorter than the card and rounded on its own, so it
        reads as a tab beside the card, not an edge of it.
 
-       This outer element is also what <Stagger> writes its scroll transform to,
-       which is why the hover lift lives on the inner card instead — one element
-       cannot carry both without the scrub erasing the hover. */
+       This outer element is also what <Stagger> animates into the viewport,
+       which is why the hover lift lives on the inner card instead. */
     <div className="group relative h-full pl-2.5">
       {/* The accent tab grows to the card's full height on hover — a small
           confirmation that the card is the thing responding. */}

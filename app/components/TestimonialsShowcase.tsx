@@ -1,16 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { TESTIMONIALS, type Testimonial } from "@/app/components/testimonials";
 import PinnedRecede from "@/app/components/PinnedRecede";
-import {
-  prefersReducedMotion,
-  subscribeScrollFrame,
-} from "@/app/lib/motion";
-
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 // deterministic colour for the initials-monogram avatar fallback.
 const AVATAR_COLORS = [
@@ -76,50 +69,6 @@ function Avatar({ t, i }: { t: Testimonial; i: number }) {
    heights vary and columns stagger, matching the design. They scrub in as the
    block rises. */
 export default function TestimonialsShowcase() {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const heading = headingRef.current;
-    const grid = gridRef.current;
-    if (!heading || !grid) return;
-
-    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-card]"));
-
-    if (prefersReducedMotion()) {
-      heading.style.opacity = "1";
-      heading.style.transform = "none";
-      heading.style.willChange = "auto";
-      cards.forEach((c) => {
-        c.style.opacity = "1";
-        c.style.transform = "none";
-        c.style.willChange = "auto";
-      });
-      return;
-    }
-
-    const update = () => {
-      const vh = window.innerHeight;
-      const headTop = heading.getBoundingClientRect().top;
-      const hp = clamp01((vh * 0.9 - headTop) / (vh * 0.5));
-      heading.style.opacity = String(hp);
-      heading.style.transform = `translateY(${lerp(40, 0, hp)}px)`;
-
-      const gridTop = grid.getBoundingClientRect().top;
-      cards.forEach((c, i) => {
-        const trigger = vh * 0.92 - i * 18;
-        const cp = clamp01((trigger - gridTop) / (vh * 0.34));
-        c.style.opacity = String(cp);
-        c.style.transform = `translateY(${lerp(44, 0, cp)}px) scale(${lerp(
-          0.94,
-          1,
-          cp,
-        )})`;
-      });
-    };
-    return subscribeScrollFrame(update);
-  }, []);
-
   return (
     /* Outer track: swipes up over the pinned Gallery section. Light near-white
        background matches the design (distinct from the lavender sections). */
@@ -128,26 +77,26 @@ export default function TestimonialsShowcase() {
         overlapFrom="xl"
         className="flex flex-col items-center justify-center py-10 sm:py-14"
       >
-        <h2
-          ref={headingRef}
-          className="px-6 text-center text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl"
-          style={{ opacity: 0, willChange: "transform, opacity" }}
-        >
-          People are saying about us
-        </h2>
+        {/* Previously both the heading and the cards were scrubbed to scroll
+            position from one shared handler, which tied all twelve cards to the
+            grid's single offset — so they drifted in together rather than each
+            arriving. <Reveal>/<Stagger> give every card its own one-shot
+            entrance the moment it reaches the viewport. */}
+        <Reveal className="w-full">
+          <h2 className="px-6 text-center text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl">
+            People are saying about us
+          </h2>
+        </Reveal>
 
-        {/* masonry grid — 1→2→3→4 columns; break-inside-avoid keeps cards whole */}
-        <div
-          ref={gridRef}
+        {/* masonry grid — 1→2→3→4 columns; break-inside-avoid keeps cards whole.
+            The cards are the direct children of this column container, so the
+            default ":scope > *" selector targets them without a data attribute. */}
+        <Stagger
           className="mx-auto mt-6 w-full max-w-6xl gap-4 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-4 lg:pr-32"
+          step={45}
         >
           {TESTIMONIALS.map((t, i) => (
-            <div
-              key={t.name}
-              data-card
-              style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mb-4 break-inside-avoid"
-            >
+            <div key={t.name} className="mb-4 break-inside-avoid">
               <article className="pf-card group flex flex-col rounded-2xl border border-black/[0.06] bg-white p-4 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]">
                 {/* header: avatar + name/handle + twitter icon */}
                 <div className="flex items-start gap-2.5">
@@ -177,7 +126,7 @@ export default function TestimonialsShowcase() {
               </article>
             </div>
           ))}
-        </div>
+        </Stagger>
       </PinnedRecede>
     </div>
   );

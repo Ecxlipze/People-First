@@ -8,10 +8,72 @@ import {
 
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
-/* Reveal — scrubbed to scroll. As the element rises through the viewport its
-   progress maps 0→1 to opacity, a translateY lift, and a subtle scale-up.
-   Unlike a one-shot trigger, it tracks the scroll position continuously
-   (Apple-style), so scrubbing back up reverses it. */
+const REVEAL_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+/* Observer options shared by <Reveal> and <Stagger>.
+
+   `threshold` is a fraction of the ELEMENT, not of the viewport, so a single
+   value cannot serve both a small card and a section taller than the screen: at
+   0.12 a 3000px-tall block needs 360px on screen (fine), but a block taller than
+   ~8 viewports would need more than the viewport can ever show, and would never
+   fire. Passing 0 alongside it means "any part visible" always qualifies, and
+   `rootMargin`'s bottom inset is what actually delays the trigger until the
+   element has entered properly. That combination behaves the same for normal
+   cards and still fires for very tall sections.
+
+   The negative bottom inset shrinks the viewport's lower edge, so an element must
+   cross above it to count as intersecting — that is what makes the entrance read
+   as an arrival instead of firing while still off-screen. */
+const REVEAL_OBSERVER: IntersectionObserverInit = {
+  threshold: [0, 0.12],
+  rootMargin: "0px 0px -8% 0px",
+};
+
+function stageForReveal(
+  el: HTMLElement,
+  { y, scale, delay = 0 }: { y: number; scale: number; delay?: number },
+) {
+  el.style.opacity = "0";
+  el.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`;
+  el.style.filter = "blur(7px)";
+  el.style.willChange = "transform, opacity, filter";
+  el.style.transition = [
+    `opacity 620ms ${REVEAL_EASE} ${delay}ms`,
+    `transform 760ms ${REVEAL_EASE} ${delay}ms`,
+    `filter 700ms ${REVEAL_EASE} ${delay}ms`,
+  ].join(", ");
+}
+
+function revealElement(el: HTMLElement) {
+  el.dataset.revealed = "true";
+  el.style.opacity = "1";
+  el.style.transform = "translate3d(0, 0, 0) scale(1)";
+  el.style.filter = "blur(0)";
+
+  const settle = (event: TransitionEvent) => {
+    if (event.propertyName !== "transform") return;
+    el.style.willChange = "auto";
+    el.style.transform = "";
+    el.style.filter = "";
+    el.style.transition = "";
+    el.removeEventListener("transitionend", settle);
+  };
+  el.addEventListener("transitionend", settle);
+}
+
+function showWithoutMotion(el: HTMLElement) {
+  el.dataset.revealed = "true";
+  el.style.opacity = "1";
+  el.style.transform = "none";
+  el.style.filter = "none";
+  el.style.transition = "none";
+  el.style.willChange = "auto";
+}
+
+/* Reveal — a clear, one-shot viewport entrance. The element stays staged just
+   below the viewport, then lifts, sharpens and scales into place when it enters.
+   One-shot motion is intentionally used here: it reads as an arrival rather
+   than the subtle continuous drift of the previous scroll scrubber. */
 export function Reveal({
   children,
   className = "",
@@ -29,23 +91,31 @@ export function Reveal({
     const el = ref.current;
     if (!el) return;
     if (prefersReducedMotion()) {
-      el.style.opacity = "1";
-      el.style.transform = "none";
+      showWithoutMotion(el);
       return;
     }
-    const update = () => {
-      const r = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const start = vh * 0.95; // element top enters here → p=0
-      const end = vh * 0.42; // element top reaches here → p=1
-      const p = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
-      el.style.opacity = String(p);
-      el.style.transform = `translateY(${(1 - p) * y}px) scale(${
-        scale + p * (1 - scale)
-      })`;
-    };
-    const unsubscribe = subscribeScrollFrame(update);
-    return unsubscribe;
+
+    stageForReveal(el, { y, scale });
+
+    if (!("IntersectionObserver" in window)) {
+      showWithoutMotion(el);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          revealElement(el);
+          observer.disconnect();
+          break;
+        }
+      },
+      REVEAL_OBSERVER,
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [y, scale]);
 
   return (
@@ -99,14 +169,9 @@ export function Recede({
   );
 }
 
-/* Stagger — the list/grid counterpart to <Reveal>. Instead of moving the whole
-   block as one unit, each direct child scrubs in on its own slightly delayed
-   ramp, so a row of cards cascades rather than appearing as a slab.
-
-   Several sections already hand-rolled this exact loop (Testimonials cards,
-   Ecosystem left column, Ventures). This is the shared version for new usage;
-   the existing bespoke ones are left alone since their triggers are tuned to
-   their own pinned tracks. */
+/* Stagger — the list/grid counterpart to <Reveal>. Each item owns its observer,
+   so tall mobile stacks reveal as individual cards reach the viewport, while
+   same-row desktop cards cascade with a short delay. */
 export function Stagger({
   children,
   className = "",
@@ -118,7 +183,7 @@ export function Stagger({
   className?: string;
   /* px of upward travel each child covers. */
   y?: number;
-  /* px of scroll offset between consecutive children — the cascade amount. */
+  /* milliseconds between consecutive items in the same visible group. */
   step?: number;
   /* Which descendants to stagger. Defaults to direct children; pass e.g.
      "[data-stagger]" when the children are wrapped by layout elements. */
@@ -134,37 +199,36 @@ export function Stagger({
     if (items.length === 0) return;
 
     if (prefersReducedMotion()) {
-      items.forEach((el) => {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-        el.style.willChange = "auto";
-      });
+      items.forEach(showWithoutMotion);
       return;
     }
 
-    /* Children are hidden HERE, from inside the effect, rather than via an
-       inline style on the server-rendered markup. That way the content is
-       visible by default and only this running effect can hide it — so a
-       hydration failure or disabled JS degrades to "no animation" instead of
-       "no content". */
-    items.forEach((el) => {
-      el.style.opacity = "0";
-      el.style.willChange = "transform, opacity";
+    items.forEach((el, i) => {
+      /* Reset the cascade after six items. On long mobile lists this prevents a
+         card far down the page from inheriting a needlessly long delay. */
+      const delay = Math.min((i % 6) * step, 320);
+      stageForReveal(el, { y, scale: 0.94, delay });
     });
 
-    const update = () => {
-      const vh = window.innerHeight;
-      items.forEach((el, i) => {
-        const top = el.getBoundingClientRect().top;
-        // Each successive child needs the page scrolled a little further before
-        // it starts, which is what produces the cascade.
-        const p = clamp01((vh * 0.92 - top - i * step) / (vh * 0.42));
-        el.style.opacity = String(p);
-        el.style.transform = `translateY(${(1 - p) * y}px)`;
-      });
-    };
+    if (!("IntersectionObserver" in window)) {
+      items.forEach(showWithoutMotion);
+      return;
+    }
 
-    return subscribeScrollFrame(update);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          revealElement(el);
+          observer.unobserve(el);
+        });
+      },
+      REVEAL_OBSERVER,
+    );
+
+    items.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, [y, step, selector]);
 
   return (

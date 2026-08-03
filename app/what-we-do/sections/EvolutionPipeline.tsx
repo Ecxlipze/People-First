@@ -20,8 +20,8 @@ import {
    stage columns; see pipeline.ts. */
 
 function StageCard({ stage }: { stage: PipelineStage }) {
-  /* Wrapper takes <Stagger>'s scroll transform; the card inside owns the hover
-     lift. Same split as the pillar and tier cards. */
+  /* Wrapper takes <Stagger>'s entrance transform; the card inside owns the
+     hover lift. Same split as the pillar and tier cards. */
   return (
     <div className="h-full">
       <div className="pf-lift pf-sheen group relative flex h-full min-h-[31.25rem] flex-col overflow-hidden rounded-xl bg-[#f3f1f2] shadow-[0_12px_28px_-16px_rgba(35,25,45,0.4)]">

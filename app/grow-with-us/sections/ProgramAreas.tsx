@@ -40,8 +40,8 @@ const AREAS: Area[] = [
 ];
 
 function Card({ area }: { area: Area }) {
-  /* Wrapper absorbs <Stagger>'s scroll transform so .pf-card is free to own the
-     hover lift — the two cannot share one element. */
+  /* Wrapper owns <Stagger>'s entrance transform so .pf-card is free to own the
+     hover lift during that entrance. */
   return (
     <div className="h-full">
       <div className="pf-card group relative flex h-full min-h-[240px] flex-col rounded-xl bg-white px-7 pb-8 pt-10 shadow-[0_18px_45px_-20px_rgba(70,80,120,0.35)]">

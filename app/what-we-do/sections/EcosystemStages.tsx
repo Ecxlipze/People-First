@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { GraduationCap } from "lucide-react";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 import { STAGES, type Stage } from "@/app/what-we-do/stages";
 import ContactTrigger from "@/app/contact/ContactTrigger";
 
@@ -60,9 +60,8 @@ function StageColumn({ stage }: { stage: Stage }) {
   return (
     /* h-full + flex-col so all three columns match height on desktop even
        though the middle one holds a single card rather than a list */
-    /* pf-card is safe here: <Reveal> writes its scroll transform to the grid
-       wrapper above, not to these columns, so the hover lift has the transform
-       property to itself. */
+    /* pf-card is safe here: <Reveal> writes its entrance transform to the grid
+       wrapper above, not to these columns, so hover stays independent. */
     <div
       className="pf-card flex h-full flex-col overflow-hidden rounded-lg border bg-white/70 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.4)] backdrop-blur-sm xl:h-[45.75vh] xl:rounded-[1.24vh] xl:bg-transparent xl:shadow-none xl:backdrop-blur-none"
       style={{ borderColor: stage.accent }}
@@ -207,11 +206,14 @@ export default function EcosystemStages() {
 
         {/* the grid and the CTAs below reserve just enough room for the icon
             rail, whose labels start around 1164px at a 1440 viewport */}
-        <Reveal className="mt-12 grid items-stretch gap-6 md:grid-cols-3 md:gap-5 lg:pr-[11rem] xl:absolute xl:left-[8.33vw] xl:top-[33.49vh] xl:mt-0 xl:w-[70.83vw] xl:grid-cols-3 xl:gap-[1.08vw] xl:pr-0">
+        <Stagger
+          className="mt-12 grid items-stretch gap-6 md:grid-cols-3 md:gap-5 lg:pr-[11rem] xl:absolute xl:left-[8.33vw] xl:top-[33.49vh] xl:mt-0 xl:w-[70.83vw] xl:grid-cols-3 xl:gap-[1.08vw] xl:pr-0"
+          step={90}
+        >
           {STAGES.map((s) => (
             <StageColumn key={s.title} stage={s} />
           ))}
-        </Reveal>
+        </Stagger>
 
         {/* ── CTAs + say-hello glyph, bottom-right as in the mockup ──
             Same right reservation as the grid above, so the buttons line up

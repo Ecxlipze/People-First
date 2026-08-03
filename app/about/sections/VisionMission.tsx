@@ -7,7 +7,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* About → Vision & Mission. Two rows (Vision / Mission), each a circular icon +
    heading + rich copy, with a dotted world-map illustration flanking them. Below
@@ -78,7 +78,10 @@ export default function VisionMission() {
           />
         </Reveal>
 
-        <Reveal className="mt-20 grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_370px]">
+        <Stagger
+          className="mt-20 grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_370px]"
+          step={120}
+        >
           {/* ── vision + mission rows ── */}
           <div className="space-y-12">
             <div className="group flex flex-col items-center gap-8 sm:flex-row sm:items-center">
@@ -155,7 +158,7 @@ export default function VisionMission() {
               className="mx-auto w-full max-w-[16rem] select-none lg:max-w-[370px]"
             />
           </div>
-        </Reveal>
+        </Stagger>
 
         {/* ── Learn × Grow × Lead × Transform step row ── */}
         <Reveal className="mx-auto mt-16 max-w-2xl rounded-2xl bg-[#d9cff7] px-4 py-6 shadow-[0_18px_30px_-18px_rgba(50,30,80,0.6)] sm:px-8 sm:py-8">

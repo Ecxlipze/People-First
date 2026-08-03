@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Play, ChevronRight } from "lucide-react";
 import { EPISODES, TOTAL_PAGES } from "@/app/podcasts/episodes";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* Podcasts → "Our Podcasts". Deep-purple band holding one wide white card per
    episode: thumbnail with a play overlay and a coloured corner badge on the
@@ -26,9 +26,10 @@ export default function OurPodcasts() {
           </h2>
         </Reveal>
 
-        <div
+        <Stagger
           key={page}
-          className="animate-fade-in-up mt-20 flex flex-col gap-14 sm:mt-24 sm:gap-20 lg:ml-20"
+          className="mt-20 flex flex-col gap-14 sm:mt-24 sm:gap-20 lg:ml-20"
+          step={90}
         >
           {page === 1 ? (
             EPISODES.map((ep) => (
@@ -94,10 +95,10 @@ export default function OurPodcasts() {
               More episodes are on the way.
             </p>
           )}
-        </div>
+        </Stagger>
 
         {/* ── pager + View All ── */}
-        <div className="mt-14 flex flex-wrap items-center justify-between gap-4 lg:ml-20">
+        <Reveal className="mt-14 flex flex-wrap items-center justify-between gap-4 lg:ml-20" y={28} scale={0.98}>
           <nav aria-label="Podcast pages" className="flex items-center gap-2">
             {Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1).map((n) => (
               <button
@@ -131,7 +132,7 @@ export default function OurPodcasts() {
           >
             View All
           </Link>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

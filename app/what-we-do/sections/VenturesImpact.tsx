@@ -23,10 +23,8 @@ import {
    Copy and colours both come straight out of the mockup; see ventures.ts. */
 
 function TierCard({ tier }: { tier: VentureTier }) {
-  /* Two elements, deliberately: <Stagger> writes a scroll-driven `transform` to
-     its direct children, and .pf-lift writes a hover `transform`. On one element
-     those two fight — the per-frame scrub would erase the hover lift. So the
-     outer div is the stagger target and the inner one carries the hover. */
+  /* Two elements, deliberately: the outer div owns <Stagger>'s viewport
+     entrance and the inner card owns the hover lift. */
   return (
     <div className="h-full">
       <div
@@ -207,8 +205,8 @@ function ImpactCard({
   index: number;
 }) {
   const featured = area.featured ?? false;
-  /* Outer div absorbs <Stagger>'s scroll transform so the inner card is free to
-     own the hover transform — see the note in TierCard. */
+  /* Outer div absorbs <Stagger>'s entrance so the inner card is free to own the
+     hover transform — see the note in TierCard. */
   return (
     <div className="h-full">
       <div

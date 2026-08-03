@@ -54,9 +54,8 @@ export default function ProgramOutcomes() {
             must exceed that same overhang so the right column's illustration
             doesn't land on top of the left column's tile */}
         {/* Stagger so the 2×2 grid cascades instead of the four tiles fading in
-            together. Each tile is wrapped, because <Stagger> writes a transform
-            to its direct children and the tile itself already animates one on
-            hover — the two would fight on a single element. */}
+            together. Each tile is wrapped so its entrance and hover transforms
+            stay independent. */}
         <Stagger className="mt-20 grid gap-y-14 pl-10 sm:pl-14 md:grid-cols-2 md:gap-x-24 lg:gap-x-32">
           {OUTCOMES.map((o) => (
             <div key={o.lead}>

@@ -4,12 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { SECTORS, type Sector } from "@/app/components/ecosystem";
 import PinnedRecede from "@/app/components/PinnedRecede";
-import {
-  prefersReducedMotion,
-  subscribeScrollFrame,
-} from "@/app/lib/motion";
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+import { prefersReducedMotion } from "@/app/lib/motion";
 
 function SectorIcon({
   sector,
@@ -168,25 +163,81 @@ export default function EcosystemShowcase() {
       return;
     }
 
-    const update = () => {
-      const vh = window.innerHeight;
+    /* One-shot entrances, replacing the previous scroll scrubber. The scrubber
+       tied every element's opacity to its live scroll offset, so content drifted
+       continuously instead of arriving — which read as nothing happening. Each
+       element now animates once, when it actually reaches the viewport.
 
-      leftItems.forEach((el, i) => {
-        const top = el.getBoundingClientRect().top;
-        const p = clamp01((vh * 0.9 - top - i * 12) / (vh * 0.45));
-        el.style.opacity = String(p);
-        el.style.transform = `translateY(${lerp(34, 0, p)}px)`;
-      });
+       The two groups get different motion on purpose:
+         · left column — a short lift, like <Reveal> elsewhere on the site
+         · orbit nodes — a scale-up from the centre of the ring, staggered around
+           it, so the diagram assembles itself
 
-      // orbit nodes pop in from the centre, staggered around the ring.
-      const oTop = orbit.getBoundingClientRect().top;
-      nodes.forEach((el, i) => {
-        const p = clamp01((vh * 0.88 - oTop - i * 40) / (vh * 0.4));
-        el.style.opacity = String(p);
-        el.style.transform = `scale(${lerp(0.4, 1, p)})`;
-      });
+       The nodes are positioned on the ring with `left`/`top` plus Tailwind's
+       -translate-x/y-1/2 (the `translate` property), so animating `transform`
+       here cannot disturb their placement. */
+    const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+    const stage = (el: HTMLElement, from: string, delay: number) => {
+      el.style.opacity = "0";
+      el.style.transform = from;
+      el.style.willChange = "transform, opacity";
+      el.style.transition = [
+        `opacity 600ms ${EASE} ${delay}ms`,
+        `transform 720ms ${EASE} ${delay}ms`,
+      ].join(", ");
     };
-    return subscribeScrollFrame(update);
+
+    leftItems.forEach((el, i) => stage(el, "translateY(34px)", i * 70));
+    // Nodes ease in around the ring; capped so the last one isn't left waiting.
+    nodes.forEach((el, i) => stage(el, "scale(0.4)", Math.min(i * 80, 560)));
+
+    /* Orbit members (nodes AND the hub) must land on `scale(1)` rather than
+       `none`: clearing the transform outright would also drop any scale the
+       element's own classes rely on, and the hub additionally runs
+       `animate-ring-pulse`. Membership is checked against the collected set, not
+       a data attribute, since the hub uses data-hub and the nodes data-node. */
+    const orbitMembers = new Set<HTMLElement>(nodes);
+
+    const reveal = (el: HTMLElement) => {
+      el.style.opacity = "1";
+      el.style.transform = orbitMembers.has(el) ? "scale(1)" : "none";
+      const settle = (event: TransitionEvent) => {
+        if (event.propertyName !== "transform") return;
+        el.style.willChange = "auto";
+        el.style.transition = "";
+        el.removeEventListener("transitionend", settle);
+      };
+      el.addEventListener("transitionend", settle);
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      [...leftItems, ...nodes].forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.transition = "none";
+        el.style.willChange = "auto";
+      });
+      return;
+    }
+
+    /* threshold 0 alongside a negative bottom rootMargin: a `threshold` is a
+       fraction of the element, which cannot work for both a small node and a
+       column taller than the viewport. The margin is what delays the trigger
+       until the element has properly entered. */
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          reveal(entry.target as HTMLElement);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: [0, 0.12], rootMargin: "0px 0px -8% 0px" },
+    );
+
+    [...leftItems, ...nodes].forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
