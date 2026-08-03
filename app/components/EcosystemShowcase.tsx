@@ -52,7 +52,7 @@ function Decor() {
         alt=""
         width={859}
         height={430}
-        className="absolute -bottom-2 -right-2 w-[46vw] max-w-[640px] select-none"
+        className="absolute -bottom-2 -right-2 w-[46vw] max-w-[640px] select-none xl:-bottom-20 xl:-right-12 xl:w-[40vw] xl:max-w-[560px]"
       />
       {/* paper-plane pair, top-left (blue + teal, pointing down) */}
       <Image
@@ -83,16 +83,22 @@ function OrbitNode({ s }: { s: Sector }) {
   const rad = (s.angle * Math.PI) / 180;
   const x = Math.sin(rad);
   const y = -Math.cos(rad);
-  // Right half → label flanks right (outward, away from the copy). Left half →
-  // label stacks centred (flanking left would spill into the left copy column):
-  // above the node if it's in the top arc, below if in the bottom arc.
+  // Keep labels on the outside of the ring. The top and bottom nodes stack their
+  // labels vertically; the remaining nodes flank left/right. This avoids the
+  // previous cluster of centred labels on the left arc, which collided with both
+  // one another and the section copy.
   let placement: string;
-  if (x > 0.34) {
-    placement = "left-full ml-3 top-1/2 -translate-y-1/2 text-left";
-  } else if (y < 0) {
-    placement = "bottom-full mb-2 left-1/2 -translate-x-1/2 text-center";
+  if (s.angle === 0) {
+    placement =
+      "bottom-full left-1/2 mb-3 -translate-x-1/2 text-center";
+  } else if (s.angle > 0 && s.angle < 180) {
+    placement =
+      "left-full top-1/2 ml-3 -translate-y-1/2 text-left 2xl:ml-4";
+  } else if (s.angle > 180 && s.angle < 240) {
+    placement = "left-1/2 top-full mt-3 -translate-x-1/2 text-center";
   } else {
-    placement = "top-full mt-2 left-1/2 -translate-x-1/2 text-center";
+    placement =
+      "right-full top-1/2 mr-3 -translate-y-1/2 text-right 2xl:mr-4";
   }
   return (
     <div
@@ -107,17 +113,19 @@ function OrbitNode({ s }: { s: Sector }) {
     >
       <div className="relative flex items-center justify-center">
         <span
-          className="pf-pop flex h-16 w-16 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-8px_rgba(20,20,50,0.5)] xl:h-[4.75rem] xl:w-[4.75rem]"
+          className="pf-pop flex h-16 w-16 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-8px_rgba(20,20,50,0.5)] 2xl:h-[4.75rem] 2xl:w-[4.75rem]"
           style={{ backgroundColor: s.color }}
         >
           <SectorIcon
             sector={s}
             sizes="32px"
-            className="h-7 w-7 xl:h-8 xl:w-8"
+            className="h-7 w-7 2xl:h-8 2xl:w-8"
           />
         </span>
 
-        <div className={`absolute w-36 ${placement}`}>
+        <div
+          className={`absolute w-32 min-[1400px]:w-40 2xl:w-44 ${placement}`}
+        >
           <p
             className="text-sm font-bold leading-tight"
             style={{ color: s.color }}
@@ -248,7 +256,7 @@ export default function EcosystemShowcase() {
       >
         {/* decorative layer — pinned+receding with the content */}
         <Decor />
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-8 sm:px-12 lg:grid-cols-2 lg:gap-8 lg:px-16 lg:pr-32">
+        <div className="relative z-10 mx-auto grid w-full max-w-[1720px] grid-cols-1 items-center gap-8 px-8 sm:px-12 lg:px-16 lg:pr-32 xl:grid-cols-[minmax(400px,0.78fr)_minmax(560px,1.22fr)] xl:gap-8 2xl:gap-12">
           {/* ── left column ── */}
           <div ref={leftRef} className="max-w-xl">
             <h2
@@ -315,7 +323,7 @@ export default function EcosystemShowcase() {
           {/* ── right column: orbit (desktop) ── */}
           <div
             ref={orbitRef}
-            className="relative mx-auto hidden aspect-square w-full max-w-[450px] lg:block [--orbit-r:155px] xl:[--orbit-r:180px]"
+            className="relative mx-auto hidden h-[500px] w-full max-w-[680px] [--orbit-r:145px] xl:block min-[1400px]:h-[540px] min-[1400px]:max-w-[760px] min-[1400px]:[--orbit-r:165px] 2xl:h-[580px] 2xl:max-w-[820px] 2xl:[--orbit-r:180px]"
           >
             {/* faint ring */}
             <span
@@ -347,7 +355,7 @@ export default function EcosystemShowcase() {
           </div>
 
           {/* ── right column: legend (mobile) ── */}
-          <ul className="flex flex-col gap-4 lg:hidden">
+          <ul className="flex flex-col gap-4 xl:hidden">
             {SECTORS.map((s) => (
               <li key={s.label} className="group flex items-start gap-3 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1">
                 <span

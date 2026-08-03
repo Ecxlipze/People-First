@@ -11,13 +11,22 @@ export type Episode = {
 
 /* The mockup shows three episodes across four pages of pagination. Only the
    first page's content is specified, so that is what ships; add further pages
-   here and the pager below picks them up automatically. */
+   here and the pager below picks them up automatically.
+
+   EPISODES[0] is also what /insights renders as its featured podcast card — the
+   Studio.pdf mockup specifies that card with this episode's title, still and
+   teal badge. It is imported there rather than restated, so the two pages cannot
+   drift apart. */
 export const EPISODES: Episode[] = [
   {
-    title: "Reasons Pakistani Manufacturers Should Start Selling Online",
-    thumb: "/images/podcast/ep-5g.webp",
-    thumbAlt:
-      "Episode still — Pakistan Raises $507 Million in Major 5G Spectrum Auction",
+    /* The Studio.pdf mockup titles this one "Podcast 1 : …", numbering it in the
+       same series as the two below, which the Podcast.pdf mockup left as
+       "Reasons Pakistani Manufacturers…" — a headline that belongs to the
+       article on /insights, not to an episode. The mockup's own wording wins. */
+    title:
+      "Podcast 1 : world will know about the magic of digital world & its achievements.",
+    thumb: "/images/podcast/ep-itcn.webp",
+    thumbAlt: "Episode still — the People First team on stage at ITCN Asia",
     badge: "Largest digital marketing conference",
     badgeBg: "bg-pf-teal",
     stats: [
@@ -52,8 +61,12 @@ export const EPISODES: Episode[] = [
   {
     title:
       "Podcast 3: world will know about the magic of digital world & its achievements.",
-    thumb: "/images/podcast/ep-itcn.webp",
-    thumbAlt: "Episode still — the People First team on stage at ITCN Asia",
+    /* Uses the 5G still that episode 1 previously carried — the ITCN frame moved
+       up to episode 1 to match the Studio.pdf mockup, and two episodes sharing
+       one still would read as a rendering bug. */
+    thumb: "/images/podcast/ep-5g.webp",
+    thumbAlt:
+      "Episode still — Pakistan Raises $507 Million in Major 5G Spectrum Auction",
     badge: "Largest digital marketing conference",
     badgeBg: "bg-[#3f2a6b]",
     stats: [

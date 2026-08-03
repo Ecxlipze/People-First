@@ -205,7 +205,7 @@ export default function SideNav() {
            screen readers; the desktop rail always stays interactive. */
         inert={!isDesktop && !open && !dragging}
         style={{ translate: drag ? `${drag.x}px 0` : undefined }}
-        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col overflow-y-auto overscroll-contain rounded-l-2xl bg-white/95 pb-[max(1.25rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.25rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] shadow-2xl ring-1 ring-black/5 backdrop-blur-md lg:right-6 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:ring-0 lg:backdrop-blur-none ${
+        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col overflow-y-auto overscroll-contain rounded-l-2xl bg-transparent pb-[max(1.25rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.25rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] lg:right-6 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:p-0 ${
           dragging ? "" : "transition-[translate] duration-300 ease-out"
         } ${
           dragging
