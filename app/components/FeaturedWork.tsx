@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { CountUp, Reveal } from "@/app/components/ScrollFx";
 import { MediaFrame, StatCard } from "@/app/components/media";
 import MediaShowcase from "@/app/components/MediaShowcase";
 import PinnedRecede from "@/app/components/PinnedRecede";
@@ -46,7 +46,10 @@ export default function FeaturedWork() {
               aria-hidden
               width={1923}
               height={462}
-              className="pointer-events-none absolute -left-4 -top-12 hidden h-16 w-auto -rotate-[8deg] select-none object-contain object-left opacity-90 sm:block"
+              /* Floats gently — it is a decorative crystal sitting in open
+                 space, which is exactly the kind of element that looks pasted-on
+                 when static. */
+              className="animate-floaty pointer-events-none absolute -left-4 -top-12 hidden h-16 w-auto -rotate-[8deg] select-none object-contain object-left opacity-90 sm:block"
             />
             <MediaFrame
               src="/images/featured/feature2.webp"
@@ -77,9 +80,12 @@ export default function FeaturedWork() {
               help promote and sell your products, including helping marketing.
             </p>
             <div className="mt-8 flex items-center gap-3">
-              <span className="text-4xl font-extrabold text-[#e0325a] sm:text-5xl">
-                30%
-              </span>
+              {/* The figure counts up when it scrolls into view, matching the
+                  treatment the About page's Key Stats already use. */}
+              <CountUp
+                value="30%"
+                className="text-4xl font-extrabold text-[#e0325a] sm:text-5xl"
+              />
               <span className="text-sm font-medium leading-tight text-zinc-500">
                 management skills
               </span>
@@ -87,9 +93,11 @@ export default function FeaturedWork() {
 
             <ul className="mt-8 grid max-w-md grid-cols-2 gap-x-8 gap-y-4">
               {SKILLS.map((skill) => (
+                /* Each row nudges right on hover, so the list reads as content
+                   rather than as a static caption block. */
                 <li
                   key={skill}
-                  className="flex items-center gap-2.5 text-base font-semibold text-zinc-700"
+                  className="group flex items-center gap-2.5 text-base font-semibold text-zinc-700 transition-[transform,color] duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1 hover:text-zinc-950"
                 >
                   <Image
                     src="/images/icons/task-icon.png"
@@ -97,7 +105,7 @@ export default function FeaturedWork() {
                     aria-hidden
                     width={26}
                     height={30}
-                    className="h-5 w-auto shrink-0 select-none"
+                    className="pf-pop h-5 w-auto shrink-0 select-none"
                   />
                   {skill}
                 </li>

@@ -153,7 +153,7 @@ export default function ContactPanel({
   return (
     <div className="grid min-w-0 gap-10 bg-[#69205b] p-6 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12 lg:px-16 lg:py-20">
       {/* ── left: get in touch ── */}
-      <div className="text-white">
+      <div className="pf-stagger text-white">
         <h2
           id={headingId}
           className="text-3xl font-bold uppercase tracking-wide sm:text-[2.15rem]"
@@ -166,9 +166,9 @@ export default function ContactPanel({
 
         <div className="mt-10 space-y-7">
           {/* phones — one icon, both numbers, as in the design */}
-          <div className="flex items-start gap-3.5">
+          <div className="group flex items-start gap-3.5">
             <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
-              <WhatsappIcon className="h-5 w-5 text-[#25d366]" />
+              <WhatsappIcon className="pf-pop h-5 w-5 text-[#25d366]" />
             </span>
             <div className="flex flex-col">
               {PHONES.map((p, i) => (
@@ -183,9 +183,9 @@ export default function ContactPanel({
             </div>
           </div>
 
-          <div className="flex items-start gap-3.5">
+          <div className="group flex items-start gap-3.5">
             <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
-              <GmailIcon className="h-4 w-4" />
+              <GmailIcon className="pf-pop h-4 w-4" />
             </span>
             <div className="flex flex-col">
               {EMAILS.map((e) => (
@@ -209,7 +209,7 @@ export default function ContactPanel({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="flex h-11 w-11 items-center justify-center rounded-full transition-transform hover:scale-110"
+              className="pf-interactive flex h-11 w-11 items-center justify-center rounded-full hover:-translate-y-1 hover:scale-110 hover:bg-white/10"
             >
               <Icon className={`h-7 w-7 ${className}`} />
             </a>
@@ -218,7 +218,7 @@ export default function ContactPanel({
       </div>
 
       {/* ── right: form card ── */}
-      <div className="min-w-0 overflow-hidden rounded-[1.75rem] bg-[#eeeeef] shadow-2xl">
+      <div className="animate-fade-in-up min-w-0 overflow-hidden rounded-[1.75rem] bg-[#eeeeef] shadow-2xl">
         <ContactForm defaultRole={defaultRole} onSuccess={onSuccess} />
       </div>
     </div>

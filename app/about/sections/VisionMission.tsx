@@ -37,13 +37,16 @@ export default function VisionMission() {
         height={291}
         className="pointer-events-none absolute left-0 top-0 w-72 -translate-x-[12%] select-none opacity-85 sm:w-[360px] lg:w-[410px]"
       />
+      {/* The two paper planes drift gently — they are the one element in this
+          section that reads as "in flight", so leaving them frozen is what makes
+          the panel feel like a screenshot. Offset delays keep them independent. */}
       <Image
         src="/images/about-page/left-plane.png"
         alt=""
         aria-hidden
         width={246}
         height={262}
-        className="pointer-events-none absolute bottom-20 left-[10%] w-20 select-none sm:w-32"
+        className="animate-floaty pointer-events-none absolute bottom-20 left-[10%] w-20 select-none sm:w-32"
       />
       <Image
         src="/images/about-page/right-plane.png"
@@ -51,7 +54,8 @@ export default function VisionMission() {
         aria-hidden
         width={212}
         height={214}
-        className="pointer-events-none absolute right-[11%] top-24 w-20 select-none sm:w-28"
+        style={{ animationDelay: "-3s" }}
+        className="animate-floaty pointer-events-none absolute right-[11%] top-24 w-20 select-none sm:w-28"
       />
 
       <div className="relative z-10 mx-auto max-w-[1440px]">
@@ -77,7 +81,7 @@ export default function VisionMission() {
         <Reveal className="mt-20 grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_370px]">
           {/* ── vision + mission rows ── */}
           <div className="space-y-12">
-            <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-center">
+            <div className="group flex flex-col items-center gap-8 sm:flex-row sm:items-center">
               {/* target/maze icon — note the provided file is named mission.png
                   but its art is the VISION target (filenames are swapped). */}
               <Image
@@ -86,7 +90,7 @@ export default function VisionMission() {
                 aria-hidden
                 width={261}
                 height={261}
-                className="h-44 w-44 flex-none select-none object-contain sm:h-52 sm:w-52"
+                className="pf-pop h-44 w-44 flex-none select-none object-contain sm:h-52 sm:w-52"
               />
               <div className="max-w-[750px] text-center sm:text-left">
                 <h3 className="border-b border-pf-purple/25 pb-2 text-2xl font-bold text-pf-purple sm:text-3xl">
@@ -109,7 +113,7 @@ export default function VisionMission() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-center">
+            <div className="group flex flex-col items-center gap-8 sm:flex-row sm:items-center">
               {/* mountain/flag icon — the provided file is named vision.png but
                   its art is the MISSION mountain (filenames are swapped). */}
               <Image
@@ -118,7 +122,7 @@ export default function VisionMission() {
                 aria-hidden
                 width={261}
                 height={261}
-                className="h-44 w-44 flex-none select-none object-contain sm:h-52 sm:w-52"
+                className="pf-pop h-44 w-44 flex-none select-none object-contain sm:h-52 sm:w-52"
               />
               <div className="max-w-[750px] text-center sm:text-left">
                 <h3 className="border-b border-pf-purple/25 pb-2 text-2xl font-bold text-pf-purple sm:text-3xl">
@@ -158,8 +162,14 @@ export default function VisionMission() {
           <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
             {STEPS.map((s, i) => (
               <div key={s.label} className="flex items-center gap-4 sm:flex-1">
-                <div className="flex flex-1 flex-col items-center text-center">
-                  <s.icon className="h-7 w-7 text-pf-lead" strokeWidth={1.75} />
+                {/* Each step is its own hover group: the icon pops and the whole
+                    step lifts slightly, so the four stages of the model read as
+                    individually explorable rather than as a printed diagram. */}
+                <div className="group flex flex-1 flex-col items-center rounded-lg px-2 py-1 text-center transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1">
+                  <s.icon
+                    className="pf-pop h-7 w-7 text-pf-lead"
+                    strokeWidth={1.75}
+                  />
                   <span className="mt-2 text-sm font-extrabold tracking-[0.12em] text-pf-purple">
                     {s.label}
                   </span>

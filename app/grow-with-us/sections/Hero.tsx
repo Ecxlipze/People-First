@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ContactTrigger from "@/app/contact/ContactTrigger";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* Grow With Us → Hero. The wide mint panel follows the desktop mockup: brand
    mark, desk illustration and headline, then the expo photo and program
@@ -11,7 +12,7 @@ export default function Hero() {
       {/* soft lavender glow behind the headline, top-left */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-32 -top-40 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(150,140,240,0.18)_0%,rgba(150,140,240,0)_70%)]"
+        className="animate-glow-pulse pointer-events-none absolute -left-32 -top-40 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(150,140,240,0.18)_0%,rgba(150,140,240,0)_70%)]"
       />
 
       {/* logo, top-left */}
@@ -19,7 +20,7 @@ export default function Hero() {
         <Link
           href="/"
           aria-label="People First — landing"
-          className="inline-flex min-h-11 items-center"
+          className="group inline-flex min-h-11 items-center"
         >
           <Image
             src="/images/logo.svg"
@@ -27,7 +28,7 @@ export default function Hero() {
             width={398}
             height={100}
             priority
-            className="h-12 w-auto sm:h-16"
+            className="pf-photo h-12 w-auto sm:h-16"
           />
         </Link>
       </header>
@@ -63,10 +64,10 @@ export default function Hero() {
       </div>
 
       {/* ── "Why These Programs Exist": photo left, copy right ── */}
-      <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-10 pt-20 sm:px-10 sm:pt-28 lg:px-16 lg:pr-36">
+      <Reveal className="relative z-10 mx-auto max-w-[1440px] px-6 pb-10 pt-20 sm:px-10 sm:pt-28 lg:px-16 lg:pr-36" y={42} scale={0.975}>
         <div className="flex flex-col items-start gap-9 md:flex-row md:items-center md:gap-12">
           {/* photo + the blue paper plane tucked behind its top-left corner */}
-          <div className="relative shrink-0">
+          <div className="group relative shrink-0">
             {/* hidden below sm: at narrow widths there is no side margin to
                 hold the plane, so it would be clipped by the viewport edge */}
             <Image
@@ -82,7 +83,7 @@ export default function Hero() {
               alt="People First team meeting entrepreneurs at an industry expo"
               width={590}
               height={443}
-              className="relative z-10 w-[18rem] rounded-xl shadow-[0_20px_50px_-20px_rgba(60,60,110,0.45)] sm:w-[20rem]"
+              className="pf-photo relative z-10 w-[18rem] rounded-xl shadow-[0_20px_50px_-20px_rgba(60,60,110,0.45)] sm:w-[20rem]"
             />
           </div>
 
@@ -99,7 +100,7 @@ export default function Hero() {
             </p>
           </div>
         </div>
-      </div>
+      </Reveal>
 
       {/* ── two CTAs, right-aligned above the fold-out ── */}
       <div className="relative z-10 mx-auto flex max-w-[1600px] flex-wrap justify-end gap-4 px-6 pb-8 pt-8 sm:px-10 lg:px-24 lg:pr-44 xl:px-28 xl:pr-48">

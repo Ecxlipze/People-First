@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 import {
   VENTURE_TIERS,
   RESULTS,
@@ -23,43 +23,49 @@ import {
    Copy and colours both come straight out of the mockup; see ventures.ts. */
 
 function TierCard({ tier }: { tier: VentureTier }) {
+  /* Two elements, deliberately: <Stagger> writes a scroll-driven `transform` to
+     its direct children, and .pf-lift writes a hover `transform`. On one element
+     those two fight — the per-frame scrub would erase the hover lift. So the
+     outer div is the stagger target and the inner one carries the hover. */
   return (
-    <div
-      /* the wash is the accent at 6% — the `/ca 0.060000` ExtGState the
-         mockup applies to each of these cards */
-      className="relative flex h-full flex-col items-center rounded-xl border px-5 py-7 text-center xl:h-[20.833vw] xl:rounded-[0.83vw] xl:px-[1vw] xl:pt-[3.1vw]"
-      style={{
-        backgroundColor: `${tier.accent}0f`,
-        borderColor: tier.accent,
-      }}
-    >
+    <div className="h-full">
       <div
-        role={tier.iconAlt ? "img" : undefined}
-        aria-label={tier.iconAlt}
-        aria-hidden={tier.iconAlt ? undefined : true}
-        className="h-12 w-12 shrink-0 select-none bg-current xl:h-[4.35vw] xl:w-[4.35vw]"
+        /* the wash is the accent at 6% — the `/ca 0.060000` ExtGState the
+           mockup applies to each of these cards */
+        className="pf-lift group relative flex h-full flex-col items-center overflow-hidden rounded-xl border px-5 py-7 text-center xl:h-[20.833vw] xl:rounded-[0.83vw] xl:px-[1vw] xl:pt-[3.1vw]"
         style={{
-          color: tier.accent,
-          WebkitMaskImage: `url("${tier.icon}")`,
-          maskImage: `url("${tier.icon}")`,
-          WebkitMaskPosition: "center",
-          maskPosition: "center",
-          WebkitMaskRepeat: "no-repeat",
-          maskRepeat: "no-repeat",
-          WebkitMaskSize: "contain",
-          maskSize: "contain",
+          backgroundColor: `${tier.accent}0f`,
+          borderColor: tier.accent,
         }}
-      />
-
-      <h3
-        className="mt-5 text-[0.92rem] font-extrabold uppercase leading-tight tracking-wide xl:absolute xl:left-[0.5vw] xl:right-[0.5vw] xl:top-[10.2vw] xl:mt-0 xl:text-[1.25vw] xl:leading-[1.05]"
-        style={{ color: tier.accent }}
       >
-        {tier.name}
-      </h3>
-      <p className="mt-4 text-[0.82rem] leading-relaxed text-zinc-600 xl:absolute xl:left-[1vw] xl:right-[1vw] xl:top-[14.45vw] xl:mt-0 xl:text-[1.25vw] xl:leading-[1.3]">
-        {tier.blurb}
-      </p>
+        <div
+          role={tier.iconAlt ? "img" : undefined}
+          aria-label={tier.iconAlt}
+          aria-hidden={tier.iconAlt ? undefined : true}
+          className="pf-pop h-12 w-12 shrink-0 select-none bg-current xl:h-[4.35vw] xl:w-[4.35vw]"
+          style={{
+            color: tier.accent,
+            WebkitMaskImage: `url("${tier.icon}")`,
+            maskImage: `url("${tier.icon}")`,
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+          }}
+        />
+
+        <h3
+          className="mt-5 text-[0.92rem] font-extrabold uppercase leading-tight tracking-wide xl:absolute xl:left-[0.5vw] xl:right-[0.5vw] xl:top-[10.2vw] xl:mt-0 xl:text-[1.25vw] xl:leading-[1.05]"
+          style={{ color: tier.accent }}
+        >
+          {tier.name}
+        </h3>
+        <p className="mt-4 text-[0.82rem] leading-relaxed text-zinc-600 xl:absolute xl:left-[1vw] xl:right-[1vw] xl:top-[14.45vw] xl:mt-0 xl:text-[1.25vw] xl:leading-[1.3]">
+          {tier.blurb}
+        </p>
+      </div>
     </div>
   );
 }
@@ -78,11 +84,14 @@ export default function VenturesImpact() {
           under the icon rail reserve that room themselves. */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 xl:max-w-none xl:px-0">
         {/* ── venture tiers ── */}
-        <Reveal className="grid items-stretch gap-5 sm:grid-cols-2 xl:ml-[6.77vw] xl:w-[70.3125vw] xl:grid-cols-4 xl:gap-[2.604vw]">
+        {/* Stagger, not Reveal: four cards side by side read as a slab when they
+            fade in together, so each one comes in on its own slightly delayed
+            ramp. */}
+        <Stagger className="grid items-stretch gap-5 sm:grid-cols-2 xl:ml-[6.77vw] xl:w-[70.3125vw] xl:grid-cols-4 xl:gap-[2.604vw]">
           {VENTURE_TIERS.map((t) => (
             <TierCard key={t.name} tier={t} />
           ))}
-        </Reveal>
+        </Stagger>
 
         {/* ── results ──
             No `lg:pr` on the headings: reserving rail space here would shrink
@@ -99,12 +108,21 @@ export default function VenturesImpact() {
             row sits high, the bottom two are nudged inward and down. That
             composition needs the full reference width. Medium screens use a
             balanced 2 + 2 + 1 grid, and phones use a readable stack. */}
-        <Reveal className="mt-10 xl:mt-[4.45vw]">
+        {/* The <li>s are one level down inside the <ul>, so the stagger targets
+            them by their data attribute rather than the default direct-child
+            selector. At 1536px+ they are absolutely positioned in a scatter; a
+            translateY on each is independent of that `left`/`top` placement. */}
+        <Stagger
+          className="mt-10 xl:mt-[4.45vw]"
+          selector="[data-stagger]"
+          step={45}
+        >
           <ul className="mx-auto grid max-w-5xl gap-x-8 gap-y-7 sm:grid-cols-2 sm:justify-items-center min-[1536px]:relative min-[1536px]:h-[12.7vw] min-[1536px]:max-w-none min-[1536px]:translate-x-[2vw] min-[1536px]:grid-cols-3 min-[1536px]:gap-0">
             {RESULTS.map((r, i) => (
               <li
                 key={r.text}
-                className={`flex w-full items-center justify-center gap-4 sm:justify-self-center min-[1536px]:absolute min-[1536px]:max-w-[20.833vw] min-[1536px]:items-start min-[1536px]:justify-start min-[1536px]:justify-self-auto ${
+                data-stagger
+                className={`group flex w-full items-center justify-center gap-4 sm:justify-self-center min-[1536px]:absolute min-[1536px]:max-w-[20.833vw] min-[1536px]:items-start min-[1536px]:justify-start min-[1536px]:justify-self-auto ${
                   /* items 4 and 5 form the offset lower row */
                   i === 0
                     ? "min-[1536px]:left-[10.52vw] min-[1536px]:top-0 min-[1536px]:gap-[0.78vw]"
@@ -133,7 +151,7 @@ export default function VenturesImpact() {
                   aria-hidden
                   width={320}
                   height={320}
-                  className="h-14 w-14 shrink-0 select-none object-contain min-[1536px]:mt-[1.2vw] min-[1536px]:h-[5.21vw] min-[1536px]:w-[5.21vw]"
+                  className="pf-pop h-14 w-14 shrink-0 select-none object-contain min-[1536px]:mt-[1.2vw] min-[1536px]:h-[5.21vw] min-[1536px]:w-[5.21vw]"
                 />
                 <p className="max-w-72 text-[0.82rem] font-bold leading-snug text-black min-[1536px]:max-w-[18vw] min-[1536px]:text-[1.146vw] min-[1536px]:leading-[1.25]">
                   {r.text}
@@ -141,7 +159,7 @@ export default function VenturesImpact() {
               </li>
             ))}
           </ul>
-        </Reveal>
+        </Stagger>
 
         {/* ── impact focus areas ── */}
         <Reveal className="mt-24 text-center xl:mt-[7.65vw]">
@@ -153,18 +171,21 @@ export default function VenturesImpact() {
         {/* 3 across, then 2 centred beneath — the mockup's layout. The second
             row is centred by starting it in column 1 of a 4-col track at
             `md`… simpler: a second grid with its own max-width. */}
-        <Reveal className="mt-12 xl:mt-[7.4vw]">
-          <div className="mx-auto grid max-w-5xl items-stretch gap-5 md:grid-cols-3 xl:relative xl:-left-[0.78vw] xl:w-[65.52vw] xl:max-w-none xl:gap-[1.56vw]">
+        {/* Each row staggers on its own so the cascade restarts on the second
+            row, rather than the two rows sharing one long ramp that would leave
+            the last card waiting well past the others. */}
+        <div className="mt-12 xl:mt-[7.4vw]">
+          <Stagger className="mx-auto grid max-w-5xl items-stretch gap-5 md:grid-cols-3 xl:relative xl:-left-[0.78vw] xl:w-[65.52vw] xl:max-w-none xl:gap-[1.56vw]">
             {IMPACT_AREAS.slice(0, 3).map((a, index) => (
               <ImpactCard key={a.title} area={a} index={index} />
             ))}
-          </div>
-          <div className="mx-auto mt-5 grid max-w-3xl items-stretch gap-5 md:grid-cols-2 xl:relative xl:-left-[1.09vw] xl:mt-[1.72vw] xl:w-[43.23vw] xl:max-w-none xl:gap-[1.56vw]">
+          </Stagger>
+          <Stagger className="mx-auto mt-5 grid max-w-3xl items-stretch gap-5 md:grid-cols-2 xl:relative xl:-left-[1.09vw] xl:mt-[1.72vw] xl:w-[43.23vw] xl:max-w-none xl:gap-[1.56vw]">
             {IMPACT_AREAS.slice(3).map((a, index) => (
               <ImpactCard key={a.title} area={a} index={index + 3} />
             ))}
-          </div>
-        </Reveal>
+          </Stagger>
+        </div>
       </div>
     </section>
   );
@@ -186,41 +207,47 @@ function ImpactCard({
   index: number;
 }) {
   const featured = area.featured ?? false;
+  /* Outer div absorbs <Stagger>'s scroll transform so the inner card is free to
+     own the hover transform — see the note in TierCard. */
   return (
-    <div
-      className={`relative flex h-full flex-col overflow-hidden rounded-lg px-5 pb-6 pt-5 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.45)] xl:h-[13.646vw] xl:overflow-visible xl:rounded-[0.83vw] xl:px-[1.56vw] xl:pb-[1.56vw] xl:pt-[2vw] ${
-        featured ? "bg-[#090c62]" : "bg-white"
-      }`}
-    >
+    <div className="h-full">
+      <div
+        /* No .pf-sheen here: the card is `xl:overflow-visible` so its icons can
+           overhang, which would let the sweep bleed outside the card at xl. */
+        className={`pf-card group relative flex h-full flex-col overflow-hidden rounded-lg px-5 pb-6 pt-5 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.45)] xl:h-[13.646vw] xl:overflow-visible xl:rounded-[0.83vw] xl:px-[1.56vw] xl:pb-[1.56vw] xl:pt-[2vw] ${
+          featured ? "bg-[#090c62]" : "bg-white"
+        }`}
+      >
       {/* Icon top-right, inside the card. It is NOT absolutely positioned
           over the title: these are wide 3D renders and at this card width the
           longer titles ("Women's Financial Independence") run under them. The
           header row reserves the space instead. */}
-      <div className="flex items-start justify-between gap-3">
-        <h3
-          className={`text-[1.02rem] font-extrabold leading-tight xl:max-w-[11vw] xl:text-[1.354vw] xl:leading-[1.28] ${
-            featured ? "text-white" : "text-[#1a1a2e]"
+        <div className="flex items-start justify-between gap-3">
+          <h3
+            className={`text-[1.02rem] font-extrabold leading-tight xl:max-w-[11vw] xl:text-[1.354vw] xl:leading-[1.28] ${
+              featured ? "text-white" : "text-[#1a1a2e]"
+            }`}
+          >
+            {area.title}
+          </h3>
+          <Image
+            src={area.icon}
+            alt=""
+            aria-hidden
+            width={480}
+            height={480}
+            className={`pf-pop -mt-1 h-16 w-16 shrink-0 select-none object-contain xl:absolute xl:m-0 ${impactIconClasses[index]}`}
+          />
+        </div>
+
+        <p
+          className={`mt-3 text-[0.76rem] leading-relaxed xl:absolute xl:left-[1.56vw] xl:right-[1.56vw] xl:top-[7.55vw] xl:mt-0 xl:text-[0.938vw] xl:leading-[1.35] ${
+            featured ? "text-white/85" : "text-zinc-500"
           }`}
         >
-          {area.title}
-        </h3>
-        <Image
-          src={area.icon}
-          alt=""
-          aria-hidden
-          width={480}
-          height={480}
-          className={`-mt-1 h-16 w-16 shrink-0 select-none object-contain xl:absolute xl:m-0 ${impactIconClasses[index]}`}
-        />
+          {area.blurb}
+        </p>
       </div>
-
-      <p
-        className={`mt-3 text-[0.76rem] leading-relaxed xl:absolute xl:left-[1.56vw] xl:right-[1.56vw] xl:top-[7.55vw] xl:mt-0 xl:text-[0.938vw] xl:leading-[1.35] ${
-          featured ? "text-white/85" : "text-zinc-500"
-        }`}
-      >
-        {area.blurb}
-      </p>
     </div>
   );
 }

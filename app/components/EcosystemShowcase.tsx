@@ -65,7 +65,7 @@ function Decor() {
         alt=""
         width={392}
         height={353}
-        className="absolute left-6 top-8 w-24 select-none sm:left-12 sm:top-10 sm:w-32"
+        className="animate-floaty absolute left-6 top-8 w-24 select-none sm:left-12 sm:top-10 sm:w-32"
       />
       {/* paper-plane pair, top-right (teal + blue, pointing up) */}
       <Image
@@ -73,7 +73,8 @@ function Decor() {
         alt=""
         width={256}
         height={227}
-        className="absolute right-6 top-6 w-20 select-none sm:right-12 sm:top-8 sm:w-24"
+        style={{ animationDelay: "-2.5s" }}
+        className="animate-floaty absolute right-6 top-6 w-20 select-none sm:right-12 sm:top-8 sm:w-24"
       />
     </div>
   );
@@ -101,7 +102,7 @@ function OrbitNode({ s }: { s: Sector }) {
   return (
     <div
       data-node
-      className="absolute -translate-x-1/2 -translate-y-1/2"
+      className="group absolute -translate-x-1/2 -translate-y-1/2"
       style={{
         left: `calc(50% + ${x.toFixed(4)} * var(--orbit-r))`,
         top: `calc(50% + ${y.toFixed(4)} * var(--orbit-r))`,
@@ -111,7 +112,7 @@ function OrbitNode({ s }: { s: Sector }) {
     >
       <div className="relative flex items-center justify-center">
         <span
-          className="flex h-16 w-16 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-8px_rgba(20,20,50,0.5)] xl:h-[4.75rem] xl:w-[4.75rem]"
+          className="pf-pop flex h-16 w-16 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-8px_rgba(20,20,50,0.5)] xl:h-[4.75rem] xl:w-[4.75rem]"
           style={{ backgroundColor: s.color }}
         >
           <SectorIcon
@@ -268,7 +269,7 @@ export default function EcosystemShowcase() {
             {/* faint ring */}
             <span
               aria-hidden
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-zinc-200"
+              className="animate-orbit-slow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-zinc-200"
               style={{
                 width: "calc(var(--orbit-r) * 2)",
                 height: "calc(var(--orbit-r) * 2)",
@@ -277,7 +278,7 @@ export default function EcosystemShowcase() {
             {/* hub */}
             <div
               data-hub
-              className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-6 shadow-[0_18px_40px_-14px_rgba(15,61,102,0.7)] xl:h-32 xl:w-32"
+              className="animate-ring-pulse absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-6 shadow-[0_18px_40px_-14px_rgba(15,61,102,0.7)] xl:h-32 xl:w-32"
               style={{ opacity: 0, willChange: "transform, opacity" }}
             >
               <Image
@@ -297,9 +298,9 @@ export default function EcosystemShowcase() {
           {/* ── right column: legend (mobile) ── */}
           <ul className="flex flex-col gap-4 lg:hidden">
             {SECTORS.map((s) => (
-              <li key={s.label} className="flex items-start gap-3">
+              <li key={s.label} className="group flex items-start gap-3 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1">
                 <span
-                  className="flex h-11 w-11 flex-none items-center justify-center rounded-full text-white"
+                  className="pf-pop flex h-11 w-11 flex-none items-center justify-center rounded-full text-white"
                   style={{ backgroundColor: s.color }}
                 >
                   <SectorIcon sector={s} sizes="20px" className="h-5 w-5" />

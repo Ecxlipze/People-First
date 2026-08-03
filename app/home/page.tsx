@@ -26,7 +26,7 @@ export default function HomePage() {
             {/* soft blue glow, top-left */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(140,164,240,0.45)_0%,rgba(140,164,240,0)_70%)]"
+              className="animate-glow-pulse pointer-events-none absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(140,164,240,0.45)_0%,rgba(140,164,240,0)_70%)]"
             />
 
             {/* decorative pattern band (crystals + journey lines) */}
@@ -45,7 +45,7 @@ export default function HomePage() {
               <Link
                 href="/"
                 aria-label="People First — landing"
-                className="inline-flex min-h-11 items-center"
+                className="group inline-flex min-h-11 items-center"
               >
                 <Image
                   src="/images/logo.svg"
@@ -53,7 +53,7 @@ export default function HomePage() {
                   width={398}
                   height={100}
                   priority
-                  className="h-11 w-auto sm:h-[52px] [@media(max-height:500px)]:h-9"
+                  className="pf-photo h-11 w-auto sm:h-[52px] [@media(max-height:500px)]:h-9"
                 />
               </Link>
             </header>
@@ -88,14 +88,14 @@ export default function HomePage() {
                 <ContactTrigger
                   href="/partner"
                   role="Training Partner"
-                  className="inline-flex min-h-11 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#a02f52] px-3 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#8c2946] min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3 sm:text-base"
+                  className="pf-interactive inline-flex min-h-11 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#a02f52] px-3 py-2.5 text-center text-xs font-medium text-white hover:-translate-y-0.5 hover:bg-[#8c2946] hover:shadow-lg min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3 sm:text-base"
                 >
                   Partner with Us
                 </ContactTrigger>
                 <ContactTrigger
                   href="/training"
                   role="Student"
-                  className="inline-flex min-h-11 flex-1 items-center justify-center rounded-md bg-zinc-200 px-3 py-2.5 text-center text-xs font-medium leading-tight text-zinc-700 transition-colors hover:bg-zinc-300 min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3 sm:text-base"
+                  className="pf-interactive inline-flex min-h-11 flex-1 items-center justify-center rounded-md bg-zinc-200 px-3 py-2.5 text-center text-xs font-medium leading-tight text-zinc-700 hover:-translate-y-0.5 hover:bg-white hover:shadow-lg min-[390px]:px-4 min-[390px]:text-sm sm:flex-none sm:px-5 sm:py-3 sm:text-base"
                 >
                   Join Training Program
                 </ContactTrigger>
@@ -103,7 +103,7 @@ export default function HomePage() {
               <ContactTrigger
                 href="/contact"
                 aria-label="Say hello"
-                className="hidden transition-transform duration-300 hover:-translate-y-1 hover:scale-110 sm:inline-flex"
+                className="pf-interactive hidden hover:-translate-y-1 hover:scale-110 sm:inline-flex"
               >
                 <Image
                   src="/images/icons/messages.png"

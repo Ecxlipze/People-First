@@ -142,38 +142,40 @@ export default function TestimonialsShowcase() {
           className="mx-auto mt-6 w-full max-w-6xl gap-4 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-4 lg:pr-32"
         >
           {TESTIMONIALS.map((t, i) => (
-            <article
+            <div
               key={t.name}
               data-card
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mb-4 flex break-inside-avoid flex-col rounded-2xl border border-black/[0.06] bg-white p-4 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]"
+              className="mb-4 break-inside-avoid"
             >
-              {/* header: avatar + name/handle + twitter icon */}
-              <div className="flex items-start gap-2.5">
-                <Avatar t={t} i={i} />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-semibold text-zinc-900 sm:text-sm">
-                    {t.name}
-                  </p>
-                  <p className="truncate text-[11px] text-zinc-400">
-                    {t.handle}
-                  </p>
+              <article className="pf-card group flex flex-col rounded-2xl border border-black/[0.06] bg-white p-4 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]">
+                {/* header: avatar + name/handle + twitter icon */}
+                <div className="flex items-start gap-2.5">
+                  <Avatar t={t} i={i} />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs font-semibold text-zinc-900 sm:text-sm">
+                      {t.name}
+                    </p>
+                    <p className="truncate text-[11px] text-zinc-400">
+                      {t.handle}
+                    </p>
+                  </div>
+                  <TwitterBird className="pf-pop h-4 w-4 flex-none text-[#1da1f2]" />
                 </div>
-                <TwitterBird className="h-4 w-4 flex-none text-[#1da1f2]" />
-              </div>
 
-              {/* body */}
-              <p className="mt-3 text-xs leading-relaxed text-zinc-600 sm:text-sm">
-                {t.body}
-              </p>
+                {/* body */}
+                <p className="mt-3 text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                  {t.body}
+                </p>
 
-              {/* tags */}
-              <p className="mt-2.5 flex flex-wrap gap-x-2 text-xs font-medium text-[#1da1f2]">
-                {t.tags.map((tag) => (
-                  <span key={tag}>#{tag}</span>
-                ))}
-              </p>
-            </article>
+                {/* tags */}
+                <p className="mt-2.5 flex flex-wrap gap-x-2 text-xs font-medium text-[#1da1f2]">
+                  {t.tags.map((tag) => (
+                    <span key={tag}>#{tag}</span>
+                  ))}
+                </p>
+              </article>
+            </div>
           ))}
         </div>
       </PinnedRecede>

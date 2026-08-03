@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* Grow With Us → "PROGRAM OUTCOMES". Deep-teal band with four translucent
    tiles in a 2×2 grid; each illustration overlaps the left edge of its tile and
@@ -53,27 +53,34 @@ export default function ProgramOutcomes() {
             each tile without clipping at the section boundary; the column gap
             must exceed that same overhang so the right column's illustration
             doesn't land on top of the left column's tile */}
-        <Reveal className="mt-20 grid gap-y-14 pl-10 sm:pl-14 md:grid-cols-2 md:gap-x-24 lg:gap-x-32">
+        {/* Stagger so the 2×2 grid cascades instead of the four tiles fading in
+            together. Each tile is wrapped, because <Stagger> writes a transform
+            to its direct children and the tile itself already animates one on
+            hover — the two would fight on a single element. */}
+        <Stagger className="mt-20 grid gap-y-14 pl-10 sm:pl-14 md:grid-cols-2 md:gap-x-24 lg:gap-x-32">
           {OUTCOMES.map((o) => (
-            <div
-              key={o.lead}
-              className="group relative flex min-h-[10rem] items-center rounded-xl bg-[#88b8b4] py-8 pl-20 pr-8 transition-transform duration-300 hover:-translate-y-1 sm:pl-28"
-            >
-              <Image
-                src={o.icon}
-                alt={o.alt}
-                aria-hidden
-                width={640}
-                height={640}
-                className="pointer-events-none absolute -left-10 top-1/2 h-28 w-auto -translate-y-1/2 select-none drop-shadow-[0_12px_20px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-105 sm:-left-16 sm:h-36"
-              />
-              <p className="text-base leading-snug text-white sm:text-xl">
-                <span className="font-bold text-white">{o.lead}</span>
-                {o.rest}
-              </p>
+            <div key={o.lead}>
+              <div className="group relative flex min-h-[10rem] items-center rounded-xl bg-[#88b8b4] py-8 pl-20 pr-8 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1 sm:pl-28">
+                {/* .pf-pop rather than a `group-hover:scale-105` utility: this
+                    icon is vertically centred with -translate-y-1/2, which
+                    compiles to the `translate` property. .pf-pop animates
+                    `scale` on its own longhand, so the centring survives. */}
+                <Image
+                  src={o.icon}
+                  alt={o.alt}
+                  aria-hidden
+                  width={640}
+                  height={640}
+                  className="pf-pop pointer-events-none absolute -left-10 top-1/2 h-28 w-auto -translate-y-1/2 select-none drop-shadow-[0_12px_20px_rgba(0,0,0,0.3)] sm:-left-16 sm:h-36"
+                />
+                <p className="text-base leading-snug text-white sm:text-xl">
+                  <span className="font-bold text-white">{o.lead}</span>
+                  {o.rest}
+                </p>
+              </div>
             </div>
           ))}
-        </Reveal>
+        </Stagger>
       </div>
     </section>
   );

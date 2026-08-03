@@ -22,14 +22,20 @@ export default function PainPoints() {
       {/* soft cyan wash, upper-left — the corner glow from the mockup. Drawn as
           a gradient rather than the source raster: that asset peaks at an alpha
           of 67/255, so it is a tint, not artwork. */}
+      {/* The two washes breathe slowly (glow-pulse) so the pinned first
+          viewport isn't completely still while the user reads it. They are
+          decorative and behind everything, so the movement can't disturb the
+          composition — and it stops on prefers-reduced-motion. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 -top-40 h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(120,215,230,0.38)_0%,rgba(120,215,230,0)_70%)]"
+        className="animate-glow-pulse pointer-events-none absolute -left-40 -top-40 h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(120,215,230,0.38)_0%,rgba(120,215,230,0)_70%)]"
       />
       {/* matching lavender wash, lower-right */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-56 -right-40 h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(170,150,240,0.22)_0%,rgba(170,150,240,0)_70%)]"
+        /* Offset delay so the two washes don't pulse in lockstep. */
+        style={{ animationDelay: "-2.5s" }}
+        className="animate-glow-pulse pointer-events-none absolute -bottom-56 -right-40 h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(170,150,240,0.22)_0%,rgba(170,150,240,0)_70%)]"
       />
 
       {/* The desktop mockup opens directly on the composition. Keep the logo as
@@ -84,9 +90,20 @@ export default function PainPoints() {
             The section is locked to the viewport height (it is the pinned half
             of the swipe-over), so this list owns the overflow rather than
             letting the page grow. */}
-        <ul className="mt-6 min-h-0 flex-1 space-y-3 overflow-y-auto px-8 pb-8 pr-12 sm:px-14 sm:pr-20 lg:hidden">
-          {PAIN_POINTS.map((p) => (
-            <li key={p.title} className="flex items-start gap-3">
+        {/* The list cascades in rather than appearing all at once. `pf-stagger`
+            (CSS, mount-driven) is used instead of the scroll-scrubbed <Stagger>
+            because this list is its own scroll container — the items' viewport
+            position doesn't change as it scrolls, so a scroll-scrubbed reveal
+            would never advance for anything below the fold. */}
+        <ul className="pf-stagger mt-6 min-h-0 flex-1 space-y-3 overflow-y-auto px-8 pb-8 pr-12 sm:px-14 sm:pr-20 lg:hidden">
+          {PAIN_POINTS.map((p, i) => (
+            <li
+              key={p.title}
+              /* .pf-stagger's nth-child fallback only covers six children; these
+                 are eight, so the index is set explicitly. */
+              style={{ "--i": i } as React.CSSProperties}
+              className="flex items-start gap-3"
+            >
               <Image
                 src="/images/what-we-do/pins.webp"
                 alt=""

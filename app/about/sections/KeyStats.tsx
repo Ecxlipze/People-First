@@ -102,14 +102,17 @@ export default function KeyStats() {
                     <div
                       key={`${copy}-${partner.name}`}
                       role={copy === 0 ? "listitem" : undefined}
-                      className="pf-card flex h-28 w-[250px] shrink-0 items-center justify-center bg-white px-7 shadow-md sm:h-32 sm:w-[310px] lg:w-[340px]"
+                      className="pf-card group flex h-28 w-[250px] shrink-0 items-center justify-center bg-white px-7 shadow-md sm:h-32 sm:w-[310px] lg:w-[340px]"
                     >
+                      {/* The rail already pauses on hover (see
+                          .about-partner-marquee:hover); scaling the logo as well
+                          makes it clear which card the pause is focused on. */}
                       <Image
                         src={partner.logo}
                         alt={copy === 0 ? partner.name : ""}
                         width={337}
                         height={97}
-                        className="max-h-16 w-auto object-contain sm:max-h-20"
+                        className="pf-pop max-h-16 w-auto object-contain sm:max-h-20"
                       />
                     </div>
                   ))}

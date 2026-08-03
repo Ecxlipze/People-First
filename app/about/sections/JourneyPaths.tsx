@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import ContactTrigger from "@/app/contact/ContactTrigger";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* About → "Where Are You In Your Journey". Three path cards (Learn / Grow /
    Lead), each with a coloured top-left accent, a lead line, a checked list of
@@ -69,61 +69,67 @@ export default function JourneyPaths() {
           </p>
         </Reveal>
 
-        <Reveal className="mt-16 grid gap-8 md:grid-cols-3">
+        <Stagger
+          className="mt-16 grid items-stretch gap-8 md:grid-cols-3"
+          step={75}
+        >
           {PATHS.map((p) => (
-            <div
-              key={p.title}
-              className={`pf-card flex min-h-[360px] flex-col rounded-2xl border ${p.border} bg-[#4b1858] px-10 py-9 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.55)]`}
-            >
-              <h3
-                className={`text-center text-2xl font-extrabold tracking-[0.08em] ${p.labelText}`}
+            <div key={p.title} className="h-full">
+              <div
+                className={`pf-card pf-sheen group relative flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl border ${p.border} bg-[#4b1858] px-10 py-9 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.55)]`}
               >
-                {p.title}
-              </h3>
-              <p className="mt-1 text-center text-xs text-white/65">{p.lead}</p>
+                <h3
+                  className={`text-center text-2xl font-extrabold tracking-[0.08em] ${p.labelText}`}
+                >
+                  {p.title}
+                </h3>
+                <p className="mt-1 text-center text-xs text-white/65">
+                  {p.lead}
+                </p>
 
-              <ul className="mx-auto mt-10 flex w-full max-w-[260px] flex-1 flex-col gap-4">
-                {p.audiences.map((a) => (
-                  <li
-                    key={a}
-                    className="flex items-center gap-4 text-base font-medium text-white sm:text-lg"
-                  >
-                    <Check
-                      className="h-4 w-4 shrink-0 text-white"
-                      strokeWidth={2.5}
-                    />
-                    {a}
-                  </li>
-                ))}
-              </ul>
+                <ul className="mx-auto mt-10 flex w-full max-w-[260px] flex-1 flex-col gap-4">
+                  {p.audiences.map((a) => (
+                    <li
+                      key={a}
+                      className="flex items-center gap-4 text-base font-medium text-white sm:text-lg"
+                    >
+                      <Check
+                        className="pf-pop h-4 w-4 shrink-0 text-white"
+                        strokeWidth={2.5}
+                      />
+                      {a}
+                    </li>
+                  ))}
+                </ul>
 
-              {/* Contact-CTA cards open the modal in place; GROW is a real
-                  page, so it stays an ordinary link. */}
-              {(() => {
-                const cls = `group mx-auto mt-8 inline-flex min-h-11 w-full max-w-[210px] items-center justify-between gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-all ${p.button}`;
-                const inner = (
-                  <>
-                    Explore Path
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </>
-                );
-                return p.contactRole ? (
-                  <ContactTrigger
-                    href={p.href}
-                    role={p.contactRole}
-                    className={cls}
-                  >
-                    {inner}
-                  </ContactTrigger>
-                ) : (
-                  <Link href={p.href} className={cls}>
-                    {inner}
-                  </Link>
-                );
-              })()}
+                {/* Contact-CTA cards open the modal in place; GROW is a real
+                    page, so it stays an ordinary link. */}
+                {(() => {
+                  const cls = `pf-interactive group mx-auto mt-8 inline-flex min-h-11 w-full max-w-[210px] items-center justify-between gap-2 rounded-full px-6 py-2.5 text-sm font-medium ${p.button}`;
+                  const inner = (
+                    <>
+                      Explore Path
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </>
+                  );
+                  return p.contactRole ? (
+                    <ContactTrigger
+                      href={p.href}
+                      role={p.contactRole}
+                      className={cls}
+                    >
+                      {inner}
+                    </ContactTrigger>
+                  ) : (
+                    <Link href={p.href} className={cls}>
+                      {inner}
+                    </Link>
+                  );
+                })()}
+              </div>
             </div>
           ))}
-        </Reveal>
+        </Stagger>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ContactTrigger from "@/app/contact/ContactTrigger";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* Podcasts → Hero. Light lavender panel: the 3D microphone sits at the left of
    the headline, and the "Podcast Value" block follows below with the guest
@@ -12,7 +13,7 @@ export default function Hero() {
       {/* soft violet glow behind the headline */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-32 -top-40 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(140,110,235,0.18)_0%,rgba(140,110,235,0)_70%)]"
+        className="animate-glow-pulse pointer-events-none absolute -left-32 -top-40 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(140,110,235,0.18)_0%,rgba(140,110,235,0)_70%)]"
       />
 
       {/* logo, top-left */}
@@ -20,7 +21,7 @@ export default function Hero() {
         <Link
           href="/"
           aria-label="People First — landing"
-          className="inline-flex min-h-11 items-center"
+          className="group inline-flex min-h-11 items-center"
         >
           <Image
             src="/images/logo.svg"
@@ -28,7 +29,7 @@ export default function Hero() {
             width={398}
             height={100}
             priority
-            className="h-12 w-auto sm:h-16"
+            className="pf-photo h-12 w-auto sm:h-16"
           />
         </Link>
       </header>
@@ -64,9 +65,9 @@ export default function Hero() {
       </div>
 
       {/* ── "Podcast Value": guest portrait left, pull-quote right ── */}
-      <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-4 pt-20 sm:px-10 sm:pt-28 lg:pl-52 lg:pr-36">
+      <Reveal className="relative z-10 mx-auto max-w-[1440px] px-6 pb-4 pt-20 sm:px-10 sm:pt-28 lg:pl-52 lg:pr-36" y={42} scale={0.975}>
         <div className="flex w-full min-w-0 flex-col items-start gap-9 md:flex-row md:items-center md:gap-12">
-          <div className="relative shrink-0">
+          <div className="group relative shrink-0">
             {/* hidden below sm: no side margin to hold it, it would be clipped */}
             <Image
               src="/images/podcast/plane-blue.webp"
@@ -82,7 +83,7 @@ export default function Hero() {
                 alt="A guest recording an episode of the People First Podcast"
                 fill
                 sizes="(max-width: 640px) 15rem, 18rem"
-                className="object-cover object-top"
+                className="pf-photo object-cover object-top"
               />
             </div>
           </div>
@@ -99,7 +100,7 @@ export default function Hero() {
             </blockquote>
           </div>
         </div>
-      </div>
+      </Reveal>
 
       {/* ── two CTAs, right-aligned ── */}
       <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-wrap justify-end gap-4 px-6 pb-8 pt-8 sm:px-10 lg:px-24 lg:pr-36 xl:px-28 xl:pr-36">

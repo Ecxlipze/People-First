@@ -12,7 +12,7 @@ export default function Hero() {
       {/* soft glow, top-left */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(122,92,240,0.35)_0%,rgba(122,92,240,0)_70%)]"
+        className="animate-glow-pulse pointer-events-none absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(122,92,240,0.35)_0%,rgba(122,92,240,0)_70%)]"
       />
 
       {/* logo, top-left (links back to landing) */}
@@ -20,7 +20,7 @@ export default function Hero() {
         <Link
           href="/"
           aria-label="People First — landing"
-          className="inline-flex min-h-11 items-center"
+          className="group inline-flex min-h-11 items-center"
         >
           {/* About-page logo (already light/white — designed for the dark hero,
               so no invert filter needed). */}
@@ -30,14 +30,14 @@ export default function Hero() {
             width={318}
             height={91}
             priority
-            className="h-11 w-auto sm:h-[58px]"
+            className="pf-photo h-11 w-auto sm:h-[58px]"
           />
         </Link>
       </header>
 
       <div className="relative z-10 mx-auto grid max-w-[1600px] items-start gap-12 px-6 pb-16 pt-12 sm:px-10 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-20 lg:px-24 xl:gap-24 xl:px-28 xl:pr-44">
         {/* ── left: copy ── */}
-        <div className="animate-fade-in-up max-w-[680px]">
+        <div className="pf-stagger max-w-[680px]">
           <h1 className="text-4xl font-extrabold leading-[1.06] tracking-tight text-white sm:text-[2.75rem] lg:text-5xl">
             Every Movement Begins
             <br className="hidden sm:block" /> with a Question.
@@ -74,14 +74,14 @@ export default function Hero() {
         </div>
 
         {/* ── right: founder portrait ── */}
-        <div className="animate-fade-in-up relative mx-auto w-full max-w-[390px]">
+        <div className="animate-fade-in-up group relative mx-auto w-full max-w-[390px]">
           <div className="relative aspect-[498/641] w-full overflow-hidden border-b-4 border-[#3f4bde] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.72)]">
             <Image
               src="/images/about-page/founder.png"
               alt="Rai Salahuddin Ahmad, founder of People First"
               fill
               sizes="(max-width: 1024px) 90vw, 390px"
-              className="object-cover object-top"
+              className="pf-photo object-cover object-top"
               priority
             />
           </div>
@@ -122,7 +122,7 @@ export default function Hero() {
         aria-hidden
         width={1920}
         height={236}
-        className="pointer-events-none relative z-0 w-full select-none opacity-80"
+        className="pf-wipe pointer-events-none relative z-0 w-full select-none opacity-80"
       />
     </section>
   );

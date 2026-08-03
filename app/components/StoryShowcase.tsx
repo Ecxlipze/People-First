@@ -37,13 +37,15 @@ function Decor() {
         height={430}
         className="absolute -bottom-2 -right-2 w-[46vw] max-w-[640px] select-none opacity-25 xl:opacity-100"
       />
-      {/* paper-plane pair, top-left (blue + teal, pointing down) */}
+      {/* paper-plane pair, top-left (blue + teal, pointing down).
+          The planes drift gently rather than sitting frozen — offset delays keep
+          the two pairs from moving in lockstep. */}
       <Image
         src="/images/icons/left-plane.png"
         alt=""
         width={392}
         height={353}
-        className="absolute left-6 top-24 hidden w-24 select-none sm:left-12 sm:top-28 sm:w-32 xl:block"
+        className="animate-floaty absolute left-6 top-24 hidden w-24 select-none sm:left-12 sm:top-28 sm:w-32 xl:block"
       />
       {/* paper-plane pair, top-right (teal + blue, pointing up) */}
       <Image
@@ -51,7 +53,8 @@ function Decor() {
         alt=""
         width={256}
         height={227}
-        className="absolute right-6 top-8 hidden w-20 select-none sm:right-10 sm:top-10 sm:w-24 xl:block"
+        style={{ animationDelay: "-2s" }}
+        className="animate-floaty absolute right-6 top-8 hidden w-20 select-none sm:right-10 sm:top-10 sm:w-24 xl:block"
       />
     </div>
   );
@@ -186,14 +189,18 @@ export default function StoryShowcase() {
                 is the SAME size as the plain text, just bold + purple. */}
             <ul className="mt-5 flex flex-col gap-4">
               {GAPS.map(({ icon: GapIcon, plain, strong }) => (
+                /* `group` only — no hover transform on the <li> itself: it
+                   carries data-reveal, whose scrubber writes `transform` every
+                   frame and would erase one. The icon inside is a separate
+                   element, so it can animate freely. */
                 <li
                   key={strong}
                   data-reveal
                   style={{ opacity: 0, willChange: "transform, opacity" }}
-                  className="max-xl:!opacity-100 flex items-center gap-3"
+                  className="group max-xl:!opacity-100 flex items-center gap-3"
                 >
                   <GapIcon
-                    className="h-6 w-6 flex-none text-[#2a2a4a]"
+                    className="pf-pop h-6 w-6 flex-none text-[#2a2a4a] transition-colors duration-[var(--dur-base)] group-hover:text-[#5a1f9e]"
                     strokeWidth={1.5}
                   />
                   <p className="text-sm text-zinc-600 sm:text-base">

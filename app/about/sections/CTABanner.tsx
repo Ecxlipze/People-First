@@ -13,7 +13,7 @@ export default function CTABanner() {
         <Reveal
           y={36}
           scale={0.975}
-          className="relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]"
+          className="pf-sheen group relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]"
         >
           {/* wireframe globe, flush-left and clipped by the rounded corner */}
           <Image
@@ -22,7 +22,7 @@ export default function CTABanner() {
             aria-hidden
             width={500}
             height={500}
-            className="pointer-events-none absolute left-0 top-1/2 h-[150%] w-auto -translate-x-[38%] -translate-y-1/2 select-none opacity-25 [filter:brightness(0)_invert(1)]"
+            className="animate-orbit-slow pointer-events-none absolute left-0 top-1/2 h-[150%] w-auto -translate-x-[38%] -translate-y-1/2 select-none opacity-25 [filter:brightness(0)_invert(1)]"
           />
 
           <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-14">

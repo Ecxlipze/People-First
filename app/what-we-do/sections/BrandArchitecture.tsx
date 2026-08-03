@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 import { PILLARS, type Pillar } from "@/app/what-we-do/pillars";
 
 /* What We Do → "Brand Architecture" (SECTION 5).
@@ -24,15 +24,21 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
   return (
     /* `relative` + the absolutely-placed bar rather than a border-l: the
        mockup's bar is shorter than the card and rounded on its own, so it
-       reads as a tab beside the card, not an edge of it. */
-    <div className="relative h-full pl-2.5">
+       reads as a tab beside the card, not an edge of it.
+
+       This outer element is also what <Stagger> writes its scroll transform to,
+       which is why the hover lift lives on the inner card instead — one element
+       cannot carry both without the scrub erasing the hover. */
+    <div className="group relative h-full pl-2.5">
+      {/* The accent tab grows to the card's full height on hover — a small
+          confirmation that the card is the thing responding. */}
       <span
         aria-hidden
-        className="absolute left-0 top-7 h-[45%] w-[11px] rounded-l-md"
+        className="absolute left-0 top-7 h-[45%] w-[11px] rounded-l-md transition-[height,top] duration-[var(--dur-base)] ease-[var(--ease-out-soft)] group-hover:top-4 group-hover:h-[calc(100%-2rem)]"
         style={{ backgroundColor: pillar.accent }}
       />
 
-      <div className="flex h-full flex-col rounded-xl bg-[#f3efef] px-6 py-7 shadow-[0_16px_40px_-26px_rgba(60,50,110,0.5)] sm:px-7">
+      <div className="pf-lift pf-sheen relative flex h-full flex-col overflow-hidden rounded-xl bg-[#f3efef] px-6 py-7 shadow-[0_16px_40px_-26px_rgba(60,50,110,0.5)] sm:px-7">
         {/* icon and heading share a row; the body copy below is indented to
             the heading's left edge, as in the mockup */}
         <div className="flex items-start gap-4">
@@ -42,7 +48,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
             aria-hidden
             width={256}
             height={256}
-            className="mt-0.5 h-12 w-12 shrink-0 select-none object-contain sm:h-[3.25rem] sm:w-[3.25rem]"
+            className="pf-pop mt-0.5 h-12 w-12 shrink-0 select-none object-contain sm:h-[3.25rem] sm:w-[3.25rem]"
           />
 
           <div className="min-w-0 flex-1">
@@ -180,11 +186,13 @@ export default function BrandArchitecture() {
 
         {/* The grid reserves rail space itself; the container above must not,
             or the centred heading would sit off the page's true centre. */}
-        <Reveal className="mt-14 grid items-stretch gap-8 md:grid-cols-2 md:gap-x-10 lg:pr-[11rem] sm:mt-16">
+        {/* Stagger so the four pillars arrive one after another rather than as a
+            single 2×2 slab. */}
+        <Stagger className="mt-14 grid items-stretch gap-8 md:grid-cols-2 md:gap-x-10 lg:pr-[11rem] sm:mt-16">
           {PILLARS.map((p) => (
             <PillarCard key={p.name} pillar={p} />
           ))}
-        </Reveal>
+        </Stagger>
       </div>
     </section>
   );

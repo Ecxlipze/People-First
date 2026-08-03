@@ -37,6 +37,7 @@ export default function Hero() {
           stroke="currentColor"
           strokeWidth="1.5"
           opacity="0.7"
+          className="pf-line-draw"
         />
         <path
           d="M-40 288 C 250 190, 480 348, 730 300 C 995 250, 1200 150, 1500 196"
@@ -44,6 +45,7 @@ export default function Hero() {
           stroke="currentColor"
           strokeWidth="1.5"
           opacity="0.55"
+          className="pf-line-draw [--line-delay:140ms]"
         />
         <path
           d="M-40 178 C 280 70, 450 250, 710 214 C 960 178, 1170 46, 1500 104"
@@ -51,6 +53,7 @@ export default function Hero() {
           stroke="currentColor"
           strokeWidth="1.5"
           opacity="0.4"
+          className="pf-line-draw [--line-delay:280ms]"
         />
       </svg>
 
@@ -70,6 +73,7 @@ export default function Hero() {
         width={253}
         height={500}
         priority
+        style={{ animationDelay: "-1.5s" }}
         className="animate-floaty pointer-events-none absolute left-[24%] top-[26%] hidden h-[5.5rem] w-auto select-none sm:block lg:h-28"
       />
       <Image
@@ -78,6 +82,7 @@ export default function Hero() {
         aria-hidden
         width={259}
         height={300}
+        style={{ animationDelay: "-3s" }}
         className="animate-floaty pointer-events-none absolute left-[44%] top-[39%] hidden h-6 w-auto select-none sm:block"
       />
       <Image
@@ -87,6 +92,7 @@ export default function Hero() {
         width={253}
         height={500}
         priority
+        style={{ animationDelay: "-4.5s" }}
         className="animate-floaty pointer-events-none absolute left-[60%] top-[17%] hidden h-24 w-auto select-none sm:block lg:h-32"
       />
 

@@ -18,16 +18,19 @@ export default function StudioSound() {
           </p>
         </Reveal>
 
-        <Reveal className="mt-14 w-full min-w-0 sm:mt-20">
+        {/* The waveform wipes in left-to-right rather than fading, so it reads
+            as audio being played/scanned — the one element on this panel where
+            motion carries meaning rather than just decoration. */}
+        <div className="mt-14 w-full min-w-0 sm:mt-20">
           <Image
             src="/images/podcast/waveform.webp"
             alt=""
             aria-hidden
             width={1400}
             height={444}
-            className="mx-auto w-full min-w-0 max-w-full select-none sm:max-w-4xl"
+            className="pf-wipe mx-auto w-full min-w-0 max-w-full select-none sm:max-w-4xl"
           />
-        </Reveal>
+        </div>
       </div>
     </section>
   );

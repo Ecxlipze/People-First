@@ -1,4 +1,4 @@
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* Grow With Us → "WHO CAN JOIN". Four tall coloured tiles whose oversized
    letters spell J-O-I-N; each carries a number and the audience it describes.
@@ -58,31 +58,39 @@ export default function WhoCanJoin() {
           </h2>
         </Reveal>
 
-        <Reveal className="mt-20 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
+        {/* These four tiles spell J-O-I-N, so a left-to-right cascade lets the
+            word assemble itself as the row scrolls in. Each tile is wrapped
+            because <Stagger> transforms its direct children and .pf-card
+            transforms on hover — one element cannot carry both. */}
+        <Stagger
+          className="mt-20 grid grid-cols-2 items-stretch gap-4 sm:grid-cols-4 sm:gap-5"
+          step={70}
+        >
           {TILES.map((t) => (
-            <div
-              key={t.letter}
-              className="pf-card flex min-h-[360px] flex-col overflow-hidden rounded-2xl shadow-[0_16px_36px_-18px_rgba(60,60,110,0.5)]"
-            >
-              <div className={`grid h-44 place-items-center ${t.top}`}>
-                <span
-                  aria-hidden
-                  className="text-center text-7xl font-extrabold leading-none text-white sm:text-8xl"
+            <div key={t.letter} className="h-full">
+              <div className="pf-card group flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl shadow-[0_16px_36px_-18px_rgba(60,60,110,0.5)]">
+                <div className={`grid h-44 place-items-center ${t.top}`}>
+                  <span
+                    aria-hidden
+                    className="pf-pop text-center text-7xl font-extrabold leading-none text-white sm:text-8xl"
+                  >
+                    {t.letter}
+                  </span>
+                </div>
+                <div
+                  className={`flex flex-1 flex-col px-4 pb-6 pt-7 ${t.bottom}`}
                 >
-                  {t.letter}
-                </span>
-              </div>
-              <div className={`flex flex-1 flex-col px-4 pb-6 pt-7 ${t.bottom}`}>
-                <span className={`text-center text-lg font-bold ${t.accent}`}>
-                  {t.n}
-                </span>
-                <p className="mt-7 text-sm font-semibold leading-snug text-zinc-950 sm:text-[0.95rem]">
-                  {t.label}
-                </p>
+                  <span className={`text-center text-lg font-bold ${t.accent}`}>
+                    {t.n}
+                  </span>
+                  <p className="mt-7 text-sm font-semibold leading-snug text-zinc-950 sm:text-[0.95rem]">
+                    {t.label}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
-        </Reveal>
+        </Stagger>
       </div>
     </section>
   );

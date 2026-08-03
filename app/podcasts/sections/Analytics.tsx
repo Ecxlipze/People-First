@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Stagger } from "@/app/components/ScrollFx";
 
 /* Podcasts → "Advanced Podcast Analytics". Two columns on a pale field: copy on
    the left, the phone + laptop dashboard illustration on the right. The two
@@ -8,7 +8,13 @@ export default function Analytics() {
   return (
     <section className="flex min-h-[620px] items-center bg-[#f4f4fc] px-6 py-24 sm:px-10 sm:py-28">
       <div className="mx-auto w-full max-w-[1400px] lg:px-16 lg:pr-36">
-        <Reveal className="grid min-w-0 items-center gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
+        {/* Stagger rather than Reveal: the copy arrives first and the dashboard
+            illustration follows, so the panel assembles left-to-right instead of
+            both halves fading in as one slab. */}
+        <Stagger
+          className="grid min-w-0 items-center gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16"
+          step={90}
+        >
           <div className="min-w-0">
             <h2 className="text-xl font-extrabold uppercase tracking-tight text-zinc-950 sm:text-[1.75rem]">
               Advanced Podcast Analytics
@@ -24,16 +30,18 @@ export default function Analytics() {
             </p>
           </div>
 
-          <Image
-            src="/images/podcast/analytics.webp"
-            alt=""
-            aria-hidden
-            width={1200}
-            height={683}
-            sizes="(max-width: 768px) 100vw, 52vw"
-            className="w-full min-w-0 max-w-full justify-self-end select-none md:max-w-[600px]"
-          />
-        </Reveal>
+          <div className="group min-w-0 justify-self-end">
+            <Image
+              src="/images/podcast/analytics.webp"
+              alt=""
+              aria-hidden
+              width={1200}
+              height={683}
+              sizes="(max-width: 768px) 100vw, 52vw"
+              className="pf-photo w-full min-w-0 max-w-full select-none md:max-w-[600px]"
+            />
+          </div>
+        </Stagger>
       </div>
     </section>
   );

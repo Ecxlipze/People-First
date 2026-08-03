@@ -17,6 +17,10 @@ export default function PageShell({
 
       {/* pr on lg+ keeps the centred copy clear of the fixed rail */}
       <div className="relative flex min-h-svh flex-col bg-[radial-gradient(ellipse_at_center_top,#2a2a30_0%,#141417_45%,#0b0b0d_100%)] px-6 py-8 sm:px-14 sm:py-10 lg:pr-32">
+        <div
+          aria-hidden
+          className="animate-glow-pulse pointer-events-none absolute left-1/2 top-1/2 h-[min(70vw,680px)] w-[min(70vw,680px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(43,191,196,0.12)_0%,rgba(43,191,196,0)_68%)]"
+        />
         <Link
           href="/"
           className="pf-interactive inline-flex min-h-11 w-fit items-center gap-2 rounded-sm text-sm text-zinc-400 hover:-translate-x-0.5 hover:text-white"

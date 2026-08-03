@@ -126,6 +126,122 @@ body {
   box-shadow: 0 22px 45px -20px rgba(60, 50, 110, 0.45);
 }
 
+/* ---- .pf-lift: a lighter .pf-card ----
+   Same lift-on-hover contract as .pf-card, but tuned for elements that sit on a
+   coloured field rather than a white page, where .pf-card's purple-tinted shadow
+   reads as a smudge. Used by the teal Program Outcomes tiles, the plum Key Stats
+   partner rail, and the pipeline/pillar cards on white.
+
+   Like .pf-card, this must go on a CHILD of any scroll-scrubbed element — never
+   the element itself — or the hover transform fights Reveal's inline transform. */
+.pf-lift {
+  transition-property: transform, box-shadow, border-color, background-color;
+  transition-duration: var(--dur-base);
+  transition-timing-function: var(--ease-out-soft);
+}
+
+@media (hover: hover) {
+  .pf-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 26px 50px -22px rgba(20, 18, 40, 0.5);
+  }
+}
+
+.pf-lift:focus-within {
+  transform: translateY(-5px);
+  box-shadow: 0 26px 50px -22px rgba(20, 18, 40, 0.5);
+}
+
+/* ---- .pf-pop: hover response for an icon/illustration inside a card ----
+   Put this on the artwork and the hover trigger (`group`) on the card, so the
+   icon reacts to the whole card being hovered, not just itself.
+
+   Animates the `scale`/`rotate` properties rather than `transform`. Several of
+   these illustrations are positioned with Tailwind's `-translate-y-1/2`
+   centring, which compiles to the `translate` property — driving `scale`
+   separately lets a centred icon keep its offset while still animating, where a
+   `transform: scale()` would overwrite the centring and drop the icon. */
+.pf-pop {
+  transition:
+    scale var(--dur-base) var(--ease-out-soft),
+    rotate var(--dur-base) var(--ease-out-soft),
+    filter var(--dur-base) var(--ease-out-soft);
+}
+
+@media (hover: hover) {
+  .group:hover .pf-pop {
+    scale: 1.07;
+  }
+}
+
+.group:focus-within .pf-pop {
+  scale: 1.07;
+}
+
+/* ---- .pf-sheen: a one-pass light sweep across a card on hover ----
+   Draws its own gradient via ::after, so it needs no extra markup. Requires
+   `position: relative` + `overflow: hidden` on the host (the cards using it
+   already have both) and `group` on the hover trigger.
+
+   `pointer-events: none` is load-bearing: the sheen covers the whole card, so
+   without it it would swallow clicks on any link inside. */
+.pf-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 65%
+  );
+  translate: -100% 0;
+  transition:
+    translate 700ms var(--ease-out-soft),
+    opacity 200ms linear;
+}
+
+@media (hover: hover) {
+  .group:hover .pf-sheen::after,
+  .pf-sheen:hover::after {
+    opacity: 1;
+    translate: 100% 0;
+  }
+}
+
+/* ---- .pf-underline: a link underline that wipes in from the left ----
+   A scaled ::after rather than `text-decoration`, so the line sits a fixed
+   distance below the text and animates on the compositor. */
+.pf-underline {
+  position: relative;
+}
+
+.pf-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out-soft);
+}
+
+@media (hover: hover) {
+  .pf-underline:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.pf-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
 /* ---- .pf-media: smooth image reveal after decode ----
    Paired with <SmartImage>, which flips data-loaded to "true" once the bitmap is
    ready. Animating opacity/scale (never layout) means no CLS: the box is already
@@ -197,6 +313,33 @@ body {
   50% {
     opacity: 0.6;
     transform: scale(1.15);
+  }
+}
+
+@keyframes orbit-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ring-pulse {
+  0%,
+  100% {
+    box-shadow: 0 18px 40px -14px rgba(15, 61, 102, 0.7);
+  }
+  50% {
+    box-shadow:
+      0 18px 46px -12px rgba(15, 61, 102, 0.82),
+      0 0 0 10px rgba(58, 110, 165, 0.08);
+  }
+}
+
+@keyframes line-draw {
+  from {
+    stroke-dashoffset: 2000;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
@@ -285,6 +428,39 @@ body {
   }
 }
 
+/* ---- .pf-wipe: reveal a block left-to-right ----
+   Used for the Podcasts waveform, where a straight fade wastes the one element
+   on the page that should read as playing back. Driven by `clip-path` so the
+   artwork itself never moves or scales — only how much of it is shown.
+
+   The animation is triggered by scrolling into view (`animation-timeline: view()`
+   where supported), so it plays when the user actually reaches it rather than on
+   page load, which for a mid-page section would mean playing unseen. */
+@keyframes pf-wipe-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.pf-wipe {
+  animation: pf-wipe-in 1100ms var(--ease-out-soft) both;
+}
+
+/* Browsers with scroll-driven animation support run it on view() instead, so it
+   is tied to the element entering the viewport. `both` above still guarantees the
+   from-state applies before it starts elsewhere. */
+@supports (animation-timeline: view()) {
+  .pf-wipe {
+    animation-timeline: view();
+    /* Complete the wipe over the first 40% of the element's pass through the
+       viewport, so it finishes well before it leaves. */
+    animation-range: entry 5% entry 45%;
+  }
+}
+
 @keyframes about-partner-scroll {
   to {
     transform: translate3d(-50%, 0, 0);
@@ -303,6 +479,12 @@ body {
 }
 .animate-glow-pulse {
   animation: glow-pulse 5s ease-in-out infinite;
+}
+.animate-orbit-slow {
+  animation: orbit-slow 28s linear infinite;
+}
+.animate-ring-pulse {
+  animation: ring-pulse 4.8s ease-in-out infinite;
 }
 .animate-modal-backdrop {
   animation: modal-backdrop-in 260ms ease-out both;
@@ -327,6 +509,36 @@ body {
 }
 .animate-feedback-in {
   animation: feedback-in var(--dur-base) ease-out both;
+}
+
+/* Hero/editorial photography reacts to the whole surrounding group. `scale`
+   is used as an independent longhand so it can coexist with positioned art
+   that already uses Tailwind's translate utilities. */
+.pf-photo {
+  transition:
+    scale 700ms var(--ease-out-soft),
+    filter 700ms var(--ease-out-soft);
+}
+
+@media (hover: hover) {
+  .group:hover .pf-photo {
+    scale: 1.025;
+    filter: saturate(1.04) contrast(1.02);
+  }
+}
+
+.group:focus-within .pf-photo {
+  scale: 1.025;
+  filter: saturate(1.04) contrast(1.02);
+}
+
+/* Draw the Ideas Lab journey paths in sequence on arrival. The curves are all
+   shorter than 2000 SVG units, so one dash reliably covers each full path. */
+.pf-line-draw {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: line-draw 1400ms var(--ease-out-soft) both;
+  animation-delay: var(--line-delay, 0ms);
 }
 
 /* A skeleton placeholder block. Put `.pf-skeleton` on the grey box; it draws its
@@ -467,9 +679,18 @@ body {
   .animate-modal-panel-out,
   .animate-success-in,
   .animate-feedback-in,
+  .animate-orbit-slow,
+  .animate-ring-pulse,
   .pf-stagger > *,
-  .pf-skeleton::after {
+  .pf-skeleton::after,
+  .pf-wipe {
     animation: none;
+  }
+
+  /* The wipe's from-state clips the element to nothing, so with the animation
+     off the clip must be cleared or the artwork would never appear. */
+  .pf-wipe {
+    clip-path: none;
   }
 
   /* Skeletons still need to read as placeholders without the sweep, so keep the
@@ -486,8 +707,52 @@ body {
 
   .pf-interactive:active:not(:disabled):not([aria-disabled="true"]),
   .pf-card:hover,
-  .pf-card:focus-within {
+  .pf-card:focus-within,
+  .pf-lift:hover,
+  .pf-lift:focus-within {
     transform: none;
+  }
+
+  /* The icon pop and the underline wipe are pure decoration, so they are removed
+     outright rather than shortened. `scale`/`rotate` are reset on the longhands
+     these animate, so a centred icon keeps its `translate` offset. */
+  .pf-pop,
+  .group:hover .pf-pop,
+  .group:focus-within .pf-pop {
+    scale: 1;
+    rotate: none;
+    transition: none;
+  }
+
+  .pf-photo,
+  .group:hover .pf-photo,
+  .group:focus-within .pf-photo {
+    scale: 1;
+    filter: none;
+    transition: none;
+  }
+
+  .pf-line-draw {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  /* The sheen is a moving highlight with no informational value — hide it
+     entirely rather than letting it snap across in 0.01ms. */
+  .pf-sheen::after {
+    display: none;
+  }
+
+  /* Show the underline statically instead of wiping it in, so hover/focus still
+     reads as a state change without the motion. */
+  .pf-underline::after {
+    transition: none;
+  }
+
+  .pf-underline:hover::after,
+  .pf-underline:focus-visible::after {
+    transform: scaleX(1);
   }
 
   /* Images should appear immediately rather than fading/scaling in. */

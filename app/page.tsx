@@ -35,21 +35,21 @@ export default function Landing() {
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <Link
               href="/privacy"
-              className="inline-flex min-h-11 items-center transition-colors hover:text-white"
+              className="pf-interactive pf-underline inline-flex min-h-11 items-center hover:text-white"
             >
               Privacy
             </Link>
             <span className="text-zinc-600">|</span>
             <Link
               href="/terms"
-              className="inline-flex min-h-11 items-center transition-colors hover:text-white"
+              className="pf-interactive pf-underline inline-flex min-h-11 items-center hover:text-white"
             >
               Terms of Service
             </Link>
             <span className="text-zinc-600">|</span>
             <Link
               href="/cookies"
-              className="inline-flex min-h-11 items-center transition-colors hover:text-white"
+              className="pf-interactive pf-underline inline-flex min-h-11 items-center hover:text-white"
             >
               Cookies
             </Link>
@@ -58,7 +58,7 @@ export default function Landing() {
 
         <ContactTrigger
           href="/contact"
-          className="group inline-flex min-h-11 items-center gap-3 self-start text-lg font-bold text-white transition-colors hover:text-accent sm:self-auto sm:text-xl"
+          className="pf-interactive group inline-flex min-h-11 items-center gap-3 self-start text-lg font-bold text-white hover:-translate-y-0.5 hover:text-accent sm:self-auto sm:text-xl"
         >
           Say Hello!
           <MessageCircle className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110 sm:h-7 sm:w-7" />

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Play, ChevronRight } from "lucide-react";
 import { EPISODES, TOTAL_PAGES } from "@/app/podcasts/episodes";
+import { Reveal } from "@/app/components/ScrollFx";
 
 /* Podcasts → "Our Podcasts". Deep-purple band holding one wide white card per
    episode: thumbnail with a play overlay and a coloured corner badge on the
@@ -19,9 +20,11 @@ export default function OurPodcasts() {
   return (
     <section className="bg-[#2d064b] px-6 py-24 sm:px-10 sm:py-28 lg:px-24 xl:px-28">
       <div className="mx-auto max-w-[1440px]">
-        <h2 className="text-center text-2xl font-extrabold uppercase tracking-tight text-white sm:text-[2rem]">
-          Our Podcasts
-        </h2>
+        <Reveal y={28} scale={0.98}>
+          <h2 className="text-center text-2xl font-extrabold uppercase tracking-tight text-white sm:text-[2rem]">
+            Our Podcasts
+          </h2>
+        </Reveal>
 
         <div
           key={page}

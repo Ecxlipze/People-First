@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* Grow With Us → "Program Areas". Five white cards on a mint field, laid out
    three-up then two-up and centred, with the supplied 3D illustrations. */
@@ -40,29 +40,33 @@ const AREAS: Area[] = [
 ];
 
 function Card({ area }: { area: Area }) {
+  /* Wrapper absorbs <Stagger>'s scroll transform so .pf-card is free to own the
+     hover lift — the two cannot share one element. */
   return (
-    <div className="pf-card group relative flex min-h-[240px] flex-col rounded-xl bg-white px-7 pb-8 pt-10 shadow-[0_18px_45px_-20px_rgba(70,80,120,0.35)]">
-      {/* illustration — overlaps the card's top-right corner */}
-      <Image
-        src={area.icon}
-        alt=""
-        aria-hidden
-        width={560}
-        height={560}
-        className={`pointer-events-none absolute -top-5 right-3 h-24 w-auto select-none drop-shadow-[0_10px_18px_rgba(60,60,110,0.28)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105 sm:h-28 ${
-          area.iconClass ?? ""
-        }`}
-      />
+    <div className="h-full">
+      <div className="pf-card group relative flex h-full min-h-[240px] flex-col rounded-xl bg-white px-7 pb-8 pt-10 shadow-[0_18px_45px_-20px_rgba(70,80,120,0.35)]">
+        {/* illustration — overlaps the card's top-right corner */}
+        <Image
+          src={area.icon}
+          alt=""
+          aria-hidden
+          width={560}
+          height={560}
+          className={`pf-pop pointer-events-none absolute -top-5 right-3 h-24 w-auto select-none drop-shadow-[0_10px_18px_rgba(60,60,110,0.28)] sm:h-28 ${
+            area.iconClass ?? ""
+          }`}
+        />
 
-      {/* title is padded on the right so long headings clear the illustration */}
-      <h3 className="max-w-[13rem] text-xl font-extrabold leading-snug text-zinc-950 sm:text-2xl">
-        {area.title}
-      </h3>
-      {/* mt-auto pins the body to the card bottom so cards in a row stay level
-          even when a title wraps to more lines than its neighbours */}
-      <p className="mt-auto max-w-[14rem] pt-6 text-sm leading-relaxed text-zinc-900 sm:text-base">
-        {area.body}
-      </p>
+        {/* title is padded on the right so long headings clear the illustration */}
+        <h3 className="max-w-[13rem] text-xl font-extrabold leading-snug text-zinc-950 sm:text-2xl">
+          {area.title}
+        </h3>
+        {/* mt-auto pins the body to the card bottom so cards in a row stay level
+            even when a title wraps to more lines than its neighbours */}
+        <p className="mt-auto max-w-[14rem] pt-6 text-sm leading-relaxed text-zinc-900 sm:text-base">
+          {area.body}
+        </p>
+      </div>
     </div>
   );
 }
@@ -87,19 +91,20 @@ export default function ProgramAreas() {
           </h2>
         </Reveal>
 
-        {/* row 1 — three cards */}
-        <Reveal className="mt-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {/* row 1 — three cards. Each row staggers on its own so the cascade
+            restarts on row 2 rather than the two rows sharing one long ramp. */}
+        <Stagger className="mt-20 grid items-stretch gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {AREAS.slice(0, 3).map((a) => (
             <Card key={a.title} area={a} />
           ))}
-        </Reveal>
+        </Stagger>
 
         {/* row 2 — two cards, centred beneath the row above */}
-        <Reveal className="mt-20 grid gap-8 sm:grid-cols-2 lg:mx-auto lg:w-2/3">
+        <Stagger className="mt-20 grid items-stretch gap-8 sm:grid-cols-2 lg:mx-auto lg:w-2/3">
           {AREAS.slice(3).map((a) => (
             <Card key={a.title} area={a} />
           ))}
-        </Reveal>
+        </Stagger>
       </div>
     </section>
   );

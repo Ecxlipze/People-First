@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { GraduationCap } from "lucide-react";
-import { Reveal } from "@/app/components/ScrollFx";
+import { Reveal, Stagger } from "@/app/components/ScrollFx";
 import {
   PIPELINE,
   ECOSYSTEM_BANNER,
@@ -20,89 +20,98 @@ import {
    stage columns; see pipeline.ts. */
 
 function StageCard({ stage }: { stage: PipelineStage }) {
+  /* Wrapper takes <Stagger>'s scroll transform; the card inside owns the hover
+     lift. Same split as the pillar and tier cards. */
   return (
-    <div className="flex h-full min-h-[31.25rem] flex-col overflow-hidden rounded-xl bg-[#f3f1f2] shadow-[0_12px_28px_-16px_rgba(35,25,45,0.4)]">
-      <div className="flex min-h-0 flex-1 flex-col px-5 pb-2 pt-11">
-        <div className="flex items-center gap-4 sm:mx-3">
-          <span
-            className="grid h-14 w-14 shrink-0 place-items-center rounded-full text-xl font-bold text-white"
-            style={{ backgroundColor: stage.pillBg }}
-          >
-            {stage.number}
-          </span>
-          <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-zinc-900">
-              {stage.label}
-            </p>
-            <h3 className="mt-1 text-xl font-medium leading-tight text-zinc-950">
-              {stage.headline}
-            </h3>
-          </div>
-        </div>
-
-        <p className="mt-7 text-[0.7rem] leading-relaxed text-zinc-800">
-          {stage.rationale}
-        </p>
-
-        {stage.feature ? (
-          /* MIND STAGE — one feature card, vertically centred in the space the
-             other two columns fill with their venture lists */
-          <div className="mt-1 flex min-h-0 flex-1 items-center sm:mx-12">
-            <div
-              className="w-full rounded-xl border bg-transparent px-5 py-6 text-center"
-              style={{ borderColor: `${stage.pillBg}44` }}
+    <div className="h-full">
+      <div className="pf-lift pf-sheen group relative flex h-full min-h-[31.25rem] flex-col overflow-hidden rounded-xl bg-[#f3f1f2] shadow-[0_12px_28px_-16px_rgba(35,25,45,0.4)]">
+        <div className="flex min-h-0 flex-1 flex-col px-5 pb-2 pt-11">
+          <div className="flex items-center gap-4 sm:mx-3">
+            {/* The numbered disc scales up with the card, giving the stage number
+                the same emphasis the icons get on the other card types. */}
+            <span
+              className="pf-pop grid h-14 w-14 shrink-0 place-items-center rounded-full text-xl font-bold text-white"
+              style={{ backgroundColor: stage.pillBg }}
             >
-              <GraduationCap
-                className="mx-auto h-9 w-9"
-                style={{ color: stage.pillBg }}
-                strokeWidth={2}
-                aria-hidden
-              />
-              <p
-                className="mt-5 text-base font-bold leading-tight"
-                style={{ color: stage.pillBg }}
-              >
-                {stage.feature.name}
+              {stage.number}
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs font-bold uppercase tracking-[0.08em] text-zinc-900">
+                {stage.label}
               </p>
-              <p className="mt-5 text-[0.7rem] leading-relaxed text-zinc-600">
-                {stage.feature.blurb}
-              </p>
+              <h3 className="mt-1 text-xl font-medium leading-tight text-zinc-950">
+                {stage.headline}
+              </h3>
             </div>
           </div>
-        ) : (
-          <ul className="mt-1 space-y-1.5 sm:mx-12">
-            {stage.ventures.map((v) => (
-              <li
-                key={v.name}
-                className="rounded-lg border border-[#50b5bd] bg-transparent px-3 py-1.5"
-              >
-                <p className="text-[0.7rem] font-bold leading-tight text-zinc-950">
-                  {v.name}
-                </p>
-                <p className="mt-0.5 text-[0.6rem] leading-snug text-zinc-600">
-                  {v.blurb}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
 
-      {/* outcome strip — full-bleed foot of the card */}
-      <div
-        className="mt-auto grid min-h-16 grid-cols-[auto_1fr] items-start gap-x-5 px-6 py-3 sm:px-8"
-        style={{ backgroundColor: stage.outcome.bg }}
-      >
-        <p className="text-[0.72rem] font-extrabold uppercase tracking-wide text-zinc-950">
-          Outcome:
-        </p>
-        <div>
-          <p className="text-[0.78rem] font-bold leading-tight text-zinc-950">
-            {stage.outcome.title}
+          <p className="mt-7 text-[0.7rem] leading-relaxed text-zinc-800">
+            {stage.rationale}
           </p>
-          <p className="mt-2 text-[0.62rem] leading-snug text-zinc-800">
-            {stage.outcome.detail}
+
+          {stage.feature ? (
+            /* MIND STAGE — one feature card, vertically centred in the space the
+               other two columns fill with their venture lists */
+            <div className="mt-1 flex min-h-0 flex-1 items-center sm:mx-12">
+              <div
+                className="w-full rounded-xl border bg-transparent px-5 py-6 text-center transition-colors duration-[var(--dur-base)]"
+                style={{ borderColor: `${stage.pillBg}44` }}
+              >
+                <GraduationCap
+                  className="pf-pop mx-auto h-9 w-9"
+                  style={{ color: stage.pillBg }}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+                <p
+                  className="mt-5 text-base font-bold leading-tight"
+                  style={{ color: stage.pillBg }}
+                >
+                  {stage.feature.name}
+                </p>
+                <p className="mt-5 text-[0.7rem] leading-relaxed text-zinc-600">
+                  {stage.feature.blurb}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <ul className="mt-1 space-y-1.5 sm:mx-12">
+              {stage.ventures.map((v) => (
+                /* Each venture row nudges right and fills with a hint of its
+                   border colour on hover, so the list reads as browsable rather
+                   than as static bullet points. */
+                <li
+                  key={v.name}
+                  className="rounded-lg border border-[#50b5bd] bg-transparent px-3 py-1.5 transition-[background-color,transform] duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1 hover:bg-[#50b5bd]/10"
+                >
+                  <p className="text-[0.7rem] font-bold leading-tight text-zinc-950">
+                    {v.name}
+                  </p>
+                  <p className="mt-0.5 text-[0.6rem] leading-snug text-zinc-600">
+                    {v.blurb}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* outcome strip — full-bleed foot of the card */}
+        <div
+          className="mt-auto grid min-h-16 grid-cols-[auto_1fr] items-start gap-x-5 px-6 py-3 sm:px-8"
+          style={{ backgroundColor: stage.outcome.bg }}
+        >
+          <p className="text-[0.72rem] font-extrabold uppercase tracking-wide text-zinc-950">
+            Outcome:
           </p>
+          <div>
+            <p className="text-[0.78rem] font-bold leading-tight text-zinc-950">
+              {stage.outcome.title}
+            </p>
+            <p className="mt-2 text-[0.62rem] leading-snug text-zinc-800">
+              {stage.outcome.detail}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -160,7 +169,7 @@ export default function EvolutionPipeline() {
 
         {/* ── purple banner ── */}
         <Reveal className="mt-12 sm:mx-8 sm:mt-10">
-          <div className="overflow-hidden rounded-xl bg-[linear-gradient(100deg,#5d1a68_0%,#7a2585_55%,#8e2c96_100%)] px-5 py-7 shadow-[0_18px_44px_-24px_rgba(90,25,105,0.7)]">
+          <div className="pf-lift pf-sheen group relative overflow-hidden rounded-xl bg-[linear-gradient(100deg,#5d1a68_0%,#7a2585_55%,#8e2c96_100%)] px-5 py-7 shadow-[0_18px_44px_-24px_rgba(90,25,105,0.7)]">
             <div className="grid gap-7 md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)_minmax(0,1fr)] md:gap-8">
               <div className="flex items-center gap-2">
                 <Image
@@ -169,7 +178,7 @@ export default function EvolutionPipeline() {
                   aria-hidden
                   width={248}
                   height={248}
-                  className="h-16 w-16 shrink-0 select-none lg:h-20 lg:w-20"
+                  className="pf-pop h-16 w-16 shrink-0 select-none lg:h-20 lg:w-20"
                 />
                 <h3 className="text-xl font-bold leading-tight text-white">
                   {ECOSYSTEM_BANNER.title}
@@ -200,11 +209,16 @@ export default function EvolutionPipeline() {
           </h2>
         </Reveal>
 
-        <Reveal className="mt-20 grid items-stretch gap-8 md:grid-cols-3 lg:mt-28 lg:gap-10">
+        {/* Stagger so the three stages arrive left-to-right, which also reads as
+            the pipeline's own order. */}
+        <Stagger
+          className="mt-20 grid items-stretch gap-8 md:grid-cols-3 lg:mt-28 lg:gap-10"
+          step={80}
+        >
           {PIPELINE.map((s) => (
             <StageCard key={s.number} stage={s} />
           ))}
-        </Reveal>
+        </Stagger>
       </div>
     </section>
   );
