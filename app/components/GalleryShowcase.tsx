@@ -65,11 +65,18 @@ export default function GalleryShowcase() {
   };
 
   return (
-    /* Outer track: swipes up over the pinned Ventures section. */
-    <div className="relative z-30 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
-      <PinnedRecede className="flex flex-col items-center justify-center py-10 sm:py-14">
+    /* Outer track: swipes up over the pinned Ventures section.
+       Background #f2f8f8, sampled from HOME4.pdf — the same pale mint the
+       Ventures section uses, not the lavender gradient this carried. The whole
+       block (heading, carousel, button) centres on one axis with no sidebar
+       padding, matching the design's shared x≈931 centreline. */
+    <div className="relative z-30 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
+      {/* No horizontal padding on the column itself — the carousel's ±2 slides
+          must reach the viewport edges to be clipped like the design's. The
+          heading and button carry their own px-6 instead. */}
+      <PinnedRecede className="flex flex-col items-center justify-center overflow-hidden py-10 sm:py-14">
         {/* heading */}
-        <Reveal y={28} scale={0.98}>
+        <Reveal y={28} scale={0.98} className="px-6">
           {/* CAPS is correct, though the PDF text layer disagrees: it stores
               "Our Gallery" mixed-case while the frame RENDERS "OUR GALLERY",
               i.e. the design applies a text-transform. Reading the text layer
@@ -104,14 +111,23 @@ export default function GalleryShowcase() {
             drag.current.active = false;
             setDragging(false);
           }}
-          className="relative mt-6 w-full touch-pan-y select-none outline-none sm:mt-8 lg:pr-24"
+          /* No lg:pr-* here. In HOME4.pdf the heading, the centre photo and the
+             button all share ONE vertical axis (x≈932 / 930 / 931.5 on the 1920
+             frame), so the carousel must be centred on the same box as the other
+             two. The old `lg:pr-24` padded only this element, pushing the photos
+             96px left of the heading and button — the off-centre look. */
+          className="relative mt-6 w-full touch-pan-y select-none outline-none sm:mt-8"
           style={{ perspective: "1600px" }}
         >
-          {/* stage — the peeking neighbours are positioned relative to centre.
-              The design's centre photo is 399×675 on the 1920 frame, i.e. a
-              PORTRAIT 0.59 aspect (≈300×506 at a 1440 viewport), so the stage
-              height and slide width are sized to land near that ratio. */}
-          <div className="relative mx-auto flex h-[clamp(300px,52vh,506px)] w-full max-w-5xl items-center justify-center">
+          {/* stage — slides are positioned relative to centre.
+              The design's centre photo is 399×675 on the 1920 frame, a PORTRAIT
+              0.59 aspect (≈300×506 at 1440), so the stage height and slide width
+              target that ratio.
+              FULL WIDTH, no max-w: in HOME4 the ±2 slides run off both frame
+              edges (the left one starts at x=0, the right ends at x=1867 of
+              1920), so they are meant to bleed. A max-w-5xl stage would pull them
+              inside the container and lose that clipped-edge look. */}
+          <div className="relative flex h-[clamp(300px,52vh,506px)] w-full items-center justify-center">
             {GALLERY.map((photo, i) => {
               // signed distance from the active slide, wrapped to the short way
               // round the ring so slide 0 and slide n-1 are neighbours.
@@ -129,24 +145,34 @@ export default function GalleryShowcase() {
                   aria-current={isActive}
                   onClick={() => !isActive && to(i)}
                   tabIndex={isActive ? 0 : -1}
-                  className="absolute h-full w-[62%] overflow-hidden bg-[#f0f0f0] transition-[transform,opacity] duration-500 ease-out sm:w-[46%] lg:w-[28%]"
+                  /* 21% at lg: the design's centre slide is 399px of a 1920
+                     frame (20.8%), ≈299px at a 1440 viewport. The old 28% was
+                     sized against a max-w-5xl stage; now that the stage is
+                     full-width it has to be a share of the viewport instead. */
+                  className="absolute h-full w-[62%] overflow-hidden bg-[#f0f0f0] transition-[transform,opacity] duration-500 ease-out sm:w-[40%] lg:w-[21%]"
                   style={{
-                    // Flat horizontal layout with gaps. No overlapping (except during transition).
-                    // Center is offset=0 -> translateX(0)
-                    // Left is offset=-1 -> translateX(-110%)
-                    // Right is offset=1 -> translateX(110%)
-                    /* Neighbour scale 0.76, measured off HOME4.pdf: the centre
-                       photo is 675px tall and its neighbours 512px (512/675 =
-                       0.759), where this used 0.85 and read as too uniform.
-                       The 105% pitch is already right — centre sits at x=930 and
-                       its neighbour at x=510, a 420px step against the centre
-                       photo's 399px width. */
+                    /* FIVE slides are visible in HOME4.pdf, not three: a centre
+                       photo, both ±1 neighbours, and both ±2 slides clipped by
+                       the frame edges. Measuring each slide's height on the 1920
+                       frame gives a clean scale ladder —
+                         centre  675px  → 1.000
+                         ±1      512px  → 0.759
+                         ±2      359px  → 0.532
+                       Slide centres sit at 138 / 511.5 / 930 / 1357.5 / 1727, so
+                       the step is ~105% of a slide width from centre to ±1 and
+                       ~93% from ±1 to ±2 — the gaps tighten as the slides shrink.
+                       Verified at 1920 (the design's own frame width): our outer
+                       centres land 798px from the middle against the design's
+                       794px.
+                       This previously hid everything past ±1 via `opacity: abs >
+                       1 ? 0 : 1`, which is why only three photos ever showed —
+                       the mockup shows FIVE at once. */
                     transform: `translateX(${
-                      Math.sign(offset) * (abs === 0 ? 0 : 105 + (abs - 1) * 105)
-                    }%) scale(${isActive ? 1 : 0.76})`,
-                    opacity: abs > 1 ? 0 : 1,
+                      Math.sign(offset) * (abs === 0 ? 0 : 105 + (abs - 1) * 93)
+                    }%) scale(${abs === 0 ? 1 : abs === 1 ? 0.759 : 0.532})`,
+                    opacity: abs > 2 ? 0 : 1,
                     zIndex: isActive ? 20 : 10 - abs,
-                    pointerEvents: abs > 1 ? "none" : "auto",
+                    pointerEvents: abs > 2 ? "none" : "auto",
                     cursor: isActive ? "default" : "pointer",
                   }}
                 >

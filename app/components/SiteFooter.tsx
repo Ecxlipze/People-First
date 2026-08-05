@@ -123,7 +123,12 @@ export default function SiteFooter({
           <Reveal
             y={36}
             scale={0.975}
-            className="relative overflow-hidden rounded-[1.5rem] bg-[linear-gradient(115deg,#26095f_0%,#3a1268_50%,#5a1e6d_100%)]"
+            /* Gradient sampled across the band in Footer.pdf: #150065 at the left
+               edge easing to #4f1a57 at the right (deep indigo → plum), where this
+               used #26095f→#3a1268→#5a1e6d. Corner radius measured at ~14px on
+               the 1920 frame → 10px at 1440, so rounded-[0.625rem] rather than
+               the 1.5rem here. */
+            className="relative overflow-hidden rounded-[0.625rem] bg-[linear-gradient(100deg,#150065_0%,#340d5e_55%,#4f1a57_100%)]"
           >
             {/* wireframe globe (real asset) — vertically centred, flush to the
               left edge and clipped by the rounded corner, ~1.5× the band height.
@@ -145,25 +150,34 @@ export default function SiteFooter({
                 <h2 className="font-serif text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
                   Let&rsquo;s Get in Touch
                 </h2>
-                <p className="mt-2 text-base text-white/85 sm:text-[1.0625rem]">
+                <p className="mt-2 text-base text-white sm:text-[1.0625rem]">
                   Learn More about us and what you wanna do further.
                 </p>
               </div>
 
-              {/* CTAs — the top row's two buttons + gap define the block width;
-                "Partner With Us" is full-width so it ends flush with them. */}
-              <div className="flex w-full flex-none flex-col gap-3.5 sm:w-[29rem]">
-                <div className="flex flex-col gap-3.5 sm:flex-row">
+              {/* CTAs. All three buttons share ONE right edge in the design: the
+                  outlined button and "Partner With Us" both end at x1704 on the
+                  1920 frame, with the block running x1199→1704 = 506px (380px at
+                  1440) and sitting 54px inside the band's right edge. This was
+                  29rem/464px. Buttons are 50px tall → ~38px at 1440. */}
+              {/* `min-w-0` on the row + no `whitespace-nowrap` on the buttons.
+                  With nowrap AND flex-1, "Join a Training Program" forced itself
+                  wider than the 380px block, pushing the pair past the band's
+                  right edge — the buttons hanging outside the panel. The label is
+                  long, so the type steps down slightly at sm to keep it on one
+                  line inside the design's width instead of forcing an overflow. */}
+              <div className="flex w-full flex-none flex-col gap-3.5 sm:w-[380px]">
+                <div className="flex min-w-0 flex-col gap-3.5 sm:flex-row">
                   <ContactTrigger
                     href="/contact"
-                    className="pf-interactive flex-1 whitespace-nowrap rounded-md bg-[#dcd4e1] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
+                    className="pf-interactive min-w-0 flex-1 rounded-md bg-[#dcd4e1] px-3 py-3 text-center text-[0.95rem] font-medium leading-tight text-[#090c62] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg sm:text-[0.8125rem]"
                   >
                     Book a Consultation
                   </ContactTrigger>
                   <ContactTrigger
                     href="/training"
                     role="Student"
-                    className="pf-interactive flex-1 whitespace-nowrap rounded-md border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white hover:-translate-y-0.5 hover:bg-white/10"
+                    className="pf-interactive min-w-0 flex-1 rounded-md border border-white/50 px-3 py-3 text-center text-[0.95rem] font-medium leading-tight text-white hover:-translate-y-0.5 hover:bg-white/10 sm:text-[0.8125rem]"
                   >
                     Join a Training Program
                   </ContactTrigger>
@@ -171,7 +185,7 @@ export default function SiteFooter({
                 <ContactTrigger
                   href="/partner"
                   role="Training Partner"
-                  className="pf-interactive w-full rounded-md bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-[#1a1a2e] hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
+                  className="pf-interactive w-full rounded-md bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-black hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
                 >
                   Partner With Us
                 </ContactTrigger>
@@ -191,16 +205,25 @@ export default function SiteFooter({
               a left pad would offset the block from the column's true centre,
               which is what left it 227px/203px off-centre before. */}
           <div className="lg:flex lg:flex-col lg:items-center lg:justify-center">
+            {/* Logo is 283×66 on the 1920 frame → ~50px tall at 1440, where this
+                rendered h-11/44px. */}
             <Link href="/" aria-label="People First — home">
               <Image
                 src="/images/logo.svg"
                 alt="People First"
                 width={398}
                 height={100}
-                className="h-11 w-auto"
+                className="h-[50px] w-auto"
               />
             </Link>
-            <div className="mt-8 flex items-center gap-7">
+            {/* Icons are 34px in the design (26px at 1440) and the whole row spans
+                253px → 190px at 1440, i.e. ~29px of visible gap between marks.
+                The gap value has to account for the 44px tap-target wrappers:
+                each `w-11` box adds 9px of padding either side of its 26px glyph,
+                so a bare gap-[29px] rendered as 47px of visible space. Using
+                gap-[11px] (29 − 2×9) lands the visible gap at ~29px while every
+                link keeps its full 44px touch target. */}
+            <div className="mt-8 flex items-center gap-[11px]">
               {SOCIALS.map(({ label, href, icon: SocialIcon }) => (
                 <a
                   key={label}
@@ -208,29 +231,54 @@ export default function SiteFooter({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="pf-interactive grid h-11 w-11 place-items-center rounded-full text-[#1a1a2e] hover:-translate-y-0.5 hover:text-[#5a1f9e]"
+                  className="pf-interactive grid h-11 w-11 place-items-center rounded-full text-black hover:-translate-y-0.5 hover:text-[#5a1f9e]"
                 >
-                  <SocialIcon className="h-[1.65rem] w-[1.65rem]" />
+                  <SocialIcon className="h-[26px] w-[26px]" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Link columns, preceded by a vertical divider on lg+. Values from
-              Footer.pdf: the divider is a near-black hairline (not zinc-200),
-              headings are pure black, links #3c3c3c, and there is a wide gap
-              between the rule and the "Pages" column — QA asked for both the
-              divider colour/weight and more left padding on the right links. */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3 lg:gap-x-16 lg:border-l lg:border-[#1a1a1a] lg:pl-20">
+          {/* Link columns, preceded by a vertical divider on lg+. Measured in
+              Footer.pdf: the rule is a 1px PURE BLACK hairline at x=932 spanning
+              y419–618 — 200px, which stops short of the columns' own height
+              (their content runs to y660). A `border-l` on this grid cell would
+              instead run the full row height, so the rule is drawn as an
+              absolutely-positioned span sized to the design's 200px (150px at
+              1440). Headings are pure black, links #3c3c3c, and the gap from rule
+              to the "Pages" column is 119px → 89px at 1440 (pl-20 ≈ 80px is
+              within a rounding step). QA asked for both the divider treatment and
+              more left padding on the right-hand links. */}
+          <div className="relative grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3 lg:gap-x-16 lg:pl-[89px]">
+            {/* inset-y-0 rather than a fixed height: the rule should run the
+                columns' own height. A hard h-[150px] taken from the design's
+                200px rule left it floating — the design's columns are 193px tall
+                there, so the rule effectively spans them, and ours are a
+                different height. */}
+            <span
+              aria-hidden
+              className="absolute inset-y-0 left-0 hidden w-px bg-black lg:block"
+            />
             {COLUMNS.map((col) => (
               <div key={col.title}>
                 <h3 className="text-xl font-bold text-black">{col.title}</h3>
-                <ul className="mt-6 flex flex-col gap-[1.1rem]">
+                {/* Row pitch: 34px in the design, and it stays ~34px here — do
+                    NOT scale it by the 1920→1440 frame ratio. The design's link
+                    ink is 13px tall, so its type is ~17.7px, essentially the same
+                    as our 17px; the pitch is therefore already at our scale.
+                    Scaling the pitch to 26px while leaving the font at 17px is
+                    what crushed these rows together (pitch/font falls from the
+                    design's 1.92 to 1.53).
+                    A 33px row still cannot hold a 44px touch target, so the <li>
+                    is capped at 33px on lg and the <a> keeps its full 44px height,
+                    overhanging symmetrically via -my-[5px]. Below lg the roomier
+                    stacked spacing is kept, where touch is likelier. */}
+                <ul className="mt-6 flex flex-col gap-3 lg:mt-[35px] lg:gap-0">
                   {col.links.map((l) => (
-                    <li key={l.label}>
+                    <li key={l.label} className="lg:h-[33px]">
                       <Link
                         href={l.href}
-                        className="pf-interactive inline-flex min-h-11 items-center rounded-sm text-[1.0625rem] text-[#3c3c3c] hover:translate-x-0.5 hover:text-[#491557]"
+                        className="pf-interactive inline-flex min-h-11 items-center rounded-sm text-[1.0625rem] text-black hover:translate-x-0.5 hover:text-[#491557] lg:-my-[5px]"
                       >
                         {l.label}
                       </Link>

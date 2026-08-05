@@ -37,22 +37,24 @@ function initials(name: string) {
     .toUpperCase();
 }
 
+/* 40px: the avatar circle measures x178→232 on the 1920 frame (54px), which is
+   40px at a 1440 viewport — this rendered 48px. */
 function Avatar({ t, i }: { t: Testimonial; i: number }) {
   if (t.avatar && t.hasAvatar) {
     return (
       <Image
         src={t.avatar}
         alt={t.name}
-        width={48}
-        height={48}
-        className="h-12 w-12 rounded-full object-cover"
+        width={80}
+        height={80}
+        className="h-10 w-10 rounded-full object-cover"
       />
     );
   }
   return (
     <span
       aria-hidden
-      className="flex h-12 w-12 items-center justify-center rounded-full text-sm font-semibold text-white"
+      className="flex h-10 w-10 items-center justify-center rounded-full text-xs font-semibold text-white"
       style={{ backgroundColor: AVATAR_COLORS[i % AVATAR_COLORS.length] }}
     >
       {initials(t.name)}
@@ -83,7 +85,10 @@ export default function TestimonialsShowcase() {
             arriving. <Reveal>/<Stagger> give every card its own one-shot
             entrance the moment it reaches the viewport. */}
         <Reveal className="w-full">
-          <h2 className="px-6 text-center text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl">
+          {/* 36px at lg, not 48px. The heading's em box is 67.3pt on the 1920
+              frame; em boxes overstate visual size by ~35%, so the cap-corrected
+              figure is ~36px at a 1440 viewport. Colour is #18181b. */}
+          <h2 className="px-6 text-center text-3xl font-extrabold tracking-tight text-[#18181b] sm:text-4xl lg:text-[2.25rem]">
             People are saying about us
           </h2>
         </Reveal>
@@ -91,37 +96,57 @@ export default function TestimonialsShowcase() {
         {/* masonry grid — 1→2→3→4 columns; break-inside-avoid keeps cards whole.
             The cards are the direct children of this column container, so the
             default ":scope > *" selector targets them without a data attribute. */}
-        {/* Column geometry from HOME5.pdf: 4 columns on a 1920 frame with a
-            412.5pt pitch (cards ~355pt wide, ~57pt gutters), first column
-            starting at x=185. That is a wider grid than the old max-w-6xl, and
-            the gap is larger than the previous gap-4 — QA #10 ("cards sizes
-            doesn't match with design"). */}
+        {/* Column geometry measured off the HOME5.pdf render by detecting the
+            white card rectangles (QA #10, "cards sizes doesn't match with
+            design"). On the 1920 frame:
+              8 cards, 4 columns × 2 rows, each card 379px wide
+              column gaps 33–35px, vertical gaps 29–37px
+              grid spans x152→1768 = 1617px (84.2% of the frame), margins 152/151
+            At a 1440 viewport that is 284px cards, ~26px gaps, 1213px of grid.
+
+            It is a true MASONRY: row-1 tops all align at y=270 but their heights
+            differ (311/279/249/285), and each column's row-2 top follows its own
+            row-1 height (618/584/552/584) rather than a shared row line — which
+            is what the CSS columns + break-inside-avoid reproduces.
+
+            No lg:pr-32 here: that padded only this element, pulling the grid off
+            the heading's centre axis (the same bug the Gallery had). */}
         <Stagger
-          className="mx-auto mt-6 w-full max-w-[1500px] gap-4 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 sm:gap-[3.5%] lg:columns-4 lg:pr-32"
+          className="mx-auto mt-6 w-full max-w-[1213px] gap-[26px] px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-4"
           step={45}
         >
+          {/* mb-[26px] gives the vertical rhythm the design's 29–37px column
+              gaps imply (33px mean → 25px at 1440); this was mb-4/16px. */}
           {TESTIMONIALS.map((t, i) => (
-            <div key={t.name} className="mb-4 break-inside-avoid">
-              {/* rounded-xl (12px), down from rounded-2xl (16px) — QA #16. */}
-              <article className="pf-card group flex flex-col rounded-xl border border-black/[0.06] bg-white p-4 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]">
+            <div key={t.name} className="mb-[26px] break-inside-avoid">
+              {/* rounded-xl (12px), down from rounded-2xl (16px) — QA #16.
+                  Padding from the design: the avatar sits 26px in from the card's
+                  left edge on the 1920 frame → ~20px at 1440, so p-5 not p-4. */}
+              <article className="pf-card group flex flex-col rounded-xl border border-black/[0.06] bg-white p-5 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]">
                 {/* header: avatar + name/handle + twitter icon */}
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-start gap-2">
                   <Avatar t={t} i={i} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-semibold text-zinc-900 sm:text-sm">
+                    <p className="truncate text-[13px] font-semibold text-black">
                       {t.name}
                     </p>
                     {/* handle #52525b and body #27272a, sampled from HOME5.pdf
-                        (QA #13: "@username color not match"). */}
+                        (QA #13: "@username color not match"). Name is pure black
+                        in the design, not zinc-900. */}
                     <p className="truncate text-[11px] text-[#52525b]">
                       {t.handle}
                     </p>
                   </div>
-                  <TwitterBird className="pf-pop h-4 w-4 flex-none text-[#1da9ee]" />
+                  {/* #0ea5e9 — the SAME blue as the hashtags. Sampling the bird
+                      glyph directly gives #0ea5e9, not the #1da9ee used here
+                      before. */}
+                  <TwitterBird className="pf-pop h-4 w-4 flex-none text-[#0ea5e9]" />
                 </div>
 
-                {/* body */}
-                <p className="mt-3 text-xs leading-relaxed text-[#27272a] sm:text-sm">
+                {/* body — 15px/19.5px. The design's body lines sit at y 397 /
+                    423 / 449 / 475, i.e. 26pt of leading, which is 19.5px at a
+                    1440 viewport on ~15px type; this was 14px. */}
+                <p className="mt-3 text-[13px] leading-[1.3] text-[#27272a] sm:text-[15px]">
                   {t.body}
                 </p>
 

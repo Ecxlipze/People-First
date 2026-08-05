@@ -143,14 +143,14 @@ export default function StoryShowcase() {
             <h2
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="max-xl:!opacity-100 text-[2.2rem] font-extrabold leading-none tracking-tight text-[#1a1a2e] sm:text-[2.5rem]"
+              className="max-xl:!opacity-100 text-[2.2rem] font-extrabold leading-none tracking-tight text-black sm:text-[2.5rem]"
             >
               The Story
             </h2>
             <p
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="max-xl:!opacity-100 mt-3 text-xl font-semibold text-[#1a1a2e] sm:text-2xl"
+              className="max-xl:!opacity-100 mt-3 text-xl font-semibold text-black sm:text-2xl"
             >
               Every Movement Begins with a Question.
             </p>
@@ -161,14 +161,16 @@ export default function StoryShowcase() {
               style={{ opacity: 0, willChange: "transform, opacity" }}
               className="max-xl:!opacity-100 relative mt-8"
             >
-              {/* Quote mark sits OUTSIDE the bubble, overlapping its top-left
-                  corner, as a solid #481456 double-prime — in HOME7.pdf it is
-                  clearly above and left of the blue block rather than inline
-                  beside it (QA: "position & style not same"). Sans-serif and
-                  heavy, not the serif “ glyph used before. */}
+              {/* Quote mark sits OUTSIDE the bubble, above and left of its
+                  top-left corner (QA: "position & style not same"). Measured in
+                  HOME7.pdf: the glyph's ink box is x68–135 / y530–588 (68×59)
+                  while the bubble runs x80.. / y552.., so it starts 12px LEFT of
+                  the bubble edge and 22px ABOVE its top — about a 59px cap on the
+                  1920 frame (~44px at 1440). Colour #481456, confirmed as the
+                  modal glyph pixel. */}
               <span
                 aria-hidden
-                className="absolute -top-5 left-1 select-none font-serif text-[3.5rem] font-bold leading-none tracking-tighter text-[#481456]"
+                className="absolute -left-2 -top-6 select-none font-serif text-[2.75rem] font-bold leading-none tracking-tighter text-[#481456]"
               >
                 &ldquo;
               </span>
@@ -181,7 +183,7 @@ export default function StoryShowcase() {
             <p
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="max-xl:!opacity-100 mt-4 text-sm leading-relaxed text-zinc-700 sm:text-base"
+              className="max-xl:!opacity-100 mt-4 text-sm leading-relaxed text-black sm:text-base"
             >
               After more than 25 years working closely with entrepreneurs,
               students, farmers, and investors across diverse sectors, our
@@ -214,7 +216,7 @@ export default function StoryShowcase() {
                     className="pf-pop h-7 w-7 flex-none text-[#481456] transition-colors duration-[var(--dur-base)] group-hover:text-[#6b2080]"
                     strokeWidth={1.5}
                   />
-                  <p className="text-sm text-zinc-700 sm:text-base">
+                  <p className="text-sm text-black sm:text-base">
                     {plain}{" "}
                     <span className="font-bold text-[#491557]">
                       {strong}
@@ -227,7 +229,7 @@ export default function StoryShowcase() {
             <p
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="max-xl:!opacity-100 mt-6 text-lg text-[#1a1a2e] sm:text-xl"
+              className="max-xl:!opacity-100 mt-6 text-lg text-black sm:text-xl"
             >
               Talent is everywhere, but the{" "}
               <span className="font-bold text-[#491557]">
@@ -240,7 +242,11 @@ export default function StoryShowcase() {
           <div
             data-reveal
             style={{ opacity: 0, willChange: "transform, opacity" }}
-            className="max-xl:!opacity-100 relative mx-auto w-full max-w-[380px] pb-0 sm:pb-32"
+            /* max-w raised 380 → 460px. In HOME7 the photo disc is ~600px of a
+               1920 frame (450px at 1440) and the callout is 75% of it; at 380px
+               the callout came out only 285px, too small for the copy, which then
+               overflowed the circle. */
+            className="max-xl:!opacity-100 relative mx-auto w-full max-w-[460px] pb-0 sm:pb-40"
           >
             {/* circular founder photo */}
             {/* No white ring: scanning down the photo's vertical centre in
@@ -256,30 +262,57 @@ export default function StoryShowcase() {
               />
             </div>
 
-            <div className="relative z-10 -mt-12 flex min-h-[17rem] w-full flex-col items-center justify-center rounded-[2rem] border-[5px] border-[#491557] bg-white px-5 py-6 text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)] sm:absolute sm:bottom-0 sm:left-1/2 sm:mt-0 sm:aspect-square sm:min-h-0 sm:w-[76%] sm:-translate-x-1/2 sm:rounded-full sm:px-8 sm:py-0">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-3">
+            {/* The ring is a GRADIENT, not a flat purple. Tracing the stroke
+                down the circle in HOME7.pdf gives #444776 near the top, #407190
+                at mid-height and #4fa0af at the bottom — purple-navy easing into
+                teal. A flat #491557 border read as a different shape entirely.
+                Rendered with a gradient background + an inset ring so the fill
+                (#f6f6f6 in the design, not pure white) sits inside the stroke.
+                Circle is 450px of the 1920 frame with a ~10px stroke. */}
+            <div className="relative z-10 -mt-12 flex min-h-[17rem] w-full flex-col items-center justify-center rounded-[2rem] bg-[linear-gradient(180deg,#444776_0%,#407190_50%,#4fa0af_100%)] p-[5px] text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)] sm:absolute sm:-bottom-12 sm:left-1/2 sm:mt-0 sm:aspect-square sm:min-h-0 sm:w-[75%] sm:-translate-x-1/2 sm:rounded-full">
+              {/* `overflow-hidden` keeps this a true CIRCLE — without clipping,
+                  the copy pushed the flex box taller than its aspect-square and
+                  it rendered as an OVAL. The design's circle is 450px against the
+                  ~600px photo (75%), which sm:w-[75%] matches; its content starts
+                  ~8% down from the inner edge. */}
+              <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-[calc(2rem-5px)] bg-[#f6f6f6] px-5 py-6 sm:justify-start sm:rounded-full sm:px-[12%] sm:pb-0 sm:pt-[8%]">
+              {/* Logo circle sits FULLY INSIDE the callout, near its top — 130px
+                  of the 450px circle (29%). Cropping the mockup shows it clear of
+                  the ring on all sides; an earlier reading of these coordinates
+                  as "straddling the top edge" was wrong.
+                  Same teal-blue gradient and light-on-dark logo as the Ecosystem
+                  hub; `brightness-0 invert` on the old asset flattened it to a
+                  white silhouette, losing the fan colours and teal "First". */}
+              <span className="flex h-[29%] min-h-14 w-[29%] min-w-14 flex-none items-center justify-center rounded-full bg-[linear-gradient(135deg,#0286a4_0%,#035688_100%)]">
                 <Image
-                  src="/images/peoplefirst.svg"
+                  src="/images/logo-light.webp"
                   alt="People First"
-                  width={48}
-                  height={48}
-                  className="h-full w-full object-contain brightness-0 invert"
+                  width={800}
+                  height={184}
+                  className="w-[84%] object-contain"
                 />
               </span>
-              <h3 className="mt-3 text-base font-bold text-[#491557] sm:text-lg">
+              {/* Inner type is sized to the content budget the design implies:
+                  its three blocks occupy ~205px of a 450px circle (46%), so ours
+                  must fit the same share of a smaller circle. */}
+              <h3 className="mt-3 text-base font-bold leading-tight text-[#491557] sm:mt-2 sm:text-[15px]">
                 was born out of a simple conclusion:
               </h3>
-              <p className="mt-2 text-[13px] font-semibold leading-snug text-zinc-800">
+              <p className="mt-2 text-[13px] font-semibold leading-snug text-black sm:mt-1.5 sm:text-[12px]">
                 People don&apos;t just need isolated education, funding, or jobs
               </p>
-              <p className="mt-2 text-[12px] font-medium leading-snug text-[#00757e]">
+              <p className="mt-2 text-[12px] font-medium leading-snug text-[#00757e] sm:mt-1.5 sm:text-[11px] sm:leading-[1.35]">
                 They need connections, opportunities, mentorship, and a unified
                 platform where they can discover themselves, perform at their
                 highest level, and build meaningful lives.
               </p>
-              <span className="mt-2 select-none text-2xl font-serif font-bold leading-none text-[#00757e]">
-                &rdquo;
+              {/* Closing mark is a LEFT double-quote glyph in the design too (a
+                  ‟ pair, not a ” — its ink box is 35×31 at x1236–1270), teal
+                  #00747d, sitting under the paragraph inside the circle. */}
+              <span className="mt-2 select-none font-serif text-2xl font-bold leading-none text-[#00747d]">
+                &ldquo;
               </span>
+              </div>
             </div>
           </div>
         </div>
