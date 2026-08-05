@@ -27,23 +27,15 @@ export default function RadialNav() {
            IDEAS LAB. Deriving it from the angle reproduces that automatically
            instead of hand-tuning seven offsets, and it keeps working at every
            --nav-r breakpoint. */
-        /* Label inner edges in the mockup sit at ~1.29× the icon radius from the
-           arc origin (measured per item: 1.21–1.34, mean 1.288 — the scatter is
-           hand-placement in Figma, not a rule). The label box is anchored at the
-           icon's centre, so the outset needed is that ratio minus 1. */
-        const labelOut = 0.29;
-        const labelX = (Math.sin(rad) * labelOut).toFixed(4);
-        const labelY = (-Math.cos(rad) * labelOut).toFixed(4);
-
-        /* Anchor + self-centring are folded into one `translate` below, because
-           mixing Tailwind's -translate-* utilities with an inline `translate`
-           would have the two fight over the same property. */
+        /* Removed the complex labelOut calculation because it pushed labels far too 
+           away from the icons. Instead, we use absolute positioning anchored outside 
+           the link container. */
         const labelPlacement =
           item.side === "center"
-            ? { anchor: "left-1/2 bottom-full", self: "-50%, 0%" }
+            ? { anchor: "left-1/2 bottom-full mb-2", self: "-50%, 0%" }
             : item.side === "left"
-              ? { anchor: "right-0 top-1/2 text-right", self: "0%, -50%" }
-              : { anchor: "left-0 top-1/2 text-left", self: "0%, -50%" };
+              ? { anchor: "right-full top-1/2 mr-3 text-right", self: "0%, -50%" }
+              : { anchor: "left-full top-1/2 ml-3 text-left", self: "0%, -50%" };
 
         return (
           <Link
@@ -77,10 +69,7 @@ export default function RadialNav() {
                 `w-max` lets it size to its own content instead. */}
             <span
               style={{
-                /* Self-centring offset first, then the radial outset along this
-                   item's own angle (see labelOut). The left/right anchor pins
-                   the label's inner edge, so text grows away from the arc. */
-                transform: `translate(${labelPlacement.self}) translate(calc(${labelX} * var(--nav-r)), calc(${labelY} * var(--nav-r)))`,
+                transform: `translate(${labelPlacement.self})`,
               }}
               className={`absolute hidden w-max whitespace-nowrap text-[0.9375rem] font-light uppercase tracking-[0.06em] text-zinc-300/90 transition-colors group-hover:text-white lg:block ${labelPlacement.anchor}`}
             >

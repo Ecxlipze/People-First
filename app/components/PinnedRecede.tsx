@@ -123,9 +123,17 @@ export default function PinnedRecede({
         const enter = flowOnly
           ? clamp01((vh * 1.05 - r.top) / (vh * 0.55))
           : clamp01((vh - r.top) / (vh * 0.38));
-        const exit = flowOnly
-          ? clamp01((vh * 1.02 - r.bottom) / (vh * 0.55))
-          : clamp01((vh * 0.68 - r.bottom) / (vh * 0.48));
+          
+        // On mobile/tablet where sections don't fully overlap (no pin), disable the 
+        // exit animation to prevent gaps from forming before the next section arrives.
+        const shouldExit = needsFullOverlapCompensation() || flowOnly;
+        
+        const exit = shouldExit
+          ? flowOnly
+            ? clamp01((vh * 1.02 - r.bottom) / (vh * 0.55))
+            : clamp01((vh * 0.68 - r.bottom) / (vh * 0.48))
+          : 0;
+          
         const enterEase = enter * enter * (3 - 2 * enter);
         const exitEase = exit * exit * (3 - 2 * exit);
         const opacity = flowOnly

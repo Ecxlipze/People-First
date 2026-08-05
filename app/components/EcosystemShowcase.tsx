@@ -105,16 +105,24 @@ function OrbitNode({ s }: { s: Sector }) {
       data-node
       className="group absolute -translate-x-1/2 -translate-y-1/2"
       style={{
-        left: `calc(50% + ${x.toFixed(4)} * var(--orbit-r))`,
-        top: `calc(50% + ${y.toFixed(4)} * var(--orbit-r))`,
+        /* Each node carries its own radius multiplier — see the `r` note in
+           ecosystem.ts. The design's ring runs 138–187px around a 130px hub, so
+           a single shared radius flattens a deliberately uneven arrangement. */
+        left: `calc(50% + ${(x * s.r).toFixed(4)} * var(--orbit-r))`,
+        top: `calc(50% + ${(y * s.r).toFixed(4)} * var(--orbit-r))`,
         opacity: 0,
         willChange: "transform, opacity",
       }}
     >
       <div className="relative flex items-center justify-center">
+        {/* Node is 82px against the hub's 130px in the design — a 0.63 ratio.
+            Diagonal gradient (light top-left → dark bottom-right), not a flat
+            fill: every node in HOME6.pdf is shaded that way. */}
         <span
           className="pf-pop flex h-16 w-16 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-8px_rgba(20,20,50,0.5)] 2xl:h-[4.75rem] 2xl:w-[4.75rem]"
-          style={{ backgroundColor: s.color }}
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${s.from} 0%, ${s.to} 100%)`,
+          }}
         >
           <SectorIcon
             sector={s}
@@ -123,16 +131,19 @@ function OrbitNode({ s }: { s: Sector }) {
           />
         </span>
 
+        {/* Label sizes from the design's boxes: AGRICULTURE 35.2pt and its
+            tagline 22.8pt on the 1920 frame → ~19px and ~13px at 1440, where
+            these were 14px/12px. Taglines are BLACK in HOME6, not zinc-500. */}
         <div
-          className={`absolute w-32 min-[1400px]:w-40 2xl:w-44 ${placement}`}
+          className={`absolute w-32 min-[1400px]:w-40 2xl:w-48 ${placement}`}
         >
           <p
-            className="text-sm font-bold leading-tight"
+            className="text-[17px] font-bold leading-tight 2xl:text-[19px]"
             style={{ color: s.color }}
           >
             {s.label}
           </p>
-          <p className="mt-0.5 text-xs leading-tight text-zinc-500">
+          <p className="mt-0.5 text-[12px] leading-snug text-black 2xl:text-[13px]">
             {s.tagline}
           </p>
         </div>
@@ -268,17 +279,29 @@ export default function EcosystemShowcase() {
             <h2
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="text-2xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-3xl lg:text-[2.4rem] lg:leading-[1.1]"
+              /* Pure BLACK in the design, not zinc-900 — the modal glyph pixel
+                 across all three heading lines in HOME6.pdf is #000000. Same for
+                 the body copy and both callout paragraphs below, which were
+                 zinc-600. The heading spans x 80→836 over lines at y 389/459/529,
+                 i.e. 70pt leading, so ~46px type at a 1440 viewport. */
+              className="text-2xl leading-tight tracking-tight text-black sm:text-3xl lg:text-[2.375rem] lg:leading-[1.38]"
             >
-              Welcome to a Compounding Corporate{" "}
-              <span className="text-[#3581a6]">Ecosystem</span> Built Around
-              You.
+              <span className="font-semibold">Welcome to a</span>
+              <br />
+              <span className="font-extrabold">Compounding Corporate</span>
+              <br />
+              {/* "Ecosystem" is a GRADIENT in the design (#3979a5 → #406aa4),
+                  not the flat #3581a6 used here before. */}
+              <span className="bg-[linear-gradient(90deg,#3979a5_0%,#406aa4_100%)] bg-clip-text font-extrabold text-transparent">
+                Ecosystem
+              </span>{" "}
+              <span className="font-extrabold">Built Around You.</span>
             </h2>
 
             <p
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mt-4 text-sm leading-relaxed text-zinc-600 sm:text-base"
+              className="mt-4 text-sm leading-relaxed text-black sm:text-base"
             >
               We bring together essential sectors into one collaborative
               ecosystem, working in synergy to create lasting impact, shared
@@ -291,20 +314,37 @@ export default function EcosystemShowcase() {
               style={{ opacity: 0, willChange: "transform, opacity" }}
               className="mt-6 flex items-start gap-3.5"
             >
-              <span className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[radial-gradient(circle,#e7edf7_0%,#d7e2f2_100%)] p-2">
+              {/* 90px circle in the design (measured by component detection),
+                  filled #548fae — was 48px and a lighter #8eaabf. The logo sits
+                  INSIDE it at full colour, so no invert/brightness filter. */}
+              {/* 90px circle in the design (component detection), filled
+                  #548fae — was 48px and a lighter #8eaabf.
+                  The logo is the LIGHT-ON-DARK variant: in HOME6 "People" is
+                  white and "First" teal, over the multicoloured fan. Neither
+                  peoplefirst.svg (the tall landing artwork) nor logo.svg (navy
+                  "People") reads on this fill — the navy text disappeared into
+                  the blue entirely. logo-light.webp is logo.svg's own bitmap with
+                  just the navy wordmark recoloured white, so the fan and "First"
+                  keep their brand colours. As in the design it overflows the
+                  circle's width rather than being padded inside it. */}
+              <span className="relative flex h-16 w-16 flex-none items-center justify-center rounded-full bg-[#548fae] shadow-sm sm:h-[68px] sm:w-[68px]">
                 <Image
-                  src="/images/peoplefirst.svg"
+                  src="/images/logo-light.webp"
                   alt="People First"
-                  width={44}
-                  height={44}
-                  className="h-full w-full object-contain"
+                  width={800}
+                  height={184}
+                  className="w-[85%] object-contain"
                 />
               </span>
               <div>
-                <h3 className="text-lg font-bold text-[#2f8ea7]">
+                {/* "People First" and "No more struggling alone." share a 61.5pt
+                    box in the design — 0.70 of the h2's 87.9pt, so ~26px against
+                    the heading's 38px. Both are teal GRADIENTS
+                    (#367fa6 → #2a9aa8), not the flat #2f8ea7 used before. */}
+                <h3 className="bg-[linear-gradient(90deg,#367fa6_0%,#2a9aa8_100%)] bg-clip-text text-xl font-bold text-transparent sm:text-[1.625rem]">
                   People First
                 </h3>
-                <p className="mt-0.5 text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                <p className="mt-1 text-sm leading-relaxed text-black">
                   We don&apos;t just build companies; we build a self-sustaining
                   infrastructure where every sector accelerates the next.
                 </p>
@@ -315,12 +355,13 @@ export default function EcosystemShowcase() {
             <div
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="mt-6 border-l-2 border-[#2f7d78] pl-4"
+              /* Rule colour sampled at the bar's own pixels: #2d4d76. */
+              className="mt-8 border-l-4 border-[#2d4d76] pl-5"
             >
-              <h3 className="text-xl font-bold text-[#23aaa9] sm:text-2xl">
+              <h3 className="bg-[linear-gradient(90deg,#367fa6_0%,#2a9aa8_100%)] bg-clip-text text-xl font-bold text-transparent sm:text-[1.625rem]">
                 No more struggling alone.
               </h3>
-              <p className="mt-1 text-xs leading-relaxed text-zinc-600 sm:text-sm">
+              <p className="mt-1.5 text-sm leading-relaxed text-black sm:text-[1.0625rem]">
                 Grow, scale, and thrive with a system designed to uplift you.
               </p>
             </div>
@@ -334,24 +375,34 @@ export default function EcosystemShowcase() {
             {/* faint ring */}
             <span
               aria-hidden
-              className="animate-orbit-slow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-zinc-200"
+              className="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-zinc-200"
               style={{
                 width: "calc(var(--orbit-r) * 2)",
                 height: "calc(var(--orbit-r) * 2)",
               }}
             />
             {/* hub */}
+            {/* Hub fill sampled from HOME6.pdf: a teal-blue diagonal gradient,
+                #0286a4 at the top-left through #035688 at the bottom-right —
+                where this was a much darker navy (#1f6ea8 → #0f3d66).
+                Sized against the nodes at the design's ratio: hub 130px to node
+                82px = 0.63, so 64px nodes want a ~102px hub (h-24 ≈ 96, h-28 at
+                2xl) rather than the 112–128px used before, which made the ring
+                read as crowding a too-large centre. */}
             <div
               data-hub
-              className="animate-ring-pulse absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-6 shadow-[0_18px_40px_-14px_rgba(15,61,102,0.7)] xl:h-32 xl:w-32"
+              className="animate-ring-pulse absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[linear-gradient(135deg,#0286a4_0%,#035688_100%)] shadow-[0_18px_40px_-14px_rgba(3,86,136,0.7)] 2xl:h-28 2xl:w-28"
               style={{ opacity: 0, willChange: "transform, opacity" }}
             >
+              {/* Same light-on-dark logo as the callout. `brightness-0 invert`
+                  on the old asset produced a flat white silhouette, losing the
+                  fan's colours and the teal "First" that the design keeps. */}
               <Image
-                src="/images/peoplefirst.svg"
+                src="/images/logo-light.webp"
                 alt="People First"
-                width={96}
-                height={96}
-                className="h-full w-full object-contain brightness-0 invert"
+                width={800}
+                height={184}
+                className="w-[86%] object-contain"
               />
             </div>
             {/* orbiting sector nodes */}
@@ -364,22 +415,23 @@ export default function EcosystemShowcase() {
           <ul className="flex flex-col gap-4 xl:hidden">
             {SECTORS.map((s) => (
               <li key={s.label} className="group flex items-start gap-3 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1">
+                {/* Same diagonal gradient as the desktop orbit nodes. */}
                 <span
-                  className="pf-pop flex h-11 w-11 flex-none items-center justify-center rounded-full text-white"
-                  style={{ backgroundColor: s.color }}
+                  className="pf-pop flex h-12 w-12 flex-none items-center justify-center rounded-full text-white"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, ${s.from} 0%, ${s.to} 100%)`,
+                  }}
                 >
-                  <SectorIcon sector={s} sizes="20px" className="h-5 w-5" />
+                  <SectorIcon sector={s} sizes="24px" className="h-6 w-6" />
                 </span>
                 <div>
                   <p
-                    className="text-sm font-bold leading-tight"
+                    className="text-[15px] font-bold leading-tight"
                     style={{ color: s.color }}
                   >
                     {s.label}
                   </p>
-                  <p className="text-xs leading-tight text-zinc-500">
-                    {s.tagline}
-                  </p>
+                  <p className="text-xs leading-snug text-black">{s.tagline}</p>
                 </div>
               </li>
             ))}

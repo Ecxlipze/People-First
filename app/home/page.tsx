@@ -21,8 +21,8 @@ export default function HomePage() {
           Pinned to the top so the next section slides up and overlaps it.
           The tall track gives the sticky hero room to pin while FeaturedWork
           swipes up over it by one viewport at every responsive size. */}
-        <div className="relative h-[200svh] md:h-[200vh]">
-          <section className="sticky top-0 h-[100svh] overflow-hidden bg-[linear-gradient(135deg,#e6ebfb_0%,#f1eefb_38%,#f6f3fc_70%,#f7f5fd_100%)] md:h-screen">
+        <div className="relative max-md:h-auto md:h-[200vh]">
+          <section className="max-md:relative md:sticky md:top-0 h-[100svh] overflow-hidden bg-[linear-gradient(135deg,#e6ebfb_0%,#f1eefb_38%,#f6f3fc_70%,#f7f5fd_100%)] md:h-screen">
             {/* Soft cyan glow, hugging the LEFT EDGE at mid-height.
 
                 QA #8 called this out as a "green half shadow in left center
@@ -34,7 +34,7 @@ export default function HomePage() {
                 off-canvas, which is what makes it read as a "half shadow". */}
             <div
               aria-hidden
-              className="animate-glow-pulse pointer-events-none absolute -left-[300px] top-1/2 h-[620px] w-[620px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(148,214,232,0.55)_0%,rgba(148,214,232,0)_70%)]"
+              className="animate-glow-pulse pointer-events-none absolute -left-[400px] top-1/2 h-[1200px] w-[1200px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(148,214,232,0.6)_0%,rgba(148,214,232,0)_65%)]"
             />
 
             {/* Decorative pattern band (crystals + journey lines). Pushed lower
@@ -49,7 +49,7 @@ export default function HomePage() {
               width={1923}
               height={462}
               priority
-              className="animate-fade-in-up pointer-events-none absolute left-0 right-0 top-[58%] w-full select-none sm:top-[45%]"
+              className="animate-fade-in-up pointer-events-none absolute left-0 right-0 top-[65%] w-full select-none sm:top-[55%] xl:top-[60%]"
             />
 
             {/* logo, top-left (links back to landing) */}

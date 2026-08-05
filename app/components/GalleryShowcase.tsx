@@ -70,13 +70,16 @@ export default function GalleryShowcase() {
       <PinnedRecede className="flex flex-col items-center justify-center py-10 sm:py-14">
         {/* heading */}
         <Reveal y={28} scale={0.98}>
-          {/* HOME4.pdf renders this as "Our Gallery" in mixed case (not caps),
-              with "Gallery" in #150065 — the same deep indigo as the button. */}
-          {/* Smaller than the other section headings: HOME4.pdf gives this a
-              23.5pt box on a 1920 frame (~18px at 1440), where the site had
-              text-4xl/36px — QA's "fontsize should be decreased". */}
-          <h2 className="text-center text-xl font-extrabold tracking-tight text-zinc-900 sm:text-2xl">
-            Our <span className="text-[#150065]">Gallery</span>
+          {/* CAPS is correct, though the PDF text layer disagrees: it stores
+              "Our Gallery" mixed-case while the frame RENDERS "OUR GALLERY",
+              i.e. the design applies a text-transform. Reading the text layer
+              alone gets this backwards.
+              "OUR" is pure black and "GALLERY" #150065 — the same deep indigo as
+              the button fill. Size stays small per QA ("fontsize should be
+              decreased"): the box is 23.5pt on the 1920 frame → ~18px at 1440,
+              against the text-4xl/36px originally here. */}
+          <h2 className="text-center text-xl font-extrabold tracking-tight text-black sm:text-2xl">
+            OUR <span className="text-[#150065]">GALLERY</span>
           </h2>
         </Reveal>
 
@@ -104,8 +107,11 @@ export default function GalleryShowcase() {
           className="relative mt-6 w-full touch-pan-y select-none outline-none sm:mt-8 lg:pr-24"
           style={{ perspective: "1600px" }}
         >
-          {/* stage — the peeking neighbours are positioned relative to centre */}
-          <div className="relative mx-auto flex h-[clamp(280px,44vh,460px)] w-full max-w-5xl items-center justify-center">
+          {/* stage — the peeking neighbours are positioned relative to centre.
+              The design's centre photo is 399×675 on the 1920 frame, i.e. a
+              PORTRAIT 0.59 aspect (≈300×506 at a 1440 viewport), so the stage
+              height and slide width are sized to land near that ratio. */}
+          <div className="relative mx-auto flex h-[clamp(300px,52vh,506px)] w-full max-w-5xl items-center justify-center">
             {GALLERY.map((photo, i) => {
               // signed distance from the active slide, wrapped to the short way
               // round the ring so slide 0 and slide n-1 are neighbours.
@@ -123,24 +129,24 @@ export default function GalleryShowcase() {
                   aria-current={isActive}
                   onClick={() => !isActive && to(i)}
                   tabIndex={isActive ? 0 : -1}
-                  className="absolute h-full w-[62%] overflow-hidden rounded-2xl shadow-[0_30px_70px_-30px_rgba(40,40,80,0.6)] transition-[transform,opacity,filter] duration-500 ease-out sm:w-[46%] lg:w-[38%]"
+                  className="absolute h-full w-[62%] overflow-hidden bg-[#f0f0f0] transition-[transform,opacity] duration-500 ease-out sm:w-[46%] lg:w-[28%]"
                   style={{
-                    // each step out shifts less than the previous, so distant
-                    // slides bunch toward the edges — an endless-stream look.
+                    // Flat horizontal layout with gaps. No overlapping (except during transition).
+                    // Center is offset=0 -> translateX(0)
+                    // Left is offset=-1 -> translateX(-110%)
+                    // Right is offset=1 -> translateX(110%)
+                    /* Neighbour scale 0.76, measured off HOME4.pdf: the centre
+                       photo is 675px tall and its neighbours 512px (512/675 =
+                       0.759), where this used 0.85 and read as too uniform.
+                       The 105% pitch is already right — centre sits at x=930 and
+                       its neighbour at x=510, a 420px step against the centre
+                       photo's 399px width. */
                     transform: `translateX(${
-                      Math.sign(offset) * (abs === 0 ? 0 : 55 + (abs - 1) * 26)
-                    }%) scale(${isActive ? 1 : Math.max(0.62, 0.84 - (abs - 1) * 0.1)})`,
-                    opacity:
-                      abs > 3
-                        ? 0
-                        : isActive
-                          ? 1
-                          : Math.max(0.2, 0.6 - (abs - 1) * 0.2),
-                    filter: isActive
-                      ? "none"
-                      : `brightness(${0.9 - (abs - 1) * 0.08})`,
-                    zIndex: 20 - abs,
-                    pointerEvents: abs > 3 ? "none" : "auto",
+                      Math.sign(offset) * (abs === 0 ? 0 : 105 + (abs - 1) * 105)
+                    }%) scale(${isActive ? 1 : 0.76})`,
+                    opacity: abs > 1 ? 0 : 1,
+                    zIndex: isActive ? 20 : 10 - abs,
+                    pointerEvents: abs > 1 ? "none" : "auto",
                     cursor: isActive ? "default" : "pointer",
                   }}
                 >

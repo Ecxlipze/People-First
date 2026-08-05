@@ -168,7 +168,7 @@ export default function StoryShowcase() {
                   heavy, not the serif “ glyph used before. */}
               <span
                 aria-hidden
-                className="absolute -top-5 left-1 select-none text-[2.5rem] font-black leading-none tracking-tighter text-[#481456]"
+                className="absolute -top-5 left-1 select-none font-serif text-[3.5rem] font-bold leading-none tracking-tighter text-[#481456]"
               >
                 &ldquo;
               </span>
@@ -216,7 +216,7 @@ export default function StoryShowcase() {
                   />
                   <p className="text-sm text-zinc-700 sm:text-base">
                     {plain}{" "}
-                    <span className="text-base font-bold text-[#491557] sm:text-xl">
+                    <span className="font-bold text-[#491557]">
                       {strong}
                     </span>
                   </p>
@@ -256,11 +256,7 @@ export default function StoryShowcase() {
               />
             </div>
 
-            {/* overlapping conclusion callout circle */}
-            {/* Ring is #425e84 (slate blue) and ~5px, sampled by stepping out
-                from the white disc's edge in HOME7.pdf — it was a 3px purple
-                #4b2f8c here (QA: "border not same as in design"). */}
-            <div className="relative z-10 -mt-12 flex min-h-[17rem] w-full flex-col items-center justify-center rounded-[2rem] border-[5px] border-[#425e84] bg-white px-5 py-6 text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)] sm:absolute sm:bottom-0 sm:left-1/2 sm:mt-0 sm:aspect-square sm:min-h-0 sm:w-[76%] sm:-translate-x-1/2 sm:rounded-full sm:px-8 sm:py-0">
+            <div className="relative z-10 -mt-12 flex min-h-[17rem] w-full flex-col items-center justify-center rounded-[2rem] border-[5px] border-[#491557] bg-white px-5 py-6 text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)] sm:absolute sm:bottom-0 sm:left-1/2 sm:mt-0 sm:aspect-square sm:min-h-0 sm:w-[76%] sm:-translate-x-1/2 sm:rounded-full sm:px-8 sm:py-0">
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-3">
                 <Image
                   src="/images/peoplefirst.svg"

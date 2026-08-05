@@ -9,25 +9,31 @@ export function MediaFrame({
   alt = "",
   caption,
   className = "",
+  aspect = "aspect-[0.7/1]",
   sizes = "(max-width: 767px) calc(100vw - 3rem), (max-width: 1279px) 45vw, 520px",
 }: {
   src?: string;
   alt?: string;
   caption?: React.ReactNode;
   className?: string;
+  aspect?: string;
   sizes?: string;
 }) {
   return (
     /* `group` so the play button and image can respond to a hover anywhere on
        the frame, which is a much larger target than the button alone. */
-    /* Geometry from home2.pdf: the placed photos are 1736×1704 — aspect 1.019,
-       i.e. essentially SQUARE, not the 4:3 used here before (QA: "img width and
-       height needs changes and aspect ratio is not same as in design").
-       Corners are square too: probing the frame edges in the mockup finds the
-       photo running straight into its own corner with no rounding, so the
-       rounded-xl is dropped (QA: "no border-radius in design"). */
+    /* Geometry measured off the home2.pdf render, NOT off the embedded bitmap
+       dimensions — the 1736×1704 source JPEGs are cropped by their placement
+       box, so their own aspect says nothing about the rendered frame. Scanning
+       for the sharp photo edges in the 1920pt render gives:
+         podcast frame  x 956–1351, y 325–891 → 395×566, aspect 0.698
+         tech-events    x 397–781,  y 1180–1660 → 384×480, aspect 0.800
+       So the frames are PORTRAIT and the two differ — hence the `aspect` prop
+       rather than one shared ratio. Corners stay square: probing the edges
+       finds the photo running straight into its corner with no rounding
+       (QA: "no border-radius in design"). */
     <div
-      className={`group relative aspect-[1.02/1] w-full overflow-hidden bg-[linear-gradient(135deg,#3a3f52_0%,#242838_100%)] shadow-xl ring-1 ring-black/5 ${className}`}
+      className={`group relative ${aspect} w-full overflow-hidden bg-[linear-gradient(135deg,#3a3f52_0%,#242838_100%)] shadow-xl ring-1 ring-black/5 ${className}`}
     >
       {src ? (
         /* SmartImage fades the photo up once decoded (and shimmers until then)
@@ -79,17 +85,29 @@ export function StatCard({
   className?: string;
 }) {
   return (
+    /* Card 1 in the home2.pdf render spans x 755–1016, y 684–890 → 262×207 on
+       the 1920pt frame, i.e. ~196×155 at a 1440 viewport. Both cards sample to
+       #60aaaa (card 2 only looks purple where the pink bloom passes over it).
+       Unlike the photo frames these ARE rounded, cutting in over ~12px.
+
+       Type size here must be derived from LINE SPACING, not from the reported
+       glyph boxes. pdftotext gives the three body lines boxes of 37.8pt each,
+       but their yMins are only 25pt apart (773.4 / 798.4 / 824.4) — the boxes
+       overlap by 12.8pt because each is the font's full em box, not the visual
+       size. 25pt of leading → ~18–19pt type → ~14px at 1440, i.e. text-sm.
+       Likewise "27%" reports 77.2pt but four lines share a 207pt-tall card, so
+       it lands near 42px, not the 58px the raw box implies. */
     <div
-      className={`w-40 rounded-lg bg-[#60aaaa] p-4 text-white shadow-xl sm:w-44 sm:p-5 ${className}`}
+      className={`w-[168px] rounded-xl bg-[#60aaaa] p-4 text-white shadow-xl sm:w-[196px] ${className}`}
     >
       {/* The figure counts up the first time the card scrolls into view.
           CountUp renders the finished string on the server, so the value is
           correct before hydration and for reduced-motion users. */}
       <CountUp
         value={value}
-        className="block text-2xl font-extrabold sm:text-3xl"
+        className="block text-3xl font-extrabold leading-none sm:text-[2.6rem]"
       />
-      <p className="mt-1 text-sm font-semibold leading-tight">{children}</p>
+      <p className="mt-2 text-sm font-bold leading-snug">{children}</p>
     </div>
   );
 }

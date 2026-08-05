@@ -6,8 +6,12 @@ import ContactTrigger from "@/app/contact/ContactTrigger";
 
 export default function Landing() {
   return (
-    <div className="relative flex min-h-svh flex-col overflow-hidden bg-[radial-gradient(ellipse_at_center_top,#2a2a30_0%,#141417_45%,#0b0b0d_100%)]">
-      <main className="relative flex flex-1 flex-col items-center justify-center px-4">
+    <div className="relative flex min-h-svh flex-col overflow-hidden bg-[#0b0b0d]">
+      <div 
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 bg-[url('/images/bg-landing.png')] bg-cover bg-center bg-no-repeat opacity-80 mix-blend-screen"
+      />
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4">
         <RadialNav />
 
         {/* Logo block. The radial nav's HOME icon sits one nav-radius directly

@@ -20,7 +20,14 @@ export default function VenturesShowcase() {
     <div className="relative z-20 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
       <PinnedRecede
         pinTallContent
-        className="relative flex flex-col items-center justify-center py-10 sm:py-14 lg:py-16 xl:min-h-[73.385vw] xl:justify-start xl:py-0"
+        /* xl min-height was 73.385vw — the FULL height of the HOME3.pdf frame
+           (1409 of 1920). But the design's frame includes 358pt of empty space
+           below the last card row, because that is simply where the next Figma
+           frame started; measured on the built page it left 284px (26.8% of the
+           section) of dead whitespace under the cards. Trimming to 58vw keeps
+           the heading and both card rows at their measured positions
+           (cards end at 54.74vw) with a normal bottom margin instead. */
+        className="relative flex flex-col items-center justify-center py-10 sm:py-14 lg:py-16 xl:min-h-[58vw] xl:justify-start xl:py-0"
       >
         {/* decorative paper-plane pairs, flanking the heading in the top corners
             (matches the mockup). Purely aesthetic. */}
@@ -67,7 +74,17 @@ export default function VenturesShowcase() {
           /* lg uses flex-wrap + justify-center rather than a 5-col grid so the
              second row of four centres under the first row of five, as in
              HOME3.pdf. A grid would left-align the orphan row. */
-          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-3.5 px-6 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.167vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.52vw] xl:max-w-none xl:gap-[2.604vw] xl:px-0 xl:pr-0"
+          /* xl track uses the design's EXACT proportions, measured off the
+             HOME3.pdf render on its 1920pt frame:
+               card 248 → 12.917vw    gap 52 → 2.708vw
+               row block 1448 → 75.417vw, left margin 81 → 4.219vw
+             5×12.917 + 4×2.708 = 75.417vw, i.e. the row fits the track exactly.
+             The previous 13.02vw card against a 75.52vw track summed to 1087.43
+             inside 1087.49 — about 0.06px of slack, so sub-pixel rounding forced
+             a flex-wrap and the five-card row broke into uneven rows with white
+             channels between them. Giving the track a hair more room than the
+             cards need (75.6 vs 75.417) keeps the 5/4 split stable. */
+          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-3.5 px-6 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.219vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.6vw] xl:max-w-none xl:gap-[2.708vw] xl:px-0 xl:pr-0"
           step={55}
         >
           {/* Wrapper carries an explicit basis at lg because the container is
@@ -76,16 +93,21 @@ export default function VenturesShowcase() {
           {VENTURES.map((v) => (
             <div
               key={v.name}
-              className="lg:w-[calc((100%-4*1rem)/5)] lg:shrink-0 xl:h-[12.135vw] xl:w-[13.02vw]"
+              /* 12.917 × 12.031vw = the design's 248 × 231 card (aspect 1.074). */
+              className="lg:w-[calc((100%-4*1rem)/5)] lg:shrink-0 xl:h-[12.031vw] xl:w-[12.917vw]"
             >
             <a
               href={v.href}
               style={{ borderColor: v.accent }}
-              /* Flat #9d89ac fill sampled from HOME3.pdf (was a two-stop
-                 gradient), and a 2px accent border — the design's card outlines
-                 are clearly visible, where a hairline read as no border at all
-                 (QA: "borders color of this card is not matching with design"). */
-              className="group relative flex h-full flex-col overflow-hidden rounded-2xl border-2 bg-[#9d89ac] p-4 shadow-[0_10px_30px_-12px_rgba(80,80,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-14px_rgba(80,80,120,0.35)] xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
+              /* Flat #9b86a8 fill — the modal pixel inside a card body in the
+                 HOME3.pdf render (was a two-stop gradient) — and a 2px accent
+                 border, since the design's outlines are clearly visible where a
+                 hairline read as no border at all (QA: "borders color of this
+                 card is not matching with design").
+                 Corner radius measured off the render: the fill reaches the card
+                 edge by dy=12 at the top-left, i.e. r≈12px on a 248px-wide card
+                 (~4.8%), which is rounded-xl rather than rounded-2xl. */
+              className="group relative flex h-full flex-col overflow-hidden rounded-xl border-2 bg-[#9b86a8] p-4 shadow-[0_10px_30px_-12px_rgba(80,80,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-14px_rgba(80,80,120,0.35)] xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
             >
               {/* Logo box — real logo once the file exists, else an empty plate.
                   #e9e9e9, sampled from HOME3.pdf: the grey plate IS in the
@@ -93,10 +115,13 @@ export default function VenturesShowcase() {
                   QA's "in design, grey bg is not present" does not hold once the
                   frame renders — it only looked absent because pdftocairo drops
                   most of that page. */}
-              <div
-                className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-[#e9e9e9] px-3 sm:h-20 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[0.5vw]"
-                style={{ boxShadow: `inset 0 0 0 1px ${v.accent}` }}
-              >
+              {/* The plate's own hairline is a faint VIOLET in the design
+                  (#9c95e2 / #c8b2eb at its edges), constant across all nine
+                  cards — not a tint of the card's accent colour, which is what
+                  an inset ring of `v.accent` was drawing here. Plate height
+                  checks out at 28% of the card (65px of 231px in the render),
+                  which the xl track already matches. */}
+              <div className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-[#e9e9e9] px-3 ring-1 ring-[#9c95e2]/60 sm:h-20 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[0.5vw]">
                 {v.logo && v.hasLogo ? (
                   <Image
                     src={v.logo}

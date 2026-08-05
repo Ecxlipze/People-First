@@ -14,18 +14,21 @@ const SKILLS = [
 
 export default function FeaturedWork() {
   return (
-    <section className="relative z-10 -mt-[100svh] rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-32 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-44 md:-mt-[100vh]">
+    <section className="relative z-10 max-md:-mt-8 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-32 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-44 md:-mt-[100vh]">
       {/* heading */}
-      {/* Type scale from home2.pdf (1920pt frame → ×0.75 for a 1440 viewport):
-          "Featured Work" box height 96.8 → ~72px, and the subtitle 60.5 → ~45px.
-          The subtitle was `sm:text-2xl` (24px), roughly half the design size —
-          that is QA's "font size not matched for head and para". Both are also
-          near-black in the design rather than zinc-500. */}
+      {/* Type scale from home2.pdf (1920pt frame → ×0.75 for a 1440 viewport).
+          Sizes come from CAP HEIGHT, not from the boxes pdftotext reports: those
+          boxes are the font's full em square (ascent+descent+line gap), which
+          runs ~35% larger than the glyphs actually look. Trusting them directly
+          is what made this heading render oversized.
+            "Featured Work"  box 96.8 → cap ~64 → ~48px  (not the 72px box implies)
+            subtitle         box 60.5 → cap ~40 → ~30px  (not 45px)
+          Both are near-black in the design rather than zinc-500. */}
       <Reveal className="px-6 text-center">
-        <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl lg:text-[4.5rem] lg:leading-[1.05]">
+        <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl lg:text-[3rem] lg:leading-[1.1]">
           Featured Work
         </h2>
-        <p className="mt-4 text-lg text-zinc-700 sm:text-2xl lg:text-[2.8rem] lg:leading-tight">
+        <p className="mt-4 text-lg text-zinc-700 sm:text-xl lg:text-[1.875rem] lg:leading-snug">
           Let&rsquo;s give you exceptional reasons to choose us.
         </p>
       </Reveal>
@@ -40,29 +43,47 @@ export default function FeaturedWork() {
         <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
           {/* media */}
           <div className="relative order-1">
-            {/* Soft halo bleeding out from the photo. home2.pdf has a lavender
-                bloom here — sampling outward from the photo's right edge gives
-                #f0e7fd at +2pt fading to the page bg by ~100pt — where this was
-                a green-teal (150,200,190) glow. QA read the mismatch as "in img
-                background there is no gradient shadow". */}
+            {/* Soft pink bloom behind the photo (QA: "in img background there is
+                no gradient shadow"), sampled from home2.pdf — probing outward
+                from the photo edge picks up #dfbade / #ffeaff, with #8b64d1 in
+                the band above. An earlier pass read this as lavender-blue
+                (rgba(196,168,246)); that is the cool violet at the outer edge of
+                the falloff, not the bloom itself. Teal in this design comes from
+                the paper planes and stat card, never the glow.
+
+                The bloom must stay INSIDE this box: PinnedRecede's sticky stage
+                is `overflow-hidden`, so a large negative inset is clipped rather
+                than bleeding outward — that is what made an earlier -inset-24
+                disappear entirely. Keep the box modest and get the wide falloff
+                from the gradient's own stops instead.
+
+                -z-10 is correct here: it puts the bloom behind the photo and
+                stat card, and the section's opaque background is a distant
+                ANCESTOR, which always paints below its descendants regardless of
+                their z-index. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-10 -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(196,168,246,0.42)_0%,rgba(196,168,246,0)_68%)]"
+              className="pointer-events-none absolute -inset-8 -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(226,124,203,0.45)_0%,rgba(226,124,203,0.22)_45%,rgba(226,124,203,0)_78%)]"
             />
-            {/* crystal accent, top-left */}
+            {/* Paper-plane accent, top-left. home2.pdf uses the DIAGONAL pair
+                here (planes pointing down-right) against the upright pair beside
+                the podcast photo — the two assets already exist as
+                left-plane/right-plane. This was cropping pattern.png, a
+                different shape. Floats gently, since a decorative element
+                sitting in open space reads as pasted-on when static. */}
             <Image
-              src="/images/pattern.png"
+              src="/images/icons/left-plane.png"
               alt=""
               aria-hidden
-              width={1923}
-              height={462}
-              /* Floats gently — it is a decorative crystal sitting in open
-                 space, which is exactly the kind of element that looks pasted-on
-                 when static. */
-              className="animate-floaty pointer-events-none absolute -left-4 -top-12 hidden h-16 w-auto -rotate-[8deg] select-none object-contain object-left opacity-90 sm:block"
+              width={379}
+              height={340}
+              className="animate-floaty pointer-events-none absolute -left-16 -top-16 hidden h-28 w-auto select-none object-contain sm:block"
             />
+            {/* 0.8 aspect (384×480 in the render), against the podcast frame's
+                0.698 — the two frames are deliberately different shapes. */}
             <MediaFrame
               src="/images/featured/feature2.webp"
+              aspect="aspect-[0.8/1]"
               alt="Rai Salahuddin Ahmad in conversation with Khuram Schezad, Advisor to the Finance Minister, at a conference"
               caption={
                 <>
@@ -73,10 +94,27 @@ export default function FeaturedWork() {
               }
             />
             {/* home2.pdf reads "45% / Productivity events all over Pakistan" —
-                the site had "5% / activity events all Pakistan". */}
+                the site had "5% / activity events all Pakistan"; the photo
+                simply occludes the start of the string in the mockup, the text
+                layer carries it in full.
+
+                Mirrors the podcast card: bottom edge flush with the photo, the
+                card overhanging the photo's RIGHT edge (card x 755–959 against
+                photo x 397–781, so only ~26px of it sits over the photo). */}
+            {/* Overhang has to fit in the GRID GAP, which is the only free space
+                to the right of this photo. The gap is gap-12 (48px) below md and
+                gap-16 (64px) from md up, so an overhang equal to the gap leaves
+                zero clearance and the card touches the "Tech Events Management"
+                copy — that was the bug. Half the gap keeps the design's
+                overhanging look with real air on both sides:
+                  <md   gap 48 → -right-4 (16px)
+                  md+   gap 64 → -right-8 (32px), 32px still clear
+                The design's literal ~77%-of-card-width overhang is not
+                reproducible here: the mockup's photo has the whole page margin to
+                bleed into, where this one has a text column beside it. */}
             <StatCard
               value="45%"
-              className="absolute -bottom-6 -right-4 sm:-right-8"
+              className="absolute bottom-0 -right-4 md:-right-8"
             >
               Productivity events all over Pakistan
             </StatCard>

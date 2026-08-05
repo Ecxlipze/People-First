@@ -187,17 +187,31 @@ export default function MediaShowcase() {
 
           {/* media — scales through the pin */}
           <div className="relative order-1 md:order-2">
+            {/* The bloom in home2.pdf spreads far past the frame — it is still
+                tinting the page a few hundred px out — and it is centred on the
+                photo rather than offset to 70%/60%. The rounded-[2rem] did
+                nothing on a radial gradient.
+
+                The bloom must stay INSIDE this box: the sticky stage above is
+                `overflow-hidden`, so a large negative inset is clipped rather
+                than bleeding outward — an earlier -inset-24 vanished for exactly
+                that reason. Wide falloff comes from the gradient stops instead. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-[radial-gradient(circle_at_70%_60%,rgba(226,124,203,0.45)_0%,rgba(226,124,203,0)_65%)]"
+              className="pointer-events-none absolute -inset-8 -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(226,124,203,0.45)_0%,rgba(226,124,203,0.22)_45%,rgba(226,124,203,0)_78%)]"
             />
+            {/* The design's accent here is the upright teal/blue paper-plane
+                pair, which already exists as its own asset — this was cropping
+                the left edge of pattern.png (the crystal band) instead, which is
+                a different shape entirely. In home2.pdf the pair sits just off
+                the photo's top-right corner, upright and unrotated. */}
             <Image
-              src="/images/pattern.png"
+              src="/images/icons/right-plane.png"
               alt=""
               aria-hidden
-              width={1923}
-              height={462}
-              className="pointer-events-none absolute -right-4 -top-10 hidden h-16 w-auto rotate-[8deg] select-none object-contain object-left opacity-90 sm:block"
+              width={272}
+              height={228}
+              className="animate-floaty pointer-events-none absolute -right-10 -top-12 hidden h-24 w-auto select-none object-contain sm:block"
             />
             <div ref={mediaRef} style={{ willChange: "transform" }}>
               <MediaFrame
@@ -205,9 +219,21 @@ export default function MediaShowcase() {
                 alt="A man working on a laptop during a late-evening podcast recording session"
               />
             </div>
+            {/* In home2.pdf the card's BOTTOM edge is flush with the photo's
+                (890 vs 891 on the 1920 frame) and it overhangs sideways instead:
+                card x 755–1016 against photo x 956–1351, so ~77% of its width
+                sits outside the photo's left edge. We had it hanging off the
+                bottom-left corner, which reads as a different composition. */}
+            {/* Overhang must fit the GRID GAP (gap-12 below md, gap-16 above),
+                the only free space left of this photo. An overhang equal to the
+                gap leaves zero clearance and the card touches the copy in the
+                other column, so use half: -left-4 (16px) below md, -left-8
+                (32px) from md up. The design's literal ~77% overhang isn't
+                reproducible — the mockup's photo bleeds into a page margin,
+                this one has a text column beside it. */}
             <div
               ref={statRef}
-              className="absolute -bottom-6 -left-4 sm:-left-8"
+              className="absolute bottom-0 -left-4 md:-left-8"
               style={{ opacity: 0, willChange: "transform, opacity" }}
             >
               <StatCard value="27%">

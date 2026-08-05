@@ -2,11 +2,20 @@
    `logo` points at the artwork supplied in the homepage mockup. Cards without
    artwork retain the mockup's clean logo placeholder.
    Each venture carries an accent colour used for the card ring + button border.
-   These are sampled per-card from HOME3.pdf — note Merchanity is TEAL (#508088)
-   and Abaad.pk VIOLET (#6c5eb9), where both were previously the same blue; QA
-   flagged Merchanity specifically ("borders color of this card is not matching
-   with design"). HOME3 only rasterises via `pdftoppm` (the splash backend);
-   pdftocairo drops eight of the nine cards on that file. */
+   QA flagged these ("borders color of this card is not matching with design").
+
+   Sampled from the HOME3.pdf render, which only rasterises via `pdftoppm` (the
+   splash backend) — pdftocairo drops eight of the nine cards on this file.
+   There are exactly THREE border colours across the nine cards, not nine:
+     #2c8e85  teal     — Merchanity, Kissan Veer
+     #a00017  crimson  — Insights, SME & Consumer, Health care, Technology,
+                         Renewable Energy, Knowledge
+     #2e21b6  indigo   — Abaad.pk
+   An earlier pass recorded nine slightly different values (#b63a4c, #ad5770,
+   #a76986, #ab5d77 …). Those were ANTIALIASED EDGE pixels — the border blending
+   into the card fill or page background — not the stroke colour. Taking the
+   modal non-fill/non-background pixel around each card's whole perimeter gives
+   the three true values above. */
 export type Venture = {
   name: string;
   tagline: string;
@@ -26,7 +35,7 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/merchanity.webp",
     hasLogo: true,
     href: "https://merchanity.com",
-    accent: "#508088",
+    accent: "#2c8e85",
   },
   {
     name: "Insights by people first",
@@ -34,25 +43,25 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/insights.webp",
     hasLogo: true,
     href: "https://insights.peoplefirst.com",
-    accent: "#b63a4c",
+    accent: "#a00017",
   },
   {
     name: "SME & Consumer",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#b63a4c",
+    accent: "#a00017",
   },
   {
     name: "Health care",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#ad5770",
+    accent: "#a00017",
   },
   {
     name: "Technology",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#b63a4c",
+    accent: "#a00017",
   },
   {
     name: "Abaad.pk",
@@ -60,7 +69,7 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/abaad.webp",
     hasLogo: true,
     href: "https://abaad.pk",
-    accent: "#6c5eb9",
+    accent: "#2e21b6",
   },
   {
     name: "Kissan Veer",
@@ -68,18 +77,18 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/kissan-veer.webp",
     hasLogo: true,
     href: "https://kissanveer.com",
-    accent: "#638392",
+    accent: "#2c8e85",
   },
   {
     name: "Renewable Energy",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#a76986",
+    accent: "#a00017",
   },
   {
     name: "Knowledge",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#ab5d77",
+    accent: "#a00017",
   },
 ];
