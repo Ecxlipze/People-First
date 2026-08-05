@@ -1,8 +1,12 @@
 /* Venture cards for the "core, joint, affiliated & genesis ventures" section.
    `logo` points at the artwork supplied in the homepage mockup. Cards without
    artwork retain the mockup's clean logo placeholder.
-   Each venture carries an accent colour used for the card ring + button border,
-   matching the design (blue / teal / pink-red groupings). */
+   Each venture carries an accent colour used for the card ring + button border.
+   These are sampled per-card from HOME3.pdf — note Merchanity is TEAL (#508088)
+   and Abaad.pk VIOLET (#6c5eb9), where both were previously the same blue; QA
+   flagged Merchanity specifically ("borders color of this card is not matching
+   with design"). HOME3 only rasterises via `pdftoppm` (the splash backend);
+   pdftocairo drops eight of the nine cards on that file. */
 export type Venture = {
   name: string;
   tagline: string;
@@ -22,7 +26,7 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/merchanity.webp",
     hasLogo: true,
     href: "https://merchanity.com",
-    accent: "#4f6ef7",
+    accent: "#508088",
   },
   {
     name: "Insights by people first",
@@ -30,25 +34,25 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/insights.webp",
     hasLogo: true,
     href: "https://insights.peoplefirst.com",
-    accent: "#e0325a",
+    accent: "#b63a4c",
   },
   {
     name: "SME & Consumer",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#e0325a",
+    accent: "#b63a4c",
   },
   {
     name: "Health care",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#e0325a",
+    accent: "#ad5770",
   },
   {
     name: "Technology",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#e0325a",
+    accent: "#b63a4c",
   },
   {
     name: "Abaad.pk",
@@ -56,7 +60,7 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/abaad.webp",
     hasLogo: true,
     href: "https://abaad.pk",
-    accent: "#4f6ef7",
+    accent: "#6c5eb9",
   },
   {
     name: "Kissan Veer",
@@ -64,18 +68,18 @@ export const VENTURES: Venture[] = [
     logo: "/images/home/ventures/kissan-veer.webp",
     hasLogo: true,
     href: "https://kissanveer.com",
-    accent: "#5a9e95",
+    accent: "#638392",
   },
   {
     name: "Renewable Energy",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#e0325a",
+    accent: "#a76986",
   },
   {
     name: "Knowledge",
     tagline: "Media & IT Intelligence Plateform",
     href: "#",
-    accent: "#e0325a",
+    accent: "#ab5d77",
   },
 ];

@@ -156,14 +156,14 @@ export default function SiteFooter({
                 <div className="flex flex-col gap-3.5 sm:flex-row">
                   <ContactTrigger
                     href="/contact"
-                    className="pf-interactive flex-1 whitespace-nowrap rounded-lg bg-[#dfd3ef] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
+                    className="pf-interactive flex-1 whitespace-nowrap rounded-md bg-[#dcd4e1] px-5 py-3 text-center text-[0.95rem] font-medium text-[#3f2a6b] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
                   >
                     Book a Consultation
                   </ContactTrigger>
                   <ContactTrigger
                     href="/training"
                     role="Student"
-                    className="pf-interactive flex-1 whitespace-nowrap rounded-lg border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white hover:-translate-y-0.5 hover:bg-white/10"
+                    className="pf-interactive flex-1 whitespace-nowrap rounded-md border border-white/50 px-5 py-3 text-center text-[0.95rem] font-medium text-white hover:-translate-y-0.5 hover:bg-white/10"
                   >
                     Join a Training Program
                   </ContactTrigger>
@@ -171,7 +171,7 @@ export default function SiteFooter({
                 <ContactTrigger
                   href="/partner"
                   role="Training Partner"
-                  className="pf-interactive w-full rounded-lg bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-[#1a1a2e] hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
+                  className="pf-interactive w-full rounded-md bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-[#1a1a2e] hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
                 >
                   Partner With Us
                 </ContactTrigger>
@@ -186,8 +186,11 @@ export default function SiteFooter({
           scale={0.985}
           className="mt-14 grid grid-cols-1 gap-12 sm:mt-16 lg:grid-cols-[1fr_1.1fr]"
         >
-          {/* logo + socials */}
-          <div className="lg:pl-6">
+          {/* logo + socials — centred within its column on lg+, matching the
+              design (QA Footer: "present in center in design"). No `pl-*` here:
+              a left pad would offset the block from the column's true centre,
+              which is what left it 227px/203px off-centre before. */}
+          <div className="lg:flex lg:flex-col lg:items-center lg:justify-center">
             <Link href="/" aria-label="People First — home">
               <Image
                 src="/images/logo.svg"
@@ -213,19 +216,21 @@ export default function SiteFooter({
             </div>
           </div>
 
-          {/* link columns, preceded by a vertical divider on lg+ */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3 lg:gap-x-16 lg:border-l lg:border-zinc-200 lg:pl-14">
+          {/* Link columns, preceded by a vertical divider on lg+. Values from
+              Footer.pdf: the divider is a near-black hairline (not zinc-200),
+              headings are pure black, links #3c3c3c, and there is a wide gap
+              between the rule and the "Pages" column — QA asked for both the
+              divider colour/weight and more left padding on the right links. */}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3 lg:gap-x-16 lg:border-l lg:border-[#1a1a1a] lg:pl-20">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <h3 className="text-xl font-bold text-[#1a1a2e]">
-                  {col.title}
-                </h3>
+                <h3 className="text-xl font-bold text-black">{col.title}</h3>
                 <ul className="mt-6 flex flex-col gap-[1.1rem]">
                   {col.links.map((l) => (
                     <li key={l.label}>
                       <Link
                         href={l.href}
-                        className="pf-interactive inline-flex min-h-11 items-center rounded-sm text-[1.0625rem] text-zinc-600 hover:translate-x-0.5 hover:text-[#5a1f9e]"
+                        className="pf-interactive inline-flex min-h-11 items-center rounded-sm text-[1.0625rem] text-[#3c3c3c] hover:translate-x-0.5 hover:text-[#491557]"
                       >
                         {l.label}
                       </Link>

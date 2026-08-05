@@ -115,7 +115,37 @@ export function Reveal({
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+
+    /* Same safety net as <Stagger> — see the long comment there. If the element
+       is already on screen once layout has settled but the observer hasn't
+       fired (pinned/absolute ancestors can put its box outside the trigger
+       geometry), reveal it rather than leave it invisible. */
+    const sweep = () => {
+      if (el.dataset.revealed === "true") return;
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) return;
+      const vh = window.innerHeight || 0;
+      const vw = window.innerWidth || 0;
+      if (r.top < vh && r.bottom > 0 && r.left < vw && r.right > 0) {
+        revealElement(el);
+        observer.disconnect();
+      }
+    };
+
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(sweep);
+    });
+    window.addEventListener("resize", sweep, { passive: true });
+    window.addEventListener("orientationchange", sweep, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      window.removeEventListener("resize", sweep);
+      window.removeEventListener("orientationchange", sweep);
+    };
   }, [y, scale]);
 
   return (
@@ -239,7 +269,53 @@ export function Stagger({
     );
 
     items.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+
+    /* Safety net for staged-but-never-revealed items.
+
+       Some callers place this grid inside a pinned/sticky section and switch it
+       to `position: absolute` at a breakpoint (see VenturesShowcase's
+       `xl:absolute`). When that happens the item's box can sit where the
+       negative `rootMargin` bottom inset is never crossed, so the observer
+       never fires and the card stays at `opacity: 0` — permanently invisible.
+       Any later relayout (notably opening DevTools, which resizes the viewport)
+       would flush the callback and make it appear, which is exactly the
+       "images only show up after Inspect" symptom.
+
+       Rather than reach for fragile geometry assumptions, re-test each pending
+       item against the real viewport and reveal anything already on screen.
+       Runs once after layout settles, and again on resize/orientation change. */
+    const sweep = () => {
+      const vh = window.innerHeight || 0;
+      const vw = window.innerWidth || 0;
+      for (const el of items) {
+        if (el.dataset.revealed === "true") continue;
+        const r = el.getBoundingClientRect();
+        // Skip genuinely zero-area boxes (display:none at this breakpoint).
+        if (r.width === 0 && r.height === 0) continue;
+        const onScreen =
+          r.top < vh && r.bottom > 0 && r.left < vw && r.right > 0;
+        if (onScreen) {
+          revealElement(el);
+          observer.unobserve(el);
+        }
+      }
+    };
+
+    // Two frames: let the pinned/absolute layout settle before measuring.
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(sweep);
+    });
+    window.addEventListener("resize", sweep, { passive: true });
+    window.addEventListener("orientationchange", sweep, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      window.removeEventListener("resize", sweep);
+      window.removeEventListener("orientationchange", sweep);
+    };
   }, [y, step, selector]);
 
   return (

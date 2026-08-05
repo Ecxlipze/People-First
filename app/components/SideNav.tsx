@@ -233,7 +233,12 @@ export default function SideNav() {
                    icons arriving at once. Keyed on `open` (below) so it replays
                    each time the drawer opens. On lg+ the rail is always present,
                    so there is nothing to animate — hence lg:animate-none. */
-                className="group flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none"
+                /* gap-5 on lg: HOME1.pdf puts the label text ending at x=1704
+                   with the icon centred near x=1812 on a 1920 frame, i.e. a
+                   clear ~40pt gap between chip and icon rather than the tight
+                   gap-3 (QA footer note: "padding issues.. also check the other
+                   icons as well"). */
+                className="group flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none lg:gap-5"
                 style={{ animationDelay: `${i * 45}ms`, animationDuration: "420ms" }}
               >
               {/* Label chip. Light, brand-tinted surface instead of a heavy

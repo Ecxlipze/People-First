@@ -91,13 +91,19 @@ export default function TestimonialsShowcase() {
         {/* masonry grid — 1→2→3→4 columns; break-inside-avoid keeps cards whole.
             The cards are the direct children of this column container, so the
             default ":scope > *" selector targets them without a data attribute. */}
+        {/* Column geometry from HOME5.pdf: 4 columns on a 1920 frame with a
+            412.5pt pitch (cards ~355pt wide, ~57pt gutters), first column
+            starting at x=185. That is a wider grid than the old max-w-6xl, and
+            the gap is larger than the previous gap-4 — QA #10 ("cards sizes
+            doesn't match with design"). */}
         <Stagger
-          className="mx-auto mt-6 w-full max-w-6xl gap-4 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-4 lg:pr-32"
+          className="mx-auto mt-6 w-full max-w-[1500px] gap-4 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 sm:gap-[3.5%] lg:columns-4 lg:pr-32"
           step={45}
         >
           {TESTIMONIALS.map((t, i) => (
             <div key={t.name} className="mb-4 break-inside-avoid">
-              <article className="pf-card group flex flex-col rounded-2xl border border-black/[0.06] bg-white p-4 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]">
+              {/* rounded-xl (12px), down from rounded-2xl (16px) — QA #16. */}
+              <article className="pf-card group flex flex-col rounded-xl border border-black/[0.06] bg-white p-4 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]">
                 {/* header: avatar + name/handle + twitter icon */}
                 <div className="flex items-start gap-2.5">
                   <Avatar t={t} i={i} />
@@ -105,20 +111,23 @@ export default function TestimonialsShowcase() {
                     <p className="truncate text-xs font-semibold text-zinc-900 sm:text-sm">
                       {t.name}
                     </p>
-                    <p className="truncate text-[11px] text-zinc-400">
+                    {/* handle #52525b and body #27272a, sampled from HOME5.pdf
+                        (QA #13: "@username color not match"). */}
+                    <p className="truncate text-[11px] text-[#52525b]">
                       {t.handle}
                     </p>
                   </div>
-                  <TwitterBird className="pf-pop h-4 w-4 flex-none text-[#1da1f2]" />
+                  <TwitterBird className="pf-pop h-4 w-4 flex-none text-[#1da9ee]" />
                 </div>
 
                 {/* body */}
-                <p className="mt-3 text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                <p className="mt-3 text-xs leading-relaxed text-[#27272a] sm:text-sm">
                   {t.body}
                 </p>
 
-                {/* tags */}
-                <p className="mt-2.5 flex flex-wrap gap-x-2 text-xs font-medium text-[#1da1f2]">
+                {/* tags — #0ea5e9 in the design, and a tighter top gap than the
+                    body copy above (QA #14: hashtags sat too far below). */}
+                <p className="mt-1.5 flex flex-wrap gap-x-2 text-xs font-medium text-[#0ea5e9]">
                   {t.tags.map((tag) => (
                     <span key={tag}>#{tag}</span>
                   ))}

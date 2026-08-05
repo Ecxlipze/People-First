@@ -70,8 +70,13 @@ export default function GalleryShowcase() {
       <PinnedRecede className="flex flex-col items-center justify-center py-10 sm:py-14">
         {/* heading */}
         <Reveal y={28} scale={0.98}>
-          <h2 className="text-center text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl">
-            OUR <span className="text-[#4b2fb3]">GALLERY</span>
+          {/* HOME4.pdf renders this as "Our Gallery" in mixed case (not caps),
+              with "Gallery" in #150065 — the same deep indigo as the button. */}
+          {/* Smaller than the other section headings: HOME4.pdf gives this a
+              23.5pt box on a 1920 frame (~18px at 1440), where the site had
+              text-4xl/36px — QA's "fontsize should be decreased". */}
+          <h2 className="text-center text-xl font-extrabold tracking-tight text-zinc-900 sm:text-2xl">
+            Our <span className="text-[#150065]">Gallery</span>
           </h2>
         </Reveal>
 
@@ -194,7 +199,9 @@ export default function GalleryShowcase() {
         {/* CTA */}
         <Link
           href="/gallery"
-          className="pf-interactive mt-6 inline-flex min-h-11 items-center rounded-md bg-[#2e1a86] px-8 py-2.5 text-sm font-medium text-white shadow-[0_10px_30px_-10px_rgba(46,26,134,0.7)] hover:-translate-y-0.5 hover:bg-[#241569] hover:shadow-[0_14px_34px_-10px_rgba(46,26,134,0.8)] sm:text-base"
+          /* Button fill #150065, sampled from HOME4.pdf. `mt-10` (was mt-6)
+             gives the bottom margin QA asked for under the carousel. */
+          className="pf-interactive mt-10 inline-flex min-h-11 items-center rounded-md bg-[#150065] px-8 py-2.5 text-sm font-medium text-white shadow-[0_10px_30px_-10px_rgba(21,0,101,0.7)] hover:-translate-y-0.5 hover:bg-[#0f0049] hover:shadow-[0_14px_34px_-10px_rgba(21,0,101,0.8)] sm:text-base"
         >
           View our Gallery
         </Link>

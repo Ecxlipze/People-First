@@ -20,8 +20,14 @@ export function MediaFrame({
   return (
     /* `group` so the play button and image can respond to a hover anywhere on
        the frame, which is a much larger target than the button alone. */
+    /* Geometry from home2.pdf: the placed photos are 1736×1704 — aspect 1.019,
+       i.e. essentially SQUARE, not the 4:3 used here before (QA: "img width and
+       height needs changes and aspect ratio is not same as in design").
+       Corners are square too: probing the frame edges in the mockup finds the
+       photo running straight into its own corner with no rounding, so the
+       rounded-xl is dropped (QA: "no border-radius in design"). */
     <div
-      className={`group relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[linear-gradient(135deg,#3a3f52_0%,#242838_100%)] shadow-xl ring-1 ring-black/5 ${className}`}
+      className={`group relative aspect-[1.02/1] w-full overflow-hidden bg-[linear-gradient(135deg,#3a3f52_0%,#242838_100%)] shadow-xl ring-1 ring-black/5 ${className}`}
     >
       {src ? (
         /* SmartImage fades the photo up once decoded (and shimmers until then)
@@ -74,7 +80,7 @@ export function StatCard({
 }) {
   return (
     <div
-      className={`w-40 rounded-lg bg-[#5a9e95] p-4 text-white shadow-xl sm:w-44 sm:p-5 ${className}`}
+      className={`w-40 rounded-lg bg-[#60aaaa] p-4 text-white shadow-xl sm:w-44 sm:p-5 ${className}`}
     >
       {/* The figure counts up the first time the card scrolls into view.
           CountUp renders the finished string on the server, so the value is

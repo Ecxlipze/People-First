@@ -159,12 +159,20 @@ export default function StoryShowcase() {
             <div
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
-              className="max-xl:!opacity-100 mt-4 flex gap-2"
+              className="max-xl:!opacity-100 relative mt-8"
             >
-              <span className="mt-1 select-none font-serif text-4xl font-bold leading-none text-[#4b2f8c]">
+              {/* Quote mark sits OUTSIDE the bubble, overlapping its top-left
+                  corner, as a solid #481456 double-prime — in HOME7.pdf it is
+                  clearly above and left of the blue block rather than inline
+                  beside it (QA: "position & style not same"). Sans-serif and
+                  heavy, not the serif “ glyph used before. */}
+              <span
+                aria-hidden
+                className="absolute -top-5 left-1 select-none text-[2.5rem] font-black leading-none tracking-tighter text-[#481456]"
+              >
                 &ldquo;
               </span>
-              <p className="rounded-xl rounded-tl-none bg-[#e8effc] px-5 py-3 text-base font-normal leading-snug text-[#5b6ee0] sm:text-lg">
+              <p className="rounded-xl bg-[#d8eefe] px-5 py-3.5 text-base font-normal leading-snug text-[#491557] sm:text-lg">
                 Why do so many talented people fail, even when they have passion
                 and good intentions?
               </p>
@@ -180,13 +188,16 @@ export default function StoryShowcase() {
               founder, Rai Salahuddin Ahmad, realized that regardless of the
               industry, individuals consistently confront the same fundamental
               challenge:{" "}
-              <span className="font-bold text-[#5a1f9e]">
+              <span className="font-bold text-[#491557]">
                 People are struggling alone.
               </span>
             </p>
 
-            {/* the three gaps — bare thin-line icons (no circle), strong text
-                is the SAME size as the plain text, just bold + purple. */}
+            {/* The three gaps — bare thin-line icons (no circle). In HOME7.pdf
+                the icon strokes sample as #481456 (the same purple as the quote
+                mark), NOT the dark navy used here before, and the bold accent
+                phrase is noticeably LARGER than the sentence it sits in rather
+                than the same size (QA: "text color and icons not same"). */}
             <ul className="mt-5 flex flex-col gap-4">
               {GAPS.map(({ icon: GapIcon, plain, strong }) => (
                 /* `group` only — no hover transform on the <li> itself: it
@@ -200,12 +211,14 @@ export default function StoryShowcase() {
                   className="group max-xl:!opacity-100 flex items-center gap-3"
                 >
                   <GapIcon
-                    className="pf-pop h-6 w-6 flex-none text-[#2a2a4a] transition-colors duration-[var(--dur-base)] group-hover:text-[#5a1f9e]"
+                    className="pf-pop h-7 w-7 flex-none text-[#481456] transition-colors duration-[var(--dur-base)] group-hover:text-[#6b2080]"
                     strokeWidth={1.5}
                   />
-                  <p className="text-sm text-zinc-600 sm:text-base">
+                  <p className="text-sm text-zinc-700 sm:text-base">
                     {plain}{" "}
-                    <span className="font-bold text-[#5a1f9e]">{strong}</span>
+                    <span className="text-base font-bold text-[#491557] sm:text-xl">
+                      {strong}
+                    </span>
                   </p>
                 </li>
               ))}
@@ -217,7 +230,7 @@ export default function StoryShowcase() {
               className="max-xl:!opacity-100 mt-6 text-lg text-[#1a1a2e] sm:text-xl"
             >
               Talent is everywhere, but the{" "}
-              <span className="font-bold text-[#5a1f9e]">
+              <span className="font-bold text-[#491557]">
                 ecosystem to sustain it is missing.
               </span>
             </p>
@@ -230,7 +243,10 @@ export default function StoryShowcase() {
             className="max-xl:!opacity-100 relative mx-auto w-full max-w-[380px] pb-0 sm:pb-32"
           >
             {/* circular founder photo */}
-            <div className="relative aspect-square w-full overflow-hidden rounded-full shadow-[0_24px_60px_-20px_rgba(20,40,80,0.5)] ring-4 ring-white">
+            {/* No white ring: scanning down the photo's vertical centre in
+                HOME7.pdf goes straight from page background into sky pixels
+                with no intervening stroke (QA: "border not present in design"). */}
+            <div className="relative aspect-square w-full overflow-hidden rounded-full shadow-[0_24px_60px_-20px_rgba(20,40,80,0.5)]">
               <Image
                 src="/images/story/founder-cliff.webp"
                 alt="A person in a suit standing on a cliff edge, looking out over a mountain valley at sunrise"
@@ -241,7 +257,10 @@ export default function StoryShowcase() {
             </div>
 
             {/* overlapping conclusion callout circle */}
-            <div className="relative z-10 -mt-12 flex min-h-[17rem] w-full flex-col items-center justify-center rounded-[2rem] border-[3px] border-[#4b2f8c] bg-white px-5 py-6 text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)] sm:absolute sm:bottom-0 sm:left-1/2 sm:mt-0 sm:aspect-square sm:min-h-0 sm:w-[76%] sm:-translate-x-1/2 sm:rounded-full sm:px-8 sm:py-0">
+            {/* Ring is #425e84 (slate blue) and ~5px, sampled by stepping out
+                from the white disc's edge in HOME7.pdf — it was a 3px purple
+                #4b2f8c here (QA: "border not same as in design"). */}
+            <div className="relative z-10 -mt-12 flex min-h-[17rem] w-full flex-col items-center justify-center rounded-[2rem] border-[5px] border-[#425e84] bg-white px-5 py-6 text-center shadow-[0_18px_44px_-16px_rgba(30,20,80,0.4)] sm:absolute sm:bottom-0 sm:left-1/2 sm:mt-0 sm:aspect-square sm:min-h-0 sm:w-[76%] sm:-translate-x-1/2 sm:rounded-full sm:px-8 sm:py-0">
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#1f6ea8_0%,#0f3d66_100%)] p-3">
                 <Image
                   src="/images/peoplefirst.svg"
@@ -251,18 +270,18 @@ export default function StoryShowcase() {
                   className="h-full w-full object-contain brightness-0 invert"
                 />
               </span>
-              <h3 className="mt-3 text-base font-bold text-[#5a1f9e] sm:text-lg">
+              <h3 className="mt-3 text-base font-bold text-[#491557] sm:text-lg">
                 was born out of a simple conclusion:
               </h3>
               <p className="mt-2 text-[13px] font-semibold leading-snug text-zinc-800">
                 People don&apos;t just need isolated education, funding, or jobs
               </p>
-              <p className="mt-2 text-[12px] font-medium leading-snug text-[#2f7d78]">
+              <p className="mt-2 text-[12px] font-medium leading-snug text-[#00757e]">
                 They need connections, opportunities, mentorship, and a unified
                 platform where they can discover themselves, perform at their
                 highest level, and build meaningful lives.
               </p>
-              <span className="mt-2 select-none text-2xl font-serif font-bold leading-none text-[#2f7d78]">
+              <span className="mt-2 select-none text-2xl font-serif font-bold leading-none text-[#00757e]">
                 &rdquo;
               </span>
             </div>

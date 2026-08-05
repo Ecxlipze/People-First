@@ -16,11 +16,16 @@ export default function FeaturedWork() {
   return (
     <section className="relative z-10 -mt-[100svh] rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-32 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-44 md:-mt-[100vh]">
       {/* heading */}
+      {/* Type scale from home2.pdf (1920pt frame → ×0.75 for a 1440 viewport):
+          "Featured Work" box height 96.8 → ~72px, and the subtitle 60.5 → ~45px.
+          The subtitle was `sm:text-2xl` (24px), roughly half the design size —
+          that is QA's "font size not matched for head and para". Both are also
+          near-black in the design rather than zinc-500. */}
       <Reveal className="px-6 text-center">
-        <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">
+        <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl lg:text-[4.5rem] lg:leading-[1.05]">
           Featured Work
         </h2>
-        <p className="mt-3 text-lg text-zinc-500 sm:text-2xl">
+        <p className="mt-4 text-lg text-zinc-700 sm:text-2xl lg:text-[2.8rem] lg:leading-tight">
           Let&rsquo;s give you exceptional reasons to choose us.
         </p>
       </Reveal>
@@ -35,9 +40,14 @@ export default function FeaturedWork() {
         <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
           {/* media */}
           <div className="relative order-1">
+            {/* Soft halo bleeding out from the photo. home2.pdf has a lavender
+                bloom here — sampling outward from the photo's right edge gives
+                #f0e7fd at +2pt fading to the page bg by ~100pt — where this was
+                a green-teal (150,200,190) glow. QA read the mismatch as "in img
+                background there is no gradient shadow". */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-[radial-gradient(circle_at_40%_50%,rgba(150,200,190,0.5)_0%,rgba(150,200,190,0)_65%)]"
+              className="pointer-events-none absolute -inset-10 -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(196,168,246,0.42)_0%,rgba(196,168,246,0)_68%)]"
             />
             {/* crystal accent, top-left */}
             <Image
@@ -62,17 +72,19 @@ export default function FeaturedWork() {
                 </>
               }
             />
+            {/* home2.pdf reads "45% / Productivity events all over Pakistan" —
+                the site had "5% / activity events all Pakistan". */}
             <StatCard
-              value="5%"
+              value="45%"
               className="absolute -bottom-6 -right-4 sm:-right-8"
             >
-              activity events all Pakistan
+              Productivity events all over Pakistan
             </StatCard>
           </div>
 
           {/* text */}
           <div className="order-2">
-            <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-4xl">
+            <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-4xl lg:text-[3.4rem] lg:leading-[1.1]">
               Tech Events Management&nbsp;.
             </h3>
             <p className="mt-5 max-w-md text-base leading-relaxed text-zinc-500">
@@ -84,7 +96,7 @@ export default function FeaturedWork() {
                   treatment the About page's Key Stats already use. */}
               <CountUp
                 value="30%"
-                className="text-4xl font-extrabold text-[#e0325a] sm:text-5xl"
+                className="text-4xl font-extrabold text-[#d73042] sm:text-5xl"
               />
               <span className="text-sm font-medium leading-tight text-zinc-500">
                 management skills

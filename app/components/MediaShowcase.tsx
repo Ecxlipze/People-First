@@ -163,18 +163,21 @@ export default function MediaShowcase() {
             className="order-2 md:order-1"
             style={{ opacity: 0, willChange: "transform, opacity" }}
           >
-            <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-4xl">
+            <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-4xl lg:text-[3.4rem] lg:leading-[1.1]">
               Podcast: market strategy
             </h3>
             <p className="mt-5 max-w-md text-base leading-relaxed text-zinc-500">
               We are strategy consultants who work with startup strategies and
               help promote and sell your products, including helping marketing.
             </p>
+            {/* #d73042 to match home2 (the other stats already use it), and
+                `leading-relaxed` on the label — QA asked for more line-height
+                between "Increased" and "Performance Rate". */}
             <div className="mt-8 flex items-center gap-4">
-              <span className="text-4xl font-extrabold text-[#e0325a] sm:text-5xl">
+              <span className="text-4xl font-extrabold text-[#d73042] sm:text-5xl">
                 80%
               </span>
-              <span className="text-sm font-medium leading-tight text-zinc-500">
+              <span className="text-sm font-medium leading-relaxed text-zinc-500">
                 Increased
                 <br />
                 Performance Rate

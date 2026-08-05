@@ -252,7 +252,13 @@ export default function EcosystemShowcase() {
     <div className="relative z-50 -mt-8 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]">
       <PinnedRecede
         overlapFrom="xl"
-        className="relative flex items-center py-10 sm:py-12 md:min-h-screen"
+        /* Extra top padding: in HOME6.pdf the "Welcome to a Compounding…"
+           heading starts at y≈390 of a 1409-tall frame (~28% down), leaving room
+           for the flanking crystal art above it. With py-10/12 the crystals sat
+           tight against the section's top edge — QA #17 ("needs spacing/margin
+           at top, because the images placed at both ends should be at above
+           position"). */
+        className="relative flex items-center pb-10 pt-24 sm:pb-12 sm:pt-32 md:min-h-screen lg:pt-40"
       >
         {/* decorative layer — pinned+receding with the content */}
         <Decor />
@@ -265,7 +271,7 @@ export default function EcosystemShowcase() {
               className="text-2xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-3xl lg:text-[2.4rem] lg:leading-[1.1]"
             >
               Welcome to a Compounding Corporate{" "}
-              <span className="text-[#3a6ea5]">Ecosystem</span> Built Around
+              <span className="text-[#3581a6]">Ecosystem</span> Built Around
               You.
             </h2>
 
@@ -295,7 +301,7 @@ export default function EcosystemShowcase() {
                 />
               </span>
               <div>
-                <h3 className="text-lg font-bold text-[#3a6ea5]">
+                <h3 className="text-lg font-bold text-[#2f8ea7]">
                   People First
                 </h3>
                 <p className="mt-0.5 text-xs leading-relaxed text-zinc-600 sm:text-sm">
@@ -311,7 +317,7 @@ export default function EcosystemShowcase() {
               style={{ opacity: 0, willChange: "transform, opacity" }}
               className="mt-6 border-l-2 border-[#2f7d78] pl-4"
             >
-              <h3 className="text-xl font-bold text-[#2f7d78] sm:text-2xl">
+              <h3 className="text-xl font-bold text-[#23aaa9] sm:text-2xl">
                 No more struggling alone.
               </h3>
               <p className="mt-1 text-xs leading-relaxed text-zinc-600 sm:text-sm">

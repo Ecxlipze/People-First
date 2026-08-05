@@ -61,22 +61,40 @@ export default function VenturesShowcase() {
             keeping them on separate elements stops the two from colliding. The
             wrapper carries the xl sizing so the flex layout is unchanged. */}
         <Stagger
-          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-3.5 px-6 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 lg:pr-32 xl:absolute xl:left-[4.167vw] xl:top-[26.927vw] xl:mt-0 xl:flex xl:w-[75.52vw] xl:max-w-none xl:flex-wrap xl:justify-center xl:gap-x-[2.604vw] xl:gap-y-[3.646vw] xl:px-0 xl:pr-0"
+          /* Gaps are equal on both axes at every breakpoint (QA CardsSection:
+             "horizontal & vertical gap should be equal") — the xl track
+             previously used 2.604vw across and 3.646vw down. */
+          /* lg uses flex-wrap + justify-center rather than a 5-col grid so the
+             second row of four centres under the first row of five, as in
+             HOME3.pdf. A grid would left-align the orphan row. */
+          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-3.5 px-6 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.167vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.52vw] xl:max-w-none xl:gap-[2.604vw] xl:px-0 xl:pr-0"
           step={55}
         >
+          {/* Wrapper carries an explicit basis at lg because the container is
+              flex there (see the justify-center note above): five per row once
+              the four 1rem gaps are subtracted. */}
           {VENTURES.map((v) => (
             <div
               key={v.name}
-              className="xl:h-[12.135vw] xl:w-[13.02vw] xl:shrink-0"
+              className="lg:w-[calc((100%-4*1rem)/5)] lg:shrink-0 xl:h-[12.135vw] xl:w-[13.02vw]"
             >
             <a
               href={v.href}
               style={{ borderColor: v.accent }}
-              className="group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-[linear-gradient(160deg,#9e8cb2_0%,#9a85a6_100%)] p-4 shadow-[0_10px_30px_-12px_rgba(80,80,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-14px_rgba(80,80,120,0.35)] xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
+              /* Flat #9d89ac fill sampled from HOME3.pdf (was a two-stop
+                 gradient), and a 2px accent border — the design's card outlines
+                 are clearly visible, where a hairline read as no border at all
+                 (QA: "borders color of this card is not matching with design"). */
+              className="group relative flex h-full flex-col overflow-hidden rounded-2xl border-2 bg-[#9d89ac] p-4 shadow-[0_10px_30px_-12px_rgba(80,80,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-14px_rgba(80,80,120,0.35)] xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
             >
-              {/* logo box — real logo once the file exists, else a soft box */}
+              {/* Logo box — real logo once the file exists, else an empty plate.
+                  #e9e9e9, sampled from HOME3.pdf: the grey plate IS in the
+                  design (behind logos and on the logo-less cards alike), so
+                  QA's "in design, grey bg is not present" does not hold once the
+                  frame renders — it only looked absent because pdftocairo drops
+                  most of that page. */}
               <div
-                className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-[#f0f0f0] px-3 sm:h-20 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[0.5vw]"
+                className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-[#e9e9e9] px-3 sm:h-20 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[0.5vw]"
                 style={{ boxShadow: `inset 0 0 0 1px ${v.accent}` }}
               >
                 {v.logo && v.hasLogo ? (

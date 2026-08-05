@@ -23,13 +23,25 @@ export default function HomePage() {
           swipes up over it by one viewport at every responsive size. */}
         <div className="relative h-[200svh] md:h-[200vh]">
           <section className="sticky top-0 h-[100svh] overflow-hidden bg-[linear-gradient(135deg,#e6ebfb_0%,#f1eefb_38%,#f6f3fc_70%,#f7f5fd_100%)] md:h-screen">
-            {/* soft blue glow, top-left */}
+            {/* Soft cyan glow, hugging the LEFT EDGE at mid-height.
+
+                QA #8 called this out as a "green half shadow in left center
+                position" — and HOME1.pdf confirms it: sampling the left edge
+                down the page gives #fcf7ff at the top, deepening to #caeaf3 at
+                ~48% height, then fading back. So the design's tint is cyan and
+                vertically centred, where this was a blue-violet (140,164,240)
+                blob anchored to the top-left CORNER. Half the circle sits
+                off-canvas, which is what makes it read as a "half shadow". */}
             <div
               aria-hidden
-              className="animate-glow-pulse pointer-events-none absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(140,164,240,0.45)_0%,rgba(140,164,240,0)_70%)]"
+              className="animate-glow-pulse pointer-events-none absolute -left-[300px] top-1/2 h-[620px] w-[620px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(148,214,232,0.55)_0%,rgba(148,214,232,0)_70%)]"
             />
 
-            {/* decorative pattern band (crystals + journey lines) */}
+            {/* Decorative pattern band (crystals + journey lines). Pushed lower
+                below `sm`: at 45% it sat directly behind the "Learn x Grow x
+                Lead" line, so the crystals read as overlapping the text (QA #9,
+                "in some mobile screen it overlaps with the text"). It stays at
+                45% from sm up, where the hero copy is narrower and clears it. */}
             <Image
               src="/images/pattern.png"
               alt=""
@@ -37,7 +49,7 @@ export default function HomePage() {
               width={1923}
               height={462}
               priority
-              className="animate-fade-in-up pointer-events-none absolute left-0 right-0 top-[45%] w-full select-none"
+              className="animate-fade-in-up pointer-events-none absolute left-0 right-0 top-[58%] w-full select-none sm:top-[45%]"
             />
 
             {/* logo, top-left (links back to landing) */}
@@ -60,30 +72,47 @@ export default function HomePage() {
 
             {/* hero copy, left */}
             <Recede>
-              <main className="animate-fade-in-up relative z-10 w-full max-w-[92%] px-6 pr-12 pt-6 sm:max-w-[min(56rem,72%)] sm:px-14 sm:pt-16 [@media(max-height:500px)]:pt-2">
+              {/* `pb-40` below sm reserves room for the CTA block, which is
+                  absolutely positioned at the bottom of this hero and therefore
+                  contributes no height of its own. Without it the "Learn x Grow
+                  x Lead" line and the buttons could occupy the same band on
+                  short/narrow screens (QA #9). */}
+              <main className="animate-fade-in-up relative z-10 w-full max-w-[92%] px-6 pb-40 pr-12 pt-6 sm:max-w-[min(56rem,72%)] sm:px-14 sm:pb-0 sm:pt-16 [@media(max-height:500px)]:pt-2">
+                {/* Colours sampled pixel-exact from HOME1.pdf (1920pt frame):
+                    "Why"/"Learn" #feb7c1, "Struggle Alone?"/"Lead" #ade2dc,
+                    "Grow" #e2fe74, paragraph #506ce6, the "x" separators
+                    #a8a8b3. Note "Lead" is TEAL in the design, not pink —
+                    QA flagged exactly this ("the color of x and Lead is not
+                    same as in design"). */}
                 <h1 className="text-3xl font-extrabold leading-[1.05] tracking-tight min-[390px]:text-4xl sm:text-6xl lg:text-7xl [@media(max-height:500px)]:text-3xl">
-                  <span className="text-[#f2a7a7]">Why </span>
-                  <span className="text-[#9ed2bd]">Struggle Alone?</span>
+                  <span className="text-[#feb7c1]">Why </span>
+                  <span className="text-[#ade2dc]">Struggle Alone?</span>
                 </h1>
 
-                <p className="mt-5 max-w-2xl text-base font-medium leading-snug text-[#7a86dd] sm:mt-8 sm:text-xl lg:text-2xl [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:text-sm">
+                <p className="mt-5 max-w-2xl text-base font-medium leading-snug text-[#506ce6] sm:mt-8 sm:text-xl lg:text-2xl [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:text-sm">
                   Isolation Breeds Failure. People First Rewrites the Script.
                   Together We Progress, Together We Win. Across your physical,
                   mind &amp; market journey
                 </p>
 
                 <p className="mt-5 text-xl font-bold tracking-tight sm:mt-7 sm:text-3xl [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:text-lg">
-                  <span className="text-[#f2a7a7]">Learn</span>
-                  <span className="text-zinc-400"> x </span>
-                  <span className="text-[#b9df53]">Grow</span>
-                  <span className="text-zinc-400"> x </span>
-                  <span className="text-[#f2a7a7]">Lead</span>
+                  <span className="text-[#feb7c1]">Learn</span>
+                  <span className="text-[#a8a8b3]"> x </span>
+                  <span className="text-[#e2fe74]">Grow</span>
+                  <span className="text-[#a8a8b3]"> x </span>
+                  <span className="text-[#ade2dc]">Lead</span>
                 </p>
               </main>
             </Recede>
 
             {/* bottom-right CTAs (stack on small screens) */}
-            <Recede className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] right-[max(1rem,env(safe-area-inset-right))] z-20 flex flex-col items-end gap-3 sm:bottom-10 sm:left-auto sm:right-[max(2rem,env(safe-area-inset-right))] sm:flex-row sm:items-center sm:gap-4">
+            {/* Bottom CTAs. `gap-5` on sm+ (was gap-4) gives the message icon
+                the breathing room from the two buttons that the design shows.
+                On mobile the block is pinned to the bottom of the hero and the
+                buttons span the full width, so it was crowding the hero copy
+                above it — the taller bottom inset plus `mt-auto` on the row
+                keeps a clear band between the text and the buttons. */}
+            <Recede className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] right-[max(1rem,env(safe-area-inset-right))] z-20 flex flex-col items-end gap-3 sm:bottom-10 sm:left-auto sm:right-[max(2rem,env(safe-area-inset-right))] sm:flex-row sm:items-center sm:gap-5">
               <div className="flex w-full gap-3 sm:w-auto">
                 <ContactTrigger
                   href="/partner"
