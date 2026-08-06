@@ -129,9 +129,12 @@ export default function StoryShowcase() {
     };
   }, []);
 
+  // .pf-blend flattens the swipe-over dressing on mobile (square top, no
+  // shadow, no negative pull) so this reads as the next section in a flat stack
+  // rather than a rounded card floating over nothing. See globals.css.
   return (
-    <div className="relative z-[60] -mt-8 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]">
-      <div className="relative flex items-center py-10 sm:py-12 md:min-h-screen">
+    <div className="pf-blend relative z-[60] -mt-16 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] md:-mt-8 xl:-mt-[100vh]">
+      <div className="pf-seam relative flex items-center py-10 sm:py-12 md:min-h-screen">
         {/* decorative layer — pinned+receding with the content */}
         <Decor />
         <div

@@ -74,10 +74,13 @@ export default function TestimonialsShowcase() {
   return (
     /* Outer track: swipes up over the pinned Gallery section. Light near-white
        background matches the design (distinct from the lavender sections). */
-    <div className="relative z-40 rounded-t-[2rem] bg-[linear-gradient(180deg,#ffffff_0%,#f6faf8_100%)] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
+    <div
+      style={{ "--pf-blend": "#ffffff" } as React.CSSProperties}
+      className="pf-blend relative z-40 rounded-t-[2rem] bg-[linear-gradient(180deg,#ffffff_0%,#f6faf8_100%)] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]"
+    >
       <PinnedRecede
         overlapFrom="xl"
-        className="flex flex-col items-center justify-center py-10 sm:py-14"
+        className="pf-seam flex flex-col items-center justify-center py-10 sm:py-14"
       >
         {/* Previously both the heading and the cards were scrubbed to scroll
             position from one shared handler, which tied all twelve cards to the

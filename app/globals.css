@@ -522,6 +522,70 @@ optgroup {
   }
 }
 
+/* ---- Mobile section rhythm (.pf-seam / .pf-blend) ----
+   The homepage stacks opaque panels that SWIPE OVER one another. On md+ each
+   panel pulls itself up a full viewport (`md:-mt-[100vh]`) over the PINNED panel
+   above it, and its rounded top + upward shadow are what sell that overlap: one
+   card visibly riding up over another.
+
+   Below md none of that applies. Nothing pins, so nothing is overlapped, and the
+   panels simply stack in document order. Carried over unchanged, the desktop
+   recipe produced three separate defects on a phone:
+
+     1. A rounded top and drop shadow floating on a flat stack, with no panel
+        underneath to ride over — the "curved border at the start of each
+        section" with nothing explaining it.
+     2. A strip of the previous panel's BARE background above each rounded top,
+        because the -mt-8 pull (32px) was smaller than the trailing padding it
+        had to cover (96px on FeaturedWork) — the reported changeover band.
+     3. Sections reading as cramped once that band was removed, because the
+        padding that had been creating it was the same padding providing the
+        breathing room between sections.
+
+   So on mobile the panels are treated as what they actually are — a plain
+   vertical sequence of full-bleed sections:
+
+     · square top corners and no upward shadow, so no overlap is implied
+     · no negative pull; each section starts exactly where the last one ended
+     · generous, uniform end padding so consecutive sections are clearly apart
+
+   Everything here is scoped to max-width 767px. From md up the pinned
+   swipe-over is untouched. */
+@media (max-width: 767px) {
+  /* Trailing room at the end of a section. Deliberately large: this is the only
+     thing separating one full-bleed section from the next now that they meet
+     flush, so it carries the whole visual gap. */
+  .pf-seam {
+    padding-bottom: 4.5rem;
+  }
+
+  /* Flatten the swipe-over dressing and cancel the overlap pull. `!important`
+     is needed because the values it overrides come from Tailwind utilities on
+     the same element (rounded-t-[2rem], -mt-8/-mt-16, shadow-[...]) which carry
+     equal specificity but win on source order. */
+  .pf-blend {
+    position: relative;
+    margin-top: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* A hairline at the join. With the panels flush and their fills often close in
+     tone, this is what makes the transition legible as "new section" without
+     reintroducing a floating rounded edge. */
+  .pf-blend::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    pointer-events: none;
+    background: rgba(80, 80, 120, 0.1);
+  }
+}
+
 /* ---- .pf-lead-in: scroll room for a preceding pinned hero ----
    Set by <TallSwipePanel leadIn={n}>, which passes `n` as --pf-lead-in. The gap
    lets the pinned section above hold still and then recede before this panel

@@ -14,7 +14,7 @@ const SKILLS = [
 
 export default function FeaturedWork() {
   return (
-    <section className="relative z-10 max-md:-mt-8 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-24 md:-mt-[100vh]">
+    <section className="pf-seam relative z-10 max-md:-mt-8 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-24 md:-mt-[100vh]">
 
       {/* ── Block 1: pinned cinematic stage (media scales through the pin) ── */}
       <MediaShowcase />

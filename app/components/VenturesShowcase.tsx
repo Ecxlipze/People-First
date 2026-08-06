@@ -17,7 +17,12 @@ export default function VenturesShowcase() {
     /* Outer track: negative margin + rounded opaque bg → swipes up over Featured
        Work. PinnedRecede inside gives Ventures its own pin so Gallery can later
        swipe over it. */
-    <div className="relative z-20 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
+    <div
+      /* --pf-blend matches this panel's own fill so .pf-blend's gradient (mobile
+         only) fades this section out of the one above it. */
+      style={{ "--pf-blend": "#f2f8f8" } as React.CSSProperties}
+      className="pf-blend relative z-20 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]"
+    >
       <PinnedRecede
         pinTallContent
         /* xl min-height was 73.385vw — the FULL height of the HOME3.pdf frame
@@ -27,7 +32,7 @@ export default function VenturesShowcase() {
            section) of dead whitespace under the cards. Trimming to 58vw keeps
            the heading and both card rows at their measured positions
            (cards end at 54.74vw) with a normal bottom margin instead. */
-        className="relative flex flex-col items-center justify-center py-10 sm:py-14 lg:py-16 xl:min-h-[58vw] xl:justify-start xl:py-0"
+        className="pf-seam relative flex flex-col items-center justify-center py-10 sm:py-14 lg:py-16 xl:min-h-[58vw] xl:justify-start xl:py-0"
       >
         {/* decorative paper-plane pairs, flanking the heading in the top corners
             (matches the mockup). Purely aesthetic. */}

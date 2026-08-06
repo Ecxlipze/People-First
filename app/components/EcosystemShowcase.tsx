@@ -259,8 +259,11 @@ export default function EcosystemShowcase() {
     return () => observer.disconnect();
   }, []);
 
+  // .pf-blend flattens the swipe-over dressing on mobile (square top, no
+  // shadow, no negative pull); see globals.css. Safe alongside `overflow-clip`
+  // because the joining hairline is drawn inside this box, not outside it.
   return (
-    <div className="relative z-50 -mt-8 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]">
+    <div className="pf-blend relative z-50 -mt-16 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] md:-mt-8 xl:-mt-[100vh]">
       <PinnedRecede
         overlapFrom="xl"
         /* Extra top padding: in HOME6.pdf the "Welcome to a Compounding…"
@@ -269,7 +272,7 @@ export default function EcosystemShowcase() {
            tight against the section's top edge — QA #17 ("needs spacing/margin
            at top, because the images placed at both ends should be at above
            position"). */
-        className="relative flex items-center pb-10 pt-24 sm:pb-12 sm:pt-32 md:min-h-screen lg:pt-40"
+        className="pf-seam relative flex items-center pb-10 pt-24 sm:pb-12 sm:pt-32 md:min-h-screen lg:pt-40"
       >
         {/* decorative layer — pinned+receding with the content */}
         <Decor />

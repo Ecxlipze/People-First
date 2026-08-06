@@ -70,11 +70,14 @@ export default function GalleryShowcase() {
        Ventures section uses, not the lavender gradient this carried. The whole
        block (heading, carousel, button) centres on one axis with no sidebar
        padding, matching the design's shared x≈931 centreline. */
-    <div className="relative z-30 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-8 sm:rounded-t-[3rem] md:-mt-[100vh]">
+    <div
+      style={{ "--pf-blend": "#f2f8f8" } as React.CSSProperties}
+      className="pf-blend relative z-30 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]"
+    >
       {/* No horizontal padding on the column itself — the carousel's ±2 slides
           must reach the viewport edges to be clipped like the design's. The
           heading and button carry their own px-6 instead. */}
-      <PinnedRecede className="flex flex-col items-center justify-center overflow-hidden py-10 sm:py-14">
+      <PinnedRecede className="pf-seam flex flex-col items-center justify-center overflow-hidden py-10 sm:py-14">
         {/* heading */}
         <Reveal y={28} scale={0.98} className="px-6">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-black sm:text-4xl">
