@@ -1,19 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { Reveal } from "@/app/components/ScrollFx";
 import { MediaFrame, StatCard } from "@/app/components/media";
-import {
-  prefersReducedMotion,
-  subscribeScrollFrame,
-} from "@/app/lib/motion";
-
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
-// remap a slice of overall progress [from,to] to 0..1
-const slice = (p: number, from: number, to: number) =>
-  clamp01((p - from) / (to - from));
 
 /* An Apple-style pinned scroll stage: the section holds in the middle of the
    viewport for a beat while, driven purely by scroll position, the media frame
@@ -26,138 +16,15 @@ export default function MediaShowcase() {
   const textRef = useRef<HTMLDivElement>(null);
   const statRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const track = trackRef.current;
-    const media = mediaRef.current;
-    const text = textRef.current;
-    const stat = statRef.current;
-    if (!track || !media || !text || !stat) return;
-
-    // The pinned scale/fade stage runs from `md` (768px) up; phones keep normal
-    // flow so nothing clips, while using a lighter element-by-element scrub.
-    const desktop = window.matchMedia("(min-width: 768px)");
-
-    const disable = () => {
-      // No pinning: collapse the track and show everything in place.
-      track.style.height = "auto";
-      if (stageRef.current) {
-        stageRef.current.style.height = "auto";
-        stageRef.current.style.position = "static";
-        stageRef.current.style.overflow = "visible";
-        stageRef.current.style.alignItems = "stretch";
-      }
-    };
-
-    // `unsubscribe` is non-null exactly while this section is subscribed to the
-    // site-wide scroll frame. Sharing that one listener+RAF pair with every
-    // other scroll effect (see app/lib/motion.ts) keeps a long page from
-    // stacking up a listener per section.
-    let unsubscribe: (() => void) | null = null;
-    let pinned = false;
-    const update = () => {
-      const vh = window.innerHeight;
-
-      if (pinned) {
-        const r = track.getBoundingClientRect();
-        const distance = r.height - vh; // scroll travelled while pinned
-        const p = distance > 0 ? clamp01(-r.top / distance) : 0;
-
-        // media scales up through the first ~60% of the pin, then holds.
-        const grow = slice(p, 0, 0.6);
-        media.style.transform = `scale(${lerp(0.62, 1, grow)})`;
-
-        // text fades + rises in over the middle stretch.
-        const t = slice(p, 0.2, 0.55);
-        text.style.opacity = String(t);
-        text.style.transform = `translateY(${lerp(40, 0, t)}px)`;
-
-        // stat card slides in last.
-        const s = slice(p, 0.55, 0.85);
-        stat.style.opacity = String(s);
-        stat.style.transform = `translateY(${lerp(28, 0, s)}px) scale(${lerp(
-          0.9,
-          1,
-          s,
-        )})`;
-      } else {
-        // Phones keep normal document flow, but each part still scrubs into
-        // place as it enters instead of appearing as a static stack.
-        const mediaTop = media.getBoundingClientRect().top;
-        const textTop = text.getBoundingClientRect().top;
-        const statTop = stat.getBoundingClientRect().top;
-        const grow = clamp01((vh * 0.96 - mediaTop) / (vh * 0.5));
-        const t = clamp01((vh * 0.94 - textTop) / (vh * 0.48));
-        const s = clamp01((vh * 0.94 - statTop) / (vh * 0.42));
-        media.style.transform = `scale(${lerp(0.88, 1, grow)})`;
-        text.style.opacity = String(t);
-        text.style.transform = `translateY(${lerp(34, 0, t)}px)`;
-        stat.style.opacity = String(s);
-        stat.style.transform = `translateY(${lerp(24, 0, s)}px) scale(${lerp(
-          0.94,
-          1,
-          s,
-        )})`;
-      }
-    };
-
-    const apply = () => {
-      const reduced = prefersReducedMotion();
-      if (reduced) {
-        pinned = false;
-        disable();
-        media.style.transform = "none";
-        text.style.opacity = "1";
-        text.style.transform = "none";
-        stat.style.opacity = "1";
-        stat.style.transform = "none";
-        unsubscribe?.();
-        unsubscribe = null;
-        return;
-      }
-
-      pinned = desktop.matches;
-      if (pinned) {
-        track.style.height = "";
-        if (stageRef.current) {
-          stageRef.current.style.height = "";
-          stageRef.current.style.position = "";
-          stageRef.current.style.overflow = "";
-          stageRef.current.style.alignItems = "";
-        }
-      } else {
-        disable();
-      }
-
-      // subscribeScrollFrame invokes `update` immediately on subscribe, so the
-      // already-subscribed branch calls it directly to re-sync after a
-      // breakpoint change.
-      if (unsubscribe) update();
-      else unsubscribe = subscribeScrollFrame(update);
-    };
-
-    apply();
-    // The md breakpoint crossing is what flips pinning on/off, so `change` is
-    // the event that matters. A plain resize only needs the scrub re-measured,
-    // which the shared scroll frame already does on its own resize listener.
-    desktop.addEventListener("change", apply);
-    // Reduced-motion can be toggled while the page is open; re-apply so the
-    // effect turns off (or back on) without a reload.
-    const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    reduceMq.addEventListener("change", apply);
-    return () => {
-      desktop.removeEventListener("change", apply);
-      reduceMq.removeEventListener("change", apply);
-      unsubscribe?.();
-    };
-  }, []);
+  // Pinned scroll behavior removed to allow sections to flow naturally as compact blocks.
 
   return (
-    <div ref={trackRef} className="relative h-[260vh] max-md:!h-auto">
+    <div ref={trackRef} className="relative w-full overflow-hidden pb-12 pt-8 sm:pb-16 sm:pt-16">
       <div
         ref={stageRef}
-        className="flex w-full flex-col items-center justify-center overflow-hidden pb-16 pt-8 md:sticky md:top-0 md:h-screen md:pb-0 md:pt-0"
+        className="flex w-full flex-col items-center justify-center"
       >
-        <Reveal className="mb-10 px-6 text-center sm:mb-12">
+        <Reveal className="mb-6 px-6 text-center sm:mb-8">
           <h2 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-[2.6rem] lg:leading-[1.1]">
             Featured Work
           </h2>
@@ -167,37 +34,35 @@ export default function MediaShowcase() {
         </Reveal>
 
         <div className="mx-auto grid w-full max-w-[56rem] items-center gap-8 px-6 sm:px-10 md:grid-cols-2 md:gap-12 lg:pr-32 xl:pr-40">
-          {/* text — fades/rises in */}
-          <div
-            ref={textRef}
-            className="order-2 md:order-1 lg:pl-10 lg:pt-8"
-            style={{ opacity: 0, willChange: "transform, opacity" }}
-          >
-            <h3 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl lg:text-[2.2rem]">
-              Podcast: market<br />strategy
-            </h3>
-            <p className="mt-4 max-w-[18rem] text-[14px] leading-relaxed text-[#4e648c]">
-              We are strategy consultants who work with startup strategies and
-              help promote and sell your products, including helping marketing.
-            </p>
-            <div className="mt-6 flex items-center gap-3">
-              <span className="text-4xl font-bold text-[#d73042] sm:text-4xl">
-                80%
-              </span>
-              <span className="text-[12px] font-semibold leading-tight text-zinc-500">
-                Increased
-                <br />
-                Performance Rate
-              </span>
+          {/* text */}
+          <Reveal className="order-2 md:order-1 lg:pl-10 lg:pt-4">
+            <div ref={textRef} className="max-w-[320px]">
+              <h3 className="text-[2.2rem] font-bold leading-[1.1] tracking-tight text-zinc-900 sm:text-4xl">
+                Podcast: market<br />strategy
+              </h3>
+              <p className="mt-4 text-[14px] leading-snug text-gray-500">
+                We are strategy consultants who work with startup strategies and
+                help promote and sell your products, including helping marketing.
+              </p>
+              <div className="mt-4 flex items-center gap-3">
+                <span className="text-4xl font-bold text-[#d73042] sm:text-4xl">
+                  80%
+                </span>
+                <span className="text-[12px] font-semibold leading-tight text-zinc-500">
+                  Increased
+                  <br />
+                  Performance Rate
+                </span>
+              </div>
             </div>
-          </div>
+          </Reveal>
 
-          {/* media — scales through the pin */}
-          <div className="relative order-1 mx-auto w-full max-w-[260px] md:order-2">
+          {/* media */}
+          <Reveal className="relative order-1 mx-auto w-full max-w-[260px] md:order-2">
             {/* Diffused cyan, purple, and pink glow behind the media frame. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-16 -z-10 bg-[radial-gradient(ellipse_at_50%_50%,rgba(100,200,230,0.35)_0%,rgba(180,130,240,0.25)_35%,rgba(230,130,180,0.15)_65%,transparent_80%)] opacity-90 blur-2xl"
+              className="pointer-events-none absolute -inset-16 -z-10 bg-[radial-gradient(ellipse_at_50%_50%,rgba(100,200,230,0.5)_0%,rgba(180,130,240,0.4)_35%,rgba(230,130,180,0.3)_65%,transparent_75%)] opacity-100 blur-3xl"
             />
             {/* Paper-plane accent, top-right. */}
             <Image
@@ -209,23 +74,22 @@ export default function MediaShowcase() {
               className="animate-floaty pointer-events-none absolute -right-16 -top-12 z-20 hidden h-24 w-auto select-none object-contain sm:block"
             />
             {/* 0.698 aspect */}
-            <div ref={mediaRef} style={{ willChange: "transform" }} className="relative">
+            <div ref={mediaRef} className="relative">
               <MediaFrame
                 src="/images/featured/feature1.webp"
                 alt="A man working on a laptop during a late-evening podcast recording session"
               />
             </div>
-            {/* StatCard positioned over the lower-right area of the image. */}
+            {/* StatCard positioned over the lower-left area of the image. */}
             <div
               ref={statRef}
-              className="absolute -bottom-6 -right-6 z-20 md:-bottom-8 md:-right-8"
-              style={{ opacity: 0, willChange: "transform, opacity" }}
+              className="absolute -bottom-4 -left-6 z-20 sm:-bottom-6 sm:-left-8"
             >
-              <StatCard variant="compact" value="27%">
+              <StatCard variant="compact" value="27%" className="scale-95 origin-bottom-left">
                 have knowledge about market strategies.
               </StatCard>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </div>

@@ -66,7 +66,7 @@ export function MediaFrame({
       </button>
 
       {caption && (
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pr-32 pt-10 text-xs font-semibold leading-tight text-white">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 pb-3 pr-36 pt-12 text-[10px] sm:text-[11.5px] font-medium leading-snug text-white/90 drop-shadow-md">
           {caption}
         </div>
       )}
