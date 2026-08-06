@@ -100,7 +100,7 @@ function Media({
       <div className="absolute left-0 top-[58%] z-10 w-[9rem] -translate-y-1/2 rounded-md rounded-tl-none bg-[#68a9a8] px-5 py-5 text-white shadow-[0_14px_30px_-14px_rgba(40,80,70,0.7)] sm:w-[11rem] sm:px-6 sm:py-7 lg:w-[13rem] lg:px-7 lg:py-8 xl:-left-12 xl:w-[15rem] xl:px-8 xl:py-10">
         <CountUp
           value={insight.cardValue}
-          className="block text-2xl font-extrabold leading-none sm:text-[1.75rem] lg:text-[2.5rem] xl:text-[3rem]"
+          className="font-heading block text-2xl font-extrabold leading-none sm:text-[1.75rem] lg:text-[2.5rem] xl:text-[3rem]"
         />
         {/* The mockup treats this overlapping tile as a compact display label. */}
         <p className="mt-2 whitespace-pre-line text-[0.7rem] font-bold uppercase leading-tight sm:text-[0.8rem] lg:text-base">

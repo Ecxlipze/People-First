@@ -23,10 +23,19 @@ export default function PinnedRecede({
   className = "",
   overlapFrom = "md",
   pinTallContent = false,
+  compactStage = false,
 }: {
   children: React.ReactNode;
   hold?: number;
   className?: string;
+  /* By default the sticky stage is a full viewport tall and centres its content
+     in it, which is right for a section meant to fill the screen. For a short
+     block that should read as a COMPACT section immediately following the
+     previous one, that centring becomes dead space above the content (a 371px
+     block centred in 1200px leaves ~414px of blank band). This makes the stage
+     height follow its content instead, so consecutive sections sit close
+     together. The pin itself, and the next section's overlap, are unaffected. */
+  compactStage?: boolean;
   /* Breakpoint where the following section starts using a full -100vh pull.
      Long tablet layouts can use "xl" so iPads keep a compact overlap. "none"
      keeps the animated flow handoff without pinning or overlap compensation. */
@@ -112,46 +121,43 @@ export default function PinnedRecede({
         inner.style.transform = `perspective(1200px) rotateX(${ease * 3}deg) scale(${1 - ease * 0.06}) translateY(${-ease * 50}px)`;
         inner.style.filter = `blur(${ease * 2}px)`;
       } else {
-        // Mobile and tall tablet sections cannot safely pin because their
-        // content is higher than the viewport. Give those sections a complete
-        // scroll-linked handoff instead: the incoming card rises and sharpens,
-        // then recedes as the following rounded card reaches it.
-        const flowOnly = overlapFrom === "none";
-        // Long editorial pages need a wider, stronger transition window than
-        // the compact homepage cards. Start their exit as soon as the next
-        // panel enters the viewport so every section-to-section handoff reads.
-        const enter = flowOnly
-          ? clamp01((vh * 1.05 - r.top) / (vh * 0.55))
-          : clamp01((vh - r.top) / (vh * 0.38));
-          
-        // On mobile/tablet where sections don't fully overlap (no pin), disable the 
-        // exit animation to prevent gaps from forming before the next section arrives.
-        const shouldExit = needsFullOverlapCompensation() || flowOnly;
-        
-        const exit = shouldExit
-          ? flowOnly
-            ? clamp01((vh * 1.02 - r.bottom) / (vh * 0.55))
-            : clamp01((vh * 0.68 - r.bottom) / (vh * 0.48))
-          : 0;
-          
-        const enterEase = enter * enter * (3 - 2 * enter);
-        const exitEase = exit * exit * (3 - 2 * exit);
-        const opacity = flowOnly
-          ? (0.2 + enterEase * 0.8) * (1 - exitEase * 0.62)
-          : (0.62 + enterEase * 0.38) * (1 - exitEase * 0.42);
-        const scale = flowOnly
-          ? 0.92 + enterEase * 0.08 - exitEase * 0.055
-          : 0.975 + enterEase * 0.025 - exitEase * 0.035;
-        const y = flowOnly
-          ? (1 - enterEase) * 96 - exitEase * 54
-          : (1 - enterEase) * 42 - exitEase * 26;
-        const blur = flowOnly
-          ? (1 - enterEase) * 3.5 + exitEase * 1.8
-          : (1 - enterEase) * 1.2 + exitEase * 0.8;
+        // ---- Flow path: no pin (phones, and tall tablet/desktop sections) ----
+        //
+        // CRITICAL: the recede (fade/scale/lift) must NOT run here.
+        //
+        // A section's opaque background, rounded top and shadow live on the
+        // WRAPPER; this scrubber only transforms the INNER content. When the
+        // section is pinned, that split is exactly what's wanted — the next
+        // panel climbs over the wrapper while the content behind it recedes.
+        //
+        // Without a pin there is no panel climbing over anything, so fading or
+        // lifting the content only pulls it away from its own background: the
+        // wrapper keeps painting its bare fill, which reads as a dead band
+        // between sections, and the content sits visibly offset from the
+        // rounded top edge it belongs to. Measured on a 390px viewport this
+        // left FeaturedWork at opacity 0 above a 1469px strip of bare
+        // background, and held Ventures/Gallery/Testimonials at ~0.64 opacity
+        // with their copy pushed 46–65px below their own panel edge.
+        //
+        // So the flow path is an ENTRANCE ONLY, and it settles to exactly
+        // opacity 1 / no transform / no blur, where content and background are
+        // back in register. Sections never fade out on the way up.
+        const enter = clamp01((vh * 1.05 - r.top) / (vh * 0.5));
+        const e = enter * enter * (3 - 2 * enter);
 
-        inner.style.opacity = String(opacity);
-        inner.style.transform = `perspective(1200px) scale(${scale}) translateY(${y}px)`;
-        inner.style.filter = `blur(${blur}px)`;
+        // Once fully entered, clear the properties outright rather than writing
+        // the identity values. A lingering `transform`/`filter` on this element
+        // makes it a containing block for `position: fixed` descendants, which
+        // is what detaches the SideNav rail from the viewport.
+        if (e >= 0.999) {
+          inner.style.opacity = "";
+          inner.style.transform = "";
+          inner.style.filter = "";
+        } else {
+          inner.style.opacity = String(0.35 + e * 0.65);
+          inner.style.transform = `translate3d(0, ${(1 - e) * 40}px, 0) scale(${0.985 + e * 0.015})`;
+          inner.style.filter = `blur(${(1 - e) * 2.4}px)`;
+        }
       }
       raf = 0;
     };
@@ -243,7 +249,7 @@ export default function PinnedRecede({
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf);
     };
-  }, [hold, overlapFrom, pinTallContent]);
+  }, [hold, overlapFrom, pinTallContent, compactStage]);
 
   return (
     <div
@@ -253,7 +259,9 @@ export default function PinnedRecede({
     >
       <div
         ref={stageRef}
-        className="flex overflow-hidden md:sticky md:top-0 md:h-screen md:items-center"
+        className={`flex overflow-hidden md:sticky md:top-0 ${
+          compactStage ? "md:items-start" : "md:h-screen md:items-center"
+        }`}
       >
         <div
           ref={innerRef}

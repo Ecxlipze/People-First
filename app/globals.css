@@ -30,7 +30,18 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
-  --font-sans: var(--font-poppins);
+
+  /* ---- Typography ----
+     Inter is the body face and therefore `--font-sans`, which is what Tailwind's
+     `font-sans` utility and its own preflight resolve to. Montserrat is exposed
+     as `--font-display`, giving a `font-display` utility for the rare piece of
+     prominent text that isn't an <h1>–<h6> (large statistic numbers, for
+     instance — see `.font-heading` below).
+
+     The `--font-inter` / `--font-montserrat` variables these point at are
+     declared by next/font on <html> in app/layout.tsx. */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-montserrat);
 
   /* People First brand palette (used by the About page + future content pages).
      Tailwind v4 exposes each as a colour utility, e.g. bg-pf-purple or
@@ -60,7 +71,10 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+  /* Inter is the inherited default for the whole site: paragraphs, labels,
+     buttons, nav text, captions, form fields and card copy all get it without
+     opting in. Headings override it via the h1–h6 rule below. */
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   /* NOTE: do NOT set `transform-style: preserve-3d` (or `perspective`) here.
      Either one makes <body> a containing block for fixed-position descendants,
      which breaks the SideNav rail — it resolves `fixed` against the document
@@ -68,6 +82,86 @@ body {
      don't need it: ScrollFx/PinnedRecede each apply their own
      `perspective(1200px)` inside their own `transform`. */
   -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Global typography system ----
+   Two faces, applied by element rather than by class so that any new section
+   inherits the right one automatically:
+
+     Montserrat (--font-display) — every heading and prominent display text.
+     Inter      (--font-sans)    — everything else, inherited from <body>.
+
+   Headings get Montserrat here rather than in each component, so a section that
+   simply writes <h2 className="text-5xl"> is already correct. Weight is set as
+   a floor per level, not a single value everywhere, to keep the hierarchy the
+   mockups establish:
+
+     h1  800  page / hero headings — the heaviest thing on a page
+     h2  700  section headings
+     h3  700  sub-section headings
+     h4–h6 600  card titles and small headings
+
+   These are plain element selectors (specificity 0,0,1), so any Tailwind
+   font-weight utility already in the markup — `font-black` on a hero,
+   `font-semibold` on a card title — still wins. The declarations below are the
+   default for headings that don't state a weight, not an override. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-weight: 800;
+}
+
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+
+/* Form controls do not inherit the document font in any browser — they default
+   to a UA font unless told otherwise — so inputs, selects and textareas are
+   opted back in explicitly. Buttons are included for the same reason. Without
+   this, every field on the contact form and in the modal would render in the
+   platform UI font instead of Inter. */
+input,
+select,
+textarea,
+button,
+optgroup {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+/* ---- Typography utilities ----
+   For prominent text that is NOT an <h1>–<h6>: large statistic numbers, a
+   display-sized <span> inside a heading-less card, an oversized CTA line. Use
+   `.font-heading` there so it joins the same system rather than hardcoding a
+   family. `.font-body` is the escape hatch for the reverse case — pulling a
+   descendant of a heading (an eyebrow, a subtitle on its own line) back to
+   Inter.
+
+   Both are also available as Tailwind's `font-sans` / `font-display`
+   utilities via the @theme block above; these named aliases exist because
+   "heading" and "body" describe intent, which is what the markup should say. */
+.font-heading {
+  font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
 /* A consistent, high-contrast keyboard focus treatment across links, buttons

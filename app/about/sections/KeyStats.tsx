@@ -59,7 +59,7 @@ export default function KeyStats() {
             <div className="pf-card flex min-h-36 items-center justify-end rounded-2xl bg-[#f6f8ff] px-10 py-8 text-right shadow-xl">
               <CountUp
                 value={STATS.big.value}
-                className="block text-5xl font-extrabold text-[#67235c] sm:text-6xl"
+                className="font-heading block text-5xl font-extrabold text-[#67235c] sm:text-6xl"
               />
               <span className="ml-2 self-end pb-2 text-sm text-zinc-500">
                 {STATS.big.label}
@@ -73,7 +73,7 @@ export default function KeyStats() {
                 >
                   <CountUp
                     value={s.value}
-                    className="text-4xl font-extrabold text-[#18007a] sm:text-5xl"
+                    className="font-heading text-4xl font-extrabold text-[#18007a] sm:text-5xl"
                   />
                   <span className="text-right text-xs leading-tight text-zinc-500 sm:text-sm">
                     {s.label}

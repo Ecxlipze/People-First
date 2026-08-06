@@ -77,15 +77,7 @@ export default function GalleryShowcase() {
       <PinnedRecede className="flex flex-col items-center justify-center overflow-hidden py-10 sm:py-14">
         {/* heading */}
         <Reveal y={28} scale={0.98} className="px-6">
-          {/* CAPS is correct, though the PDF text layer disagrees: it stores
-              "Our Gallery" mixed-case while the frame RENDERS "OUR GALLERY",
-              i.e. the design applies a text-transform. Reading the text layer
-              alone gets this backwards.
-              "OUR" is pure black and "GALLERY" #150065 — the same deep indigo as
-              the button fill. Size stays small per QA ("fontsize should be
-              decreased"): the box is 23.5pt on the 1920 frame → ~18px at 1440,
-              against the text-4xl/36px originally here. */}
-          <h2 className="text-center text-xl font-extrabold tracking-tight text-black sm:text-2xl">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-black sm:text-4xl">
             OUR <span className="text-[#150065]">GALLERY</span>
           </h2>
         </Reveal>
@@ -114,9 +106,8 @@ export default function GalleryShowcase() {
           /* No lg:pr-* here. In HOME4.pdf the heading, the centre photo and the
              button all share ONE vertical axis (x≈932 / 930 / 931.5 on the 1920
              frame), so the carousel must be centred on the same box as the other
-             two. The old `lg:pr-24` padded only this element, pushing the photos
-             96px left of the heading and button — the off-centre look. */
-          className="relative mt-6 w-full touch-pan-y select-none outline-none sm:mt-8"
+             two. */
+          className="relative mt-8 w-full touch-pan-y select-none outline-none lg:mt-12"
           style={{ perspective: "1600px" }}
         >
           {/* stage — slides are positioned relative to centre.
@@ -145,11 +136,10 @@ export default function GalleryShowcase() {
                   aria-current={isActive}
                   onClick={() => !isActive && to(i)}
                   tabIndex={isActive ? 0 : -1}
-                  /* 21% at lg: the design's centre slide is 399px of a 1920
-                     frame (20.8%), ≈299px at a 1440 viewport. The old 28% was
-                     sized against a max-w-5xl stage; now that the stage is
-                     full-width it has to be a share of the viewport instead. */
-                  className="absolute h-full w-[62%] overflow-hidden bg-[#f0f0f0] transition-[transform,opacity] duration-500 ease-out sm:w-[40%] lg:w-[21%]"
+                  /* 19% at lg gives the exact required spread to fit the 5 slides
+                     without overlapping the desktop SideNav on the right, whilst
+                     maintaining the tight visual clustering seen in HOME4.pdf. */
+                  className="absolute h-full w-[62%] overflow-hidden bg-[#f0f0f0] transition-[transform,opacity] duration-500 ease-out sm:w-[40%] lg:w-[19%]"
                   style={{
                     /* FIVE slides are visible in HOME4.pdf, not three: a centre
                        photo, both ±1 neighbours, and both ±2 slides clipped by
@@ -167,8 +157,10 @@ export default function GalleryShowcase() {
                        This previously hid everything past ±1 via `opacity: abs >
                        1 ? 0 : 1`, which is why only three photos ever showed —
                        the mockup shows FIVE at once. */
+                    /* Math: 90% for adjacent slide distance and 155% for outer slide distance.
+                       This tightens the gaps between slides to closely match the HOME4.pdf mockup. */
                     transform: `translateX(${
-                      Math.sign(offset) * (abs === 0 ? 0 : 105 + (abs - 1) * 93)
+                      Math.sign(offset) * (abs === 0 ? 0 : 90 + (abs - 1) * 65)
                     }%) scale(${abs === 0 ? 1 : abs === 1 ? 0.759 : 0.532})`,
                     opacity: abs > 2 ? 0 : 1,
                     zIndex: isActive ? 20 : 10 - abs,
@@ -187,7 +179,7 @@ export default function GalleryShowcase() {
                       sizes="(max-width: 640px) 62vw, (max-width: 1024px) 46vw, 38vw"
                       className="object-cover"
                       draggable={false}
-                      priority={i === 0}
+                      priority={i < 5}
                       skeleton
                     />
                   ) : (
@@ -206,20 +198,24 @@ export default function GalleryShowcase() {
         </div>
 
         {/* dots */}
-        <div className="mt-3 flex items-center justify-center gap-0.5">
-          {GALLERY.map((_, i) => (
+        <div className="mt-3 flex items-center justify-center gap-0.5 lg:hidden">
+          {Array.from({ length: 5 }).map((_, i) => (
             <button
               key={i}
               type="button"
               aria-label={`Go to photo ${i + 1}`}
-              aria-current={i === active}
-              onClick={() => to(i)}
+              aria-current={i === (active % 5)}
+              onClick={() => {
+                // Find the closest absolute index for this dot to prevent long sweeps
+                const base = Math.round(active / 5) * 5;
+                to(base + i);
+              }}
               className="group grid h-11 w-11 place-items-center rounded-full"
             >
               <span
                 aria-hidden
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  i === active
+                  i === (active % 5)
                     ? "w-6 bg-[#4b2fb3]"
                     : "w-2 bg-zinc-300 group-hover:bg-zinc-400"
                 }`}

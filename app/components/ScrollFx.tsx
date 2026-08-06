@@ -161,15 +161,26 @@ export function Reveal({
 
 /* Recede — for a pinned (sticky) hero. As the first viewport scrolls away the
    content scales down, tilts back into depth, and fades/blurs, so it appears to
-   recede into the background behind the section swiping up over it. */
+   recede into the background behind the section swiping up over it.
+
+   The effect ONLY makes sense while the hero is actually pinned. The homepage
+   hero is `md:sticky` but `max-md:relative`, so below md it scrolls away
+   normally and nothing swipes over it — receding there just dissolves the hero
+   into its own background and leaves a tall empty band where the next section
+   has not arrived yet (measured: opacity 0 above a 1469px strip at 390px wide).
+   `enabled` is how the caller says "this hero is pinned at this breakpoint". */
 export function Recede({
   children,
   className = "",
   dwell = 0.4,
   span = 0.9,
+  enabledFrom = "md",
 }: {
   children: React.ReactNode;
   className?: string;
+  /* Min-width at which the host hero is pinned, and so at which receding is
+     correct. Below it the content is left untouched at full opacity. */
+  enabledFrom?: "none" | "md" | "lg";
   /* Viewport heights of scroll during which the hero holds completely still
      before it starts receding. Without a dwell the hero began dissolving on the
      very first wheel tick, so it never had a moment of being simply *there*. */
@@ -183,7 +194,27 @@ export function Recede({
     const el = ref.current;
     if (!el) return;
     if (prefersReducedMotion()) return;
+
+    const mq =
+      enabledFrom === "none"
+        ? null
+        : window.matchMedia(
+            `(min-width: ${enabledFrom === "lg" ? 1024 : 768}px)`,
+          );
+
+    // Clear rather than write identity values: a lingering transform/filter
+    // would make this a containing block for the fixed SideNav rail.
+    const reset = () => {
+      el.style.opacity = "";
+      el.style.transform = "";
+      el.style.filter = "";
+    };
+
     const update = () => {
+      if (mq && !mq.matches) {
+        reset();
+        return;
+      }
       const vh = window.innerHeight;
       const p = Math.max(
         0,
@@ -191,13 +222,22 @@ export function Recede({
       );
       // Smoothstep easing for cinematic feel
       const ease = p * p * (3 - 2 * p);
+      if (ease <= 0.001) {
+        reset();
+        return;
+      }
       el.style.opacity = String(1 - ease * 0.92);
       el.style.transform = `perspective(1200px) rotateX(${ease * 3.5}deg) scale(${1 - ease * 0.07}) translateY(${-ease * 55}px)`;
       el.style.filter = `blur(${ease * 3}px)`;
     };
+
     const unsubscribe = subscribeScrollFrame(update);
-    return unsubscribe;
-  }, [dwell, span]);
+    mq?.addEventListener("change", update);
+    return () => {
+      unsubscribe();
+      mq?.removeEventListener("change", update);
+    };
+  }, [dwell, span, enabledFrom]);
 
   return (
     <div
@@ -308,13 +348,36 @@ export function Stagger({
     });
     window.addEventListener("resize", sweep, { passive: true });
     window.addEventListener("orientationchange", sweep, { passive: true });
+    // A scroll is the other way a staged item can come on screen without the
+    // observer firing (same pinned/absolute geometry as above).
+    window.addEventListener("scroll", sweep, { passive: true });
+
+    /* The two-frame sweep measures ONE moment. Anything that shifts layout
+       afterwards — a web font swapping in, a logo decoding and resizing its
+       box, the pinned ancestor settling late — can move a card into view after
+       that single check, leaving it staged at opacity:0 until some unrelated
+       resize flushes it. That is the "images only show up after Inspect"
+       symptom, and a lone rAF pair is not enough to guarantee it can't recur.
+
+       A ResizeObserver on the grid re-sweeps whenever the content box actually
+       changes, which covers all of those without polling. Fonts get an explicit
+       hook too, since a font swap may not resize the grid itself. */
+    let ro: ResizeObserver | undefined;
+    if ("ResizeObserver" in window) {
+      ro = new ResizeObserver(() => sweep());
+      ro.observe(root);
+    }
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    fonts?.ready?.then(() => sweep()).catch(() => {});
 
     return () => {
       observer.disconnect();
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
+      ro?.disconnect();
       window.removeEventListener("resize", sweep);
       window.removeEventListener("orientationchange", sweep);
+      window.removeEventListener("scroll", sweep);
     };
   }, [y, step, selector]);
 

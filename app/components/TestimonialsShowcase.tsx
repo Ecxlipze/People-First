@@ -47,14 +47,14 @@ function Avatar({ t, i }: { t: Testimonial; i: number }) {
         alt={t.name}
         width={80}
         height={80}
-        className="h-10 w-10 rounded-full object-cover"
+        className="h-12 w-12 rounded-full object-cover"
       />
     );
   }
   return (
     <span
       aria-hidden
-      className="flex h-10 w-10 items-center justify-center rounded-full text-xs font-semibold text-white"
+      className="flex h-12 w-12 items-center justify-center rounded-full text-xs font-semibold text-white"
       style={{ backgroundColor: AVATAR_COLORS[i % AVATAR_COLORS.length] }}
     >
       {initials(t.name)}
@@ -88,7 +88,7 @@ export default function TestimonialsShowcase() {
           {/* 36px at lg, not 48px. The heading's em box is 67.3pt on the 1920
               frame; em boxes overstate visual size by ~35%, so the cap-corrected
               figure is ~36px at a 1440 viewport. Colour is #18181b. */}
-          <h2 className="px-6 text-center text-3xl font-extrabold tracking-tight text-[#18181b] sm:text-4xl lg:text-[2.25rem]">
+          <h2 className="px-6 text-center text-3xl font-bold tracking-tight text-[#18181b] sm:text-4xl lg:text-[2.25rem]">
             People are saying about us
           </h2>
         </Reveal>
@@ -122,18 +122,18 @@ export default function TestimonialsShowcase() {
               {/* rounded-xl (12px), down from rounded-2xl (16px) — QA #16.
                   Padding from the design: the avatar sits 26px in from the card's
                   left edge on the 1920 frame → ~20px at 1440, so p-5 not p-4. */}
-              <article className="pf-card group flex flex-col rounded-xl border border-black/[0.06] bg-white p-5 shadow-[0_10px_30px_-14px_rgba(80,80,120,0.25)]">
+              <article className="pf-card group flex flex-col rounded-[10px] border border-black/[0.04] bg-white p-6 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.08)]">
                 {/* header: avatar + name/handle + twitter icon */}
                 <div className="flex items-start gap-2">
                   <Avatar t={t} i={i} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-semibold text-black">
+                    <p className="truncate text-[15px] font-bold text-[#18181b]">
                       {t.name}
                     </p>
                     {/* handle #52525b and body #27272a, sampled from HOME5.pdf
                         (QA #13: "@username color not match"). Name is pure black
                         in the design, not zinc-900. */}
-                    <p className="truncate text-[11px] text-[#52525b]">
+                    <p className="truncate text-[13px] text-[#52525b]">
                       {t.handle}
                     </p>
                   </div>
@@ -146,13 +146,13 @@ export default function TestimonialsShowcase() {
                 {/* body — 15px/19.5px. The design's body lines sit at y 397 /
                     423 / 449 / 475, i.e. 26pt of leading, which is 19.5px at a
                     1440 viewport on ~15px type; this was 14px. */}
-                <p className="mt-3 text-[13px] leading-[1.3] text-[#27272a] sm:text-[15px]">
+                <p className="mt-3 mt-4 text-[15px] leading-[1.6] text-[#3f3f46]">
                   {t.body}
                 </p>
 
                 {/* tags — #0ea5e9 in the design, and a tighter top gap than the
                     body copy above (QA #14: hashtags sat too far below). */}
-                <p className="mt-1.5 flex flex-wrap gap-x-2 text-xs font-medium text-[#0ea5e9]">
+                <p className="mt-3 flex flex-wrap gap-x-2 text-[13px] font-medium text-[#0ea5e9]">
                   {t.tags.map((tag) => (
                     <span key={tag}>#{tag}</span>
                   ))}

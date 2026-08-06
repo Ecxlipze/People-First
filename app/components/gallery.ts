@@ -38,11 +38,21 @@ const PHOTOS: GalleryPhoto[] = [
     src: "/images/gallery/gallery3.webp",
     hasImage: true,
   },
+  {
+    alt: "Panel discussion at a People First roundtable (duplicate for layout)",
+    src: "/images/gallery/gallery3.webp",
+    hasImage: true,
+  },
+  {
+    alt: "Rai Salahuddin Ahmad at a People First partner event (duplicate for layout)",
+    src: "/images/gallery/gallery2.webp",
+    hasImage: true,
+  },
 ];
 
 /* Repeated so the coverflow reads as a continuous stream and both flanking
    previews are always filled at any active index — the same trick the mockup
    uses. The carousel wraps, so this loops forever in either direction. Three
-   copies give nine slides: enough that the repeat is not obvious while scrolling
+   copies give 15 slides: enough that the repeat is not obvious while scrolling
    through, without inventing photos we do not have. */
 export const GALLERY: GalleryPhoto[] = [...PHOTOS, ...PHOTOS, ...PHOTOS];

@@ -65,8 +65,13 @@ export function MediaFrame({
         <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={0} />
       </button>
 
+      {/* Optional caption — a SINGLE compact block pinned to the bottom-left.
+          `right-24` keeps it clear of any overhanging stat card, and the fixed
+          line-height stops multi-line captions from colliding. Only pass this
+          for photos that do NOT already have their caption burned into the
+          bitmap (see FeaturedWork's tech-events frame, which does). */}
       {caption && (
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 pb-3 pr-36 pt-12 text-[10px] sm:text-[11.5px] font-medium leading-snug text-white/90 drop-shadow-md">
+        <div className="pointer-events-none absolute bottom-3 left-3 right-24 max-w-[16rem] text-[11px] font-medium leading-[1.25] text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           {caption}
         </div>
       )}
@@ -80,28 +85,60 @@ export function StatCard({
   children,
   className = "",
   variant = "default",
+  /* Opt out of the variant's built-in width when a caller needs an exact
+     measured size. The variant widths carry a `sm:` breakpoint, which outranks
+     a plain `w-[...]` passed via className at ≥640px, so overriding through
+     className alone silently fails — hence this flag rather than a cascade
+     fight. The caller then supplies its own responsive width. */
+  fluidWidth = false,
+  /* Keeps the big stat prominent but drops the supporting line to a small,
+     tighter-leading face. The default variant's `text-sm font-bold` body
+     competes with the number and forces long copy onto one stretched line;
+     the mockup's card runs ~12px text on ~19.5px leading beneath it. */
+  compactBody = false,
 }: {
   value: string;
   children: React.ReactNode;
   className?: string;
   variant?: "default" | "compact";
+  fluidWidth?: boolean;
+  compactBody?: boolean;
 }) {
   const isCompact = variant === "compact";
+  const width = fluidWidth
+    ? ""
+    : isCompact
+      ? "w-[125px] sm:w-[140px]"
+      : "w-[168px] sm:w-[196px]";
   return (
     <div
-      className={`${
+      className={`${width} ${
         isCompact
-          ? "w-[125px] rounded-lg bg-[#60aaaa] p-3 shadow-xl sm:w-[140px]"
-          : "w-[168px] rounded-xl bg-[#60aaaa] p-4 shadow-xl sm:w-[196px]"
+          ? "rounded-lg bg-[#60aaaa] p-3 shadow-xl"
+          : compactBody
+            ? "rounded-xl bg-[#60aaaa] px-4 py-3.5 shadow-xl"
+            : "rounded-xl bg-[#60aaaa] p-4 shadow-xl"
       } text-white ${className}`}
     >
       <CountUp
         value={value}
         className={`block font-bold leading-none ${
-          isCompact ? "text-[1.75rem] sm:text-[2rem]" : "text-3xl font-extrabold sm:text-[2.6rem]"
+          isCompact
+            ? "text-[1.75rem] sm:text-[2rem]"
+            : compactBody
+              ? "text-[1.9rem] font-extrabold sm:text-[2.1rem]"
+              : "text-3xl font-extrabold sm:text-[2.6rem]"
         }`}
       />
-      <p className={`font-semibold leading-snug ${isCompact ? "mt-1 text-[11px] sm:text-[12px]" : "mt-2 text-sm font-bold"}`}>
+      <p
+        className={`font-semibold ${
+          compactBody
+            ? "mt-1.5 text-[11.5px] leading-[1.35]"
+            : isCompact
+              ? "mt-1 text-[11px] leading-snug sm:text-[12px]"
+              : "mt-2 text-sm font-bold leading-snug"
+        }`}
+      >
         {children}
       </p>
     </div>

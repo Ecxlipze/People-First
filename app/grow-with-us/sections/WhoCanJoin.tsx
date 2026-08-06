@@ -72,7 +72,7 @@ export default function WhoCanJoin() {
                 <div className={`grid h-44 place-items-center ${t.top}`}>
                   <span
                     aria-hidden
-                    className="pf-pop text-center text-7xl font-extrabold leading-none text-white sm:text-8xl"
+                    className="pf-pop font-heading text-center text-7xl font-extrabold leading-none text-white sm:text-8xl"
                   >
                     {t.letter}
                   </span>

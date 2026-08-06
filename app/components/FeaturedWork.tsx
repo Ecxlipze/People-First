@@ -95,7 +95,7 @@ export default function FeaturedWork() {
             <div className="mt-6 flex items-center gap-3">
               <CountUp
                 value="30%"
-                className="text-4xl font-bold text-[#d73042] sm:text-4xl"
+                className="font-heading text-4xl font-bold text-[#d73042] sm:text-4xl"
               />
               <span className="text-[12px] font-semibold leading-tight text-zinc-500">
                 management skills

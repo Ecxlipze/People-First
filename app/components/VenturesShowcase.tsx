@@ -35,25 +35,41 @@ export default function VenturesShowcase() {
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden"
         >
+          {/* Plane geometry from the HOME3.pdf render (÷1.333 → 1440):
+                left   x  84–314 (w 230), y  79–269
+                right  x 1078–1274 (w 197), y 59–264
+              Sized to those widths (16vw / 13.7vw). They sit OUTSIDE the
+              heading's 4-line measure in the design; the earlier left-[1.48vw]
+              put the left plane under the text once the heading was scaled up
+              to its measured size. Both stay fully inside the frame. */}
           <Image
             src="/images/icons/left-plane.png"
             alt=""
             width={392}
             height={353}
-            className="absolute left-[1.48vw] top-[2.9vw] hidden w-[20.42vw] select-none xl:block"
+            className="absolute left-[0.6vw] top-[5.5vw] hidden w-[16vw] select-none xl:block"
           />
           <Image
             src="/images/icons/right-plane.png"
             alt=""
             width={256}
             height={227}
-            className="absolute right-[16.67vw] top-[1.9vw] hidden w-[13.33vw] select-none xl:block"
+            className="absolute right-[11.5vw] top-[4.1vw] hidden w-[13.7vw] select-none xl:block"
           />
         </div>
 
         {/* heading — one-shot arrival rather than the previous scroll scrub */}
-        <Reveal className="relative mx-auto max-w-3xl px-6 text-center xl:mx-0 xl:ml-[14.06vw] xl:mt-[4.79vw] xl:w-[60.42vw] xl:max-w-none xl:self-start xl:px-0">
-          <h2 className="text-xl font-normal leading-snug tracking-tight text-[#118d89] sm:text-2xl lg:text-[1.8rem] lg:leading-snug xl:text-[2.604vw] xl:leading-[1.4]">
+        {/* Measured off the HOME3.pdf render (1920pt ÷1.333 → 1440):
+              4 lines, widest 812px, cap-height ~36px, leading ~52.5px.
+            The design's face is narrower than the site's at the same size, so
+            matching its ~50px outright pushed the copy to 6 lines and ran it
+            into the first card row. 3.05vw (~44px) is the largest size that
+            still breaks into the design's FOUR lines inside a 62vw measure —
+            line count and wrap shape matter more here than an exact px match.
+            Container stays wide (62vw); at exactly the widest line's width
+            there is zero slack and any metric difference forces a 5th line. */}
+        <Reveal className="relative mx-auto max-w-3xl px-6 text-center xl:mx-0 xl:ml-[10.5vw] xl:mt-[4.79vw] xl:w-[68vw] xl:max-w-none xl:self-start xl:px-0">
+          <h2 className="text-xl font-normal leading-snug tracking-tight text-[#118d89] sm:text-2xl lg:text-[1.8rem] lg:leading-snug xl:text-[2.95vw] xl:leading-[1.2]">
             We shape <strong className="font-semibold">capable</strong>,{" "}
             <strong className="font-semibold">confident</strong>, and{" "}
             <strong className="font-semibold">market-ready</strong> individuals
@@ -68,9 +84,11 @@ export default function VenturesShowcase() {
             keeping them on separate elements stops the two from colliding. The
             wrapper carries the xl sizing so the flex layout is unchanged. */}
         <Stagger
-          /* Gaps are equal on both axes at every breakpoint (QA CardsSection:
-             "horizontal & vertical gap should be equal") — the xl track
-             previously used 2.604vw across and 3.646vw down. */
+          /* Gaps are equal on both axes below xl. At xl they are NOT equal in
+             the design: measured on the HOME3.pdf render the column gap is 52pt
+             (2.708vw → 39px @1440) but the ROW gap between the two card rows is
+             70pt (3.646vw → 52.5px). An equal 2.708vw on both axes rendered the
+             rows 13.5px too tight. */
           /* lg uses flex-wrap + justify-center rather than a 5-col grid so the
              second row of four centres under the first row of five, as in
              HOME3.pdf. A grid would left-align the orphan row. */
@@ -84,7 +102,11 @@ export default function VenturesShowcase() {
              a flex-wrap and the five-card row broke into uneven rows with white
              channels between them. Giving the track a hair more room than the
              cards need (75.6 vs 75.417) keeps the 5/4 split stable. */
-          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-3.5 px-6 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.219vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.6vw] xl:max-w-none xl:gap-[2.708vw] xl:px-0 xl:pr-0"
+          /* Two columns for the whole tablet/mobile range (the brief asks for a
+             clean two-column grid there); the 5/4 design layout only applies
+             from lg up, where there is room for five across. gap-4 on both axes
+             keeps the horizontal and vertical gaps equal below xl. */
+          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-4 px-6 sm:mt-8 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.219vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.6vw] xl:max-w-none xl:gap-x-[2.708vw] xl:gap-y-[3.646vw] xl:px-0 xl:pr-0"
           step={55}
         >
           {/* Wrapper carries an explicit basis at lg because the container is
@@ -145,7 +167,10 @@ export default function VenturesShowcase() {
 
               <span
                 style={{ borderColor: v.accent }}
-                className="mt-auto flex min-h-11 items-center gap-1.5 rounded-full border px-4 text-xs font-medium text-white/80 xl:h-[1.823vw] xl:min-h-0 xl:px-[1.04vw] xl:text-[0.573vw]"
+                /* whitespace-nowrap + a smaller face below sm: at 390px the
+                   two-column card is ~163px wide and "Explore Website" was
+                   wrapping to two lines, which cramped the button. */
+                className="mt-auto flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[11px] font-medium text-white/80 sm:px-4 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:px-[1.04vw] xl:text-[0.573vw]"
               >
                 Explore Website
                 <ArrowRight className="ml-auto h-3.5 w-3.5 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
