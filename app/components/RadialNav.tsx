@@ -27,15 +27,6 @@ export default function RadialNav() {
            IDEAS LAB. Deriving it from the angle reproduces that automatically
            instead of hand-tuning seven offsets, and it keeps working at every
            --nav-r breakpoint. */
-        /* Removed the complex labelOut calculation because it pushed labels far too 
-           away from the icons. Instead, we use absolute positioning anchored outside 
-           the link container. */
-        const labelPlacement =
-          item.side === "center"
-            ? { anchor: "left-1/2 bottom-full mb-2", self: "-50%, 0%" }
-            : item.side === "left"
-              ? { anchor: "right-full top-1/2 mr-3 text-right", self: "0%, -50%" }
-              : { anchor: "left-full top-1/2 ml-3 text-left", self: "0%, -50%" };
 
         return (
           <Link
@@ -69,9 +60,23 @@ export default function RadialNav() {
                 `w-max` lets it size to its own content instead. */}
             <span
               style={{
-                transform: `translate(${labelPlacement.self})`,
+                /* We anchor the span at the exact center of the icon (left: 50%, top: 50%).
+                   Then we use translate to shift it out radially by 63px.
+                   Finally, we offset it by its own dimensions so it doesn't overlap the icon.
+                   - For 'left' items, we shift left by 100% so its right edge is at the radius.
+                   - For 'right' items, we shift left by 0% so its left edge is at the radius.
+                   - For 'center', we shift left by -50% to center it, and up by -100%. */
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(${
+                  item.side === "left" ? "-100%" : item.side === "right" ? "0%" : "-50%"
+                } + ${sin} * 63px), calc(${
+                  item.side === "center" ? "-100%" : "-50%"
+                } + ${cos} * 63px))`,
               }}
-              className={`absolute hidden w-max whitespace-nowrap text-[0.9375rem] font-light uppercase tracking-[0.06em] text-zinc-300/90 transition-colors group-hover:text-white lg:block ${labelPlacement.anchor}`}
+              className={`absolute hidden w-max whitespace-nowrap text-[0.9375rem] font-light uppercase tracking-[0.06em] text-zinc-300/90 transition-colors group-hover:text-white lg:block ${
+                item.side === "left" ? "text-right" : item.side === "right" ? "text-left" : "text-center"
+              }`}
             >
               {item.label}
             </span>

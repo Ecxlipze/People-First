@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { Reveal } from "@/app/components/ScrollFx";
 import { MediaFrame, StatCard } from "@/app/components/media";
 import {
   prefersReducedMotion,
@@ -154,30 +155,36 @@ export default function MediaShowcase() {
     <div ref={trackRef} className="relative h-[260vh] max-md:!h-auto">
       <div
         ref={stageRef}
-        className="flex overflow-hidden md:sticky md:top-0 md:h-screen md:items-center"
+        className="flex w-full flex-col items-center justify-center overflow-hidden pb-16 pt-8 md:sticky md:top-0 md:h-screen md:pb-0 md:pt-0"
       >
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 sm:px-10 md:grid-cols-2 md:gap-16 lg:pr-32">
+        <Reveal className="mb-10 px-6 text-center sm:mb-12">
+          <h2 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-[2.6rem] lg:leading-[1.1]">
+            Featured Work
+          </h2>
+          <p className="mt-2 text-lg text-zinc-700 sm:text-xl lg:text-[1.3rem] lg:leading-snug">
+            Let’s give you exceptional reasons to choose us.
+          </p>
+        </Reveal>
+
+        <div className="mx-auto grid w-full max-w-[56rem] items-center gap-8 px-6 sm:px-10 md:grid-cols-2 md:gap-12 lg:pr-32 xl:pr-40">
           {/* text — fades/rises in */}
           <div
             ref={textRef}
-            className="order-2 md:order-1"
+            className="order-2 md:order-1 lg:pl-10 lg:pt-8"
             style={{ opacity: 0, willChange: "transform, opacity" }}
           >
-            <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-4xl lg:text-[3.4rem] lg:leading-[1.1]">
-              Podcast: market strategy
+            <h3 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl lg:text-[2.2rem]">
+              Podcast: market<br />strategy
             </h3>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-zinc-500">
+            <p className="mt-4 max-w-[18rem] text-[14px] leading-relaxed text-[#4e648c]">
               We are strategy consultants who work with startup strategies and
               help promote and sell your products, including helping marketing.
             </p>
-            {/* #d73042 to match home2 (the other stats already use it), and
-                `leading-relaxed` on the label — QA asked for more line-height
-                between "Increased" and "Performance Rate". */}
-            <div className="mt-8 flex items-center gap-4">
-              <span className="text-4xl font-extrabold text-[#d73042] sm:text-5xl">
+            <div className="mt-6 flex items-center gap-3">
+              <span className="text-4xl font-bold text-[#d73042] sm:text-4xl">
                 80%
               </span>
-              <span className="text-sm font-medium leading-relaxed text-zinc-500">
+              <span className="text-[12px] font-semibold leading-tight text-zinc-500">
                 Increased
                 <br />
                 Performance Rate
@@ -186,57 +193,35 @@ export default function MediaShowcase() {
           </div>
 
           {/* media — scales through the pin */}
-          <div className="relative order-1 md:order-2">
-            {/* The bloom in home2.pdf spreads far past the frame — it is still
-                tinting the page a few hundred px out — and it is centred on the
-                photo rather than offset to 70%/60%. The rounded-[2rem] did
-                nothing on a radial gradient.
-
-                The bloom must stay INSIDE this box: the sticky stage above is
-                `overflow-hidden`, so a large negative inset is clipped rather
-                than bleeding outward — an earlier -inset-24 vanished for exactly
-                that reason. Wide falloff comes from the gradient stops instead. */}
+          <div className="relative order-1 mx-auto w-full max-w-[260px] md:order-2">
+            {/* Diffused cyan, purple, and pink glow behind the media frame. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-8 -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(226,124,203,0.45)_0%,rgba(226,124,203,0.22)_45%,rgba(226,124,203,0)_78%)]"
+              className="pointer-events-none absolute -inset-16 -z-10 bg-[radial-gradient(ellipse_at_50%_50%,rgba(100,200,230,0.35)_0%,rgba(180,130,240,0.25)_35%,rgba(230,130,180,0.15)_65%,transparent_80%)] opacity-90 blur-2xl"
             />
-            {/* The design's accent here is the upright teal/blue paper-plane
-                pair, which already exists as its own asset — this was cropping
-                the left edge of pattern.png (the crystal band) instead, which is
-                a different shape entirely. In home2.pdf the pair sits just off
-                the photo's top-right corner, upright and unrotated. */}
+            {/* Paper-plane accent, top-right. */}
             <Image
               src="/images/icons/right-plane.png"
               alt=""
               aria-hidden
-              width={272}
-              height={228}
-              className="animate-floaty pointer-events-none absolute -right-10 -top-12 hidden h-24 w-auto select-none object-contain sm:block"
+              width={358}
+              height={302}
+              className="animate-floaty pointer-events-none absolute -right-16 -top-12 z-20 hidden h-24 w-auto select-none object-contain sm:block"
             />
-            <div ref={mediaRef} style={{ willChange: "transform" }}>
+            {/* 0.698 aspect */}
+            <div ref={mediaRef} style={{ willChange: "transform" }} className="relative">
               <MediaFrame
                 src="/images/featured/feature1.webp"
                 alt="A man working on a laptop during a late-evening podcast recording session"
               />
             </div>
-            {/* In home2.pdf the card's BOTTOM edge is flush with the photo's
-                (890 vs 891 on the 1920 frame) and it overhangs sideways instead:
-                card x 755–1016 against photo x 956–1351, so ~77% of its width
-                sits outside the photo's left edge. We had it hanging off the
-                bottom-left corner, which reads as a different composition. */}
-            {/* Overhang must fit the GRID GAP (gap-12 below md, gap-16 above),
-                the only free space left of this photo. An overhang equal to the
-                gap leaves zero clearance and the card touches the copy in the
-                other column, so use half: -left-4 (16px) below md, -left-8
-                (32px) from md up. The design's literal ~77% overhang isn't
-                reproducible — the mockup's photo bleeds into a page margin,
-                this one has a text column beside it. */}
+            {/* StatCard positioned over the lower-right area of the image. */}
             <div
               ref={statRef}
-              className="absolute bottom-0 -left-4 md:-left-8"
+              className="absolute -bottom-6 -right-6 z-20 md:-bottom-8 md:-right-8"
               style={{ opacity: 0, willChange: "transform, opacity" }}
             >
-              <StatCard value="27%">
+              <StatCard variant="compact" value="27%">
                 have knowledge about market strategies.
               </StatCard>
             </div>

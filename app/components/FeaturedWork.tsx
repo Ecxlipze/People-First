@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CountUp, Reveal } from "@/app/components/ScrollFx";
+import { CountUp } from "@/app/components/ScrollFx";
 import { MediaFrame, StatCard } from "@/app/components/media";
 import MediaShowcase from "@/app/components/MediaShowcase";
 import PinnedRecede from "@/app/components/PinnedRecede";
@@ -14,24 +14,7 @@ const SKILLS = [
 
 export default function FeaturedWork() {
   return (
-    <section className="relative z-10 max-md:-mt-8 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-32 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-44 md:-mt-[100vh]">
-      {/* heading */}
-      {/* Type scale from home2.pdf (1920pt frame → ×0.75 for a 1440 viewport).
-          Sizes come from CAP HEIGHT, not from the boxes pdftotext reports: those
-          boxes are the font's full em square (ascent+descent+line gap), which
-          runs ~35% larger than the glyphs actually look. Trusting them directly
-          is what made this heading render oversized.
-            "Featured Work"  box 96.8 → cap ~64 → ~48px  (not the 72px box implies)
-            subtitle         box 60.5 → cap ~40 → ~30px  (not 45px)
-          Both are near-black in the design rather than zinc-500. */}
-      <Reveal className="px-6 text-center">
-        <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl lg:text-[3rem] lg:leading-[1.1]">
-          Featured Work
-        </h2>
-        <p className="mt-4 text-lg text-zinc-700 sm:text-xl lg:text-[1.875rem] lg:leading-snug">
-          Let&rsquo;s give you exceptional reasons to choose us.
-        </p>
-      </Reveal>
+    <section className="relative z-10 max-md:-mt-8 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-24 md:-mt-[100vh]">
 
       {/* ── Block 1: pinned cinematic stage (media scales through the pin) ── */}
       <MediaShowcase />
@@ -39,46 +22,24 @@ export default function FeaturedWork() {
       {/* ── Block 2: media left, text right ──
           Pinned full-viewport and recedes as Section 3 rises over it — same
           swipe-over mechanism as the hero (Section 1 → 2). */}
-      <PinnedRecede className="mx-auto max-w-6xl px-6 sm:px-10 lg:pr-32">
-        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+      <PinnedRecede className="mx-auto max-w-[56rem] px-6 sm:px-10 lg:pr-32 xl:pr-40">
+        <div className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
           {/* media */}
-          <div className="relative order-1">
-            {/* Soft pink bloom behind the photo (QA: "in img background there is
-                no gradient shadow"), sampled from home2.pdf — probing outward
-                from the photo edge picks up #dfbade / #ffeaff, with #8b64d1 in
-                the band above. An earlier pass read this as lavender-blue
-                (rgba(196,168,246)); that is the cool violet at the outer edge of
-                the falloff, not the bloom itself. Teal in this design comes from
-                the paper planes and stat card, never the glow.
-
-                The bloom must stay INSIDE this box: PinnedRecede's sticky stage
-                is `overflow-hidden`, so a large negative inset is clipped rather
-                than bleeding outward — that is what made an earlier -inset-24
-                disappear entirely. Keep the box modest and get the wide falloff
-                from the gradient's own stops instead.
-
-                -z-10 is correct here: it puts the bloom behind the photo and
-                stat card, and the section's opaque background is a distant
-                ANCESTOR, which always paints below its descendants regardless of
-                their z-index. */}
+          <div className="relative order-1 mx-auto w-full max-w-[260px] md:max-w-none lg:pr-4">
+            {/* Diffused cyan, purple, and pink glow behind the media frame. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-8 -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(226,124,203,0.45)_0%,rgba(226,124,203,0.22)_45%,rgba(226,124,203,0)_78%)]"
+              className="pointer-events-none absolute -inset-16 -z-10 bg-[radial-gradient(ellipse_at_50%_50%,rgba(100,200,230,0.35)_0%,rgba(180,130,240,0.25)_35%,rgba(230,130,180,0.15)_65%,transparent_80%)] opacity-90 blur-2xl"
             />
-            {/* Paper-plane accent, top-left. home2.pdf uses the DIAGONAL pair
-                here (planes pointing down-right) against the upright pair beside
-                the podcast photo — the two assets already exist as
-                left-plane/right-plane. This was cropping pattern.png, a
-                different shape. Floats gently, since a decorative element
-                sitting in open space reads as pasted-on when static. */}
             <Image
               src="/images/icons/left-plane.png"
               alt=""
               aria-hidden
               width={379}
               height={340}
-              className="animate-floaty pointer-events-none absolute -left-16 -top-16 hidden h-28 w-auto select-none object-contain sm:block"
+              className="animate-floaty pointer-events-none absolute -left-12 -top-12 z-20 hidden h-24 w-auto select-none object-contain sm:block"
             />
+            <div className="relative">
             {/* 0.8 aspect (384×480 in the render), against the podcast frame's
                 0.698 — the two frames are deliberately different shapes. */}
             <MediaFrame
@@ -113,30 +74,30 @@ export default function FeaturedWork() {
                 reproducible here: the mockup's photo has the whole page margin to
                 bleed into, where this one has a text column beside it. */}
             <StatCard
+              variant="compact"
               value="45%"
-              className="absolute bottom-0 -right-4 md:-right-8"
+              className="absolute -bottom-4 -right-4 z-20 md:-bottom-6 md:-right-8"
             >
               Productivity events all over Pakistan
             </StatCard>
+            </div>
           </div>
 
           {/* text */}
-          <div className="order-2">
-            <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-4xl lg:text-[3.4rem] lg:leading-[1.1]">
-              Tech Events Management&nbsp;.
+          <div className="order-2 lg:pl-4">
+            <h3 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl lg:text-[2.2rem]">
+              Tech Events<br />Management.
             </h3>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-zinc-500">
+            <p className="mt-4 max-w-[18rem] text-[14px] leading-relaxed text-[#4e648c]">
               We are strategy consultants who work with startup strategies and
               help promote and sell your products, including helping marketing.
             </p>
-            <div className="mt-8 flex items-center gap-3">
-              {/* The figure counts up when it scrolls into view, matching the
-                  treatment the About page's Key Stats already use. */}
+            <div className="mt-6 flex items-center gap-3">
               <CountUp
                 value="30%"
-                className="text-4xl font-extrabold text-[#d73042] sm:text-5xl"
+                className="text-4xl font-bold text-[#d73042] sm:text-4xl"
               />
-              <span className="text-sm font-medium leading-tight text-zinc-500">
+              <span className="text-[12px] font-semibold leading-tight text-zinc-500">
                 management skills
               </span>
             </div>

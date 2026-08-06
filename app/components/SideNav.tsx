@@ -205,7 +205,7 @@ export default function SideNav() {
            screen readers; the desktop rail always stays interactive. */
         inert={!isDesktop && !open && !dragging}
         style={{ translate: drag ? `${drag.x}px 0` : undefined }}
-        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col overflow-y-auto overscroll-contain rounded-l-2xl bg-transparent pb-[max(1.25rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.25rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] lg:right-6 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:p-0 ${
+        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col overflow-y-auto overscroll-contain rounded-l-2xl bg-transparent pb-[max(1.25rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.25rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] lg:right-8 xl:right-12 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:p-0 ${
           dragging ? "" : "transition-[translate] duration-300 ease-out"
         } ${
           dragging
@@ -220,7 +220,7 @@ export default function SideNav() {
         {/* `key` on `open` remounts the list each time the drawer opens, which
             restarts the per-item entrance animation below. Cheap: it is seven
             links, and only on mobile where the drawer exists. */}
-        <div key={isDesktop ? "rail" : `drawer-${open}`} className="my-auto flex flex-col gap-5">
+        <div key={isDesktop ? "rail" : `drawer-${open}`} className="my-auto flex flex-col gap-4">
           {navItems.map((item, i) => {
             const active = pathname === item.href;
             return (
@@ -238,7 +238,9 @@ export default function SideNav() {
                    clear ~40pt gap between chip and icon rather than the tight
                    gap-3 (QA footer note: "padding issues.. also check the other
                    icons as well"). */
-                className="group flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none lg:gap-5"
+                className={`group flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none lg:gap-3 ${
+                  active ? "lg:my-2" : ""
+                }`}
                 style={{ animationDelay: `${i * 45}ms`, animationDuration: "420ms" }}
               >
               {/* Label chip. Light, brand-tinted surface instead of a heavy
@@ -249,11 +251,11 @@ export default function SideNav() {
                   and the icons alone wouldn't be identifiable. */}
               <span
                 aria-hidden
-                className={`pointer-events-none whitespace-nowrap rounded-full px-3 py-1 text-right text-xs font-bold leading-tight tracking-wide shadow-sm ring-1 backdrop-blur-sm transition-all duration-200 lg:opacity-0 lg:[translate:-0.25rem_0] lg:group-hover:opacity-100 lg:group-hover:[translate:0_0] lg:group-focus-visible:opacity-100 lg:group-focus-visible:[translate:0_0] ${
+                className={`pointer-events-none whitespace-nowrap transition-all duration-200 uppercase tracking-wider lg:text-[13px] lg:opacity-100 lg:translate-x-0 lg:bg-transparent lg:shadow-none lg:ring-0 ${
                   active
-                    ? "bg-pf-magenta/15 text-pf-magenta-dark ring-pf-magenta/30"
-                    : "bg-white/90 text-zinc-700 ring-black/5 lg:group-hover:text-pf-magenta-dark"
-                }`}
+                    ? "lg:font-black lg:text-black max-lg:bg-pf-magenta/15 max-lg:text-pf-magenta-dark max-lg:ring-pf-magenta/30 max-lg:opacity-100 max-lg:translate-x-0"
+                    : "lg:font-medium lg:text-[#b0b5c5] max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-black/5 max-lg:opacity-0 max-lg:-translate-x-1 max-lg:group-hover:opacity-100 max-lg:group-hover:translate-x-0"
+                } max-lg:hidden lg:block`}
               >
                 {item.label}
               </span>
@@ -268,8 +270,8 @@ export default function SideNav() {
                   priority
                   className={`shrink-0 rounded-full transition-all duration-300 group-hover:scale-110 group-active:scale-95 ${
                     active
-                      ? "h-12 w-12 shadow-lg shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-14 lg:w-14"
-                      : "h-11 w-11 opacity-90 group-hover:opacity-100"
+                      ? "h-14 w-14 shadow-xl shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-[50px] lg:w-[50px]"
+                      : "h-11 w-11 opacity-90 group-hover:opacity-100 lg:h-10 lg:w-10"
                   }`}
                 />
                 <NavPending />

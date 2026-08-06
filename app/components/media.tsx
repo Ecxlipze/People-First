@@ -66,7 +66,7 @@ export function MediaFrame({
       </button>
 
       {caption && (
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pt-10 text-xs font-semibold leading-tight text-white">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pr-32 pt-10 text-xs font-semibold leading-tight text-white">
           {caption}
         </div>
       )}
@@ -79,35 +79,31 @@ export function StatCard({
   value,
   children,
   className = "",
+  variant = "default",
 }: {
   value: string;
   children: React.ReactNode;
   className?: string;
+  variant?: "default" | "compact";
 }) {
+  const isCompact = variant === "compact";
   return (
-    /* Card 1 in the home2.pdf render spans x 755–1016, y 684–890 → 262×207 on
-       the 1920pt frame, i.e. ~196×155 at a 1440 viewport. Both cards sample to
-       #60aaaa (card 2 only looks purple where the pink bloom passes over it).
-       Unlike the photo frames these ARE rounded, cutting in over ~12px.
-
-       Type size here must be derived from LINE SPACING, not from the reported
-       glyph boxes. pdftotext gives the three body lines boxes of 37.8pt each,
-       but their yMins are only 25pt apart (773.4 / 798.4 / 824.4) — the boxes
-       overlap by 12.8pt because each is the font's full em box, not the visual
-       size. 25pt of leading → ~18–19pt type → ~14px at 1440, i.e. text-sm.
-       Likewise "27%" reports 77.2pt but four lines share a 207pt-tall card, so
-       it lands near 42px, not the 58px the raw box implies. */
     <div
-      className={`w-[168px] rounded-xl bg-[#60aaaa] p-4 text-white shadow-xl sm:w-[196px] ${className}`}
+      className={`${
+        isCompact
+          ? "w-[125px] rounded-lg bg-[#60aaaa] p-3 shadow-xl sm:w-[140px]"
+          : "w-[168px] rounded-xl bg-[#60aaaa] p-4 shadow-xl sm:w-[196px]"
+      } text-white ${className}`}
     >
-      {/* The figure counts up the first time the card scrolls into view.
-          CountUp renders the finished string on the server, so the value is
-          correct before hydration and for reduced-motion users. */}
       <CountUp
         value={value}
-        className="block text-3xl font-extrabold leading-none sm:text-[2.6rem]"
+        className={`block font-bold leading-none ${
+          isCompact ? "text-[1.75rem] sm:text-[2rem]" : "text-3xl font-extrabold sm:text-[2.6rem]"
+        }`}
       />
-      <p className="mt-2 text-sm font-bold leading-snug">{children}</p>
+      <p className={`font-semibold leading-snug ${isCompact ? "mt-1 text-[11px] sm:text-[12px]" : "mt-2 text-sm font-bold"}`}>
+        {children}
+      </p>
     </div>
   );
 }

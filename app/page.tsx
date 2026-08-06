@@ -11,6 +11,19 @@ export default function Landing() {
         aria-hidden
         className="pointer-events-none absolute inset-0 z-0 bg-[url('/images/bg-landing.png')] bg-cover bg-center bg-no-repeat opacity-80 mix-blend-screen"
       />
+      {/* Subtle side patterns and dark gradients */}
+      <div 
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 opacity-40 mix-blend-screen"
+        style={{
+          backgroundImage: `
+            radial-gradient(ellipse 80% 100% at -10% 50%, rgba(43, 191, 196, 0.15) 0%, transparent 70%),
+            radial-gradient(ellipse 80% 100% at 110% 50%, rgba(43, 191, 196, 0.15) 0%, transparent 70%),
+            repeating-radial-gradient(circle at -20% 50%, transparent 0, transparent 80px, rgba(255,255,255,0.03) 80px, rgba(255,255,255,0.03) 160px),
+            repeating-radial-gradient(circle at 120% 50%, transparent 0, transparent 80px, rgba(255,255,255,0.03) 80px, rgba(255,255,255,0.03) 160px)
+          `
+        }}
+      />
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4">
         <RadialNav />
 
@@ -29,7 +42,7 @@ export default function Landing() {
             the fan's tip onto the HOME icon. Expressed in svh so the pairing
             holds as the viewport height changes. Below lg the labels are hidden
             and the arc is tighter, so margin-based stacking still applies. */}
-        <div className="animate-fade-in-up relative mt-40 flex flex-col items-center min-[400px]:mt-44 sm:mt-36 lg:absolute lg:mt-0 lg:top-[30.4svh] [@media(max-height:500px)]:mt-0">
+        <div className="animate-fade-in-up absolute flex flex-col items-center top-[58%] lg:top-[45.5svh] left-1/2 -translate-x-1/2 -translate-y-[47%]">
           {/* soft pulsing glow behind the logo */}
           <div
             aria-hidden
