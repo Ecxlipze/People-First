@@ -964,37 +964,58 @@ optgroup {
 }
 
 /* ---- Homepage Hero Background ----
-   Matches HOME1.pdf with layered radial gradients for a soft glow. */
+   Every value here is measured off HOME1.pdf (1920×1302), whose background is a
+   FLAT #fcf7ff with exactly ONE soft teal glow on it. The previous version had
+   three problems, all of which QA saw as the "green half-shadow" on the left:
+
+     1. The glow was truncated. Its stop chain ended `transparent 52%`, so the
+        colour ramp was squeezed into the inner half of the gradient's own radius
+        and then stopped dead. A radial-gradient's default extent is
+        farthest-corner, so on a wide viewport that cut-off landed mid-screen as
+        a visible arc — a hard edge with nothing beyond it, which reads as a
+        shadow rather than a glow. The design's alpha instead decays smoothly all
+        the way out (measured falloff below) and only reaches zero past its
+        nominal radius.
+
+     2. The hue was wrong. The design's glow is rgb(37,196,201) — hue 182°, a
+        blue-green. Composited over the page at its peak that lands on hue 189°.
+        The old rgba(120,210,235) is hue 193° and much lighter, which composites
+        to hue 209° — a blue-lavender. Against the page's warm #fcf7ff that
+        mismatch is what made the patch read as a dirty green-grey cast.
+
+     3. It was in the wrong place and there were two of them. The design's glow
+        centre is x=-1.88% / y=37.94% (i.e. mostly OFF the left edge, so only its
+        right flank is on screen). The old one sat fully on-screen at 10% 35%,
+        putting its bright core in the middle of the hero copy. The second
+        `radial-gradient(... 65% 8% ...)` purple wash has no counterpart in the
+        design at all — sampling the mockup at that position returns the flat
+        base colour — so it is gone.
+
+   The stop list is a fit to the mockup's own alpha channel, sampled as a
+   radial average and normalised to the peak (0.263). Gradient radius is
+   1.35 × the design's nominal 393px radius, because that is where the design's
+   alpha actually reaches zero; the stop percentages below are therefore the
+   design's 0/15/30/45/60/75/90/100% samples divided by 1.35. Max error against
+   the measured curve is 0.012 alpha.
+
+   Sized in vh, not px: the design's radius is 30.2% of the frame HEIGHT, and
+   expressing it that way keeps the glow the same share of the hero at any
+   viewport size, which is what stops it from becoming a hard-edged blob on
+   short/wide windows. No separate mobile override is needed for the same
+   reason — the one rule scales. */
 .bg-hero-gradient {
   background:
     radial-gradient(
-      circle at 10% 35%,
-      rgba(120, 210, 235, 0.15) 0%,
-      rgba(120, 210, 235, 0.06) 28%,
-      transparent 52%
+      circle 40.8vh at -1.88% 37.94%,
+      rgba(37, 196, 201, 0.262) 0%,
+      rgba(37, 196, 201, 0.249) 11.1%,
+      rgba(37, 196, 201, 0.21) 22.2%,
+      rgba(37, 196, 201, 0.16) 33.3%,
+      rgba(37, 196, 201, 0.112) 44.4%,
+      rgba(37, 196, 201, 0.069) 55.6%,
+      rgba(37, 196, 201, 0.035) 66.7%,
+      rgba(37, 196, 201, 0.019) 74.1%,
+      rgba(37, 196, 201, 0) 100%
     ),
-    radial-gradient(
-      circle at 65% 8%,
-      rgba(210, 195, 245, 0.12) 0%,
-      transparent 46%
-    ),
-    #f8f7ff;
-}
-
-@media (max-width: 768px) {
-  .bg-hero-gradient {
-    background:
-      radial-gradient(
-        circle at 0% 30%,
-        rgba(120, 210, 235, 0.12) 0%,
-        rgba(120, 210, 235, 0.04) 30%,
-        transparent 60%
-      ),
-      radial-gradient(
-        circle at 75% 5%,
-        rgba(210, 195, 245, 0.09) 0%,
-        transparent 45%
-      ),
-      #f8f7ff;
-  }
+    #fcf7ff;
 }
