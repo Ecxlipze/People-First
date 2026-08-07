@@ -33,7 +33,6 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     name: "Guy Hawkins",
-    handle: "@guyhawkins",
     handle: "@jennywilson",
     body: "This is a top quality product. No need to think twice before making it live on web.",
     tags: ["make_it_fast"],
@@ -50,7 +49,6 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     name: "Marvin McKinney",
-    handle: "@marvinmck",
     handle: "@jennywilson",
     body: "With Postcrafts, it’s quicker with the customer, the customer is more ensured of getting exactly what they ordered, and I’m all for the efficiency.",
     tags: ["dev", "tools"],
@@ -67,7 +65,6 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     name: "Annette Black",
-    handle: "@annetteblack",
     handle: "@jennywilson",
     body: "You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change and click save.",
     tags: ["another"],
@@ -84,7 +81,6 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     name: "Floyd Miles",
-    handle: "@floydmiles",
     handle: "@jennywilson",
     body: "My new site is so much faster and easier to work with than my old site. I just choose the page, make the change and click save.",
     tags: ["postcrafts"],
