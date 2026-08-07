@@ -29,18 +29,18 @@ const PATHS: Path[] = [
     audiences: ["Students", "Young Professionals", "Beginners"],
     href: "/training",
     contactRole: "Student",
-    labelText: "text-pf-teal",
-    border: "border-pf-teal",
-    button: "bg-pf-teal text-[#40205a] hover:brightness-105",
+    labelText: "text-[#2ed5b4]", // Teal/green color
+    border: "border-[#2ed5b4]/50",
+    button: "bg-[#2ed5b4] text-white hover:brightness-105",
   },
   {
     title: "GROW",
-    lead: "I want to scale my business/career",
+    lead: "I want to scale my business & Career",
     audiences: ["Professionals", "Entrepreneurs", "Businesses"],
     href: "/grow-with-us",
-    labelText: "text-pf-orange",
-    border: "border-pf-orange",
-    button: "bg-pf-orange text-white hover:brightness-105",
+    labelText: "text-[#faa02b]", // Orange/yellow
+    border: "border-[#faa02b]/50",
+    button: "bg-[#faa02b] text-white hover:brightness-105",
   },
   {
     title: "LEAD",
@@ -48,9 +48,9 @@ const PATHS: Path[] = [
     audiences: ["Founders", "Investors", "Institutions"],
     href: "/partner",
     contactRole: "Training Partner",
-    labelText: "text-pf-lead",
-    border: "border-pf-lead",
-    button: "bg-pf-lead text-white hover:brightness-105",
+    labelText: "text-[#8d6ee6]", // Light purple
+    border: "border-[#8d6ee6]/50",
+    button: "bg-[#8d6ee6] text-white hover:brightness-105",
   },
 ];
 
@@ -61,29 +61,29 @@ export default function JourneyPaths() {
     <section className="bg-pf-purple px-6 pb-24 pt-10 sm:px-10 sm:pb-32 sm:pt-14 lg:px-24 xl:px-28">
       <div className="mx-auto max-w-[1280px]">
         <Reveal className="text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#f6d9ff] sm:text-[2.65rem]">
+          <h2 className="font-display text-3xl font-bold uppercase tracking-tight text-white sm:text-[2.65rem]">
             WHERE ARE YOU IN YOUR JOURNEY
           </h2>
-          <p className="mt-5 text-base text-white/90 sm:text-xl">
+          <p className="mt-5 text-base font-normal text-white/90 sm:text-xl">
             Choose your path and let us help you grow.
           </p>
         </Reveal>
 
         <Stagger
-          className="mt-16 grid items-stretch gap-8 md:grid-cols-3"
+          className="mt-16 grid items-stretch gap-6 lg:gap-8 md:grid-cols-3"
           step={75}
         >
           {PATHS.map((p) => (
             <div key={p.title} className="h-full">
               <div
-                className={`pf-card pf-sheen group relative flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl border ${p.border} bg-[#4b1858] px-10 py-9 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.55)]`}
+                className={`group relative flex h-full min-h-[360px] flex-col overflow-hidden rounded-[0.625rem] border ${p.border} bg-transparent px-8 py-9 sm:px-10`}
               >
                 <h3
-                  className={`text-center text-2xl font-extrabold tracking-[0.08em] ${p.labelText}`}
+                  className={`font-display text-center text-xl font-bold uppercase tracking-[0.08em] sm:text-2xl ${p.labelText}`}
                 >
                   {p.title}
                 </h3>
-                <p className="mt-1 text-center text-xs text-white/65">
+                <p className="mt-2 text-center text-xs font-normal text-white/80">
                   {p.lead}
                 </p>
 
@@ -91,11 +91,11 @@ export default function JourneyPaths() {
                   {p.audiences.map((a) => (
                     <li
                       key={a}
-                      className="flex items-center gap-4 text-base font-medium text-white sm:text-lg"
+                      className="flex items-center gap-3 whitespace-nowrap text-sm font-normal text-white sm:text-base lg:text-sm xl:text-base"
                     >
                       <Check
-                        className="pf-pop h-4 w-4 shrink-0 text-white"
-                        strokeWidth={2.5}
+                        className="h-4 w-4 shrink-0 text-white"
+                        strokeWidth={2}
                       />
                       {a}
                     </li>
@@ -105,7 +105,7 @@ export default function JourneyPaths() {
                 {/* Contact-CTA cards open the modal in place; GROW is a real
                     page, so it stays an ordinary link. */}
                 {(() => {
-                  const cls = `pf-interactive group mx-auto mt-8 inline-flex min-h-11 w-full max-w-[210px] items-center justify-between gap-2 rounded-full px-6 py-2.5 text-sm font-medium ${p.button}`;
+                  const cls = `pf-interactive group mx-auto mt-8 inline-flex min-h-11 w-full max-w-[180px] items-center justify-center gap-2 rounded-full px-6 py-2.5 font-display text-sm font-medium ${p.button}`;
                   const inner = (
                     <>
                       Explore Path

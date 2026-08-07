@@ -188,9 +188,7 @@ export default function ContactPanel({
         <div className="mt-[clamp(1.25rem,4vh,2.5rem)] space-y-[clamp(0.75rem,2.5vh,1.75rem)]">
           {/* phones — one icon, both numbers, as in the design */}
           <div className="group flex items-start gap-3.5">
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
-              <WhatsappIcon className="pf-pop h-5 w-5 text-[#25d366]" />
-            </span>
+            <WhatsappIcon className="mt-0.5 pf-pop h-6 w-6 text-[#25d366]" />
             <div className="flex flex-col">
               {PHONES.map((p, i) => (
                 <a
@@ -205,9 +203,7 @@ export default function ContactPanel({
           </div>
 
           <div className="group flex items-start gap-3.5">
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
-              <GmailIcon className="pf-pop h-4 w-4" />
-            </span>
+            <GmailIcon className="mt-0.5 pf-pop h-6 w-6" />
             <div className="flex flex-col">
               {EMAILS.map((e) => (
                 <a
@@ -230,7 +226,7 @@ export default function ContactPanel({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="pf-interactive flex h-11 w-11 items-center justify-center rounded-full hover:-translate-y-1 hover:scale-110 hover:bg-white/10"
+              className="pf-interactive flex h-11 w-11 items-center justify-center rounded-xl hover:-translate-y-1 hover:scale-110 hover:bg-white/10"
             >
               <Icon className={`h-7 w-7 ${className}`} />
             </a>

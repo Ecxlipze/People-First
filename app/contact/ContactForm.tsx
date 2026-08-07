@@ -38,7 +38,7 @@ export const ROLES = [
    pixels each instead of pushing the Submit button out of view. The floor still
    clears the 40px comfortable-tap minimum. */
 const FIELD =
-  "block h-[clamp(2.125rem,4.6vh,3rem)] w-full rounded-lg border border-transparent bg-white px-3.5 text-sm text-zinc-800 shadow-[0_1px_2px_rgba(16,16,20,0.05)] outline-none transition-[border-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-zinc-400 focus:border-pf-magenta focus:ring-4 focus:ring-pf-magenta/20";
+  "block h-[clamp(2.125rem,4.6vh,3rem)] w-full rounded-lg border border-transparent bg-white px-3.5 text-sm text-zinc-800 shadow-[0_1px_2px_rgba(16,16,20,0.05)] outline-none transition-[border-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-zinc-400 focus:border-pf-magenta focus:ring-4 focus:ring-pf-magenta/20 [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white] [&:-webkit-autofill]:text-zinc-800";
 
 function Field({
   label,
@@ -66,6 +66,7 @@ function Field({
       {children}
       {error && (
         <p
+          id={`${htmlFor}-error`}
           role="alert"
           className="animate-feedback-in mt-1 flex items-start gap-1.5 text-xs font-medium text-red-600"
         >
@@ -110,6 +111,7 @@ function Select({
         name={name}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        aria-describedby={id ? `${id}-error` : undefined}
         className={`${FIELD} peer cursor-pointer appearance-none pr-9 ${
           value === "" ? "text-zinc-400" : ""
         }`}
@@ -214,10 +216,12 @@ export default function ContactForm({
           name="fullName"
           type="text"
           required
+          maxLength={120}
           autoComplete="name"
           placeholder="Full Name"
           defaultValue={v.fullName}
           aria-invalid={!!err.fullName}
+          aria-describedby={err.fullName ? `${id("fullName")}-error` : undefined}
           className={`${FIELD} ${err.fullName ? "border-red-400" : ""}`}
         />
       </Field>
@@ -228,10 +232,12 @@ export default function ContactForm({
           name="email"
           type="email"
           required
+          maxLength={254}
           autoComplete="email"
           placeholder="Email Address"
           defaultValue={v.email}
           aria-invalid={!!err.email}
+          aria-describedby={err.email ? `${id("email")}-error` : undefined}
           className={`${FIELD} ${err.email ? "border-red-400" : ""}`}
         />
       </Field>
@@ -241,10 +247,15 @@ export default function ContactForm({
           id={id("phone")}
           name="phone"
           type="tel"
+          inputMode="tel"
+          pattern="^[+()\d][\s()+\d-]{6,24}$"
+          title="Please enter a valid phone number (e.g., +92 300 1231234)"
+          maxLength={25}
           autoComplete="tel"
           placeholder="Phone Number"
           defaultValue={v.phone}
           aria-invalid={!!err.phone}
+          aria-describedby={err.phone ? `${id("phone")}-error` : undefined}
           className={`${FIELD} ${err.phone ? "border-red-400" : ""}`}
         />
       </Field>
@@ -275,9 +286,11 @@ export default function ContactForm({
           id={id("message")}
           name="message"
           required
+          maxLength={4000}
           placeholder="Your Message"
           defaultValue={v.message}
           aria-invalid={!!err.message}
+          aria-describedby={err.message ? `${id("message")}-error` : undefined}
           className={`${FIELD} h-[clamp(3.25rem,11vh,7rem)] resize-none py-2 ${err.message ? "border-red-400" : ""}`}
         />
       </Field>

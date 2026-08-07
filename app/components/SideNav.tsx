@@ -260,11 +260,11 @@ export default function SideNav({
                   and the icons alone wouldn't be identifiable. */}
               <span
                 aria-hidden
-                className={`pointer-events-none whitespace-nowrap transition-all duration-200 uppercase tracking-wider lg:text-[13px] lg:opacity-100 lg:translate-x-0 lg:bg-transparent lg:shadow-none lg:ring-0 ${
+                className={`pointer-events-none whitespace-nowrap transition-all duration-200 uppercase tracking-wider lg:text-[13px] lg:bg-transparent lg:shadow-none lg:ring-0 lg:opacity-0 lg:-translate-x-1 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 max-lg:opacity-100 max-lg:translate-x-0 ${
                   active
-                    ? "lg:font-black lg:text-black max-lg:bg-pf-magenta/15 max-lg:text-pf-magenta-dark max-lg:ring-pf-magenta/30 max-lg:opacity-100 max-lg:translate-x-0"
-                    : `lg:font-medium ${onLight ? "lg:text-zinc-600" : "lg:text-[#b0b5c5]"} max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-black/5 max-lg:opacity-0 max-lg:-translate-x-1 max-lg:group-hover:opacity-100 max-lg:group-hover:translate-x-0`
-                } max-lg:hidden lg:block`}
+                    ? "lg:font-black lg:text-black max-lg:bg-pf-magenta/15 max-lg:text-pf-magenta-dark max-lg:ring-pf-magenta/30"
+                    : `lg:font-medium ${onLight ? "lg:text-zinc-600" : "lg:text-[#b0b5c5]"} max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-black/5`
+                }`}
               >
                 {item.label}
               </span>

@@ -24,9 +24,9 @@ export default function ContactPageBody({
 
       {/* Exactly one viewport tall with nothing spilling out — the page never
           scrolls; the panel inside compresses to fit instead.
-          pr on lg+ keeps the panel clear of the fixed nav rail. */}
-      <div className="relative flex h-svh flex-col overflow-hidden bg-[radial-gradient(ellipse_at_center_top,#ffffff_0%,#f2f2f4_45%,#e6e5ea_100%)] px-5 py-[clamp(1rem,2.5vh,2.5rem)] sm:px-14 lg:pr-64 xl:pr-72">
-        <div className="flex shrink-0 items-center justify-between gap-6">
+          The container padding is uniform to keep the modal perfectly centered. */}
+      <div className="relative flex h-svh flex-col overflow-hidden bg-[radial-gradient(ellipse_at_center_top,#ffffff_0%,#f2f2f4_45%,#e6e5ea_100%)] px-5 py-[clamp(1rem,2.5vh,2.5rem)] sm:px-14">
+        <div className="relative z-10 flex shrink-0 items-center justify-between gap-6">
           <Link
             href="/"
             aria-label="People First — landing"
@@ -66,6 +66,9 @@ export default function ContactPageBody({
             </div>
           </div>
         </div>
+
+        {/* Invisible spacer to balance the header height for perfect vertical centering */}
+        <div className="shrink-0 h-10 sm:h-12" aria-hidden="true" />
       </div>
     </>
   );

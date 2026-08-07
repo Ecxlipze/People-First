@@ -180,7 +180,7 @@ export function ContactModalProvider({
             aria-label="Close contact form"
             tabIndex={-1}
             onClick={close}
-            className={`absolute inset-0 cursor-default bg-black/35 backdrop-blur-[5px] ${
+            className={`absolute inset-0 cursor-default bg-white/70 backdrop-blur-[10px] ${
               closing
                 ? "animate-modal-backdrop-out"
                 : "animate-modal-backdrop"

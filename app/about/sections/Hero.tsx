@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MessageCircle } from "lucide-react";
 import ContactTrigger from "@/app/contact/ContactTrigger";
 
 /* About → Hero. Deep-purple founder-story panel: big heading, founding question,
@@ -38,17 +37,17 @@ export default function Hero() {
       <div className="relative z-10 mx-auto grid max-w-[1600px] items-start gap-12 px-6 pb-16 pt-12 sm:px-10 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-20 lg:px-24 xl:gap-24 xl:px-28 xl:pr-44">
         {/* ── left: copy ── */}
         <div className="pf-stagger max-w-[680px]">
-          <h1 className="text-4xl font-extrabold leading-[1.06] tracking-tight text-white sm:text-[2.75rem] lg:text-5xl">
+          <h1 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-white sm:text-[2.75rem] lg:text-5xl">
             Every Movement Begins
             <br className="hidden sm:block" /> with a Question.
           </h1>
 
-          <p className="mt-7 max-w-[650px] text-lg font-semibold leading-snug text-white sm:text-[1.3rem]">
+          <p className="font-display mt-7 max-w-[650px] text-lg font-semibold leading-snug text-white sm:text-[1.3rem]">
             &ldquo;Why do so many talented people fail, even when they have
             passion and good intentions?&rdquo;
           </p>
 
-          <div className="mt-10 max-w-[650px] space-y-4 text-[0.92rem] leading-[1.55] text-white/90 sm:text-[0.98rem]">
+          <div className="mt-10 max-w-[650px] space-y-4 text-sm font-normal leading-[1.6] text-white sm:text-base">
             <p>
               After more than 25 years working closely with entrepreneurs,
               students, farmers, and investors across diverse sectors, our
@@ -70,7 +69,6 @@ export default function Hero() {
               highest level, and build meaningful lives.
             </p>
           </div>
-
         </div>
 
         {/* ── right: founder portrait ── */}
@@ -86,32 +84,39 @@ export default function Hero() {
             />
           </div>
           <div className="relative z-10 mt-4 flex flex-wrap items-center justify-center gap-3 px-2">
-            <ContactTrigger
-              href="/partner"
-              role="Training Partner"
+              <ContactTrigger
+                href="/partner"
+                role="Training Partner"
               className="pf-interactive inline-flex min-h-11 items-center rounded bg-[#a63d72] px-5 py-2.5 text-center text-xs font-semibold text-white shadow-lg hover:-translate-y-0.5 hover:bg-pf-magenta-dark"
-            >
-              Partner with Us
-            </ContactTrigger>
-            <ContactTrigger
-              href="/training"
-              role="Student"
+              >
+                Partner with Us
+              </ContactTrigger>
+              <ContactTrigger
+                href="/training"
+                role="Student"
               className="pf-interactive inline-flex min-h-11 items-center rounded bg-zinc-100 px-5 py-2.5 text-center text-xs font-semibold text-zinc-900 shadow-lg hover:-translate-y-0.5 hover:bg-white"
-            >
-              Join Training Program
-            </ContactTrigger>
+              >
+                Join Training Program
+              </ContactTrigger>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* "Say Hello!" — bottom-right */}
       <div className="relative z-20 mx-auto flex max-w-[1600px] justify-end px-6 pb-7 sm:px-10 lg:px-24 xl:px-44">
         <ContactTrigger
           href="/contact"
-          className="group inline-flex min-h-11 items-center gap-2.5 text-xl font-bold text-white transition-colors hover:text-pf-magenta sm:text-2xl"
+          className="group inline-flex min-h-11 items-center gap-3 font-display text-xl font-bold text-white transition-colors hover:text-pf-magenta sm:text-2xl"
         >
           Say Hello!
-          <MessageCircle className="h-7 w-7 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110" />
+          <Image
+            src="/images/icons/say-hello.svg"
+            alt=""
+            aria-hidden
+            width={32}
+            height={32}
+            className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110"
+          />
         </ContactTrigger>
       </div>
 
