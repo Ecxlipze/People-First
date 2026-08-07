@@ -33,63 +33,66 @@ export default function KeyStats() {
       <div className="mx-auto max-w-[1440px]">
         {/* ── stats row ── */}
         <Stagger
-          className="grid items-center gap-12 lg:grid-cols-[500px_minmax(0,1fr)] lg:gap-20"
+          className="grid items-center gap-12 lg:grid-cols-[500px_minmax(0,1fr)] lg:gap-16 xl:gap-20"
           step={110}
         >
           {/* left: heading + copy */}
           <div>
-            <span className="inline-block rounded-sm bg-white px-3 py-1 text-sm font-bold uppercase tracking-wide text-[#67235c] sm:text-base">
+            <span className="font-display inline-block rounded-sm bg-white px-3 py-1 text-sm font-bold uppercase tracking-wide text-[#67235c] sm:text-base">
               Trust &amp; Credibility
             </span>
-            <h2 className="mt-6 text-5xl font-extrabold tracking-tight sm:text-7xl">
+            <h2 className="font-display mt-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
               <span className="text-white">KEY </span>
               <span className="text-pf-gold">STATS</span>
             </h2>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-white/85 sm:text-[1.6rem] sm:leading-[1.35]">
+            <p className="mt-6 max-w-md text-base font-normal leading-relaxed text-white/90 sm:text-lg lg:text-xl">
               Our client retention rate is among the highest in the industry,
               reflecting long-term partnerships built on consistent execution.
             </p>
           </div>
 
           {/* right: stat cards */}
-          <div className="flex flex-col gap-4">
-            {/* The three figures count up the first time they scroll into
-                view — the payoff of a "Key Stats" panel is the numbers, so
-                they earn the emphasis. */}
-            <div className="pf-card flex min-h-36 items-center justify-end rounded-2xl bg-[#f6f8ff] px-10 py-8 text-right shadow-xl">
+          <div className="flex flex-col gap-4 sm:gap-6">
+            <div className="flex items-center justify-between rounded-xl bg-white px-8 py-8 shadow-none sm:px-12 sm:py-10">
               <CountUp
                 value={STATS.big.value}
-                className="font-heading block text-5xl font-extrabold text-[#67235c] sm:text-6xl"
+                className="font-display block text-5xl font-bold text-[#67235c] sm:text-6xl lg:text-7xl"
               />
-              <span className="ml-2 self-end pb-2 text-sm text-zinc-500">
-                {STATS.big.label}
-              </span>
+              <div className="flex flex-col text-left">
+                <span className="font-display text-sm font-bold uppercase leading-tight text-zinc-800 sm:text-base">Brands</span>
+                <span className="font-display text-sm font-bold uppercase leading-tight text-zinc-800 sm:text-base">Supported</span>
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {STATS.small.map((s) => (
+            <div className="grid grid-cols-2 gap-4 sm:gap-6">
+              {STATS.small.map((s) => {
+                const words = s.label.split(" ");
+                const firstPart = words.slice(0, words.length > 2 ? 2 : 1).join(" ");
+                const secondPart = words.slice(words.length > 2 ? 2 : 1).join(" ");
+                return (
                 <div
                   key={s.label}
-                  className="pf-card flex min-h-28 items-center justify-between gap-3 rounded-2xl bg-[#f6f8ff] px-7 py-6 shadow-xl"
+                  className="flex items-center justify-between gap-2 rounded-xl bg-white px-6 py-6 shadow-none sm:px-8 sm:py-8"
                 >
                   <CountUp
                     value={s.value}
-                    className="font-heading text-4xl font-extrabold text-[#18007a] sm:text-5xl"
+                    className="font-display text-4xl font-bold text-[#18007a] sm:text-5xl"
                   />
-                  <span className="text-right text-xs leading-tight text-zinc-500 sm:text-sm">
-                    {s.label}
-                  </span>
+                  <div className="flex flex-col text-left">
+                    <span className="font-display text-[11px] font-bold uppercase leading-tight text-zinc-800 sm:text-[13px]">{firstPart}</span>
+                    <span className="font-display text-[11px] font-bold uppercase leading-tight text-zinc-800 sm:text-[13px]">{secondPart}</span>
+                  </div>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
         </Stagger>
 
         {/* ── strategic partners ── */}
         <Reveal className="mt-20 sm:mt-28">
-          <h3 className="text-center text-3xl font-extrabold tracking-tight text-[#f6d9ff] sm:text-[2.65rem]">
+          <h3 className="font-display text-center text-3xl font-bold uppercase tracking-tight text-[#f6d9ff] sm:text-[2.65rem]">
             OUR STRATEGIC PARTNERS
           </h3>
-          <div className="about-partner-marquee mt-12">
+          <div className="about-partner-marquee mt-12 flex flex-col gap-4 sm:gap-6">
             <div className="about-partner-track">
               {[0, 1].map((copy) => (
                 <div
@@ -99,26 +102,53 @@ export default function KeyStats() {
                     copy === 0 ? "People First strategic partners" : undefined
                   }
                   aria-hidden={copy === 1}
-                  className="flex shrink-0 gap-6 pr-6"
+                  className="flex shrink-0 gap-4 pr-4 sm:gap-6 sm:pr-6"
                 >
                   {PARTNERS.map((partner) => (
                     <div
                       key={`${copy}-${partner.name}`}
                       role={copy === 0 ? "listitem" : undefined}
-                      className="pf-card group flex h-28 w-[250px] shrink-0 items-center justify-center bg-white px-7 shadow-md sm:h-32 sm:w-[310px] lg:w-[340px]"
+                      className="group flex h-24 w-[220px] shrink-0 items-center justify-center bg-white px-6 shadow-sm sm:h-28 sm:w-[280px] lg:w-[320px]"
                     >
-                      {/* The rail already pauses on hover (see
-                          .about-partner-marquee:hover); scaling the logo as well
-                          makes it clear which card the pause is focused on. */}
                       <Image
                         src={partner.logo}
                         alt={copy === 0 ? partner.name : ""}
                         width={337}
                         height={97}
-                        className="pf-pop max-h-16 w-auto object-contain sm:max-h-20"
+                        className="max-h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:max-h-16"
                       />
                     </div>
                   ))}
+                </div>
+              ))}
+            </div>
+
+            <div
+              className="about-partner-track"
+              style={{ animationDirection: "reverse" }}
+            >
+              {[0, 1].map((copy) => (
+                <div
+                  key={copy}
+                  aria-hidden="true"
+                  className="flex shrink-0 gap-4 pr-4 sm:gap-6 sm:pr-6"
+                >
+                  {[...PARTNERS.slice(2), ...PARTNERS.slice(0, 2)].map(
+                    (partner, i) => (
+                      <div
+                        key={`rev-${copy}-${i}`}
+                        className="group flex h-24 w-[220px] shrink-0 items-center justify-center bg-white px-6 shadow-sm sm:h-28 sm:w-[280px] lg:w-[320px]"
+                      >
+                        <Image
+                          src={partner.logo}
+                          alt=""
+                          width={337}
+                          height={97}
+                          className="max-h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:max-h-16"
+                        />
+                      </div>
+                    )
+                  )}
                 </div>
               ))}
             </div>
