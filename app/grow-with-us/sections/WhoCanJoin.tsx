@@ -50,10 +50,10 @@ const TILES: Tile[] = [
 
 export default function WhoCanJoin() {
   return (
-    <section className="bg-[#eefaf9] px-6 pb-40 pt-32 sm:px-10 sm:pb-48 sm:pt-36 lg:px-24 xl:px-28">
+    <section className="bg-[#eefaf9] px-6 pb-40 pt-16 sm:px-10 sm:pb-48 sm:pt-24 lg:px-24 xl:px-28">
       <div className="mx-auto max-w-[820px]">
         <Reveal>
-          <h2 className="text-center text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-[2.5rem]">
+          <h2 className="text-center font-display text-3xl font-bold tracking-tight text-zinc-950 sm:text-[2.5rem]">
             WHO CAN <span className="sr-only">JOIN</span>
           </h2>
         </Reveal>
@@ -63,13 +63,13 @@ export default function WhoCanJoin() {
             because <Stagger> transforms its direct children and .pf-card
             transforms on hover — one element cannot carry both. */}
         <Stagger
-          className="mt-20 grid grid-cols-2 items-stretch gap-4 sm:grid-cols-4 sm:gap-5"
+          className="mt-12 grid grid-cols-2 items-stretch gap-4 sm:grid-cols-4 sm:gap-5 md:mt-16"
           step={70}
         >
           {TILES.map((t) => (
             <div key={t.letter} className="h-full">
-              <div className="pf-card group flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl shadow-[0_16px_36px_-18px_rgba(60,60,110,0.5)]">
-                <div className={`grid h-44 place-items-center ${t.top}`}>
+              <div className="pf-card group flex h-full min-h-[360px] flex-col overflow-hidden rounded-[1.25rem] shadow-[0_12px_30px_-15px_rgba(60,60,110,0.3)] hover:-translate-y-1">
+                <div className={`grid h-40 place-items-center sm:h-44 ${t.top}`}>
                   <span
                     aria-hidden
                     className="pf-pop font-heading text-center text-7xl font-extrabold leading-none text-white sm:text-8xl"
@@ -78,12 +78,12 @@ export default function WhoCanJoin() {
                   </span>
                 </div>
                 <div
-                  className={`flex flex-1 flex-col px-4 pb-6 pt-7 ${t.bottom}`}
+                  className={`flex flex-1 flex-col items-center px-4 pb-6 pt-7 ${t.bottom}`}
                 >
-                  <span className={`text-center text-lg font-bold ${t.accent}`}>
+                  <span className={`text-center font-display text-[1.05rem] font-bold ${t.accent}`}>
                     {t.n}
                   </span>
-                  <p className="mt-7 text-sm font-semibold leading-snug text-zinc-950 sm:text-[0.95rem]">
+                  <p className="mt-4 text-center text-[0.85rem] font-medium leading-[1.4] text-zinc-950 sm:mt-6 sm:text-[0.9rem]">
                     {t.label}
                   </p>
                 </div>

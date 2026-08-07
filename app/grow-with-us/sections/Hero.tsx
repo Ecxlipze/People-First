@@ -16,7 +16,7 @@ export default function Hero() {
       />
 
       {/* logo, top-left */}
-      <header className="relative z-20 mx-auto max-w-[1600px] px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 xl:px-28">
+      <header className="relative z-20 mx-auto max-w-[1440px] px-6 pt-8 sm:px-10 sm:pt-10 lg:px-16">
         <Link
           href="/"
           aria-label="People First — landing"
@@ -34,8 +34,8 @@ export default function Hero() {
       </header>
 
       {/* ── headline row: desk illustration + copy ── */}
-      <div className="relative z-10 mx-auto max-w-[1600px] px-6 pt-16 sm:px-10 sm:pt-24 lg:px-24 lg:pr-44 xl:px-28 xl:pr-48">
-        <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:gap-12">
+      <div className="relative z-10 mx-auto max-w-[1440px] px-6 pt-16 sm:px-10 sm:pt-24 lg:px-16">
+        <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:gap-12">
           <Image
             src="/images/grow/hero-desk.webp"
             alt=""
@@ -43,19 +43,18 @@ export default function Hero() {
             width={900}
             height={728}
             priority
-            className="animate-floaty h-32 w-auto shrink-0 select-none sm:h-40 lg:h-52"
+            className="animate-floaty hidden h-40 w-auto shrink-0 select-none sm:block sm:h-48 md:h-56 lg:h-64"
           />
 
-          <div className="animate-fade-in-up max-w-[880px]">
-            <h1 className="text-3xl font-extrabold leading-[1.12] tracking-tight text-[#004f48] sm:text-4xl lg:text-[2.65rem]">
+          <div className="animate-fade-in-up w-full max-w-[880px] lg:pt-4">
+            <h1 className="font-display text-3xl font-bold leading-[1.15] tracking-tight text-[#004f48] sm:text-4xl md:text-5xl lg:text-[3.25rem] lg:leading-[1.12]">
               <span className="italic">Learn</span> Skills.{" "}
               <span className="italic">Earn</span> Independently.
-              <br />
+              <br className="hidden sm:block" />
               <span className="italic">Build</span> Your Future.
             </h1>
-            <p className="mt-3 max-w-[900px] text-[0.95rem] leading-relaxed text-[#075950] sm:text-lg">
-              <span className="font-extrabold">People First</span>{" "}
-              offers practical, income-generating skills training for youth and
+            <p className="mt-4 w-full max-w-[800px] text-[0.95rem] font-normal leading-relaxed text-zinc-800 sm:text-lg lg:text-xl lg:leading-[1.7]">
+              <strong className="font-bold text-[#004f48]">People First</strong> offers practical, income-generating skills training for youth and
               women across Pakistan. Our programs are designed around what the
               market actually needs so graduates can earn from day one.
             </p>
@@ -64,61 +63,66 @@ export default function Hero() {
       </div>
 
       {/* ── "Why These Programs Exist": photo left, copy right ── */}
-      <Reveal className="relative z-10 mx-auto max-w-[1440px] px-6 pb-10 pt-20 sm:px-10 sm:pt-28 lg:px-16 lg:pr-36" y={42} scale={0.975}>
-        <div className="flex flex-col items-start gap-9 md:flex-row md:items-center md:gap-12">
+      <Reveal className="relative z-10 mx-auto max-w-[1440px] px-6 pb-16 pt-24 sm:px-10 sm:pb-24 sm:pt-32 lg:px-16" y={42} scale={0.975}>
+        <div className="flex flex-col items-start gap-10 lg:flex-row lg:items-start lg:gap-16">
           {/* photo + the blue paper plane tucked behind its top-left corner */}
-          <div className="group relative shrink-0">
-            {/* hidden below sm: at narrow widths there is no side margin to
-                hold the plane, so it would be clipped by the viewport edge */}
-            <Image
-              src="/images/grow/plane-blue.webp"
-              alt=""
-              aria-hidden
-              width={253}
-              height={500}
-              className="animate-floaty pointer-events-none absolute -top-12 -left-24 z-0 hidden h-36 w-auto select-none md:block"
-            />
+          {/* photo */}
+          <div className="group relative shrink-0 w-full lg:w-auto">
             <Image
               src="/images/grow/why-photo.webp"
               alt="People First team meeting entrepreneurs at an industry expo"
               width={590}
               height={443}
-              className="pf-photo relative z-10 w-[18rem] rounded-xl shadow-[0_20px_50px_-20px_rgba(60,60,110,0.45)] sm:w-[20rem]"
+              className="pf-photo relative z-10 w-full rounded-2xl shadow-none md:max-w-2xl lg:w-[28rem]"
             />
           </div>
 
-          <div className="max-w-[720px]">
-            <h2 className="text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-[2rem]">
+          <div className="flex w-full max-w-2xl flex-col lg:max-w-[720px] lg:pt-8">
+            <h2 className="font-display text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">
               Why These Programs Exist
             </h2>
-            <p className="mt-4 text-[0.95rem] leading-relaxed text-zinc-900 sm:text-lg">
+            <p className="mt-6 text-base font-normal leading-relaxed text-zinc-800 sm:text-lg lg:text-xl lg:leading-[1.7]">
               Pakistan has millions of talented young people and women who lack
               access to the opportunities. People First bridges the gap between
               aspiration and opportunity by delivering training that is
               practical, affordable, and directly connected to real income
               pathways.
             </p>
+
+            {/* ── two CTAs + message icon, right-aligned below the text ── */}
+            <div className="mt-10 flex flex-col items-stretch justify-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start lg:mt-16 lg:justify-end lg:gap-6">
+              <ContactTrigger
+                href="/partner"
+                role="Training Partner"
+                className="pf-interactive inline-flex min-h-12 items-center justify-center rounded-lg bg-[#3bb1aa] px-6 py-3 font-display text-[0.85rem] font-bold text-white shadow-none hover:-translate-y-0.5 hover:brightness-95 sm:px-8 sm:text-[0.95rem]"
+              >
+                Partner with Us
+              </ContactTrigger>
+              <ContactTrigger
+                href="/training"
+                role="Student"
+                className="pf-interactive inline-flex min-h-12 items-center justify-center rounded-lg bg-[#c6f4ef] px-6 py-3 font-display text-[0.85rem] font-bold text-zinc-950 hover:-translate-y-0.5 hover:bg-white sm:px-8 sm:text-[0.95rem]"
+              >
+                Join Training Program
+              </ContactTrigger>
+              <Link
+                href="/contact"
+                aria-label="Say Hello"
+                className="pf-interactive flex shrink-0 items-center justify-center self-center rounded-full hover:-translate-y-0.5 hover:shadow-lg sm:self-auto"
+              >
+                <Image
+                  src="/images/icons/say-hello.svg"
+                  alt=""
+                  aria-hidden
+                  width={48}
+                  height={48}
+                  className="h-12 w-12 sm:h-14 sm:w-14"
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </Reveal>
-
-      {/* ── two CTAs, right-aligned above the fold-out ── */}
-      <div className="relative z-10 mx-auto flex max-w-[1600px] flex-wrap justify-end gap-4 px-6 pb-8 pt-8 sm:px-10 lg:px-24 lg:pr-44 xl:px-28 xl:pr-48">
-        <ContactTrigger
-          href="/partner"
-          role="Training Partner"
-          className="pf-interactive inline-flex min-h-11 items-center rounded bg-pf-teal px-7 py-2.5 text-[0.8rem] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(45,190,158,0.8)] hover:-translate-y-0.5 hover:brightness-95 sm:text-sm"
-        >
-          Partner with Us
-        </ContactTrigger>
-        <ContactTrigger
-          href="/training"
-          role="Student"
-          className="pf-interactive inline-flex min-h-11 items-center rounded bg-[#c9f3f1] px-7 py-2.5 text-[0.8rem] font-semibold text-zinc-950 hover:-translate-y-0.5 hover:bg-white sm:text-sm"
-        >
-          Join Training Program
-        </ContactTrigger>
-      </div>
     </section>
   );
 }
