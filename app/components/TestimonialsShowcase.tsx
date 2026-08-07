@@ -1,18 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import { User } from "lucide-react";
 import { TESTIMONIALS, type Testimonial } from "@/app/components/testimonials";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
-// deterministic colour for the initials-monogram avatar fallback.
+// deterministic rich gradient for the initials-monogram avatar fallback.
 const AVATAR_COLORS = [
-  "#4f6ef7",
-  "#e0325a",
-  "#5a9e95",
-  "#7a5cf0",
-  "#e08a2f",
-  "#2f9ae0",
+  "linear-gradient(135deg, #4f6ef7 0%, #2f4fc9 100%)",
+  "linear-gradient(135deg, #e0325a 0%, #b8183d 100%)",
+  "linear-gradient(135deg, #5a9e95 0%, #3a7a72 100%)",
+  "linear-gradient(135deg, #7a5cf0 0%, #5437cc 100%)",
+  "linear-gradient(135deg, #e08a2f 0%, #ba6714 100%)",
+  "linear-gradient(135deg, #2f9ae0 0%, #1579bd 100%)",
 ];
 /* Classic Twitter bird — lucide dropped its brand icons, so inline the glyph. */
 function TwitterBird({ className }: { className?: string }) {
@@ -28,14 +29,7 @@ function TwitterBird({ className }: { className?: string }) {
   );
 }
 
-function initials(name: string) {
-  return name
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
+
 
 /* 40px: the avatar circle measures x178→232 on the 1920 frame (54px), which is
    40px at a 1440 viewport — this rendered 48px. */
@@ -54,10 +48,10 @@ function Avatar({ t, i }: { t: Testimonial; i: number }) {
   return (
     <span
       aria-hidden
-      className="flex h-12 w-12 items-center justify-center rounded-full text-xs font-semibold text-white"
-      style={{ backgroundColor: AVATAR_COLORS[i % AVATAR_COLORS.length] }}
+      className="flex h-12 w-12 items-center justify-center rounded-full text-[15px] font-bold tracking-wide text-white shadow-inner ring-1 ring-black/5"
+      style={{ background: AVATAR_COLORS[i % AVATAR_COLORS.length] }}
     >
-      {initials(t.name)}
+      <User className="h-6 w-6 text-white/90 drop-shadow-sm" strokeWidth={1.5} />
     </span>
   );
 }
@@ -91,7 +85,7 @@ export default function TestimonialsShowcase() {
           {/* 36px at lg, not 48px. The heading's em box is 67.3pt on the 1920
               frame; em boxes overstate visual size by ~35%, so the cap-corrected
               figure is ~36px at a 1440 viewport. Colour is #18181b. */}
-          <h2 className="px-6 text-center text-3xl font-bold tracking-tight text-[#18181b] sm:text-4xl lg:text-[2.25rem]">
+          <h2 className="font-heading px-6 text-center text-3xl font-bold tracking-tight text-black sm:text-4xl lg:text-[2.25rem]">
             People are saying about us
           </h2>
         </Reveal>
@@ -115,47 +109,35 @@ export default function TestimonialsShowcase() {
             No lg:pr-32 here: that padded only this element, pulling the grid off
             the heading's centre axis (the same bug the Gallery had). */}
         <Stagger
-          className="mx-auto mt-6 w-full max-w-[1213px] gap-[26px] px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-4"
+          className="mx-auto mt-6 w-full max-w-[1213px] gap-8 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-4"
           step={45}
         >
-          {/* mb-[26px] gives the vertical rhythm the design's 29–37px column
-              gaps imply (33px mean → 25px at 1440); this was mb-4/16px. */}
+          {/* mb-8 (32px) gives the vertical rhythm closer to the design's 29–37px column gaps */}
           {TESTIMONIALS.map((t, i) => (
-            <div key={t.name} className="mb-[26px] break-inside-avoid">
+            <div key={t.name} className="mb-8 break-inside-avoid">
               {/* rounded-xl (12px), down from rounded-2xl (16px) — QA #16.
                   Padding from the design: the avatar sits 26px in from the card's
                   left edge on the 1920 frame → ~20px at 1440, so p-5 not p-4. */}
-              <article className="pf-card group flex flex-col rounded-[10px] border border-black/[0.04] bg-white p-6 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.08)]">
+              <article className="pf-card group flex flex-col rounded-[4px] border border-black/10 bg-white p-6">
                 {/* header: avatar + name/handle + twitter icon */}
                 <div className="flex items-start gap-2">
                   <Avatar t={t} i={i} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[15px] font-bold text-[#18181b]">
+                    <p className="font-heading truncate text-[15px] font-bold text-black">
                       {t.name}
                     </p>
-                    {/* handle #52525b and body #27272a, sampled from HOME5.pdf
-                        (QA #13: "@username color not match"). Name is pure black
-                        in the design, not zinc-900. */}
-                    <p className="truncate text-[13px] text-[#52525b]">
+                    <p className="font-body truncate text-[13px] text-[#71717a]">
                       {t.handle}
                     </p>
                   </div>
-                  {/* #0ea5e9 — the SAME blue as the hashtags. Sampling the bird
-                      glyph directly gives #0ea5e9, not the #1da9ee used here
-                      before. */}
                   <TwitterBird className="pf-pop h-4 w-4 flex-none text-[#0ea5e9]" />
                 </div>
 
-                {/* body — 15px/19.5px. The design's body lines sit at y 397 /
-                    423 / 449 / 475, i.e. 26pt of leading, which is 19.5px at a
-                    1440 viewport on ~15px type; this was 14px. */}
-                <p className="mt-3 mt-4 text-[15px] leading-[1.6] text-[#3f3f46]">
+                <p className="font-body mt-4 text-[15px] leading-[1.6] text-[#3f3f46]">
                   {t.body}
                 </p>
 
-                {/* tags — #0ea5e9 in the design, and a tighter top gap than the
-                    body copy above (QA #14: hashtags sat too far below). */}
-                <p className="mt-3 flex flex-wrap gap-x-2 text-[13px] font-medium text-[#0ea5e9]">
+                <p className="font-body mt-2 flex flex-wrap gap-x-2 text-[13px] font-medium text-[#0ea5e9]">
                   {t.tags.map((tag) => (
                     <span key={tag}>#{tag}</span>
                   ))}
