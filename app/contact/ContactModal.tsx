@@ -193,7 +193,10 @@ export function ContactModalProvider({
             aria-modal="true"
             aria-labelledby="contact-modal-title"
             tabIndex={-1}
-            className={`relative max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[1120px] overflow-y-auto overscroll-contain rounded-sm shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none sm:max-h-[calc(100dvh-3rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] ${
+            /* No scrolling: the panel is capped at the viewport and its contents
+               are fluid, so everything fits instead of overflowing. `overflow-
+               hidden` also keeps the children inside the rounded corners. */
+            className={`relative max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[1120px] overflow-hidden rounded-2xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] outline-none sm:max-h-[calc(100dvh-3rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] sm:rounded-3xl ${
               closing ? "animate-modal-panel-out" : "animate-modal-panel"
             }`}
           >
@@ -201,7 +204,7 @@ export function ContactModalProvider({
               type="button"
               onClick={close}
               aria-label="Close"
-              className="pf-interactive absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white/90 hover:bg-white/25 hover:text-white"
+              className="pf-interactive absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full text-white/80 hover:text-white"
             >
               <X className="h-5 w-5" />
             </button>

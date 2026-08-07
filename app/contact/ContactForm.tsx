@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useActionState, useId, useState } from "react";
 import {
   AlertCircle,
   CheckCircle2,
@@ -26,14 +26,19 @@ export const ROLES = [
   "Other",
 ] as const;
 
-/* Shared input chrome — flat light-grey fields with a magenta focus ring,
-   matching the mockup's form card. */
-/* The focus treatment does more than change a border colour: the field lifts
-   off its grey fill to white and the magenta ring grows, so the active field is
-   unmistakable at a glance. `transition-[…]` (not transition-colors) is what
-   lets the ring width animate rather than snap. */
+/* Shared input chrome — white pill fields sitting on the card's grey fill,
+   matching the mockup's form card.
+
+   The focus treatment is a magenta border plus a soft ring, so the active field
+   is unmistakable at a glance. `transition-[…]` (not transition-colors) is what
+   lets the ring width animate rather than snap.
+
+   Heights are fluid (`clamp`) rather than fixed: the whole panel has to fit the
+   viewport without scrolling, so on short screens the fields give up a few
+   pixels each instead of pushing the Submit button out of view. The floor still
+   clears the 40px comfortable-tap minimum. */
 const FIELD =
-  "min-h-11 w-full rounded-lg border bg-white px-4 py-2.5 text-sm text-zinc-800 outline-none transition-[background-color,border-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-zinc-400 hover:bg-[#fafafa] focus:bg-white focus:border-pf-magenta focus:ring-4 focus:ring-pf-magenta/20";
+  "block h-[clamp(2.125rem,4.6vh,3rem)] w-full rounded-lg border border-transparent bg-white px-3.5 text-sm text-zinc-800 shadow-[0_1px_2px_rgba(16,16,20,0.05)] outline-none transition-[border-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-zinc-400 focus:border-pf-magenta focus:ring-4 focus:ring-pf-magenta/20";
 
 function Field({
   label,
@@ -47,10 +52,14 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="min-w-0">
+      {/* On very short viewports (landscape phones) the visible label is dropped
+          — each placeholder already repeats it — buying back the ~20px per field
+          that otherwise pushes Submit out of a panel that must not scroll. The
+          label stays in the DOM for screen readers, just visually hidden. */}
       <label
         htmlFor={htmlFor}
-        className="mb-1.5 block text-[0.8rem] font-semibold text-zinc-800"
+        className="mb-1 block text-[0.8rem] font-semibold text-zinc-800 [@media(max-height:560px)]:sr-only"
       >
         {label}
       </label>
@@ -58,7 +67,7 @@ function Field({
       {error && (
         <p
           role="alert"
-          className="animate-feedback-in mt-1.5 flex items-start gap-1.5 text-xs font-medium text-red-600"
+          className="animate-feedback-in mt-1 flex items-start gap-1.5 text-xs font-medium text-red-600"
         >
           <AlertCircle className="mt-px h-3.5 w-3.5 flex-none" aria-hidden />
           {error}
@@ -89,17 +98,25 @@ function Select({
   placeholder: string;
   options: readonly string[];
 }) {
+  /* A <select> has no ::placeholder, so the "nothing chosen yet" grey has to be
+     driven off the value — hence the tiny bit of state. The options themselves
+     stay dark, or they'd be grey inside the open dropdown too. */
+  const [value, setValue] = useState(defaultValue);
+
   return (
     <div className="relative">
       <select
         id={id}
         name={name}
-        defaultValue={defaultValue}
-        className={`${FIELD} peer appearance-none border-transparent pr-9`}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className={`${FIELD} peer cursor-pointer appearance-none pr-9 ${
+          value === "" ? "text-zinc-400" : ""
+        }`}
       >
         <option value="">{placeholder}</option>
         {options.map((o) => (
-          <option key={o} value={o}>
+          <option key={o} value={o} className="text-zinc-800">
             {o}
           </option>
         ))}
@@ -141,7 +158,7 @@ export default function ContactForm({
       <div
         role="status"
         aria-live="polite"
-        className="pf-stagger flex min-h-[22rem] flex-col items-center justify-center px-6 py-12 text-center"
+        className="pf-stagger flex h-full flex-col items-center justify-center px-6 py-10 text-center"
       >
         <span className="relative inline-flex">
           {/* a single soft pulse ringing out from behind the tick */}
@@ -172,9 +189,11 @@ export default function ContactForm({
   }
 
   return (
+    /* Fluid gap + padding for the same reason the fields are fluid: the card has
+       to fit the viewport without scrolling, so it tightens on short screens. */
     <form
       action={formAction}
-      className="flex flex-col gap-4 p-5 sm:p-10"
+      className="flex flex-col gap-[clamp(0.5rem,1.4vh,1rem)] p-[clamp(1rem,3vh,2.5rem)]"
       noValidate
     >
       {/* honeypot — hidden from users and assistive tech, catnip for bots */}
@@ -199,7 +218,7 @@ export default function ContactForm({
           placeholder="Full Name"
           defaultValue={v.fullName}
           aria-invalid={!!err.fullName}
-          className={`${FIELD} ${err.fullName ? "border-red-400" : "border-transparent"}`}
+          className={`${FIELD} ${err.fullName ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -213,7 +232,7 @@ export default function ContactForm({
           placeholder="Email Address"
           defaultValue={v.email}
           aria-invalid={!!err.email}
-          className={`${FIELD} ${err.email ? "border-red-400" : "border-transparent"}`}
+          className={`${FIELD} ${err.email ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -226,16 +245,18 @@ export default function ContactForm({
           placeholder="Phone Number"
           defaultValue={v.phone}
           aria-invalid={!!err.phone}
-          className={`${FIELD} ${err.phone ? "border-red-400" : "border-transparent"}`}
+          className={`${FIELD} ${err.phone ? "border-red-400" : ""}`}
         />
       </Field>
 
-      <Field label="Gender" htmlFor={id("role")} error={err.role}>
+      {/* Label reads "I am a", not "Gender" — the options are roles, and the
+          field submits as `role`. The mockup's "Gender" label was a stray. */}
+      <Field label="I am a" htmlFor={id("role")} error={err.role}>
         <Select
           id={id("role")}
           name="role"
           defaultValue={v.role ?? defaultRole ?? ""}
-          placeholder="I am a"
+          placeholder="Select an option"
           options={ROLES}
         />
       </Field>
@@ -245,15 +266,19 @@ export default function ContactForm({
         htmlFor={id("message")}
         error={err.message}
       >
+        {/* The one field that isn't a single-line pill: it overrides FIELD's
+            fixed height with its own (taller, still fluid) box and re-adds the
+            vertical padding the pills get from centring their text.
+            `resize-none` because a user-dragged textarea would grow the panel
+            past the viewport — the very scrolling this layout avoids. */}
         <textarea
           id={id("message")}
           name="message"
           required
-          rows={4}
           placeholder="Your Message"
           defaultValue={v.message}
           aria-invalid={!!err.message}
-          className={`${FIELD} resize-y ${err.message ? "border-red-400" : "border-transparent"}`}
+          className={`${FIELD} h-[clamp(3.25rem,11vh,7rem)] resize-none py-2 ${err.message ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -277,7 +302,7 @@ export default function ContactForm({
         type="submit"
         disabled={pending}
         aria-busy={pending}
-        className="pf-interactive mt-1 min-h-11 w-full rounded-md bg-[#8f1d3f] px-5 py-3 text-sm font-semibold text-white hover:bg-[#7a1836] hover:shadow-lg hover:shadow-[#8f1d3f]/25 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none"
+        className="pf-interactive mt-1 h-[clamp(2.5rem,4.4vh,3rem)] w-full shrink-0 rounded-lg bg-[#8f1d3f] px-5 text-sm font-semibold text-white hover:bg-[#7a1836] hover:shadow-lg hover:shadow-[#8f1d3f]/25 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none"
       >
         {pending ? (
           <span className="inline-flex items-center justify-center gap-2">

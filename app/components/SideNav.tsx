@@ -32,8 +32,17 @@ const DESKTOP_MIN = 1024; // Tailwind `lg`
 const EDGE_ZONE = 40; // px from the right edge that can start an opening drag
 const AXIS_LOCK = 8; // px of travel before we commit to horizontal vs vertical
 
-export default function SideNav() {
+export default function SideNav({
+  /* Most pages are dark, so the rail's lg+ labels default to a light grey. On a
+     light page (e.g. /contact) that grey disappears — `tone="light"` swaps in
+     dark label text. Only affects the lg+ rail: the mobile drawer labels sit on
+     their own opaque chips and read fine either way. */
+  tone = "dark",
+}: {
+  tone?: "dark" | "light";
+} = {}) {
   const pathname = usePathname();
+  const onLight = tone === "light";
   const navRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   // Live drag state. `x` is the offset in px (0 = fully open, w = fully
@@ -254,7 +263,7 @@ export default function SideNav() {
                 className={`pointer-events-none whitespace-nowrap transition-all duration-200 uppercase tracking-wider lg:text-[13px] lg:opacity-100 lg:translate-x-0 lg:bg-transparent lg:shadow-none lg:ring-0 ${
                   active
                     ? "lg:font-black lg:text-black max-lg:bg-pf-magenta/15 max-lg:text-pf-magenta-dark max-lg:ring-pf-magenta/30 max-lg:opacity-100 max-lg:translate-x-0"
-                    : "lg:font-medium lg:text-[#b0b5c5] max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-black/5 max-lg:opacity-0 max-lg:-translate-x-1 max-lg:group-hover:opacity-100 max-lg:group-hover:translate-x-0"
+                    : `lg:font-medium ${onLight ? "lg:text-zinc-600" : "lg:text-[#b0b5c5]"} max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-black/5 max-lg:opacity-0 max-lg:-translate-x-1 max-lg:group-hover:opacity-100 max-lg:group-hover:translate-x-0`
                 } max-lg:hidden lg:block`}
               >
                 {item.label}

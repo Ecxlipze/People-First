@@ -151,20 +151,41 @@ export default function ContactPanel({
   headingId?: string;
 }) {
   return (
-    <div className="grid min-w-0 gap-10 bg-[#69205b] p-6 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12 lg:px-16 lg:py-20">
-      {/* ── left: get in touch ── */}
-      <div className="pf-stagger text-white">
-        <h2
-          id={headingId}
-          className="text-3xl font-bold uppercase tracking-wide sm:text-[2.15rem]"
-        >
+    /* Fluid padding/gaps throughout: this panel has to fit the viewport without
+       scrolling in both the modal and the page, so every vertical measurement
+       compresses on short screens rather than overflowing. */
+    <div className="grid min-h-0 min-w-0 gap-[clamp(0.75rem,3vh,2.5rem)] bg-[#69205b] px-[clamp(1rem,3.5vh,2.5rem)] py-[clamp(0.75rem,3.5vh,2.5rem)] lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12 lg:px-16 lg:py-[clamp(2rem,6vh,5rem)]">
+      {/* Below lg: the heading alone. Every row above the form costs a form row
+          out of a short viewport, and the panel must fit without scrolling — so
+          the phone/email/social details drop out entirely on mobile rather than
+          being squeezed in. They live on in the full column at lg+, and in the
+          site footer everywhere.
+
+          This owns `headingId` at every width — the modal's aria-labelledby must
+          never point at a display:none element, or the dialog loses its name. */}
+      <h2
+        id={headingId}
+        className="min-w-0 text-[clamp(1.25rem,3vh,1.6rem)] font-bold uppercase leading-tight tracking-wide text-white lg:hidden [@media(max-height:560px)]:sr-only"
+      >
+        Get in Touch
+      </h2>
+
+      {/* ── left: get in touch ──
+          Hidden below lg. Stacked on a phone this column plus the form is far
+          more content than a viewport holds, and since the whole panel must fit
+          without scrolling, something has to give — the form is the reason the
+          panel exists, so the details step aside. They stay reachable: the
+          heading is kept for context, and /contact's own footer carries the same
+          phone/email/social links. */}
+      <div className="pf-stagger hidden text-white lg:block">
+        <h2 className="text-[clamp(1.5rem,4vh,2.15rem)] font-bold uppercase leading-tight tracking-wide">
           Get in Touch
         </h2>
-        <p className="mt-2 max-w-sm text-base leading-relaxed text-white/85 sm:text-lg">
+        <p className="mt-2 max-w-sm text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/85">
           Share your thoughts we will help you make it real!
         </p>
 
-        <div className="mt-10 space-y-7">
+        <div className="mt-[clamp(1.25rem,4vh,2.5rem)] space-y-[clamp(0.75rem,2.5vh,1.75rem)]">
           {/* phones — one icon, both numbers, as in the design */}
           <div className="group flex items-start gap-3.5">
             <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
@@ -201,7 +222,7 @@ export default function ContactPanel({
           </div>
         </div>
 
-        <div className="mt-10 flex items-center gap-5">
+        <div className="mt-[clamp(1.25rem,4vh,2.5rem)] flex items-center gap-5">
           {SOCIALS.map(({ label, href, icon: Icon, className }) => (
             <a
               key={label}

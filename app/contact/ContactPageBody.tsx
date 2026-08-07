@@ -19,42 +19,49 @@ export default function ContactPageBody({
 }) {
   return (
     <>
-      <SideNav />
+      {/* This page's backdrop is light, unlike the rest of the site. */}
+      <SideNav tone="light" />
 
-      {/* pr on lg+ keeps the panel clear of the fixed nav rail */}
-      <div className="relative flex min-h-svh flex-col bg-[radial-gradient(ellipse_at_center_top,#2a2a30_0%,#141417_45%,#0b0b0d_100%)] px-5 py-6 sm:px-14 sm:py-10 lg:pr-32">
-        <div className="flex items-center justify-between gap-6">
+      {/* Exactly one viewport tall with nothing spilling out — the page never
+          scrolls; the panel inside compresses to fit instead.
+          pr on lg+ keeps the panel clear of the fixed nav rail. */}
+      <div className="relative flex h-svh flex-col overflow-hidden bg-[radial-gradient(ellipse_at_center_top,#ffffff_0%,#f2f2f4_45%,#e6e5ea_100%)] px-5 py-[clamp(1rem,2.5vh,2.5rem)] sm:px-14 lg:pr-64 xl:pr-72">
+        <div className="flex shrink-0 items-center justify-between gap-6">
           <Link
             href="/"
             aria-label="People First — landing"
             className="inline-flex min-h-11 items-center"
           >
+            {/* The dark-text mark, not about-page/logo.png — that one is white
+                lettering for dark pages and vanishes on this light backdrop. */}
             <Image
-              src="/images/about-page/logo.png"
+              src="/images/logo.svg"
               alt="People First"
-              width={318}
-              height={91}
+              width={398}
+              height={100}
               priority
               className="h-10 w-auto sm:h-12"
             />
           </Link>
           <Link
             href="/"
-            className="pf-interactive inline-flex min-h-11 items-center gap-2 rounded-sm text-sm text-zinc-400 hover:-translate-x-0.5 hover:text-white"
+            className="pf-interactive inline-flex min-h-11 items-center gap-2 rounded-sm text-sm text-zinc-600 hover:-translate-x-0.5 hover:text-zinc-900"
           >
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
         </div>
 
-        <div className="flex flex-1 items-center justify-center py-10 sm:py-14">
+        {/* min-h-0 lets this flex child actually shrink below its content's
+            natural height, which is what keeps the panel inside the viewport. */}
+        <div className="flex min-h-0 flex-1 items-center justify-center py-[clamp(1rem,3vh,3.5rem)]">
           <div className="w-full max-w-[1120px]">
             {eyebrow && (
-              <p className="mb-4 text-center text-sm font-semibold uppercase tracking-[0.2em] text-pf-magenta">
+              <p className="mb-3 text-center text-sm font-semibold uppercase tracking-[0.2em] text-pf-magenta">
                 {eyebrow}
               </p>
             )}
-            <div className="animate-modal-panel overflow-hidden rounded-sm shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)]">
+            <div className="animate-modal-panel overflow-hidden rounded-2xl shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)] sm:rounded-3xl">
               <ContactPanel defaultRole={defaultRole} />
             </div>
           </div>
