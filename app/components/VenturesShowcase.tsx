@@ -74,7 +74,7 @@ export default function VenturesShowcase() {
             Container stays wide (62vw); at exactly the widest line's width
             there is zero slack and any metric difference forces a 5th line. */}
         <Reveal className="relative mx-auto max-w-3xl px-6 text-center xl:mx-0 xl:ml-[10.5vw] xl:mt-[4.79vw] xl:w-[68vw] xl:max-w-none xl:self-start xl:px-0">
-          <h2 className="text-xl font-normal leading-snug tracking-tight text-[#118d89] sm:text-2xl lg:text-[1.8rem] lg:leading-snug xl:text-[2.95vw] xl:leading-[1.2]">
+          <h2 className="font-heading text-xl font-normal leading-snug tracking-tight text-[#118d89] sm:text-2xl lg:text-[1.8rem] lg:leading-snug xl:text-[2.95vw] xl:leading-[1.2]">
             We shape <strong className="font-semibold">capable</strong>,{" "}
             <strong className="font-semibold">confident</strong>, and{" "}
             <strong className="font-semibold">market-ready</strong> individuals
@@ -111,7 +111,7 @@ export default function VenturesShowcase() {
              clean two-column grid there); the 5/4 design layout only applies
              from lg up, where there is room for five across. gap-4 on both axes
              keeps the horizontal and vertical gaps equal below xl. */
-          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-4 px-6 sm:mt-8 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.219vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.6vw] xl:max-w-none xl:gap-x-[2.708vw] xl:gap-y-[3.646vw] xl:px-0 xl:pr-0"
+          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-4 px-6 sm:mt-8 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.219vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.6vw] xl:max-w-none xl:gap-[2.708vw] xl:px-0 xl:pr-0"
           step={55}
         >
           {/* Wrapper carries an explicit basis at lg because the container is
@@ -126,15 +126,7 @@ export default function VenturesShowcase() {
             <a
               href={v.href}
               style={{ borderColor: v.accent }}
-              /* Flat #9b86a8 fill — the modal pixel inside a card body in the
-                 HOME3.pdf render (was a two-stop gradient) — and a 2px accent
-                 border, since the design's outlines are clearly visible where a
-                 hairline read as no border at all (QA: "borders color of this
-                 card is not matching with design").
-                 Corner radius measured off the render: the fill reaches the card
-                 edge by dy=12 at the top-left, i.e. r≈12px on a 248px-wide card
-                 (~4.8%), which is rounded-xl rather than rounded-2xl. */
-              className="group relative flex h-full flex-col overflow-hidden rounded-xl border-2 bg-[#9b86a8] p-4 shadow-[0_10px_30px_-12px_rgba(80,80,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-14px_rgba(80,80,120,0.35)] xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
+              className="group relative flex h-full flex-col overflow-hidden rounded-xl border bg-[#9b86a8] p-4 transition-all duration-300 hover:-translate-y-1 xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
             >
               {/* Logo box — real logo once the file exists, else an empty plate.
                   #e9e9e9, sampled from HOME3.pdf: the grey plate IS in the
@@ -148,7 +140,7 @@ export default function VenturesShowcase() {
                   an inset ring of `v.accent` was drawing here. Plate height
                   checks out at 28% of the card (65px of 231px in the render),
                   which the xl track already matches. */}
-              <div className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-[#e9e9e9] px-3 ring-1 ring-[#9c95e2]/60 sm:h-20 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[0.5vw]">
+              <div className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-[#e9e9e9] px-4 py-2 sm:h-20 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[1vw] xl:py-[0.5vw]">
                 {v.logo && v.hasLogo ? (
                   <Image
                     src={v.logo}
@@ -163,10 +155,10 @@ export default function VenturesShowcase() {
                 )}
               </div>
 
-              <h3 className="mt-3.5 text-sm font-semibold leading-tight text-white sm:text-base xl:mt-[0.73vw] xl:whitespace-nowrap xl:text-[0.938vw] xl:leading-none">
+              <h3 className="font-heading mt-3.5 text-sm font-semibold leading-tight text-white sm:text-base xl:mt-[0.73vw] xl:text-[0.938vw] xl:leading-none">
                 {v.name}
               </h3>
-              <p className="mt-1 text-[11px] leading-tight text-white/70 sm:text-xs xl:mt-[0.52vw] xl:text-[0.625vw] xl:leading-none">
+              <p className="font-body mt-1 text-[11px] leading-tight text-white/70 sm:text-xs xl:mt-[0.52vw] xl:text-[0.625vw] xl:leading-[1.2]">
                 {v.tagline}
               </p>
 
@@ -175,7 +167,7 @@ export default function VenturesShowcase() {
                 /* whitespace-nowrap + a smaller face below sm: at 390px the
                    two-column card is ~163px wide and "Explore Website" was
                    wrapping to two lines, which cramped the button. */
-                className="mt-auto flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[11px] font-medium text-white/80 sm:px-4 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:px-[1.04vw] xl:text-[0.573vw]"
+                className="font-heading mt-auto flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[11px] font-medium text-white/80 sm:px-4 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:px-[1.04vw] xl:text-[0.573vw]"
               >
                 Explore Website
                 <ArrowRight className="ml-auto h-3.5 w-3.5 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
