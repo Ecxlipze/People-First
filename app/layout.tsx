@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat } from "next/font/google";
+import { Inter, Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 import { ContactModalProvider } from "./contact/ContactModal";
 
@@ -9,10 +9,15 @@ import { ContactModalProvider } from "./contact/ContactModal";
    selectors). Nothing else in the app should import from next/font: a second
    call for the same family ships a second copy of the font files.
 
-   Both are variable fonts, so no `weight` array is passed — the full 100–900
-   range comes down in one file and every weight the design uses (Inter 400/500/
-   600, Montserrat 600/700/800) is available without extra requests. The
-   previous Poppins setup had to enumerate six static weights. */
+   Inter and Montserrat are variable fonts, so no `weight` array is passed — the
+   full 100–900 range comes down in one file and every weight the design uses
+   (Inter 400/500/600, Montserrat 600/700/800) is available without extra
+   requests.
+
+   Poppins is the exception and must enumerate its weights: Google serves it only
+   as static instances, so `weight` is required. Just the one weight is listed —
+   it is used in exactly one place (the landing page's radial nav labels, see
+   RadialNav.tsx), and each extra entry is another font file over the wire. */
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -22,6 +27,13 @@ const inter = Inter({
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["300"],
   display: "swap",
 });
 
@@ -38,7 +50,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${montserrat.variable} h-full antialiased`}
+      className={`${inter.variable} ${montserrat.variable} ${poppins.variable} h-full antialiased`}
     >
       {/* ContactModalProvider mounts the site-wide "Get in Touch" overlay and
           lets any CTA open it via useContactModal()/<ContactTrigger>. */}

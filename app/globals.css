@@ -38,10 +38,17 @@
      prominent text that isn't an <h1>–<h6> (large statistic numbers, for
      instance — see `.font-heading` below).
 
-     The `--font-inter` / `--font-montserrat` variables these point at are
-     declared by next/font on <html> in app/layout.tsx. */
+     Poppins is exposed as `--font-nav`, a `font-nav` utility. It is deliberately
+     NOT part of the two-face system above: it exists for the landing page's
+     radial navigation labels, which the mockup draws in Poppins rather than
+     either site face. Don't reach for it elsewhere — new headings want
+     `.font-heading`, new body copy `.font-body`.
+
+     The `--font-inter` / `--font-montserrat` / `--font-poppins` variables these
+     point at are declared by next/font on <html> in app/layout.tsx. */
   --font-sans: var(--font-inter);
   --font-display: var(--font-montserrat);
+  --font-nav: var(--font-poppins);
 
   /* People First brand palette (used by the About page + future content pages).
      Tailwind v4 exposes each as a colour utility, e.g. bg-pf-purple or
