@@ -29,11 +29,11 @@ function RainbowGlow() {
       className="pointer-events-none absolute -inset-8 -z-10 select-none blur-3xl sm:-inset-10"
       style={{
         background: `
-          radial-gradient(circle at 20% 28%, rgba(90,205,180,0.95) 0%, rgba(90,205,180,0) 50%),
-          radial-gradient(circle at 80% 20%, rgba(130,140,245,0.9) 0%, rgba(130,140,245,0) 50%),
-          radial-gradient(circle at 26% 84%, rgba(245,105,195,0.95) 0%, rgba(245,105,195,0) 50%),
-          radial-gradient(circle at 72% 80%, rgba(255,175,90,0.9) 0%, rgba(255,175,90,0) 50%),
-          radial-gradient(circle at 52% 55%, rgba(190,120,240,0.7) 0%, rgba(190,120,240,0) 55%)
+          radial-gradient(circle at 20% 28%, rgba(90,205,180,1) 0%, rgba(90,205,180,0) 65%),
+          radial-gradient(circle at 80% 20%, rgba(130,140,245,1) 0%, rgba(130,140,245,0) 65%),
+          radial-gradient(circle at 26% 84%, rgba(245,105,195,1) 0%, rgba(245,105,195,0) 65%),
+          radial-gradient(circle at 72% 80%, rgba(255,175,90,1) 0%, rgba(255,175,90,0) 65%),
+          radial-gradient(circle at 52% 55%, rgba(190,120,240,0.85) 0%, rgba(190,120,240,0) 70%)
         `,
       }}
     />
@@ -70,7 +70,7 @@ function Media({
       {/* video still + play button. The still fades up once decoded rather than
           snapping in — see SmartImage. The shadow deepens with the row's hover
           so the whole card reads as one target. */}
-      <div className="relative ml-auto aspect-[16/10] w-[85%] overflow-hidden rounded-sm bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
+      <div className="relative ml-auto aspect-[16/10] w-[85%] overflow-hidden bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
         <SmartImage
           src={article.thumb}
           alt={article.thumbAlt}
@@ -112,7 +112,7 @@ function Copy({ article }: { article: Article }) {
     <div className="max-w-sm">
       {/* The row is a link, so the title picks up the brand colour on hover to
           signal that — the row's group-hover drives it. */}
-      <h3 className="text-xl font-extrabold leading-snug tracking-tight text-[#1a1a2e] transition-colors duration-200 group-hover:text-[#e0325a] sm:text-[1.4rem]">
+      <h3 className="text-xl font-display font-extrabold leading-snug tracking-tight text-[#1a1a2e] transition-colors duration-200 group-hover:text-[#e0325a] sm:text-[1.4rem]">
         {article.title}
       </h3>
       <p className="mt-3 text-[0.7rem] leading-relaxed text-zinc-500 sm:text-[0.75rem]">
