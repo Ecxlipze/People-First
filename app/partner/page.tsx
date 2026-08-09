@@ -8,10 +8,17 @@ export const metadata: Metadata = {
   robots: {
     index: false,
   },
+  alternates: {
+    canonical: "/partner",
+  },
 };
 
 export default function PartnerPage() {
   return (
-    <ContactPageBody eyebrow="Partner with Us" defaultRole="Training Partner" />
+    <ContactPageBody
+      eyebrow="Partner with Us"
+      defaultRole="Training Partner"
+      pageTitle="Partner with People First"
+    />
   );
 }

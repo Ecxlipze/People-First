@@ -2,7 +2,7 @@ import { Play } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import { CountUp } from "@/app/components/ScrollFx";
 
-/* A photo/video frame placeholder with a play button.
+/* A photo/video frame placeholder with a decorative play motif.
    Drop a real thumbnail in by passing `src` once the asset exists. */
 export function MediaFrame({
   src,
@@ -54,16 +54,14 @@ export function MediaFrame({
         />
       )}
 
-      {/* play button — the -translate-x/y-1/2 centring uses `translate`, so the
-          hover/press feedback uses `scale` only and the two never collide.
-          A soft ring blooms outward on hover to make the target feel live. */}
-      <button
-        type="button"
-        aria-label="Play video"
+      {/* Decorative play motif. No media URL or player exists for these frames,
+          so this must not be exposed as a nonfunctional button. */}
+      <span
+        aria-hidden
         className="pf-interactive absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg ring-0 ring-white/40 hover:scale-110 hover:ring-8"
       >
         <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={0} />
-      </button>
+      </span>
 
       {/* Optional caption — a SINGLE compact block pinned to the bottom-left.
           `right-24` keeps it clear of any overhanging stat card, and the fixed

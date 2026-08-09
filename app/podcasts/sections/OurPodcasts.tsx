@@ -8,7 +8,7 @@ import { EPISODES, TOTAL_PAGES } from "@/app/podcasts/episodes";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* Podcasts → "Our Podcasts". Deep-purple band holding one wide white card per
-   episode: thumbnail with a play overlay and a coloured corner badge on the
+   episode: thumbnail with a play motif and a coloured corner badge on the
    left, title and two stat columns on the right. A numbered pager and a
    "View All" link close the section.
 
@@ -40,7 +40,7 @@ export default function OurPodcasts() {
                    grey haze against this deep-purple band. */
                 className="group pf-card grid w-full min-w-0 gap-8 rounded-2xl bg-white p-5 shadow-[0_18px_44px_-20px_rgba(0,0,0,0.5)] hover:shadow-[0_28px_60px_-22px_rgba(0,0,0,0.65)] md:grid-cols-[minmax(0,22rem)_1fr] md:items-center md:p-8 lg:min-h-[360px] lg:grid-cols-[minmax(0,28rem)_1fr] lg:gap-12 lg:p-10"
               >
-                {/* thumbnail + play overlay + corner badge */}
+                {/* thumbnail + decorative play motif + corner badge */}
                 <div className="relative aspect-[590/443] w-full min-w-0 md:-ml-12 md:self-center lg:-ml-20">
                   <div className="absolute inset-0 overflow-hidden rounded-xl bg-zinc-900">
                     <Image
@@ -50,9 +50,8 @@ export default function OurPodcasts() {
                       sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 28rem"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     />
-                    <button
-                      type="button"
-                      aria-label={`Play: ${ep.title}`}
+                    <span
+                      aria-hidden
                       className="absolute inset-0 grid place-items-center"
                     >
                       <span className="grid h-16 w-16 place-items-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110 lg:h-20 lg:w-20">
@@ -61,7 +60,7 @@ export default function OurPodcasts() {
                           fill="currentColor"
                         />
                       </span>
-                    </button>
+                    </span>
                   </div>
                   <span
                     className={`absolute bottom-0 left-0 max-w-[14rem] px-5 py-4 font-display text-sm font-bold leading-tight text-white lg:-left-12 lg:max-w-[18rem] lg:px-8 lg:py-6 lg:text-xl ${ep.badgeBg}`}

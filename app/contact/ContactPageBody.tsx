@@ -12,10 +12,12 @@ import ContactPanel from "./ContactPanel";
 export default function ContactPageBody({
   defaultRole,
   eyebrow,
+  pageTitle = "Contact People First",
 }: {
   defaultRole?: string;
   /* Small label above the panel, e.g. "Partner with Us". */
   eyebrow?: string;
+  pageTitle?: string;
 }) {
   return (
     <>
@@ -54,7 +56,7 @@ export default function ContactPageBody({
         </header>
 
         <main className="flex flex-1 items-center justify-center py-6 sm:py-8 lg:min-h-0 lg:py-[clamp(1rem,3vh,3.5rem)]">
-          <h1 className="sr-only">Contact People First</h1>
+          <h1 className="sr-only">{pageTitle}</h1>
           <div className="w-full max-w-[1120px]">
             {eyebrow && (
               <p className="mb-3 text-center text-sm font-semibold uppercase tracking-[0.2em] text-pf-magenta">

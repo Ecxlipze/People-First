@@ -11,7 +11,7 @@ export type ContactState = {
   /* field name -> error, so the form can highlight the offending input */
   errors?: Partial<
     Record<
-      "fullName" | "email" | "phone" | "gender" | "role" | "message",
+      "fullName" | "email" | "phone" | "role" | "message",
       string
     >
   >;

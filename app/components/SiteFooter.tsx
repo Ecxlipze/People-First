@@ -147,7 +147,7 @@ export default function SiteFooter({
             <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 xl:flex-row xl:items-center xl:justify-between xl:gap-10 xl:py-11">
               {/* copy */}
               <div className="text-center xl:pl-52 xl:text-left">
-                <h2 className="font-serif text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
+                <h2 className="font-display text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
                   Let&rsquo;s Get in Touch
                 </h2>
                 <p className="mt-2 text-base text-white sm:text-[1.0625rem]">

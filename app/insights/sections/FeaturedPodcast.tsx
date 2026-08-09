@@ -20,7 +20,7 @@ import { EPISODES } from "@/app/podcasts/episodes";
    A Server Component: unlike the /podcasts list this card has no pager, so
    nothing here needs client JS. The card is a Link to /podcasts rather than a
    play <button>, because there is no inline player on this page — it sends the
-   reader to where the episode actually plays. */
+   reader to the full episode listing. */
 
 const FEATURED = EPISODES[0];
 

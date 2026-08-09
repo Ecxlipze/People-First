@@ -7,7 +7,7 @@ import ContactForm from "./ContactForm";
 /* This lucide-react version dropped all brand glyphs (see the note in
    SiteFooter.tsx), so WhatsApp/Gmail and the socials are inlined SVG.
    Each keeps its real brand colour, as in the design. */
-type IconProps = { className?: string };
+type IconProps = { className?: string; idPrefix?: string };
 
 function WhatsappIcon({ className }: IconProps) {
   return (
@@ -90,11 +90,13 @@ function LinkedinIcon({ className }: IconProps) {
   );
 }
 
-function InstagramIcon({ className }: IconProps) {
+function InstagramIcon({ className, idPrefix = "contact" }: IconProps) {
+  const gradientId = `${idPrefix}-instagram-gradient`;
+
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden>
       <defs>
-        <radialGradient id="ig-grad" cx="30%" cy="107%" r="150%">
+        <radialGradient id={gradientId} cx="30%" cy="107%" r="150%">
           <stop offset="0%" stopColor="#fdf497" />
           <stop offset="5%" stopColor="#fdf497" />
           <stop offset="45%" stopColor="#fd5949" />
@@ -103,7 +105,7 @@ function InstagramIcon({ className }: IconProps) {
         </radialGradient>
       </defs>
       <path
-        fill="url(#ig-grad)"
+        fill={`url(#${gradientId})`}
         d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.12 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.12.66.66 1.33 1.07 2.12 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.9 5.9 0 0 0 2.12-1.38 5.9 5.9 0 0 0 1.38-2.12c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.38-2.12A5.9 5.9 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.85-10.41a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"
       />
     </svg>
@@ -159,7 +161,10 @@ export default function ContactPanel({
        scrolling in both the modal and the page, so every vertical measurement
        compresses on short screens rather than overflowing. */
     <div className="grid min-h-0 min-w-0 gap-[clamp(0.75rem,3vh,2.5rem)] bg-[#69205b] px-[clamp(1rem,3.5vh,2.5rem)] py-[clamp(0.75rem,3.5vh,2.5rem)] lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12 lg:px-16 lg:py-[clamp(2rem,6vh,5rem)]">
-      {/* Below lg: the heading alone. Every row above the form costs a form row
+      {/* Below lg: the visible heading alone. At lg it remains visually hidden
+          so the modal keeps one stable accessible name while the styled copy
+          in the details column supplies the visible desktop heading. Every row
+          above the form costs a form row
           out of a short viewport, and the panel must fit without scrolling — so
           the phone/email/social details drop out entirely on mobile rather than
           being squeezed in. They live on in the full column at lg+, and in the
@@ -169,7 +174,7 @@ export default function ContactPanel({
           never point at a display:none element, or the dialog loses its name. */}
       <h2
         id={headingId}
-        className="min-w-0 text-[clamp(1.25rem,3vh,1.6rem)] font-bold uppercase leading-tight tracking-wide text-white lg:hidden [@media(max-height:560px)]:sr-only"
+        className="min-w-0 text-[clamp(1.25rem,3vh,1.6rem)] font-bold uppercase leading-tight tracking-wide text-white lg:sr-only [@media(max-height:560px)]:sr-only"
       >
         Get in Touch
       </h2>
@@ -182,9 +187,9 @@ export default function ContactPanel({
           heading is kept for context, and /contact's own footer carries the same
           phone/email/social links. */}
       <div className="pf-stagger hidden text-white lg:block">
-        <h2 className="text-[clamp(1.5rem,4vh,2.15rem)] font-bold uppercase leading-tight tracking-wide">
+        <p aria-hidden="true" className="font-display text-[clamp(1.5rem,4vh,2.15rem)] font-bold uppercase leading-tight tracking-wide">
           Get in Touch
-        </h2>
+        </p>
         <p className="mt-2 max-w-sm text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/85">
           Share your thoughts we will help you make it real!
         </p>
@@ -232,7 +237,10 @@ export default function ContactPanel({
               aria-label={label}
               className="pf-interactive flex h-11 w-11 items-center justify-center rounded-xl hover:-translate-y-1 hover:scale-110 hover:bg-white/10"
             >
-              <Icon className={`h-7 w-7 ${className}`} />
+              <Icon
+                idPrefix={headingId ?? "contact-page"}
+                className={`h-7 w-7 ${className}`}
+              />
             </a>
           ))}
         </div>

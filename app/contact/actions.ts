@@ -27,7 +27,6 @@ export async function submitContact(
     fullName: get("fullName"),
     email: get("email"),
     phone: get("phone"),
-    gender: get("gender"),
     role: get("role"),
     message: get("message"),
   };
@@ -43,6 +42,8 @@ export async function submitContact(
     errors.fullName = "That name is too long.";
 
   if (!values.email) errors.email = "We need an email to reply to.";
+  else if (values.email.length > 254)
+    errors.email = "That email address is too long.";
   else if (!EMAIL_RE.test(values.email))
     errors.email = "That doesn't look like a valid email.";
 
@@ -64,7 +65,7 @@ export async function submitContact(
   }
 
   // ── TODO: replace with a real delivery mechanism ──────────────────────
-  // e.g. await resend.emails.send({ to: "info@techinsights.com", ... })
+  // e.g. await the confirmed email or CRM provider with this payload.
   // Keep the shape below — it's the fully validated payload.
   console.log("[contact] submission", {
     ...values,
@@ -75,6 +76,6 @@ export async function submitContact(
   return {
     status: "success",
     message:
-      "Thanks! Your message is on its way — we'll get back to you shortly.",
+      "Thanks! Your message has been received.",
   };
 }

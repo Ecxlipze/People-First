@@ -28,7 +28,7 @@ export default function CTABanner() {
           <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-11">
             {/* copy */}
             <div className="lg:pl-52">
-              <h2 className="font-serif text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
+              <h2 className="font-display text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
                 Let&rsquo;s Get in Touch
               </h2>
               <p className="mt-2 text-base text-white sm:text-[1.0625rem]">

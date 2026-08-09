@@ -10,20 +10,12 @@
      route animations all feel like the same product. Anything new should reach
      for these rather than inventing a duration.
 
-     --ease-out-soft is the house curve (a gentle overshoot-free decelerate);
-     --ease-spring adds a slight overshoot for things that "arrive" (panels,
-     success ticks). */
+     --ease-out-soft is the house curve (a gentle overshoot-free decelerate). */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
 
   --dur-fast: 150ms; /* micro-feedback: press, icon nudge */
   --dur-base: 220ms; /* the default hover/colour transition */
   --dur-slow: 380ms; /* panel + modal entrances */
-
-  /* Route transitions: the exit is quick so it stops competing for attention,
-     the enter is slower and delayed until the exit finishes. */
-  --dur-exit: 150ms;
-  --dur-enter: 220ms;
 }
 
 @theme inline {
@@ -417,12 +409,6 @@ optgroup {
   }
 }
 
-@keyframes orbit-slow {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes ring-pulse {
   0%,
   100% {
@@ -497,22 +483,6 @@ optgroup {
   }
   to {
     translate: 100% 0;
-  }
-}
-
-/* Indeterminate top-of-page progress bar for route changes. */
-@keyframes route-progress {
-  0% {
-    transform: scaleX(0);
-  }
-  55% {
-    transform: scaleX(0.72);
-  }
-  85% {
-    transform: scaleX(0.9);
-  }
-  100% {
-    transform: scaleX(0.97);
   }
 }
 
@@ -655,9 +625,6 @@ optgroup {
 }
 .animate-glow-pulse {
   animation: glow-pulse 5s ease-in-out infinite;
-}
-.animate-orbit-slow {
-  animation: orbit-slow 28s linear infinite;
 }
 .animate-ring-pulse {
   animation: ring-pulse 4.8s ease-in-out infinite;
@@ -855,7 +822,6 @@ optgroup {
   .animate-modal-panel-out,
   .animate-success-in,
   .animate-feedback-in,
-  .animate-orbit-slow,
   .animate-ring-pulse,
   .pf-stagger > *,
   .pf-skeleton::after,

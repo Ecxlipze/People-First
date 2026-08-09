@@ -30,8 +30,8 @@ Do not redesign the site while fixing a bug or adding content.
   `/insights`, `/podcasts`, and `/what-we-do`.
 - `/contact`, `/partner`, and `/training` share `ContactPageBody` and the same
   contact form, with route-specific headings or default roles.
-- `/privacy`, `/terms`, and `/cookies` use the shared `PageShell` and are
-  currently placeholders.
+- `/privacy`, `/terms`, and `/cookies` use the shared `LegalPageLayout` with
+  route-local policy sections.
 - `app/components/` contains cross-route UI. `SideNav`, `SiteFooter`,
   `TallSwipePanel`, `ScrollFx`, `SmartImage`, and the contact components have
   behavior that affects multiple pages; audit all consumers before changing

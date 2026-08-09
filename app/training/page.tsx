@@ -7,10 +7,17 @@ export const metadata: Metadata = {
   robots: {
     index: false,
   },
+  alternates: {
+    canonical: "/training",
+  },
 };
 
 export default function TrainingPage() {
   return (
-    <ContactPageBody eyebrow="Join Training Program" defaultRole="Student" />
+    <ContactPageBody
+      eyebrow="Join Training Program"
+      defaultRole="Student"
+      pageTitle="Join a People First Training Program"
+    />
   );
 }

@@ -96,6 +96,7 @@ function Select({
   defaultValue,
   placeholder,
   options,
+  error,
   standalone = false,
 }: {
   id: string;
@@ -103,6 +104,7 @@ function Select({
   defaultValue: string;
   placeholder: string;
   options: readonly string[];
+  error?: string;
   standalone?: boolean;
 }) {
   /* A <select> has no ::placeholder, so the "nothing chosen yet" grey has to be
@@ -117,7 +119,8 @@ function Select({
         name={name}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        aria-describedby={id ? `${id}-error` : undefined}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
         className={`${FIELD} peer cursor-pointer appearance-none pr-9 ${
           standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""
         } ${
@@ -283,6 +286,7 @@ export default function ContactForm({
           defaultValue={v.role ?? defaultRole ?? ""}
           placeholder="Select an option"
           options={ROLES}
+          error={err.role}
           standalone={standalone}
         />
       </Field>

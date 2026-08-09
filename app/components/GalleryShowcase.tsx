@@ -71,7 +71,7 @@ export default function GalleryShowcase() {
        block (heading, carousel, button) centres on one axis with no sidebar
        padding, matching the design's shared x≈931 centreline. */
     <div
-      style={{ "--pf-blend": "#f2f8f8" } as React.CSSProperties}
+      id="gallery"
       className="pf-blend relative z-30 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]"
     >
       {/* No horizontal padding on the column itself — the carousel's ±2 slides
@@ -179,10 +179,10 @@ export default function GalleryShowcase() {
                       src={photo.src}
                       alt={photo.alt}
                       fill
-                      sizes="(max-width: 640px) 62vw, (max-width: 1024px) 46vw, 38vw"
+                      sizes="(max-width: 639px) 62vw, (max-width: 1023px) 40vw, 19vw"
                       className="object-cover"
                       draggable={false}
-                      priority={i < 5}
+                      priority={i === 0}
                       skeleton
                     />
                   ) : (
@@ -229,7 +229,7 @@ export default function GalleryShowcase() {
 
         {/* CTA */}
         <Link
-          href="/gallery"
+          href="/home#gallery"
           /* Button fill #150065, sampled from HOME4.pdf. `mt-10` (was mt-6)
              gives the bottom margin QA asked for under the carousel. */
           className="font-heading pf-interactive mt-10 inline-flex min-h-11 items-center rounded-md bg-[#150065] px-8 py-2.5 text-sm font-medium text-white shadow-[0_10px_30px_-10px_rgba(21,0,101,0.7)] hover:-translate-y-0.5 hover:bg-[#0f0049] hover:shadow-[0_14px_34px_-10px_rgba(21,0,101,0.8)] sm:text-base"
