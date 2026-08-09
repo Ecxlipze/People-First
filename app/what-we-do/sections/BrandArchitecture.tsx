@@ -37,7 +37,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
         style={{ backgroundColor: pillar.accent }}
       />
 
-      <div className="pf-lift pf-sheen relative flex h-full flex-col overflow-hidden rounded-xl bg-[#f3efef] px-6 py-7 shadow-[0_16px_40px_-26px_rgba(60,50,110,0.5)] sm:px-7">
+      <div className="pf-lift pf-sheen relative flex h-full flex-col overflow-hidden rounded-2xl bg-[#f3efef] px-6 py-7 shadow-[0_20px_50px_-15px_rgba(40,30,50,0.12)] sm:px-7">
         {/* icon and heading share a row; the body copy below is indented to
             the heading's left edge, as in the mockup */}
         <div className="flex items-start gap-4">
@@ -51,7 +51,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
           />
 
           <div className="min-w-0 flex-1">
-            <h3 className="text-[1.05rem] font-extrabold uppercase tracking-tight text-[#1a1a2e] sm:text-[1.15rem]">
+            <h3 className="font-display text-[1.1rem] font-extrabold uppercase text-[#1a1a2e] sm:text-[1.2rem]">
               {pillar.name}
             </h3>
 
@@ -59,7 +59,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
               {pillar.definition}
             </p>
 
-            <p className="mt-4 text-[0.82rem] font-bold text-[#471860]">
+            <p className="mt-4 font-display text-[0.82rem] font-bold text-[#471860]">
               Purpose:
             </p>
             <p className="mt-1.5 text-[0.78rem] leading-relaxed text-zinc-600">
@@ -103,7 +103,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
           {/* The rule is a `border-l` on the second half rather than a literal
               "|" glyph: when the two halves wrap onto separate lines a
               standalone pipe is left dangling at the end of the first. */}
-          <div className="flex flex-wrap items-center justify-center gap-y-1 text-center text-[0.8rem] font-medium text-[#471860]">
+          <div className="flex flex-wrap items-center justify-center gap-y-1 text-center font-display text-[0.85rem] font-medium text-[#471860]">
             <span className={pillar.taglineSecond ? "px-3" : ""}>
               {pillar.tagline}
             </span>
@@ -163,7 +163,7 @@ export default function BrandArchitecture() {
               aria-hidden
               className="hidden h-px flex-1 bg-[linear-gradient(to_right,rgba(132,84,255,0)_0%,rgba(132,84,255,0.85)_100%)] sm:block"
             />
-            <h2 className="text-2xl font-extrabold uppercase tracking-tight text-[#1a1a2e] sm:text-3xl lg:text-[2.4rem]">
+            <h2 className="font-display text-2xl font-extrabold uppercase tracking-[0.15em] text-[#1a1a2e] sm:text-3xl lg:text-[2.4rem]">
               Brand Architecture
             </h2>
             <span
@@ -172,10 +172,10 @@ export default function BrandArchitecture() {
             />
           </div>
 
-          <p className="mt-3 text-lg font-bold text-[#1a1a2e] sm:text-[1.4rem]">
+          <p className="mt-3 font-display text-2xl font-medium text-[#1a1a2e] sm:text-3xl lg:text-4xl">
             Building an Ecosystem, Not Just Businesses
           </p>
-          <p className="mx-auto mt-4 max-w-3xl text-[0.82rem] leading-relaxed text-zinc-600 sm:text-[0.86rem]">
+          <p className="mx-auto mt-4 max-w-3xl text-[0.9rem] leading-relaxed text-zinc-600 sm:text-[0.95rem]">
             People First (Pvt) Ltd is a registered venture builder under the
             Securities and Exchange Commission of Pakistan (SECP). To scale
             seamlessly without sacrificing our community values, our corporate
@@ -187,7 +187,7 @@ export default function BrandArchitecture() {
             or the centred heading would sit off the page's true centre. */}
         {/* Stagger so the four pillars arrive one after another rather than as a
             single 2×2 slab. */}
-        <Stagger className="mt-14 grid items-stretch gap-8 md:grid-cols-2 md:gap-x-10 lg:pr-[11rem] sm:mt-16">
+        <Stagger className="mt-14 grid items-stretch gap-8 md:grid-cols-2 md:gap-x-12 lg:pr-[11rem] sm:mt-16">
           {PILLARS.map((p) => (
             <PillarCard key={p.name} pillar={p} />
           ))}

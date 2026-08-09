@@ -45,8 +45,8 @@ function Contours() {
 
 function VentureCard({ name, blurb }: { name: string; blurb: string }) {
   return (
-    <li className="pf-card rounded-md border border-[#60aaaa] bg-transparent px-4 py-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:rounded-[0.93vh] xl:px-[1.3vw] xl:py-[1.05vh]">
-      <p className="text-[0.88rem] font-bold leading-tight text-[#1a1a2e] xl:text-[1.163vh]">
+    <li className="pf-card rounded-md border border-[#60aaaa] bg-white/40 backdrop-blur-sm px-4 py-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:rounded-[0.93vh] xl:px-[1.3vw] xl:py-[1.05vh]">
+      <p className="text-[0.88rem] font-display font-bold leading-tight text-[#1a1a2e] xl:text-[1.163vh]">
         {name}
       </p>
       <p className="mt-1.5 text-[0.74rem] leading-snug text-zinc-500 xl:mt-[0.35vh] xl:text-[0.93vh] xl:leading-[1.25]">
@@ -63,7 +63,7 @@ function StageColumn({ stage }: { stage: Stage }) {
     /* pf-card is safe here: <Reveal> writes its entrance transform to the grid
        wrapper above, not to these columns, so hover stays independent. */
     <div
-      className="pf-card flex h-full flex-col overflow-hidden rounded-lg border bg-white/70 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.4)] backdrop-blur-sm xl:h-[45.75vh] xl:rounded-[1.24vh] xl:bg-transparent xl:shadow-none xl:backdrop-blur-none"
+      className="pf-card flex h-full flex-col overflow-hidden rounded-lg border bg-white/70 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.4)] backdrop-blur-sm xl:h-[45.75vh] xl:rounded-[1.24vh] xl:bg-white/20 xl:shadow-none xl:backdrop-blur-sm"
       style={{ borderColor: stage.accent }}
     >
       <div
@@ -71,12 +71,12 @@ function StageColumn({ stage }: { stage: Stage }) {
         style={{ backgroundColor: stage.headerBg }}
       >
         <span
-          className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white/95 text-[0.8rem] font-bold xl:h-[4.5vh] xl:w-[4.5vh] xl:text-[1.705vh]"
+          className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white/95 text-[0.8rem] font-display font-bold xl:h-[4.5vh] xl:w-[4.5vh] xl:text-[1.705vh]"
           style={{ color: stage.accent }}
         >
           {stage.number}
         </span>
-        <h3 className="whitespace-nowrap text-[0.9rem] font-bold tracking-wide text-white xl:text-[1.705vh] xl:tracking-normal">
+        <h3 className="whitespace-nowrap text-[0.9rem] font-display font-bold tracking-wide text-white xl:text-[1.705vh] xl:tracking-normal">
           {stage.title}
         </h3>
       </div>
@@ -89,7 +89,7 @@ function StageColumn({ stage }: { stage: Stage }) {
         {stage.feature ? (
           /* THE MIND STAGE — one feature card, centred in the column */
           <div
-            className="mt-5 rounded-lg border bg-white px-5 py-6 text-center xl:mt-[2.5vh] xl:flex xl:h-[19.2vh] xl:flex-col xl:items-center xl:justify-center xl:rounded-[0.93vh] xl:bg-transparent xl:px-[2vw] xl:py-[1.2vh]"
+            className="mt-5 rounded-lg border bg-white/40 backdrop-blur-sm px-5 py-6 text-center xl:mt-[2.5vh] xl:flex xl:h-[19.2vh] xl:flex-col xl:items-center xl:justify-center xl:rounded-[0.93vh] xl:bg-white/40 xl:px-[2vw] xl:py-[1.2vh]"
             style={{ borderColor: `${stage.accent}55` }}
           >
             <GraduationCap
@@ -99,7 +99,7 @@ function StageColumn({ stage }: { stage: Stage }) {
               aria-hidden
             />
             <p
-              className="mt-3 text-[0.82rem] font-bold leading-tight xl:mt-[1.2vh] xl:max-w-[15vw] xl:-translate-y-[0.5vh] xl:text-[1.163vh]"
+              className="mt-3 text-[0.82rem] font-display font-bold leading-tight xl:mt-[1.2vh] xl:max-w-[15vw] xl:-translate-y-[0.5vh] xl:text-[1.163vh]"
               style={{ color: stage.accent }}
             >
               {stage.feature.name}
@@ -192,7 +192,7 @@ export default function EcosystemStages() {
           reserve that space themselves. max-w-7xl so the columns run wide. */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 xl:h-[100svh] xl:max-w-none xl:px-0">
         <Reveal className="text-center xl:pt-[17.67vh]">
-          <h2 className="text-xl font-extrabold tracking-tight text-[#1a1a2e] sm:text-2xl lg:text-[1.75rem] xl:text-[3.1vh] xl:leading-none xl:text-black">
+          <h2 className="text-xl font-display font-extrabold tracking-tight text-[#1a1a2e] sm:text-2xl lg:text-[1.75rem] xl:text-[3.1vh] xl:leading-none xl:text-black">
             <span className="inline-block xl:scale-x-[1.07]">
               THE PEOPLE FIRST ECOSYSTEM
             </span>
@@ -220,32 +220,32 @@ export default function EcosystemStages() {
             with the right edge of THE MARKET STAGE column rather than floating
             somewhere between it and the icon rail. z-20 keeps them above the
             decorative planes, which drift through this band. */}
-        <div className="relative z-20 mt-10 flex animate-fade-in-up flex-wrap items-center justify-center gap-3 md:justify-end lg:pr-[11rem] xl:absolute xl:bottom-[6.4vh] xl:left-[68.45vw] xl:mt-0 xl:flex-nowrap xl:gap-[1.45vw] xl:pr-0">
+        <div className="relative z-20 mt-10 flex w-full animate-fade-in-up flex-col items-stretch gap-3 min-[500px]:flex-row min-[500px]:flex-wrap min-[500px]:items-center min-[500px]:justify-center md:w-auto md:justify-end lg:pr-[11rem] xl:absolute xl:bottom-[6.4vh] xl:left-[60vw] xl:mt-0 xl:flex-nowrap xl:gap-3 xl:pr-0">
           <ContactTrigger
             href="/partner"
             role="Training Partner"
-            className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#9f4163] px-7 py-3 text-[0.9rem] font-medium text-white transition-colors hover:bg-[#8e3a59] xl:h-[3.4vh] xl:min-h-0 xl:w-[8.9vw] xl:whitespace-nowrap xl:px-0 xl:py-0 xl:text-[1.24vh]"
+            className="flex w-full items-center justify-center rounded-md bg-[#9f4163] px-5 py-2 text-[0.8rem] font-display font-medium text-white transition-colors hover:bg-[#8e3a59] min-[500px]:inline-flex min-[500px]:w-auto xl:whitespace-nowrap"
           >
             Partner with Us
           </ContactTrigger>
           <ContactTrigger
             href="/training"
             role="Student"
-            className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#dbdbdb] px-7 py-3 text-[0.9rem] font-medium text-zinc-700 transition-colors hover:bg-[#cecece] xl:h-[3.4vh] xl:min-h-0 xl:w-[10.85vw] xl:whitespace-nowrap xl:px-0 xl:py-0 xl:text-[1.24vh]"
+            className="flex w-full items-center justify-center rounded-md bg-[#dbdbdb] px-5 py-2 text-[0.8rem] font-display font-medium text-zinc-700 transition-colors hover:bg-[#cecece] min-[500px]:inline-flex min-[500px]:w-auto xl:whitespace-nowrap"
           >
             Join Training Program
           </ContactTrigger>
           <ContactTrigger
             href="/contact"
             aria-label="Say hello"
-            className="transition-transform duration-300 hover:-translate-y-1 hover:scale-110"
+            className="hidden sm:block mx-auto mt-2 transition-transform duration-300 hover:-translate-y-1 hover:scale-110 min-[500px]:mx-0 min-[500px]:mt-0"
           >
             <Image
               src="/images/icons/messages.png"
               alt=""
-              width={40}
-              height={40}
-              className="h-9 w-9 select-none xl:h-[2.5vh] xl:w-[2.5vh]"
+              width={32}
+              height={32}
+              className="h-8 w-8 select-none xl:h-8 xl:w-8"
             />
           </ContactTrigger>
         </div>

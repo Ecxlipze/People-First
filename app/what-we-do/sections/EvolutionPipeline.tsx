@@ -24,70 +24,71 @@ function StageCard({ stage }: { stage: PipelineStage }) {
      hover lift. Same split as the pillar and tier cards. */
   return (
     <div className="h-full">
-      <div className="pf-lift pf-sheen group relative flex h-full min-h-[31.25rem] flex-col overflow-hidden rounded-xl bg-[#f3f1f2] shadow-[0_12px_28px_-16px_rgba(35,25,45,0.4)]">
-        <div className="flex min-h-0 flex-1 flex-col px-5 pb-2 pt-11">
+      <div className="pf-lift pf-sheen group relative flex h-full min-h-[31.25rem] flex-col overflow-hidden rounded-[1.25rem] bg-[#f3f1f2] shadow-[0_20px_50px_-15px_rgba(40,30,50,0.12)]">
+        <div className="flex min-h-0 flex-1 flex-col px-6 pb-2 pt-12 sm:px-8 sm:pt-14">
           <div className="flex items-center gap-4 sm:mx-3">
             {/* The numbered disc scales up with the card, giving the stage number
                 the same emphasis the icons get on the other card types. */}
             <span
-              className="pf-pop grid h-14 w-14 shrink-0 place-items-center rounded-full text-xl font-bold text-white"
+              className="pf-pop grid h-14 w-14 shrink-0 place-items-center rounded-full font-display text-xl font-bold text-white"
               style={{ backgroundColor: stage.pillBg }}
             >
               {stage.number}
             </span>
             <div className="min-w-0">
-              <p className="text-xs font-bold uppercase tracking-[0.08em] text-zinc-900">
+              <p className="font-display text-xs font-bold uppercase tracking-[0.1em] text-zinc-900">
                 {stage.label}
               </p>
-              <h3 className="mt-1 text-xl font-medium leading-tight text-zinc-950">
+              <h3 className="mt-1.5 font-display text-xl font-medium leading-tight text-zinc-950">
                 {stage.headline}
               </h3>
             </div>
           </div>
 
-          <p className="mt-7 text-[0.7rem] leading-relaxed text-zinc-800">
+          <p className="mt-8 text-[0.8rem] leading-relaxed text-zinc-600">
             {stage.rationale}
           </p>
 
           {stage.feature ? (
             /* MIND STAGE — one feature card, vertically centred in the space the
                other two columns fill with their venture lists */
-            <div className="mt-1 flex min-h-0 flex-1 items-center sm:mx-12">
+            <div className="mt-2 flex min-h-0 flex-1 items-center sm:mx-4">
               <div
-                className="w-full rounded-xl border bg-transparent px-5 py-6 text-center transition-colors duration-[var(--dur-base)]"
-                style={{ borderColor: `${stage.pillBg}44` }}
+                className="w-full rounded-2xl border bg-white px-6 py-8 text-center shadow-sm transition-colors duration-[var(--dur-base)]"
+                style={{ borderColor: `${stage.pillBg}33` }}
               >
                 <GraduationCap
-                  className="pf-pop mx-auto h-9 w-9"
+                  className="pf-pop mx-auto h-10 w-10"
                   style={{ color: stage.pillBg }}
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   aria-hidden
                 />
                 <p
-                  className="mt-5 text-base font-bold leading-tight"
+                  className="mt-6 font-display text-[1.05rem] font-bold leading-tight"
                   style={{ color: stage.pillBg }}
                 >
                   {stage.feature.name}
                 </p>
-                <p className="mt-5 text-[0.7rem] leading-relaxed text-zinc-600">
+                <p className="mt-4 text-[0.75rem] leading-relaxed text-zinc-500">
                   {stage.feature.blurb}
                 </p>
               </div>
             </div>
           ) : (
-            <ul className="mt-1 space-y-1.5 sm:mx-12">
+            <ul className="mt-3 space-y-2 sm:mx-4">
               {stage.ventures.map((v) => (
                 /* Each venture row nudges right and fills with a hint of its
                    border colour on hover, so the list reads as browsable rather
                    than as static bullet points. */
                 <li
                   key={v.name}
-                  className="rounded-lg border border-[#50b5bd] bg-transparent px-3 py-1.5 transition-[background-color,transform] duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1 hover:bg-[#50b5bd]/10"
+                  className="rounded-xl border bg-white px-4 py-2.5 shadow-sm transition-[background-color,transform] duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1"
+                  style={{ borderColor: `${stage.pillBg}22` }}
                 >
-                  <p className="text-[0.7rem] font-bold leading-tight text-zinc-950">
+                  <p className="font-display text-[0.8rem] font-bold leading-tight text-zinc-950">
                     {v.name}
                   </p>
-                  <p className="mt-0.5 text-[0.6rem] leading-snug text-zinc-600">
+                  <p className="mt-1 text-[0.65rem] leading-snug text-zinc-500">
                     {v.blurb}
                   </p>
                 </li>
@@ -98,17 +99,17 @@ function StageCard({ stage }: { stage: PipelineStage }) {
 
         {/* outcome strip — full-bleed foot of the card */}
         <div
-          className="mt-auto grid min-h-16 grid-cols-[auto_1fr] items-start gap-x-5 px-6 py-3 sm:px-8"
+          className="mt-auto grid min-h-20 grid-cols-[auto_1fr] items-start gap-x-4 px-6 py-4 sm:px-8"
           style={{ backgroundColor: stage.outcome.bg }}
         >
-          <p className="text-[0.72rem] font-extrabold uppercase tracking-wide text-zinc-950">
+          <p className="font-display text-[0.75rem] font-extrabold uppercase tracking-widest text-zinc-950">
             Outcome:
           </p>
           <div>
-            <p className="text-[0.78rem] font-bold leading-tight text-zinc-950">
+            <p className="font-display text-[0.85rem] font-bold leading-tight text-zinc-950">
               {stage.outcome.title}
             </p>
-            <p className="mt-2 text-[0.62rem] leading-snug text-zinc-800">
+            <p className="mt-1.5 text-[0.7rem] leading-snug text-zinc-800">
               {stage.outcome.detail}
             </p>
           </div>
@@ -137,31 +138,31 @@ export default function EvolutionPipeline() {
         aria-hidden
         width={525}
         height={352}
-        className="pointer-events-none absolute right-0 top-0 hidden w-[37%] max-w-[525px] select-none md:block"
+        className="pointer-events-none absolute right-0 top-0 hidden w-[42%] max-w-[600px] select-none md:block"
       />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-6 sm:px-20">
         {/* ── intro ── left-aligned; the right half is the swoosh's space, so
             the copy is held to a column rather than centred */}
-        <Reveal className="max-w-[720px]">
-          <p className="text-base font-medium uppercase tracking-[0.06em] text-zinc-900 sm:text-lg">
+        <Reveal className="max-w-[650px]">
+          <p className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-zinc-900 sm:text-[0.95rem]">
             Brand Architecture
           </p>
-          <h2 className="mt-4 text-4xl font-extrabold leading-[1.22] tracking-tight text-zinc-950 sm:text-5xl lg:text-[3.125rem]">
-            The Three Dimensions of{" "}
-            <span className="text-[#491557]">Holistic</span> Evolution
+          <h2 className="mt-3 font-display text-4xl font-extrabold leading-[1.22] tracking-tight text-zinc-950 sm:text-5xl lg:text-[3.125rem]">
+            The Three Dimensions of <br className="hidden sm:block" />
+            <span className="text-[#5d1a68]">Holistic</span> Evolution
           </h2>
           <div
             aria-hidden
-            className="mt-4 h-[3px] w-56 bg-[linear-gradient(90deg,#5d1a68_0%,rgba(93,26,104,0)_100%)]"
+            className="mt-2 h-[3px] w-56 bg-[linear-gradient(90deg,#5d1a68_0%,rgba(93,26,104,0)_100%)]"
           />
-          <p className="mt-7 text-base leading-[1.42] text-zinc-900 sm:text-[1.0625rem]">
+          <p className="mt-5 text-[0.95rem] leading-[1.6] text-zinc-800 sm:text-[1.0625rem]">
             The People First Evolution Model divides development into three
             distinct operational circles — Physical, Mind, and Market — because
             true economic empowerment must mirror the natural progression of
             human capability.
           </p>
-          <p className="mt-5 text-base leading-[1.42] text-zinc-900 sm:text-[1.0625rem]">
+          <p className="mt-5 text-[0.95rem] leading-[1.6] text-zinc-800 sm:text-[1.0625rem]">
             We build the foundation, cultivate potential, and create the
             pathways that lead our people to lasting prosperity.
           </p>
@@ -180,7 +181,7 @@ export default function EvolutionPipeline() {
                   height={248}
                   className="pf-pop h-16 w-16 shrink-0 select-none lg:h-20 lg:w-20"
                 />
-                <h3 className="text-xl font-bold leading-tight text-white">
+                <h3 className="font-display text-[1.35rem] font-bold leading-tight text-white">
                   {ECOSYSTEM_BANNER.title}
                 </h3>
               </div>
@@ -203,8 +204,8 @@ export default function EvolutionPipeline() {
         </Reveal>
 
         {/* ── pipeline ── */}
-        <Reveal className="mt-20 text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-4xl lg:text-[2.5rem]">
+        <Reveal className="mt-24 text-center">
+          <h2 className="font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl lg:text-[2.5rem]">
             Our Evolutionary Pipeline
           </h2>
         </Reveal>
@@ -212,7 +213,7 @@ export default function EvolutionPipeline() {
         {/* Stagger so the three stages arrive left-to-right, which also reads as
             the pipeline's own order. */}
         <Stagger
-          className="mt-20 grid items-stretch gap-8 md:grid-cols-3 lg:mt-28 lg:gap-10"
+          className="mt-20 grid items-stretch gap-8 md:grid-cols-3 lg:mt-28 lg:gap-10 xl:gap-12"
           step={80}
         >
           {PIPELINE.map((s) => (

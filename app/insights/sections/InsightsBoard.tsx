@@ -81,7 +81,7 @@ function Media({
 
       {/* Tall editorial crop from Studio.pdf. This is an article image, not a
           video, so it intentionally has no play control. */}
-      <div className="relative ml-auto aspect-[1.03/1] w-[87%] overflow-hidden rounded-sm bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
+      <div className="relative ml-auto aspect-[1.03/1] w-[87%] overflow-hidden rounded-2xl bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
         <SmartImage
           src={thumb}
           alt={thumbAlt}
@@ -100,10 +100,10 @@ function Media({
       <div className="absolute left-0 top-[58%] z-10 w-[9rem] -translate-y-1/2 rounded-md rounded-tl-none bg-[#68a9a8] px-5 py-5 text-white shadow-[0_14px_30px_-14px_rgba(40,80,70,0.7)] sm:w-[11rem] sm:px-6 sm:py-7 lg:w-[13rem] lg:px-7 lg:py-8 xl:-left-12 xl:w-[15rem] xl:px-8 xl:py-10">
         <CountUp
           value={insight.cardValue}
-          className="font-heading block text-2xl font-extrabold leading-none sm:text-[1.75rem] lg:text-[2.5rem] xl:text-[3rem]"
+          className="block text-2xl font-display font-extrabold leading-none sm:text-[1.75rem] lg:text-[2.5rem] xl:text-[3rem]"
         />
         {/* The mockup treats this overlapping tile as a compact display label. */}
-        <p className="mt-2 whitespace-pre-line text-[0.7rem] font-bold uppercase leading-tight sm:text-[0.8rem] lg:text-base">
+        <p className="mt-2 whitespace-pre-line text-[0.7rem] font-display font-bold uppercase leading-tight sm:text-[0.8rem] lg:text-base">
           {insight.cardLabel}
         </p>
       </div>
@@ -126,7 +126,7 @@ function Copy({ insight }: { insight: Insight }) {
         height={300}
         className="pf-pop mb-6 h-16 w-auto select-none sm:h-20"
       />
-      <h3 className="text-2xl font-extrabold leading-[1.12] tracking-tight text-[#171922] transition-colors duration-200 group-hover:text-[#c64047] sm:text-3xl lg:text-[2.15rem] xl:text-[2.375rem]">
+      <h3 className="text-2xl font-display font-extrabold leading-[1.12] tracking-tight text-[#171922] transition-colors duration-200 group-hover:text-[#c64047] sm:text-3xl lg:text-[2.15rem] xl:text-[2.375rem]">
         {insight.title}
       </h3>
       <p className="mt-5 max-w-md text-sm leading-relaxed text-zinc-500 lg:text-base">
@@ -161,7 +161,7 @@ export default function InsightsBoard() {
     <section className="relative z-10 px-6 pb-24 pt-20 sm:px-10 sm:pb-28 sm:pt-24 lg:px-20 lg:pt-28 xl:px-28 xl:pb-40 xl:pt-32">
       <div className="mx-auto max-w-[80rem]">
         {/* ── toolbar ── */}
-        <div className="flex flex-wrap items-center justify-center gap-5 sm:justify-between">
+        <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           {/* The dropdown is a real <select> with a visually-hidden label, so it
               is keyboard- and screen-reader-native and gets the platform's own
               option list on mobile. The chevron is decorative; `appearance-none`
@@ -172,7 +172,7 @@ export default function InsightsBoard() {
             </label>
             <span
               aria-hidden
-              className="pointer-events-none absolute left-0 grid h-6 w-6 place-items-center rounded border border-zinc-400 text-zinc-600"
+              className="pointer-events-none absolute left-0 grid h-6 w-6 place-items-center rounded border border-[#171922] text-[#171922]"
             >
               <ChevronDown className="h-3.5 w-3.5" />
             </span>
@@ -180,7 +180,7 @@ export default function InsightsBoard() {
               id={selectId}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="pf-interactive cursor-pointer appearance-none rounded bg-transparent py-1.5 pl-9 pr-2 text-xl font-medium text-[#171922] hover:text-[#c64047] sm:text-2xl"
+              className="pf-interactive cursor-pointer appearance-none rounded bg-transparent py-1.5 pl-9 pr-2 text-base font-display font-medium text-[#171922] hover:text-[#c64047] sm:text-xl lg:text-2xl"
             >
               {CATEGORY_OPTIONS.map((option) => (
                 <option key={option} value={option}>
@@ -190,18 +190,18 @@ export default function InsightsBoard() {
             </select>
           </div>
 
-          <div className="flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto sm:justify-end">
+          <div className="flex w-full flex-col items-stretch gap-3 min-[500px]:flex-row min-[500px]:flex-wrap min-[500px]:items-center sm:w-auto sm:justify-end">
             <ContactTrigger
               href="/partner"
               role="Training Partner"
-              className="pf-interactive inline-flex min-h-11 items-center rounded bg-[#a84666] px-6 text-sm font-medium text-white shadow-sm hover:-translate-y-0.5 hover:bg-[#8f3856] sm:px-7 sm:text-base"
+              className="pf-interactive flex min-h-11 items-center justify-center rounded bg-[#a02f52] px-6 text-sm font-display font-medium text-white shadow-sm hover:-translate-y-0.5 hover:bg-[#8c2946] sm:inline-flex sm:px-7 sm:text-base"
             >
               Partner with Us
             </ContactTrigger>
             <ContactTrigger
               href="/training"
               role="Student"
-              className="pf-interactive inline-flex min-h-11 items-center rounded bg-[#dedede] px-6 text-sm font-medium text-[#171922] shadow-sm hover:-translate-y-0.5 hover:bg-[#cbcbcb] sm:px-7 sm:text-base"
+              className="pf-interactive flex min-h-11 items-center justify-center rounded bg-zinc-200 px-6 text-sm font-display font-medium text-zinc-700 shadow-sm hover:-translate-y-0.5 hover:bg-zinc-300 sm:inline-flex sm:px-7 sm:text-base"
             >
               Join Training Program
             </ContactTrigger>
@@ -209,15 +209,15 @@ export default function InsightsBoard() {
                 do, so it is a real control rather than decoration. */}
             <ContactTrigger
               href="/contact"
-              className="pf-interactive grid h-11 w-11 place-items-center rounded-full hover:-translate-y-0.5"
+              className="pf-interactive mx-auto mt-2 grid h-11 w-11 place-items-center rounded-full hover:-translate-y-0.5 min-[500px]:mx-0 min-[500px]:mt-0"
               aria-label="Contact People First"
             >
               <Image
-                src="/images/icons/messages.png"
+                src="/images/icons/say-hello.svg"
                 alt=""
-                width={46}
-                height={46}
-                className="h-8 w-8 object-contain"
+                width={40}
+                height={40}
+                className="h-9 w-9 object-contain"
               />
             </ContactTrigger>
           </div>

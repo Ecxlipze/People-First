@@ -44,7 +44,7 @@ export default function InsightsPage() {
                 width={398}
                 height={100}
                 priority
-                className="h-12 w-auto sm:h-16"
+                className="h-11 w-auto sm:h-[52px] [@media(max-height:500px)]:h-9"
               />
             </Link>
           </div>

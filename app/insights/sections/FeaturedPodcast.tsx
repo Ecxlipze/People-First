@@ -61,13 +61,13 @@ export default function FeaturedPodcast() {
 
           {/* title + the two stat columns */}
           <div className="min-w-0 md:py-3">
-            <h2 className="max-w-[34rem] break-words text-lg font-extrabold leading-[1.45] text-[#171922] transition-colors duration-200 group-hover:text-[#c64047] sm:text-xl lg:text-[2rem]">
+            <h2 className="max-w-[34rem] break-words text-lg font-display font-extrabold leading-[1.45] text-[#171922] transition-colors duration-200 group-hover:text-[#c64047] sm:text-xl lg:text-[2rem]">
               {FEATURED.title}
             </h2>
             <div className="mt-8 grid gap-7 sm:grid-cols-2 lg:mt-10 lg:gap-12">
               {FEATURED.stats.map((s) => (
                 <div key={s.label}>
-                  <p className="text-base font-extrabold text-[#171922] lg:text-2xl">
+                  <p className="text-base font-display font-extrabold text-[#171922] lg:text-2xl">
                     {s.label}
                   </p>
                   <p className="mt-3 text-[0.72rem] leading-relaxed text-zinc-500 lg:text-sm">

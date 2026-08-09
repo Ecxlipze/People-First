@@ -62,7 +62,7 @@ export default function PainPoints() {
         {/* On desktop the PDF places the 40px heading 12% down the canvas. `vw`
             lets it scale with narrower desktop mockup proportions while the
             cap preserves the source size at 1920px and above. */}
-        <h2 className="animate-fade-in-up shrink-0 px-8 pr-16 pt-6 text-2xl font-extrabold uppercase tracking-tight text-[#2a1a6e] sm:px-14 sm:pr-20 sm:text-3xl lg:px-0 lg:pt-[12vh] lg:text-center lg:text-[clamp(1.875rem,2.083vw,2.5rem)] lg:leading-none">
+        <h2 className="animate-fade-in-up shrink-0 px-8 pr-16 pt-6 text-2xl font-display font-extrabold uppercase tracking-tight text-[#2a1a6e] sm:px-14 sm:pr-20 sm:text-3xl lg:px-0 lg:pt-[12vh] lg:text-center lg:text-[clamp(1.875rem,2.083vw,2.5rem)] lg:leading-none">
           <span className="inline-block lg:scale-x-[1.16]">
             Pain Points We Address
           </span>

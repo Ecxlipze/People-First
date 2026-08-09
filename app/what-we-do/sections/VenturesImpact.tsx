@@ -55,7 +55,7 @@ function TierCard({ tier }: { tier: VentureTier }) {
         />
 
         <h3
-          className="mt-5 text-[0.92rem] font-extrabold uppercase leading-tight tracking-wide xl:absolute xl:left-[0.5vw] xl:right-[0.5vw] xl:top-[10.2vw] xl:mt-0 xl:text-[1.25vw] xl:leading-[1.05]"
+          className="mt-5 text-[0.92rem] font-display font-extrabold uppercase leading-tight tracking-wide xl:absolute xl:left-[0.5vw] xl:right-[0.5vw] xl:top-[10.2vw] xl:mt-0 xl:text-[1.25vw] xl:leading-[1.05]"
           style={{ color: tier.accent }}
         >
           {tier.name}
@@ -78,12 +78,6 @@ export default function VenturesImpact() {
        of the pin and read as a large empty gap below "Impact Focus Areas"
        before the next section arrived. */
     <section className="relative z-20 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(170deg,#fbf7ff_0%,#f9f5fe_45%,#f6f1fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20 xl:pb-[7vw] xl:pt-[8.85vw]">
-      {/* soft cyan bloom, lower-right — the large blurred disc in the mockup */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-40 bottom-0 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(120,215,230,0.28)_0%,rgba(120,215,230,0)_70%)]"
-      />
-
       {/* No right padding on the container — it would pull the centred
           headings off the page's true centre. The bands that actually sit
           under the icon rail reserve that room themselves. */}
@@ -104,7 +98,7 @@ export default function VenturesImpact() {
             true centre. Only the bands that actually sit under the rail (the
             cards and grids below) carry the reservation. */}
         <Reveal className="mt-20 text-center xl:mt-[6vw]">
-          <h2 className="text-xl font-extrabold tracking-tight text-black sm:text-2xl xl:text-[1.667vw] xl:leading-none">
+          <h2 className="text-xl font-display font-extrabold tracking-normal text-black sm:text-2xl xl:text-[1.667vw] xl:leading-none">
             Results Clients Can Expect
           </h2>
         </Reveal>
@@ -158,7 +152,7 @@ export default function VenturesImpact() {
                   height={320}
                   className="pf-pop h-14 w-14 shrink-0 select-none object-contain min-[1536px]:mt-[1.2vw] min-[1536px]:h-[5.21vw] min-[1536px]:w-[5.21vw]"
                 />
-                <p className="max-w-72 text-[0.82rem] font-bold leading-snug text-black min-[1536px]:max-w-[18vw] min-[1536px]:text-[1.146vw] min-[1536px]:leading-[1.25]">
+                <p className="max-w-72 text-[0.82rem] font-display font-bold leading-snug text-black min-[1536px]:max-w-[18vw] min-[1536px]:text-[1.146vw] min-[1536px]:leading-[1.25]">
                   {r.text}
                 </p>
               </li>
@@ -168,7 +162,7 @@ export default function VenturesImpact() {
 
         {/* ── impact focus areas ── */}
         <Reveal className="mt-24 text-center xl:mt-[7.65vw]">
-          <h2 className="text-2xl font-extrabold uppercase tracking-tight text-black sm:text-3xl xl:text-[2.083vw] xl:leading-none">
+          <h2 className="text-2xl font-display font-extrabold uppercase tracking-normal text-black sm:text-3xl xl:text-[2.083vw] xl:leading-none">
             Impact Focus Areas
           </h2>
         </Reveal>
@@ -204,6 +198,22 @@ const impactIconClasses = [
   "xl:right-[0.94vw] xl:top-[0.94vw] xl:h-[8.44vw] xl:w-[8.44vw]",
 ];
 
+const impactTextClasses = [
+  "xl:pr-[5.5vw]",
+  "xl:pr-[1vw]",
+  "xl:pr-[8.5vw]",
+  "xl:pr-[5.5vw]",
+  "xl:pr-[6.5vw]",
+];
+
+const impactTitleClasses = [
+  "xl:max-w-[12vw]",
+  "xl:max-w-[10vw]",
+  "xl:max-w-[9.5vw]",
+  "xl:max-w-[12vw]",
+  "xl:max-w-[11vw]",
+];
+
 function ImpactCard({
   area,
   index,
@@ -211,27 +221,14 @@ function ImpactCard({
   area: (typeof IMPACT_AREAS)[number];
   index: number;
 }) {
-  const featured = area.featured ?? false;
-  /* Outer div absorbs <Stagger>'s entrance so the inner card is free to own the
-     hover transform — see the note in TierCard. */
   return (
     <div className="h-full">
       <div
-        /* No .pf-sheen here: the card is `xl:overflow-visible` so its icons can
-           overhang, which would let the sweep bleed outside the card at xl. */
-        className={`pf-card group relative flex h-full flex-col overflow-hidden rounded-lg px-5 pb-6 pt-5 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.45)] xl:h-[13.646vw] xl:overflow-visible xl:rounded-[0.83vw] xl:px-[1.56vw] xl:pb-[1.56vw] xl:pt-[2vw] ${
-          featured ? "bg-[#090c62]" : "bg-white"
-        }`}
+        className={`pf-card group relative flex h-full flex-col overflow-hidden rounded-lg bg-white px-5 pb-6 pt-5 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.45)] !transition-all !duration-500 ease-out hover:bg-[#090c62] hover:shadow-[0_20px_40px_-15px_rgba(9,12,98,0.35)] xl:overflow-visible xl:rounded-[0.83vw] xl:px-[1.56vw] xl:pb-[1.56vw] xl:pt-[1.5vw]`}
       >
-      {/* Icon top-right, inside the card. It is NOT absolutely positioned
-          over the title: these are wide 3D renders and at this card width the
-          longer titles ("Women's Financial Independence") run under them. The
-          header row reserves the space instead. */}
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-3 xl:min-h-[5.5vw]">
           <h3
-            className={`text-[1.02rem] font-extrabold leading-tight xl:max-w-[11vw] xl:text-[1.354vw] xl:leading-[1.28] ${
-              featured ? "text-white" : "text-[#1a1a2e]"
-            }`}
+            className={`relative z-10 text-[1.02rem] font-display font-extrabold leading-tight text-[#1a1a2e] !transition-colors !duration-500 ease-out group-hover:text-white xl:text-[1.354vw] xl:leading-[1.28] ${impactTitleClasses[index]}`}
           >
             {area.title}
           </h3>
@@ -241,14 +238,12 @@ function ImpactCard({
             aria-hidden
             width={480}
             height={480}
-            className={`pf-pop -mt-1 h-16 w-16 shrink-0 select-none object-contain xl:absolute xl:m-0 ${impactIconClasses[index]}`}
+            className={`pf-pop -mt-1 h-16 w-16 shrink-0 select-none object-contain !transition-all !duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-1 xl:absolute xl:m-0 ${impactIconClasses[index]}`}
           />
         </div>
 
         <p
-          className={`mt-3 text-[0.76rem] leading-relaxed xl:absolute xl:left-[1.56vw] xl:right-[1.56vw] xl:top-[7.55vw] xl:mt-0 xl:text-[0.938vw] xl:leading-[1.35] ${
-            featured ? "text-white/85" : "text-zinc-500"
-          }`}
+          className={`relative z-10 mt-3 text-[0.76rem] leading-relaxed text-zinc-500 !transition-colors !duration-500 ease-out group-hover:text-white/85 xl:mt-0 xl:text-[0.938vw] xl:leading-[1.35] ${impactTextClasses[index]}`}
         >
           {area.blurb}
         </p>
