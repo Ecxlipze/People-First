@@ -4,7 +4,7 @@ import "./globals.css";
 import { ContactModalProvider } from "./contact/ContactModal";
 import { getBaseUrl } from "@/app/lib/seo";
 
-/* ---- The site's two typefaces ----
+/* ---- The site's font setup ----
    Loaded once here, in the root layout, and handed to the rest of the site as
    CSS variables (see globals.css, which maps them onto `body` and the heading
    selectors). Nothing else in the app should import from next/font: a second
@@ -49,7 +49,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: "People First",
     description: "People First — putting people first.",
-    url: "/",
     siteName: "People First",
     locale: "en_US",
     type: "website",

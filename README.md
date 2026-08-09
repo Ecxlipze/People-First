@@ -14,7 +14,7 @@ For a comprehensive technical handover, architectural deep-dive, and route refer
 
 ## Prerequisites
 
-- **Node.js**: v20+ recommended
+- **Node.js**: v20.9.0 or newer
 - **npm**: v10+
 
 ## Installation
@@ -27,11 +27,11 @@ npm install
 
 ## Environment Variables
 
-To run the project in production, you must configure the following variable in your `.env.local` or hosting provider:
+Copy `.env.example` to `.env.local` for local overrides. For a production build, configure the following variable in the build environment or hosting provider:
 
 | Variable | Description | Example |
 | :--- | :--- | :--- |
-| `NEXT_PUBLIC_SITE_URL` | The absolute base URL of the production deployment. Used for canonical tags, JSON-LD, and the sitemap. | `https://peoplefirst.com` |
+| `NEXT_PUBLIC_SITE_URL` | Required at production build time. The absolute public origin used for canonical tags, JSON-LD, the sitemap, and robots metadata. Trailing slashes are normalized. | `https://www.example.com` |
 
 ## Development
 
@@ -81,17 +81,24 @@ Run these scripts before committing changes to ensure code quality and build int
 - `/insights` (Editorial Content)
 - `/podcasts` (Media Content)
 - `/contact` (Primary Contact Form)
+- `/privacy` (Privacy Policy)
+- `/terms` (Terms & Conditions)
+- `/cookies` (Cookie Policy)
+- `/partner` (Contact form with partner preselection; `noindex`)
+- `/training` (Contact form with training preselection; `noindex`)
 
-*(Additional legal and sub-routes are documented in the main project docs).*
+`/contact-us` permanently redirects to `/contact` with HTTP 308.
 
 ## Deployment Basics
 
-The project is built for zero-config deployment on Vercel.
+The project can run on a standard Next.js-compatible Node.js production host. Vercel can detect it automatically, but no Vercel-only runtime feature is required.
 
-1. Import the repository in your Vercel dashboard.
-2. Ensure the framework preset is **Next.js**.
-3. Set the `NEXT_PUBLIC_SITE_URL` environment variable to your exact production domain (e.g., `https://example.com` without a trailing slash).
-4. Deploy.
+1. Install dependencies with `npm ci`.
+2. Set `NEXT_PUBLIC_SITE_URL` to the final public origin.
+3. Run `npm run build`.
+4. Run the production server with `npm run start`, or use the equivalent workflow provided by the Next.js-compatible host.
+
+The contact form currently validates submissions and writes them to server logs; it does not deliver enquiries to email or a CRM. Add and verify a delivery integration before launch if receiving enquiries is required.
 
 ---
 *For more extensive engineering context, including responsive constraints, animation architecture, and SEO setup, read the [Detailed Project Documentation](./PROJECT_DOCUMENTATION.md).*
