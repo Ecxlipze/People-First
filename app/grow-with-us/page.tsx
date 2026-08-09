@@ -7,9 +7,12 @@ import WhoCanJoin from "@/app/grow-with-us/sections/WhoCanJoin";
 import ProgramOutcomes from "@/app/grow-with-us/sections/ProgramOutcomes";
 
 export const metadata: Metadata = {
-  title: "Grow With Us — People First",
+  title: "Grow with Us",
   description:
-    "Learn skills, earn independently, build your future. Practical, income-generating skills training for youth and women across Pakistan.",
+    "Explore training programs, career paths, and business growth opportunities with People First.",
+  alternates: {
+    canonical: "/grow-with-us",
+  },
 };
 
 /* Grow With Us — a single scrollable, top-to-bottom composition, structured

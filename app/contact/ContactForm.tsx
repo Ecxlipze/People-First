@@ -45,11 +45,13 @@ function Field({
   error,
   htmlFor,
   children,
+  standalone = false,
 }: {
   label: string;
   error?: string;
   htmlFor: string;
   children: React.ReactNode;
+  standalone?: boolean;
 }) {
   return (
     <div className="min-w-0">
@@ -59,7 +61,9 @@ function Field({
           label stays in the DOM for screen readers, just visually hidden. */}
       <label
         htmlFor={htmlFor}
-        className="mb-1 block text-[0.8rem] font-semibold text-zinc-800 [@media(max-height:560px)]:sr-only"
+        className={`mb-1 block text-[0.8rem] font-semibold text-zinc-800 ${
+          standalone ? "" : "[@media(max-height:560px)]:sr-only"
+        }`}
       >
         {label}
       </label>
@@ -92,12 +96,14 @@ function Select({
   defaultValue,
   placeholder,
   options,
+  standalone = false,
 }: {
   id: string;
   name: string;
   defaultValue: string;
   placeholder: string;
   options: readonly string[];
+  standalone?: boolean;
 }) {
   /* A <select> has no ::placeholder, so the "nothing chosen yet" grey has to be
      driven off the value — hence the tiny bit of state. The options themselves
@@ -113,6 +119,8 @@ function Select({
         onChange={(e) => setValue(e.target.value)}
         aria-describedby={id ? `${id}-error` : undefined}
         className={`${FIELD} peer cursor-pointer appearance-none pr-9 ${
+          standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""
+        } ${
           value === "" ? "text-zinc-400" : ""
         }`}
       >
@@ -134,11 +142,13 @@ function Select({
 export default function ContactForm({
   defaultRole,
   onSuccess,
+  standalone = false,
 }: {
   /* Preselects "I am a" — e.g. the /partner CTA opens the modal on
      "Training Partner". */
   defaultRole?: string;
   onSuccess?: () => void;
+  standalone?: boolean;
 }) {
   const [state, formAction, pending] = useActionState(
     submitContact,
@@ -195,7 +205,11 @@ export default function ContactForm({
        to fit the viewport without scrolling, so it tightens on short screens. */
     <form
       action={formAction}
-      className="flex flex-col gap-[clamp(0.5rem,1.4vh,1rem)] p-[clamp(1rem,3vh,2.5rem)]"
+      className={`flex flex-col ${
+        standalone
+          ? "gap-3 p-5 sm:p-7 lg:gap-[clamp(0.5rem,1.4vh,1rem)] lg:p-[clamp(1rem,3vh,2.5rem)]"
+          : "gap-[clamp(0.5rem,1.4vh,1rem)] p-[clamp(1rem,3vh,2.5rem)]"
+      }`}
       noValidate
     >
       {/* honeypot — hidden from users and assistive tech, catnip for bots */}
@@ -210,7 +224,7 @@ export default function ContactForm({
         />
       </div>
 
-      <Field label="Full Name" htmlFor={id("fullName")} error={err.fullName}>
+      <Field label="Full Name" htmlFor={id("fullName")} error={err.fullName} standalone={standalone}>
         <input
           id={id("fullName")}
           name="fullName"
@@ -222,11 +236,11 @@ export default function ContactForm({
           defaultValue={v.fullName}
           aria-invalid={!!err.fullName}
           aria-describedby={err.fullName ? `${id("fullName")}-error` : undefined}
-          className={`${FIELD} ${err.fullName ? "border-red-400" : ""}`}
+          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""} ${err.fullName ? "border-red-400" : ""}`}
         />
       </Field>
 
-      <Field label="Email Address" htmlFor={id("email")} error={err.email}>
+      <Field label="Email Address" htmlFor={id("email")} error={err.email} standalone={standalone}>
         <input
           id={id("email")}
           name="email"
@@ -238,11 +252,11 @@ export default function ContactForm({
           defaultValue={v.email}
           aria-invalid={!!err.email}
           aria-describedby={err.email ? `${id("email")}-error` : undefined}
-          className={`${FIELD} ${err.email ? "border-red-400" : ""}`}
+          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""} ${err.email ? "border-red-400" : ""}`}
         />
       </Field>
 
-      <Field label="Phone" htmlFor={id("phone")} error={err.phone}>
+      <Field label="Phone" htmlFor={id("phone")} error={err.phone} standalone={standalone}>
         <input
           id={id("phone")}
           name="phone"
@@ -256,19 +270,20 @@ export default function ContactForm({
           defaultValue={v.phone}
           aria-invalid={!!err.phone}
           aria-describedby={err.phone ? `${id("phone")}-error` : undefined}
-          className={`${FIELD} ${err.phone ? "border-red-400" : ""}`}
+          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""} ${err.phone ? "border-red-400" : ""}`}
         />
       </Field>
 
       {/* Label reads "I am a", not "Gender" — the options are roles, and the
           field submits as `role`. The mockup's "Gender" label was a stray. */}
-      <Field label="I am a" htmlFor={id("role")} error={err.role}>
+      <Field label="I am a" htmlFor={id("role")} error={err.role} standalone={standalone}>
         <Select
           id={id("role")}
           name="role"
           defaultValue={v.role ?? defaultRole ?? ""}
           placeholder="Select an option"
           options={ROLES}
+          standalone={standalone}
         />
       </Field>
 
@@ -276,6 +291,7 @@ export default function ContactForm({
         label="How can we help you?"
         htmlFor={id("message")}
         error={err.message}
+        standalone={standalone}
       >
         {/* The one field that isn't a single-line pill: it overrides FIELD's
             fixed height with its own (taller, still fluid) box and re-adds the
@@ -291,7 +307,7 @@ export default function ContactForm({
           defaultValue={v.message}
           aria-invalid={!!err.message}
           aria-describedby={err.message ? `${id("message")}-error` : undefined}
-          className={`${FIELD} h-[clamp(3.25rem,11vh,7rem)] resize-none py-2 ${err.message ? "border-red-400" : ""}`}
+          className={`${FIELD} resize-none py-2 ${standalone ? "!h-28 lg:!h-[clamp(3.25rem,11vh,7rem)]" : "h-[clamp(3.25rem,11vh,7rem)]"} ${err.message ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -315,7 +331,7 @@ export default function ContactForm({
         type="submit"
         disabled={pending}
         aria-busy={pending}
-        className="pf-interactive mt-1 h-[clamp(2.5rem,4.4vh,3rem)] w-full shrink-0 rounded-lg bg-[#8f1d3f] px-5 text-sm font-semibold text-white hover:bg-[#7a1836] hover:shadow-lg hover:shadow-[#8f1d3f]/25 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none"
+        className={`pf-interactive mt-1 h-[clamp(2.5rem,4.4vh,3rem)] w-full shrink-0 rounded-lg bg-[#8f1d3f] px-5 text-sm font-semibold text-white hover:bg-[#7a1836] hover:shadow-lg hover:shadow-[#8f1d3f]/25 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none ${standalone ? "min-h-11 lg:min-h-0" : ""}`}
       >
         {pending ? (
           <span className="inline-flex items-center justify-center gap-2">

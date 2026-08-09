@@ -7,9 +7,11 @@ import InsightsBoard from "@/app/insights/sections/InsightsBoard";
 import FeaturedPodcast from "@/app/insights/sections/FeaturedPodcast";
 
 export const metadata: Metadata = {
-  title: "Insights by People First",
-  description:
-    "Practical insights on digital commerce, business growth and market-ready skills — plus the People First podcast.",
+  title: "Insights",
+  description: "Featured insights and studio content from People First.",
+  alternates: {
+    canonical: "/insights",
+  },
 };
 
 /* Insights by People First — built from public/images/Studio.pdf.
@@ -48,8 +50,11 @@ export default function InsightsPage() {
           </Link>
         </header>
 
-        <InsightsBoard />
-        <FeaturedPodcast />
+        <main>
+          <h1 className="sr-only">Insights</h1>
+          <InsightsBoard />
+          <FeaturedPodcast />
+        </main>
         <SiteFooter />
       </div>
     </>

@@ -9,6 +9,15 @@ import EcosystemShowcase from "@/app/components/EcosystemShowcase";
 import StoryShowcase from "@/app/components/StoryShowcase";
 import { Recede } from "@/app/components/ScrollFx";
 import HeroCTA from "@/app/components/HeroCTA";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Explore the People First ecosystem. Discover our ventures, featured work, community, and growth opportunities.",
+  alternates: {
+    canonical: "/home",
+  },
+};
 
 export default function HomePage() {
   return (

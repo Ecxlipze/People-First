@@ -198,7 +198,7 @@ export default function EcosystemStages() {
         {/* the grid and the CTAs below reserve just enough room for the icon
             rail, whose labels start around 1164px at a 1440 viewport */}
         <Stagger
-          className="mt-12 grid items-stretch gap-6 md:grid-cols-3 md:gap-5 lg:pr-[11rem] xl:absolute xl:left-[8.33vw] xl:top-[33.49vh] xl:mt-0 xl:w-[70.83vw] xl:grid-cols-3 xl:gap-[1.08vw] xl:pr-0"
+          className="mt-12 grid items-stretch gap-6 lg:grid-cols-3 lg:gap-5 lg:pr-[11rem] xl:absolute xl:left-[8.33vw] xl:top-[33.49vh] xl:mt-0 xl:w-[70.83vw] xl:gap-[1.08vw] xl:pr-0"
           step={90}
         >
           {STAGES.map((s) => (

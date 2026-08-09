@@ -6,9 +6,12 @@ import RecommendedArticles from "@/app/ideas-lab/sections/RecommendedArticles";
 import TallSwipePanel from "@/app/components/TallSwipePanel";
 
 export const metadata: Metadata = {
-  title: "Ideas Lab — People First",
+  title: "Ideas Lab",
   description:
-    "Insights to help you grow in the ecosystem. Practical articles, guides, and perspectives on human transformation, economic gateways, startup growth, and skills development.",
+    "Discover insights, articles, and growth resources from the People First Ideas Lab.",
+  alternates: {
+    canonical: "/ideas-lab",
+  },
 };
 
 /* Ideas Lab — built on the /home swipe-over pattern: SECTION 1 pins itself

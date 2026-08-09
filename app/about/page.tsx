@@ -8,9 +8,12 @@ import VisionMission from "@/app/about/sections/VisionMission";
 import CTABanner from "@/app/about/sections/CTABanner";
 
 export const metadata: Metadata = {
-  title: "About — People First",
+  title: "About Us",
   description:
     "Every movement begins with a question. The People First story, our journey paths, key stats, and our vision & mission.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 /* About page — a single scrollable, top-to-bottom composition. The right-hand

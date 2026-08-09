@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 import { ContactModalProvider } from "./contact/ContactModal";
+import { getBaseUrl } from "@/app/lib/seo";
 
 /* ---- The site's two typefaces ----
    Loaded once here, in the root layout, and handed to the rest of the site as
@@ -38,8 +39,40 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "People First",
+  metadataBase: new URL(getBaseUrl()),
+  title: {
+    template: "%s | People First",
+    default: "People First",
+  },
   description: "People First — putting people first.",
+  applicationName: "People First",
+  openGraph: {
+    title: "People First",
+    description: "People First — putting people first.",
+    url: "/",
+    siteName: "People First",
+    locale: "en_US",
+    type: "website",
+    // TODO: A dedicated Open Graph image is required.
+    // Uncomment this line once /public/images/og/people-first-og.png is added.
+    // images: [{ url: '/images/og/people-first-og.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "People First",
+    description: "People First — putting people first.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -55,6 +88,27 @@ export default function RootLayout({
       {/* ContactModalProvider mounts the site-wide "Get in Touch" overlay and
           lets any CTA open it via useContactModal()/<ContactTrigger>. */}
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  name: "People First",
+                  url: getBaseUrl(),
+                },
+                {
+                  "@type": "Organization",
+                  name: "People First",
+                  url: getBaseUrl(),
+                  logo: `${getBaseUrl()}/icon.svg`,
+                },
+              ],
+            }),
+          }}
+        />
         <ContactModalProvider>{children}</ContactModalProvider>
       </body>
     </html>

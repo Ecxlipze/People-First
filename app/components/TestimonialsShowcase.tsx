@@ -109,7 +109,7 @@ export default function TestimonialsShowcase() {
             No lg:pr-32 here: that padded only this element, pulling the grid off
             the heading's centre axis (the same bug the Gallery had). */}
         <Stagger
-          className="mx-auto mt-6 w-full max-w-[1213px] gap-8 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-4"
+          className="mx-auto mt-6 w-full max-w-[1213px] gap-8 px-6 [column-fill:balance] sm:mt-8 sm:columns-2 lg:columns-3 xl:columns-4"
           step={45}
         >
           {/* mb-8 (32px) gives the vertical rhythm closer to the design's 29–37px column gaps */}

@@ -9,9 +9,12 @@ import BrandArchitecture from "@/app/what-we-do/sections/BrandArchitecture";
 import TallSwipePanel from "@/app/components/TallSwipePanel";
 
 export const metadata: Metadata = {
-  title: "What We Do — People First",
+  title: "What We Do",
   description:
-    "The pain points we address, the People First Evolution Model across the Physical, Mind and Market stages, our four venture tiers, and the impact focus areas we build toward.",
+    "Discover the People First services, ecosystem, ventures, impact, and brand architecture.",
+  alternates: {
+    canonical: "/what-we-do",
+  },
 };
 
 /* What We Do — a multi-section swipe-over page, same pattern as /home and

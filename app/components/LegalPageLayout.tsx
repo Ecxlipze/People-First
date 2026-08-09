@@ -12,6 +12,12 @@ export type LegalSection = {
 
 type LegalPath = "/privacy" | "/terms" | "/cookies";
 
+/* Confirmed in the active site content:
+   - BrandArchitecture identifies this exact registered entity name.
+   - ContactPanel publishes this as the primary contact email. */
+export const LEGAL_OPERATOR_NAME = "People First (Pvt) Ltd";
+export const LEGAL_CONTACT_EMAIL = "info@techinsights.com";
+
 const LEGAL_PAGES: { label: string; href: LegalPath }[] = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
@@ -82,23 +88,30 @@ export default function LegalPageLayout({
                   {summary}
                 </p>
 
-                <dl className="mt-8 grid max-w-[780px] gap-3 border-t border-pf-purple/15 pt-6 text-sm text-zinc-700 sm:grid-cols-2 sm:gap-6">
+                <dl className="mt-8 grid max-w-[900px] gap-5 border-t border-pf-purple/15 pt-6 text-sm text-zinc-700 sm:grid-cols-3 sm:gap-6">
                   <div>
                     <dt className="font-display font-semibold text-zinc-950">
                       Effective date
                     </dt>
                     <dd className="mt-1">
-                      <LegalPlaceholder>[Effective date required]</LegalPlaceholder>
+                      August 9, 2026
                     </dd>
                   </div>
                   <div>
                     <dt className="font-display font-semibold text-zinc-950">
                       Website operator
                     </dt>
+                    <dd className="mt-1 font-medium text-zinc-900">
+                      {LEGAL_OPERATOR_NAME}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-display font-semibold text-zinc-950">
+                      Registration
+                    </dt>
                     <dd className="mt-1">
-                      <LegalPlaceholder>
-                        [Company legal name required]
-                      </LegalPlaceholder>
+                      Registered venture builder under the Securities and
+                      Exchange Commission of Pakistan (SECP)
                     </dd>
                   </div>
                 </dl>

@@ -3,6 +3,17 @@ import Image from "next/image";
 import RadialNav from "@/app/components/RadialNav";
 import SayHelloIcon from "@/app/components/SayHelloIcon";
 import ContactTrigger from "@/app/contact/ContactTrigger";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "People First",
+  },
+  description: "Enter the People First ecosystem. Putting people first in ventures, partnerships, and growth.",
+  alternates: {
+    canonical: "/home",
+  },
+};
 
 export default function Landing() {
   return (
@@ -48,7 +59,7 @@ export default function Landing() {
             the icon ring. The artwork's own width is capped against svh (see the
             <Image> below), so on short windows it shrinks rather than colliding
             with the footer — that keeps this offset a single constant. */}
-        <div className="animate-fade-in-up absolute flex flex-col items-center top-[58%] lg:top-[45.98svh] left-1/2 -translate-x-1/2 -translate-y-[47%] lg:-translate-y-[31.45%]">
+        <div className="animate-fade-in-up absolute left-1/2 top-[calc(58%+0.75rem)] flex -translate-x-1/2 -translate-y-[47%] flex-col items-center sm:top-[58%] lg:top-[45.98svh] lg:-translate-y-[31.45%]">
           {/* soft pulsing glow behind the logo */}
           <div
             aria-hidden
@@ -133,6 +144,7 @@ export default function Landing() {
               Cookies
             </Link>
           </div>
+          <h1 className="sr-only">People First</h1>
         </div>
 
         {/* Montserrat 700 at 30px, with an 18px gap to the icon at sm+.

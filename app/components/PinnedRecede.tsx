@@ -230,6 +230,12 @@ export default function PinnedRecede({
     };
 
     apply();
+    /* Images, web fonts and responsive grids can finish laying out after the
+       first effect pass. Re-evaluate whenever the inner panel's measured size
+       changes so a tablet section that grows beyond the viewport switches to
+       normal flow instead of remaining clipped inside the sticky stage. */
+    const contentResizeObserver = new ResizeObserver(apply);
+    contentResizeObserver.observe(inner);
     tablet.addEventListener("change", apply);
     desktop.addEventListener("change", apply);
     wideDesktop.addEventListener("change", apply);
@@ -242,6 +248,7 @@ export default function PinnedRecede({
     };
     window.addEventListener("resize", onResize);
     return () => {
+      contentResizeObserver.disconnect();
       tablet.removeEventListener("change", apply);
       desktop.removeEventListener("change", apply);
       wideDesktop.removeEventListener("change", apply);

@@ -63,7 +63,7 @@ export default function KeyStats() {
                 <span className="font-display text-sm font-bold uppercase leading-tight text-zinc-800 sm:text-base">Supported</span>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid gap-4 min-[420px]:grid-cols-2 sm:gap-6">
               {STATS.small.map((s) => {
                 const words = s.label.split(" ");
                 const firstPart = words.slice(0, words.length > 2 ? 2 : 1).join(" ");

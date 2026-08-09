@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LegalPageLayout, {
+  LEGAL_CONTACT_EMAIL,
+  LEGAL_OPERATOR_NAME,
   LegalPlaceholder,
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — People First",
-  description:
-    "Read how information submitted through the People First website is handled, including the details that remain subject to company confirmation.",
+  title: "Privacy Policy",
+  description: "Information about how we collect, use, and share your data.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 const sections: LegalSection[] = [
@@ -19,7 +23,7 @@ const sections: LegalSection[] = [
       <>
         <p>
           This Privacy Policy explains how{" "}
-          <LegalPlaceholder>[Company legal name required]</LegalPlaceholder>,
+          {LEGAL_OPERATOR_NAME},
           operating the People First website (&ldquo;People First&rdquo;,
           &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;), handles
           personal information provided through this website.
@@ -182,7 +186,7 @@ const sections: LegalSection[] = [
           responsible privacy contact must be confirmed:
           {" "}
           <LegalPlaceholder>
-            [Privacy request process and contact email required]
+            [Privacy request verification and response process required]
           </LegalPlaceholder>
           .
         </p>
@@ -253,10 +257,12 @@ const sections: LegalSection[] = [
         <p>Questions or privacy requests should be directed to:</p>
         <ul>
           <li>
-            <LegalPlaceholder>[Company legal name required]</LegalPlaceholder>
+            {LEGAL_OPERATOR_NAME}
           </li>
           <li>
-            <LegalPlaceholder>[Contact email required]</LegalPlaceholder>
+            <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>
+              {LEGAL_CONTACT_EMAIL}
+            </a>
           </li>
           <li>
             <LegalPlaceholder>

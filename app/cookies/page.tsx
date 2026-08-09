@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import LegalPageLayout, {
+  LEGAL_CONTACT_EMAIL,
+  LEGAL_OPERATOR_NAME,
   LegalPlaceholder,
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy — People First",
-  description:
-    "Read the current People First cookie position, including what was and was not confirmed from the website application.",
+  title: "Cookies Policy",
+  description: "Information about how we use cookies and similar technologies.",
+  alternates: {
+    canonical: "/cookies",
+  },
 };
 
 const sections: LegalSection[] = [
@@ -150,10 +154,12 @@ const sections: LegalSection[] = [
         <p>Questions about cookies or similar technologies should be sent to:</p>
         <ul>
           <li>
-            <LegalPlaceholder>[Company legal name required]</LegalPlaceholder>
+            {LEGAL_OPERATOR_NAME}
           </li>
           <li>
-            <LegalPlaceholder>[Contact email required]</LegalPlaceholder>
+            <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>
+              {LEGAL_CONTACT_EMAIL}
+            </a>
           </li>
         </ul>
       </>

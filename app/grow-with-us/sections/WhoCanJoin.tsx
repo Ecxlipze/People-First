@@ -63,7 +63,7 @@ export default function WhoCanJoin() {
             because <Stagger> transforms its direct children and .pf-card
             transforms on hover — one element cannot carry both. */}
         <Stagger
-          className="mt-12 grid grid-cols-2 items-stretch gap-4 sm:grid-cols-4 sm:gap-5 md:mt-16"
+          className="mt-12 grid items-stretch gap-4 min-[480px]:grid-cols-2 sm:gap-5 md:mt-16 lg:grid-cols-4"
           step={70}
         >
           {TILES.map((t) => (

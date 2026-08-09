@@ -70,7 +70,7 @@ export default function JourneyPaths() {
         </Reveal>
 
         <Stagger
-          className="mt-16 grid items-stretch gap-6 lg:gap-8 md:grid-cols-3"
+          className="mt-16 grid items-stretch gap-6 lg:grid-cols-3 lg:gap-8"
           step={75}
         >
           {PATHS.map((p) => (

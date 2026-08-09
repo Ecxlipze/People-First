@@ -174,7 +174,7 @@ export default function VenturesImpact() {
             row, rather than the two rows sharing one long ramp that would leave
             the last card waiting well past the others. */}
         <div className="mt-12 xl:mt-[7.4vw]">
-          <Stagger className="mx-auto grid max-w-5xl items-stretch gap-5 md:grid-cols-3 xl:relative xl:-left-[0.78vw] xl:w-[65.52vw] xl:max-w-none xl:gap-[1.56vw]">
+          <Stagger className="mx-auto grid max-w-5xl items-stretch gap-5 lg:grid-cols-3 lg:pr-[11rem] xl:relative xl:-left-[0.78vw] xl:w-[65.52vw] xl:max-w-none xl:gap-[1.56vw] xl:pr-0">
             {IMPACT_AREAS.slice(0, 3).map((a, index) => (
               <ImpactCard key={a.title} area={a} index={index} />
             ))}

@@ -144,11 +144,15 @@ export default function ContactPanel({
   defaultRole,
   onSuccess,
   headingId,
+  standalone = false,
 }: {
   defaultRole?: string;
   onSuccess?: () => void;
   /* Lets the modal point its aria-labelledby at the panel's own heading. */
   headingId?: string;
+  /* The standalone route may scroll on phones, so its fields can keep a
+     comfortable touch size instead of using the modal's compact geometry. */
+  standalone?: boolean;
 }) {
   return (
     /* Fluid padding/gaps throughout: this panel has to fit the viewport without
@@ -236,7 +240,11 @@ export default function ContactPanel({
 
       {/* ── right: form card ── */}
       <div className="animate-fade-in-up min-w-0 overflow-hidden rounded-[1.75rem] bg-[#eeeeef] shadow-2xl">
-        <ContactForm defaultRole={defaultRole} onSuccess={onSuccess} />
+        <ContactForm
+          defaultRole={defaultRole}
+          onSuccess={onSuccess}
+          standalone={standalone}
+        />
       </div>
     </div>
   );

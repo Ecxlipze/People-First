@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import LegalPageLayout, {
+  LEGAL_CONTACT_EMAIL,
+  LEGAL_OPERATOR_NAME,
   LegalPlaceholder,
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions — People First",
-  description:
-    "Read the terms governing use of the People First website, including the provisions that remain subject to company and legal confirmation.",
+  title: "Terms and Conditions",
+  description: "Terms and conditions governing the use of People First services.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 const sections: LegalSection[] = [
@@ -18,15 +22,14 @@ const sections: LegalSection[] = [
       <>
         <p>
           These Terms & Conditions are intended to govern access to and use of
-          the People First website operated by
-          {" "}
-          <LegalPlaceholder>[Company legal name required]</LegalPlaceholder>.
+          the People First website operated by {LEGAL_OPERATOR_NAME}.
           By using the website after final terms are published, visitors will be
           expected to comply with them.
         </p>
         <p>
-          The legal identity of the website operator and the effective date
-          must be completed before these terms are treated as final.
+          The website identifies {LEGAL_OPERATOR_NAME} as a registered venture
+          builder under the Securities and Exchange Commission of Pakistan
+          (SECP). The effective date shown above applies to this version.
         </p>
       </>
     ),
@@ -122,7 +125,7 @@ const sections: LegalSection[] = [
           submission-handling workflow:
           {" "}
           <LegalPlaceholder>
-            [Contact-form handling and authorised recipients required]
+            [Authorised recipients and operational handling procedure required]
           </LegalPlaceholder>
           .
         </p>
@@ -244,10 +247,12 @@ const sections: LegalSection[] = [
         <p>Questions about these terms should be directed to:</p>
         <ul>
           <li>
-            <LegalPlaceholder>[Company legal name required]</LegalPlaceholder>
+            {LEGAL_OPERATOR_NAME}
           </li>
           <li>
-            <LegalPlaceholder>[Contact email required]</LegalPlaceholder>
+            <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>
+              {LEGAL_CONTACT_EMAIL}
+            </a>
           </li>
           <li>
             <LegalPlaceholder>

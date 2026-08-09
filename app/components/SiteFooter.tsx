@@ -116,7 +116,7 @@ export default function SiteFooter({
     <footer
       className={`relative z-[70] bg-white ${swipeOver ? "-mt-8 rounded-t-[2rem] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]" : ""}`}
     >
-      <div className="mx-auto w-full max-w-[1400px] px-6 py-14 sm:px-10 sm:py-16">
+      <div className="mx-auto w-full max-w-[1400px] px-6 py-14 sm:px-10 sm:py-16 lg:px-32 xl:px-36">
         {/* ── CTA band ── short & wide; globe flush-left and clipped, copy
             slightly right of it, CTAs pinned to the right. */}
         {showCta && (
@@ -144,9 +144,9 @@ export default function SiteFooter({
               className="pointer-events-none absolute left-0 top-1/2 hidden h-[135%] w-auto -translate-x-[38%] -translate-y-1/2 select-none opacity-30 [filter:brightness(0)_invert(1)] sm:block"
             />
 
-            <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-11">
+            <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 xl:flex-row xl:items-center xl:justify-between xl:gap-10 xl:py-11">
               {/* copy */}
-              <div className="lg:pl-52">
+              <div className="text-center xl:pl-52 xl:text-left">
                 <h2 className="font-serif text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
                   Let&rsquo;s Get in Touch
                 </h2>
@@ -166,7 +166,7 @@ export default function SiteFooter({
                   right edge — the buttons hanging outside the panel. The label is
                   long, so the type steps down slightly at sm to keep it on one
                   line inside the design's width instead of forcing an overflow. */}
-              <div className="flex w-full flex-none flex-col gap-3.5 sm:w-[380px]">
+              <div className="mx-auto flex w-full flex-none flex-col gap-3.5 sm:w-[380px] xl:mx-0">
                 <div className="flex min-w-0 flex-col gap-3.5 sm:flex-row">
                   <ContactTrigger
                     href="/contact"
@@ -195,16 +195,16 @@ export default function SiteFooter({
         )}
 
         {/* ── logo + socials + link columns ── */}
-        <Reveal
-          y={36}
-          scale={0.985}
-          className="mt-14 grid grid-cols-1 gap-12 sm:mt-16 lg:grid-cols-[1fr_1.1fr]"
+          <Reveal
+            y={36}
+            scale={0.985}
+            className="mt-14 grid grid-cols-1 gap-12 sm:mt-16 xl:grid-cols-[1fr_1.1fr]"
         >
           {/* logo + socials — centred within its column on lg+, matching the
               design (QA Footer: "present in center in design"). No `pl-*` here:
               a left pad would offset the block from the column's true centre,
               which is what left it 227px/203px off-centre before. */}
-          <div className="lg:flex lg:flex-col lg:items-center lg:justify-center">
+          <div className="flex flex-col items-center justify-center text-center">
             {/* Logo is 283×66 on the 1920 frame → ~50px tall at 1440, where this
                 rendered h-11/44px. */}
             <Link href="/" aria-label="People First — home">
@@ -249,7 +249,7 @@ export default function SiteFooter({
               to the "Pages" column is 119px → 89px at 1440 (pl-20 ≈ 80px is
               within a rounding step). QA asked for both the divider treatment and
               more left padding on the right-hand links. */}
-          <div className="relative grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3 lg:gap-x-16 lg:pl-[89px]">
+          <div className="relative grid grid-cols-1 justify-items-start gap-x-10 gap-y-10 text-left sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(9rem,1.15fr)] sm:justify-items-center sm:text-center xl:justify-items-start xl:gap-x-16 xl:pl-[89px] xl:text-left">
             {/* inset-y-0 rather than a fixed height: the rule should run the
                 columns' own height. A hard h-[150px] taken from the design's
                 200px rule left it floating — the design's columns are 193px tall
@@ -257,28 +257,22 @@ export default function SiteFooter({
                 different height. */}
             <span
               aria-hidden
-              className="absolute inset-y-0 left-0 hidden w-px bg-black lg:block"
+              className="absolute inset-y-0 left-0 hidden w-px bg-black xl:block"
             />
             {COLUMNS.map((col) => (
               <div key={col.title}>
                 <h3 className="text-xl font-bold text-black">{col.title}</h3>
-                {/* Row pitch: 34px in the design, and it stays ~34px here — do
-                    NOT scale it by the 1920→1440 frame ratio. The design's link
-                    ink is 13px tall, so its type is ~17.7px, essentially the same
-                    as our 17px; the pitch is therefore already at our scale.
-                    Scaling the pitch to 26px while leaving the font at 17px is
-                    what crushed these rows together (pitch/font falls from the
-                    design's 1.92 to 1.53).
-                    A 33px row still cannot hold a 44px touch target, so the <li>
-                    is capped at 33px on lg and the <a> keeps its full 44px height,
-                    overhanging symmetrically via -my-[5px]. Below lg the roomier
-                    stacked spacing is kept, where touch is likelier. */}
-                <ul className="mt-6 flex flex-col gap-3 lg:mt-[35px] lg:gap-0">
+                {/* Keep every row's visual spacing at least as large as its 44px
+                    touch target. The previous 33px rows made adjacent links
+                    overlap vertically and left the Legal column looking
+                    compressed, especially once SideNav clearance narrowed the
+                    footer at 1024px. */}
+                <ul className="mt-6 flex flex-col gap-2 xl:mt-[35px]">
                   {col.links.map((l) => (
-                    <li key={l.label} className="lg:h-[33px]">
+                    <li key={l.label}>
                       <Link
                         href={l.href}
-                        className="pf-interactive inline-flex min-h-11 items-center rounded-sm text-[1.0625rem] text-black hover:translate-x-0.5 hover:text-[#491557] lg:-my-[5px]"
+                        className="pf-interactive inline-flex min-h-11 items-center rounded-sm text-[1.0625rem] text-black hover:translate-x-0.5 hover:text-[#491557]"
                       >
                         {l.label}
                       </Link>

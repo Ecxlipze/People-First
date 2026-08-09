@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import ContactPageBody from "@/app/contact/ContactPageBody";
 
 export const metadata: Metadata = {
-  title: "Join a Training Program — People First",
-  description:
-    "Join a People First training program. Tell us about yourself and we'll match you to a track.",
+  title: "Join a Training Program",
+  description: "Sign up for skills and business training from People First.",
+  robots: {
+    index: false,
+  },
 };
 
 export default function TrainingPage() {

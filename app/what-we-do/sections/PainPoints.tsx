@@ -5,20 +5,21 @@ import { PAIN_POINTS } from "@/app/what-we-do/pain-points";
 
 /* What We Do → "Pain Points We Address" (SECTION 1).
 
-   Pinned `sticky top-0 h-screen` so the NEXT section can swipe up and over it,
-   the same pattern as /home and /ideas-lab.
+   Pinned at xl so the NEXT section can swipe up and over it, the same pattern
+   as /home and /ideas-lab. Phones and tablets use normal flow because the
+   readable text fallback is taller than a viewport.
 
    The ribbon, its eight pins and their labels are ONE illustration
    (pain-points.webp) exactly as the designer composed them, so nothing here
    re-positions or re-types any part of it.
 
-   Below `lg` that image is too wide to stay legible — the labels would fall
+   Below `xl` that image is too wide to stay legible — the labels would fall
    under ~9px — so the same eight points render as a stacked list instead, in
    ribbon order. PAIN_POINTS carries that text; it is the mobile fallback only,
    and must stay in sync with the artwork. */
 export default function PainPoints() {
   return (
-    <section className="sticky top-0 flex h-[100svh] flex-col overflow-hidden bg-[linear-gradient(115deg,#e8f6f8_0%,#f6f3fb_42%,#fbf7fd_100%)] md:h-screen">
+    <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-[linear-gradient(115deg,#e8f6f8_0%,#f6f3fb_42%,#fbf7fd_100%)] xl:sticky xl:top-0 xl:h-screen xl:min-h-0">
       {/* soft cyan wash, upper-left — the corner glow from the mockup. Drawn as
           a gradient rather than the source raster: that asset peaks at an alpha
           of 67/255, so it is a tint, not artwork. */}
@@ -62,40 +63,37 @@ export default function PainPoints() {
         {/* On desktop the PDF places the 40px heading 12% down the canvas. `vw`
             lets it scale with narrower desktop mockup proportions while the
             cap preserves the source size at 1920px and above. */}
-        <h2 className="animate-fade-in-up shrink-0 px-8 pr-16 pt-6 text-2xl font-display font-extrabold uppercase tracking-tight text-[#2a1a6e] sm:px-14 sm:pr-20 sm:text-3xl lg:px-0 lg:pt-[12vh] lg:text-center lg:text-[clamp(1.875rem,2.083vw,2.5rem)] lg:leading-none">
-          <span className="inline-block lg:scale-x-[1.16]">
+        <h1 className="animate-fade-in-up shrink-0 px-8 pr-16 pt-6 text-2xl font-display font-extrabold uppercase tracking-tight text-[#2a1a6e] sm:px-14 sm:pr-20 sm:text-3xl xl:px-0 xl:pt-[12vh] xl:text-center xl:text-[clamp(1.875rem,2.083vw,2.5rem)] xl:leading-none">
+          <span className="inline-block xl:scale-x-[1.16]">
             Pain Points We Address
           </span>
-        </h2>
+        </h1>
 
         {/* ── lg and up: the illustration, whole ──
             The source artwork occupies about 63.5% of the 1920px PDF canvas,
             starts 27.5% down it, and is centred in the area left of the nav
             rail. Keeping those proportions avoids the oversized, edge-to-edge
             rendering while preserving the illustration as one composed unit. */}
-        <div className="absolute left-0 top-[27.5vh] hidden w-[calc(100%_-_20rem)] justify-center lg:flex">
+        <div className="absolute left-0 top-[27.5vh] hidden w-[calc(100%_-_20rem)] justify-center xl:flex">
           <div className="relative aspect-[2048/1055] w-[63.5vw] max-w-[78rem]">
             <Image
               src="/images/what-we-do/pain-points.webp"
               alt="A winding path marked by eight pins, one for each pain point People First addresses: no one takes responsibility for your failure; people fight their battles alone; lack of coordination among stakeholders; absence of an integrated development approach; limited access to resources; the gap between potential and opportunity; socio-economic challenges remain unaddressed; and the need for a people-centered development model."
               fill
               priority
-              sizes="(max-width: 1024px) 0px, (max-width: 1965px) 63.5vw, 78rem"
+              sizes="(max-width: 1279px) 0px, (max-width: 1965px) 63.5vw, 78rem"
               className="select-none object-contain"
             />
           </div>
         </div>
 
-        {/* ── below lg: the same eight points, stacked and scrollable ──
-            The section is locked to the viewport height (it is the pinned half
-            of the swipe-over), so this list owns the overflow rather than
-            letting the page grow. */}
+        {/* ── below xl: the same eight points in normal document flow ── */}
         {/* The list cascades in rather than appearing all at once. `pf-stagger`
             (CSS, mount-driven) is used instead of the scroll-scrubbed <Stagger>
             because this list is its own scroll container — the items' viewport
             position doesn't change as it scrolls, so a scroll-scrubbed reveal
             would never advance for anything below the fold. */}
-        <ul className="pf-stagger mt-6 min-h-0 flex-1 space-y-3 overflow-y-auto px-8 pb-8 pr-12 sm:px-14 sm:pr-20 lg:hidden">
+        <ul className="pf-stagger mt-6 flex-1 space-y-3 px-8 pb-12 pr-12 sm:px-14 sm:pb-16 sm:pr-20 xl:hidden">
           {PAIN_POINTS.map((p, i) => (
             <li
               key={p.title}

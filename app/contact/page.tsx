@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import ContactPageBody from "./ContactPageBody";
 
 export const metadata: Metadata = {
-  title: "Contact — People First",
+  title: "Contact Us",
   description:
-    "Share your thoughts and we will help you make it real. Get in touch with the People First team.",
+    "Contact People First about partnerships, training, ventures, and growth opportunities.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {

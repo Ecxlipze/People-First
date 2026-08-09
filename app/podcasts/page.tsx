@@ -7,9 +7,12 @@ import Analytics from "@/app/podcasts/sections/Analytics";
 import OurPodcasts from "@/app/podcasts/sections/OurPodcasts";
 
 export const metadata: Metadata = {
-  title: "Podcasts — People First",
+  title: "Podcasts",
   description:
-    "Real conversations, real insights, real growth. Entrepreneurs, industry leaders, and innovators on building successful businesses in Pakistan.",
+    "Listen to People First podcasts, conversations, insights, and growth content.",
+  alternates: {
+    canonical: "/podcasts",
+  },
 };
 
 /* Podcasts — a single scrollable, top-to-bottom composition, structured like

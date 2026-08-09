@@ -4,7 +4,6 @@ import { useId, useMemo, useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
-import ContactTrigger from "@/app/contact/ContactTrigger";
 import HeroCTA from "@/app/components/HeroCTA";
 import { CountUp, Reveal, Stagger } from "@/app/components/ScrollFx";
 import {
@@ -50,13 +49,7 @@ function RainbowGlow() {
   );
 }
 
-function Media({
-  insight,
-  plane,
-}: {
-  insight: Insight;
-  plane: "left" | "right";
-}) {
+function Media({ insight }: { insight: Insight }) {
   const thumb = insight.studioThumb ?? insight.thumb;
   const thumbAlt = insight.studioThumbAlt ?? insight.thumbAlt;
 
@@ -169,7 +162,7 @@ export default function InsightsBoard() {
               id={selectId}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="pf-interactive cursor-pointer appearance-none rounded bg-transparent py-1.5 pl-9 pr-2 text-base font-display font-medium text-[#171922] hover:text-[#c64047] sm:text-xl lg:text-2xl"
+              className="pf-interactive min-h-11 cursor-pointer appearance-none rounded bg-transparent py-1.5 pl-9 pr-2 text-base font-display font-medium text-[#171922] hover:text-[#c64047] sm:text-xl lg:text-2xl"
             >
               {CATEGORY_OPTIONS.map((option) => (
                 <option key={option} value={option}>
@@ -196,7 +189,7 @@ export default function InsightsBoard() {
             <div key={insight.title}>
               <article className="group grid items-center gap-14 md:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] md:gap-16 lg:gap-20 xl:grid-cols-[minmax(440px,0.76fr)_minmax(620px,1.24fr)] xl:gap-24">
                 <Copy insight={insight} />
-                <Media insight={insight} plane="right" />
+                <Media insight={insight} />
               </article>
             </div>
           ))}
