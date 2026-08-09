@@ -16,7 +16,7 @@ export default function Analytics() {
           step={90}
         >
           <div className="min-w-0">
-            <h2 className="text-xl font-extrabold uppercase tracking-tight text-zinc-950 sm:text-[1.75rem]">
+            <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-zinc-950 sm:text-[2.25rem]">
               Advanced Podcast Analytics
             </h2>
             <p className="mt-8 max-w-[32rem] text-[0.8rem] leading-relaxed text-zinc-800 sm:text-[1rem]">

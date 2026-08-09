@@ -41,11 +41,11 @@ export default function PainPoints() {
       {/* The desktop mockup opens directly on the composition. Keep the logo as
           orientation for the mobile fallback, where the side rail becomes a
           closed drawer and no longer identifies the site at first glance. */}
-      <header className="relative z-20 shrink-0 px-8 pt-8 sm:px-14 sm:pt-10 lg:hidden">
+      <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
         <Link
           href="/"
           aria-label="People First — landing"
-          className="inline-flex min-h-11 items-center"
+          className="group inline-flex min-h-11 items-center"
         >
           <Image
             src="/images/logo.svg"
@@ -53,7 +53,7 @@ export default function PainPoints() {
             width={398}
             height={100}
             priority
-            className="h-11 w-auto sm:h-[52px]"
+            className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
           />
         </Link>
       </header>

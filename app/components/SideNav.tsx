@@ -247,7 +247,7 @@ export default function SideNav({
                    clear ~40pt gap between chip and icon rather than the tight
                    gap-3 (QA footer note: "padding issues.. also check the other
                    icons as well"). */
-                className={`group flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none lg:gap-3 ${
+                className={`group relative flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none lg:gap-0 ${
                   active ? "lg:my-2" : ""
                 }`}
                 style={{ animationDelay: `${i * 45}ms`, animationDuration: "420ms" }}
@@ -260,10 +260,10 @@ export default function SideNav({
                   and the icons alone wouldn't be identifiable. */}
               <span
                 aria-hidden
-                className={`pointer-events-none whitespace-nowrap transition-all duration-200 uppercase tracking-wider lg:text-[13px] lg:bg-transparent lg:shadow-none lg:ring-0 lg:opacity-0 lg:-translate-x-1 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 max-lg:opacity-100 max-lg:translate-x-0 ${
+                className={`pointer-events-none whitespace-nowrap transition-all duration-200 uppercase tracking-wider lg:absolute lg:right-full lg:mr-4 lg:text-[13px] lg:bg-transparent lg:shadow-none lg:ring-0 lg:opacity-0 lg:-translate-x-2 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 lg:group-focus-visible:opacity-100 lg:group-focus-visible:translate-x-0 max-lg:opacity-100 max-lg:translate-x-0 max-lg:relative max-lg:px-4 max-lg:py-2 max-lg:rounded-full ${
                   active
-                    ? "lg:font-black lg:text-black max-lg:bg-pf-magenta/15 max-lg:text-pf-magenta-dark max-lg:ring-pf-magenta/30"
-                    : `lg:font-medium ${onLight ? "lg:text-zinc-600" : "lg:text-[#b0b5c5]"} max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-black/5`
+                    ? "lg:font-black lg:text-black max-lg:bg-pf-magenta/15 max-lg:text-pf-magenta-dark max-lg:ring-1 max-lg:ring-pf-magenta/30"
+                    : `lg:font-medium ${onLight ? "lg:text-zinc-600" : "lg:text-[#b0b5c5]"} max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-1 max-lg:ring-black/5`
                 }`}
               >
                 {item.label}

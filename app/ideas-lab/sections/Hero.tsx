@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Recede } from "@/app/components/ScrollFx";
-import ContactTrigger from "@/app/contact/ContactTrigger";
+import HeroCTA from "@/app/components/HeroCTA";
 
 /* Ideas Lab → Hero (SECTION 1).
 
@@ -97,11 +97,11 @@ export default function Hero() {
       />
 
       {/* logo, top-left (links back to landing) */}
-      <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10 [@media(max-height:500px)]:pt-4">
+      <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
         <Link
           href="/"
           aria-label="People First — landing"
-          className="inline-flex min-h-11 items-center"
+          className="group inline-flex min-h-11 items-center"
         >
           <Image
             src="/images/logo.svg"
@@ -109,7 +109,7 @@ export default function Hero() {
             width={398}
             height={100}
             priority
-            className="h-11 w-auto sm:h-[52px] [@media(max-height:500px)]:h-9"
+            className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
           />
         </Link>
       </header>
@@ -145,37 +145,7 @@ export default function Hero() {
       </Recede>
 
       {/* ── bottom-right CTAs + say-hello glyph ── */}
-      <Recede className="absolute bottom-[max(2.5rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] right-[max(1rem,env(safe-area-inset-right))] z-20 flex flex-col items-end gap-3 sm:left-auto sm:right-[max(2rem,env(safe-area-inset-right))] sm:flex-row sm:items-center sm:gap-4">
-        <div className="flex w-full flex-col gap-3 min-[450px]:flex-row sm:w-auto">
-          <ContactTrigger
-            href="/partner"
-            role="Training Partner"
-            className="inline-flex min-h-12 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#a02f52] px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-[#8c2946] sm:flex-none sm:px-5"
-          >
-            Partner with Us
-          </ContactTrigger>
-          <ContactTrigger
-            href="/training"
-            role="Student"
-            className="inline-flex min-h-12 flex-1 items-center justify-center rounded-md bg-zinc-200 px-4 py-3 text-center text-sm font-medium leading-tight text-zinc-700 transition-colors hover:bg-zinc-300 sm:flex-none sm:px-5"
-          >
-            Join Training Program
-          </ContactTrigger>
-        </div>
-        <ContactTrigger
-          href="/contact"
-          aria-label="Say hello"
-          className="hidden transition-transform duration-300 hover:-translate-y-1 hover:scale-110 sm:inline-flex"
-        >
-          <Image
-            src="/images/icons/messages.png"
-            alt=""
-            width={40}
-            height={40}
-            className="h-8 w-8 select-none"
-          />
-        </ContactTrigger>
-      </Recede>
+      <HeroCTA floating />
     </section>
   );
 }

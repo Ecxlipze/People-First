@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import ContactTrigger from "@/app/contact/ContactTrigger";
+import HeroCTA from "@/app/components/HeroCTA";
 import { CountUp, Reveal, Stagger } from "@/app/components/ScrollFx";
 import {
   ALL_CATEGORY,
@@ -63,21 +64,7 @@ function Media({
     <div className="relative mx-auto w-full max-w-[38.75rem]">
       <RainbowGlow />
 
-      {/* paper plane accent — sits above the frame, opposite the copy */}
-      <Image
-        src={
-          plane === "right"
-            ? "/images/ideas-lab/plane-teal.webp"
-            : "/images/ideas-lab/plane-blue.webp"
-        }
-        alt=""
-        aria-hidden
-        width={253}
-        height={500}
-        className={`animate-floaty pointer-events-none absolute -top-16 z-20 hidden h-24 w-auto select-none sm:block xl:-top-20 xl:h-32 ${
-          plane === "right" ? "-right-4" : "-left-4"
-        }`}
-      />
+
 
       {/* Tall editorial crop from Studio.pdf. This is an article image, not a
           video, so it intentionally has no play control. */}
@@ -107,6 +94,8 @@ function Media({
           {insight.cardLabel}
         </p>
       </div>
+
+
     </div>
   );
 }
@@ -190,37 +179,7 @@ export default function InsightsBoard() {
             </select>
           </div>
 
-          <div className="flex w-full flex-col items-stretch gap-3 min-[500px]:flex-row min-[500px]:flex-wrap min-[500px]:items-center sm:w-auto sm:justify-end">
-            <ContactTrigger
-              href="/partner"
-              role="Training Partner"
-              className="pf-interactive flex min-h-11 items-center justify-center rounded bg-[#a02f52] px-6 text-sm font-display font-medium text-white shadow-sm hover:-translate-y-0.5 hover:bg-[#8c2946] sm:inline-flex sm:px-7 sm:text-base"
-            >
-              Partner with Us
-            </ContactTrigger>
-            <ContactTrigger
-              href="/training"
-              role="Student"
-              className="pf-interactive flex min-h-11 items-center justify-center rounded bg-zinc-200 px-6 text-sm font-display font-medium text-zinc-700 shadow-sm hover:-translate-y-0.5 hover:bg-zinc-300 sm:inline-flex sm:px-7 sm:text-base"
-            >
-              Join Training Program
-            </ContactTrigger>
-            {/* The mockup's chat mark. It opens the same contact panel the CTAs
-                do, so it is a real control rather than decoration. */}
-            <ContactTrigger
-              href="/contact"
-              className="pf-interactive mx-auto mt-2 grid h-11 w-11 place-items-center rounded-full hover:-translate-y-0.5 min-[500px]:mx-0 min-[500px]:mt-0"
-              aria-label="Contact People First"
-            >
-              <Image
-                src="/images/icons/say-hello.svg"
-                alt=""
-                width={40}
-                height={40}
-                className="h-9 w-9 object-contain"
-              />
-            </ContactTrigger>
-          </div>
+          <HeroCTA className="justify-start sm:justify-end lg:mr-8 xl:mr-16" />
         </div>
 
         {/* ── editorial feature ──

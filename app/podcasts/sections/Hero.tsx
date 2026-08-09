@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import ContactTrigger from "@/app/contact/ContactTrigger";
+import HeroCTA from "@/app/components/HeroCTA";
 import { Reveal } from "@/app/components/ScrollFx";
 
 /* Podcasts → Hero. Light lavender panel: the 3D microphone sits at the left of
@@ -17,7 +17,7 @@ export default function Hero() {
       />
 
       {/* logo, top-left */}
-      <header className="relative z-20 mx-auto max-w-[1600px] px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 xl:px-28">
+      <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
         <Link
           href="/"
           aria-label="People First — landing"
@@ -29,7 +29,7 @@ export default function Hero() {
             width={398}
             height={100}
             priority
-            className="pf-photo h-12 w-auto sm:h-16"
+            className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
           />
         </Link>
       </header>
@@ -44,11 +44,11 @@ export default function Hero() {
             width={290}
             height={620}
             priority
-            className="animate-floaty h-28 w-auto shrink-0 select-none drop-shadow-[0_18px_28px_rgba(70,40,120,0.3)] sm:h-36 lg:h-44"
+            className="animate-floaty h-28 w-auto shrink-0 -rotate-[8deg] select-none drop-shadow-[0_18px_28px_rgba(70,40,120,0.3)] sm:h-36 lg:h-44"
           />
 
           <div className="animate-fade-in-up w-full min-w-0 max-w-[980px]">
-            <h1 className="text-2xl font-extrabold leading-[1.18] tracking-tight text-[#6b215b] sm:text-3xl lg:text-[2.15rem]">
+            <h1 className="font-display text-2xl font-extrabold leading-[1.18] tracking-tight text-[#6b215b] sm:text-3xl lg:text-[2.15rem]">
               Real{" "}
               <span className="italic">Conversations.</span>{" "}
               Real <span className="italic">Insights.</span> Real{" "}
@@ -69,15 +69,7 @@ export default function Hero() {
         <div className="flex w-full min-w-0 flex-col items-start gap-9 md:flex-row md:items-center md:gap-12">
           <div className="group relative shrink-0">
             {/* hidden below sm: no side margin to hold it, it would be clipped */}
-            <Image
-              src="/images/podcast/plane-blue.webp"
-              alt=""
-              aria-hidden
-              width={253}
-              height={500}
-              className="animate-floaty pointer-events-none absolute -left-24 -top-8 z-0 hidden h-40 w-auto select-none md:block"
-            />
-            <div className="relative z-10 aspect-[6/7] w-[15rem] overflow-hidden rounded-xl border-4 border-white shadow-[0_20px_50px_-20px_rgba(60,50,110,0.45)] sm:w-[18rem]">
+            <div className="relative z-10 aspect-[6/7] w-[15rem] overflow-hidden rounded-2xl border-4 border-white shadow-[0_20px_50px_-15px_rgba(40,30,50,0.15)] sm:w-[18rem]">
               <Image
                 src="/images/podcast/value-guest.webp"
                 alt="A guest recording an episode of the People First Podcast"
@@ -89,7 +81,7 @@ export default function Hero() {
           </div>
 
           <div className="w-full min-w-0 max-w-xl">
-            <h2 className="text-2xl font-extrabold tracking-tight text-[#1c0878] sm:text-3xl">
+            <h2 className="font-display text-2xl font-extrabold tracking-tight text-[#1c0878] sm:text-3xl">
               Podcast Value
             </h2>
             <blockquote className="mt-4 text-[0.95rem] leading-relaxed text-zinc-900 sm:text-lg">
@@ -103,22 +95,7 @@ export default function Hero() {
       </Reveal>
 
       {/* ── two CTAs, right-aligned ── */}
-      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-wrap justify-end gap-4 px-6 pb-8 pt-8 sm:px-10 lg:px-24 lg:pr-36 xl:px-28 xl:pr-36">
-        <ContactTrigger
-          href="/partner"
-          role="Training Partner"
-          className="pf-interactive inline-flex min-h-11 w-full items-center justify-center rounded bg-[#ad3f69] px-7 py-2.5 text-[0.8rem] font-semibold text-white hover:-translate-y-0.5 hover:bg-[#96345a] sm:w-auto sm:text-sm"
-        >
-          Partner with Us
-        </ContactTrigger>
-        <ContactTrigger
-          href="/training"
-          role="Student"
-          className="pf-interactive inline-flex min-h-11 w-full items-center justify-center rounded bg-zinc-200 px-7 py-2.5 text-[0.8rem] font-semibold text-zinc-900 hover:-translate-y-0.5 hover:bg-white sm:w-auto sm:text-sm"
-        >
-          Join Training Program
-        </ContactTrigger>
-      </div>
+      <HeroCTA className="mx-auto w-full max-w-[1600px] justify-end px-6 pb-8 pt-8 sm:px-10 lg:px-24 lg:pr-36 xl:px-28 xl:pr-36" />
     </section>
   );
 }

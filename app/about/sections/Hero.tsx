@@ -15,7 +15,7 @@ export default function Hero() {
       />
 
       {/* logo, top-left (links back to landing) */}
-      <header className="relative z-20 mx-auto max-w-[1600px] px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 xl:px-28">
+      <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
         <Link
           href="/"
           aria-label="People First — landing"
@@ -29,7 +29,7 @@ export default function Hero() {
             width={318}
             height={91}
             priority
-            className="pf-photo h-11 w-auto sm:h-[58px]"
+            className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
           />
         </Link>
       </header>
@@ -83,6 +83,7 @@ export default function Hero() {
               priority
             />
           </div>
+
           <div className="relative z-10 mt-4 flex flex-wrap items-center justify-center gap-3 px-2">
               <ContactTrigger
                 href="/partner"

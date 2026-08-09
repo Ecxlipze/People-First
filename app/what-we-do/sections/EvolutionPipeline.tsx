@@ -144,12 +144,12 @@ export default function EvolutionPipeline() {
       <div className="relative z-10 mx-auto max-w-[1440px] px-6 sm:px-20">
         {/* ── intro ── left-aligned; the right half is the swoosh's space, so
             the copy is held to a column rather than centred */}
-        <Reveal className="max-w-[650px]">
+        <Reveal className="max-w-[650px] md:max-w-[55%] lg:max-w-[650px]">
           <p className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-zinc-900 sm:text-[0.95rem]">
             Brand Architecture
           </p>
-          <h2 className="mt-3 font-display text-4xl font-extrabold leading-[1.22] tracking-tight text-zinc-950 sm:text-5xl lg:text-[3.125rem]">
-            The Three Dimensions of <br className="hidden sm:block" />
+          <h2 className="mt-3 font-display text-4xl font-extrabold leading-[1.22] tracking-tight text-zinc-950 md:text-5xl lg:text-[3.125rem]">
+            The Three Dimensions of <br className="hidden lg:block" />
             <span className="text-[#5d1a68]">Holistic</span> Evolution
           </h2>
           <div
@@ -171,7 +171,7 @@ export default function EvolutionPipeline() {
         {/* ── purple banner ── */}
         <Reveal className="mt-12 sm:mx-8 sm:mt-10">
           <div className="pf-lift pf-sheen group relative overflow-hidden rounded-xl bg-[linear-gradient(100deg,#5d1a68_0%,#7a2585_55%,#8e2c96_100%)] px-5 py-7 shadow-[0_18px_44px_-24px_rgba(90,25,105,0.7)]">
-            <div className="grid gap-7 md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)_minmax(0,1fr)] md:gap-8">
+            <div className="grid gap-7 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-8">
               <div className="flex items-center gap-2">
                 <Image
                   src="/images/what-we-do/s4/ecosystem-icon.webp"
@@ -193,7 +193,7 @@ export default function EvolutionPipeline() {
                      mockup — only on the second, and only once they sit side
                      by side */
                   className={`text-sm leading-[1.55] text-white/90 ${
-                    i === 1 ? "md:border-l md:border-white/25 md:pl-8" : ""
+                    i === 1 ? "lg:border-l lg:border-white/25 lg:pl-8" : ""
                   }`}
                 >
                   {col}
@@ -213,7 +213,7 @@ export default function EvolutionPipeline() {
         {/* Stagger so the three stages arrive left-to-right, which also reads as
             the pipeline's own order. */}
         <Stagger
-          className="mt-20 grid items-stretch gap-8 md:grid-cols-3 lg:mt-28 lg:gap-10 xl:gap-12"
+          className="mt-20 grid items-stretch gap-8 lg:grid-cols-3 lg:mt-28 lg:gap-10 xl:gap-12"
           step={80}
         >
           {PIPELINE.map((s) => (

@@ -141,7 +141,7 @@ export default function SiteFooter({
               aria-hidden
               width={500}
               height={500}
-              className="pointer-events-none absolute left-0 top-1/2 h-[135%] w-auto -translate-x-[38%] -translate-y-1/2 select-none opacity-30 [filter:brightness(0)_invert(1)]"
+              className="pointer-events-none absolute left-0 top-1/2 hidden h-[135%] w-auto -translate-x-[38%] -translate-y-1/2 select-none opacity-30 [filter:brightness(0)_invert(1)] sm:block"
             />
 
             <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-11">

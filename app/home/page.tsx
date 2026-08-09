@@ -8,7 +8,7 @@ import TestimonialsShowcase from "@/app/components/TestimonialsShowcase";
 import EcosystemShowcase from "@/app/components/EcosystemShowcase";
 import StoryShowcase from "@/app/components/StoryShowcase";
 import { Recede } from "@/app/components/ScrollFx";
-import ContactTrigger from "@/app/contact/ContactTrigger";
+import HeroCTA from "@/app/components/HeroCTA";
 
 export default function HomePage() {
   return (
@@ -76,7 +76,7 @@ export default function HomePage() {
               className="animate-fade-in-up pointer-events-none absolute bottom-[76px] left-1/2 z-0 w-[160%] max-w-none -translate-x-1/2 select-none md:bottom-auto md:top-[52%] md:w-full md:max-w-[1350px] lg:top-[47%] [@media(max-height:500px)]:hidden"
             />
 
-            <header className="relative z-20 px-8 pt-8 sm:px-14 sm:pt-10 lg:px-24 lg:pt-[70px] [@media(max-height:500px)]:pt-4">
+            <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
               <Link
                 href="/"
                 aria-label="People First — landing"
@@ -88,7 +88,7 @@ export default function HomePage() {
                   width={398}
                   height={100}
                   priority
-                  className="pf-photo h-11 w-auto sm:h-[52px] lg:h-[64px] [@media(max-height:500px)]:h-9"
+                  className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
                 />
               </Link>
             </header>
@@ -138,73 +138,8 @@ export default function HomePage() {
               </main>
             </Recede>
 
-            {/* ── bottom-right CTAs ──
-                Measured off HOME1.pdf. The two button rectangles and the icon
-                were extracted by colour (#9f4163 / #dbdbdb / the purple glyph),
-                giving exact boxes rather than estimates:
-
-                  Partner with Us       169.5 × 43.5 design px → 127.1 × 32.6 css
-                  Join Training Program 206.5 × 43.5 design px → 154.9 × 32.6 css
-                  message icon           35.0 × 35.0 design px →  26.3 × 26.3 css
-
-                The two gaps are DIFFERENT and that is deliberate in the design
-                (QA #4): 28.5 design px between the buttons but 37.0 between the
-                second button and the icon — a ratio of 1.30. The old markup put
-                the buttons in their own flex box with `gap-6` and then spaced the
-                icon with the parent's `gap-6` as well, i.e. it distributed the
-                three controls evenly. Here the outer row carries the larger
-                gap-[28px] and the inner button pair the smaller gap-[21px], so
-                the asymmetry is structural and survives any width change.
-
-                Sizing is padding-driven, not fixed-width: at the measured type
-                size the text advances are 84.5 and 121.8 css px, so the measured
-                paddings reproduce 126.5 and 155.8 css px — within 1px of the
-                design boxes — while still letting a longer translation grow.
-
-                Height comes out of the same decomposition: the design's 32.63px
-                box is padding 8.25 + a 16.42px line box + padding 7.96, hence
-                py-[8px] with leading-[16px] (32px total). `leading-none` would
-                collapse the line box to the 11.5px font size and leave the
-                button 5px too short.
-
-                The icon's optical centre sits 3.7 css px ABOVE the buttons'
-                centre line in the mockup, hence `-mt-1` rather than a plain
-                items-center alignment.
-
-                Position: the row's right margin is 97.4 css px and its bottom
-                margin 72.4, replacing the old lg:right-20 / lg:bottom-[110px]
-                (the latter sat the row ~38px too high). */}
-            <Recede className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] right-[max(1rem,env(safe-area-inset-right))] z-20 flex flex-col items-end gap-3 sm:bottom-12 sm:left-auto sm:right-[max(2rem,env(safe-area-inset-right))] sm:flex-row sm:items-center sm:gap-6 lg:bottom-[72px] lg:right-[97px] lg:gap-[28px]">
-              <div className="flex w-full gap-3 sm:w-auto lg:gap-[21px]">
-                <ContactTrigger
-                  href="/partner"
-                  role="Training Partner"
-                  className="pf-interactive inline-flex min-h-9 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#9f4163] px-3 py-2 text-center text-xs font-medium text-white hover:-translate-y-0.5 hover:bg-[#8c3355] hover:shadow-lg sm:flex-none sm:px-4 sm:py-2.5 sm:text-sm lg:min-h-0 lg:rounded lg:px-[21px] lg:py-[8px] lg:text-[11.5px] lg:leading-[16px] lg:font-medium"
-                >
-                  Partner with Us
-                </ContactTrigger>
-                <ContactTrigger
-                  href="/training"
-                  role="Student"
-                  className="pf-interactive inline-flex min-h-9 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#dbdbdb] px-3 py-2 text-center text-xs font-medium leading-tight text-black hover:-translate-y-0.5 hover:bg-white hover:shadow-lg sm:flex-none sm:px-4 sm:py-2.5 sm:text-sm lg:min-h-0 lg:rounded lg:px-[17px] lg:py-[8px] lg:text-[11.5px] lg:leading-[16px] lg:font-medium"
-                >
-                  Join Training Program
-                </ContactTrigger>
-              </div>
-              <ContactTrigger
-                href="/contact"
-                aria-label="Say hello"
-                className="pf-interactive hidden hover:-translate-y-1 hover:scale-110 sm:inline-flex lg:-mt-1"
-              >
-                <Image
-                  src="/images/icons/messages.png"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className="h-10 w-10 select-none lg:h-[26px] lg:w-[26px]"
-                />
-              </ContactTrigger>
-            </Recede>
+            {/* ── bottom-right CTAs ── */}
+            <HeroCTA floating />
           </section>
         </div>
 

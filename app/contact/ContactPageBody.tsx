@@ -26,11 +26,11 @@ export default function ContactPageBody({
           scrolls; the panel inside compresses to fit instead.
           The container padding is uniform to keep the modal perfectly centered. */}
       <div className="relative flex h-svh flex-col overflow-hidden bg-[radial-gradient(ellipse_at_center_top,#ffffff_0%,#f2f2f4_45%,#e6e5ea_100%)] px-5 py-[clamp(1rem,2.5vh,2.5rem)] sm:px-14">
-        <div className="relative z-10 flex shrink-0 items-center justify-between gap-6">
+        <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
           <Link
             href="/"
             aria-label="People First — landing"
-            className="inline-flex min-h-11 items-center"
+            className="group inline-flex min-h-11 items-center"
           >
             {/* The dark-text mark, not about-page/logo.png — that one is white
                 lettering for dark pages and vanishes on this light backdrop. */}
@@ -40,7 +40,7 @@ export default function ContactPageBody({
               width={398}
               height={100}
               priority
-              className="h-10 w-auto sm:h-12"
+              className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
             />
           </Link>
           <Link
@@ -50,7 +50,7 @@ export default function ContactPageBody({
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-        </div>
+        </header>
 
         {/* min-h-0 lets this flex child actually shrink below its content's
             natural height, which is what keeps the panel inside the viewport. */}

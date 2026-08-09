@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import ContactTrigger from "@/app/contact/ContactTrigger";
+import HeroCTA from "@/app/components/HeroCTA";
 import { Reveal } from "@/app/components/ScrollFx";
 
 /* Grow With Us → Hero. The wide mint panel follows the desktop mockup: brand
@@ -16,7 +16,7 @@ export default function Hero() {
       />
 
       {/* logo, top-left */}
-      <header className="relative z-20 mx-auto max-w-[1440px] px-6 pt-8 sm:px-10 sm:pt-10 lg:px-16">
+      <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
         <Link
           href="/"
           aria-label="People First — landing"
@@ -28,7 +28,7 @@ export default function Hero() {
             width={398}
             height={100}
             priority
-            className="pf-photo h-12 w-auto sm:h-16"
+            className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
           />
         </Link>
       </header>
@@ -90,36 +90,7 @@ export default function Hero() {
             </p>
 
             {/* ── two CTAs + message icon, right-aligned below the text ── */}
-            <div className="mt-10 flex flex-col items-stretch justify-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start lg:mt-16 lg:justify-end lg:gap-6">
-              <ContactTrigger
-                href="/partner"
-                role="Training Partner"
-                className="pf-interactive inline-flex min-h-12 items-center justify-center rounded-lg bg-[#3bb1aa] px-6 py-3 font-display text-[0.85rem] font-bold text-white shadow-none hover:-translate-y-0.5 hover:brightness-95 sm:px-8 sm:text-[0.95rem]"
-              >
-                Partner with Us
-              </ContactTrigger>
-              <ContactTrigger
-                href="/training"
-                role="Student"
-                className="pf-interactive inline-flex min-h-12 items-center justify-center rounded-lg bg-[#c6f4ef] px-6 py-3 font-display text-[0.85rem] font-bold text-zinc-950 hover:-translate-y-0.5 hover:bg-white sm:px-8 sm:text-[0.95rem]"
-              >
-                Join Training Program
-              </ContactTrigger>
-              <Link
-                href="/contact"
-                aria-label="Say Hello"
-                className="pf-interactive flex shrink-0 items-center justify-center self-center rounded-full hover:-translate-y-0.5 hover:shadow-lg sm:self-auto"
-              >
-                <Image
-                  src="/images/icons/say-hello.svg"
-                  alt=""
-                  aria-hidden
-                  width={48}
-                  height={48}
-                  className="h-12 w-12 sm:h-14 sm:w-14"
-                />
-              </Link>
-            </div>
+            <HeroCTA className="mt-10 lg:mt-16 justify-start lg:justify-end" />
           </div>
         </div>
       </Reveal>

@@ -137,16 +137,7 @@ export default function EcosystemStages() {
         className="pointer-events-none absolute -left-40 top-0 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(120,215,230,0.22)_0%,rgba(120,215,230,0)_70%)] xl:-left-[13vw] xl:top-[12vh] xl:h-[44vw] xl:w-[44vw]"
       />
 
-      {/* The source composition identifies the section with a large logo in
-          the upper-left. Smaller layouts keep the compact stacked treatment. */}
-      <Image
-        src="/images/logo.svg"
-        alt="People First"
-        width={398}
-        height={100}
-        sizes="(min-width: 1280px) 19.2vw, 0px"
-        className="absolute left-[7.45vw] top-[6.51vh] hidden h-auto w-[19.2vw] max-w-[23rem] xl:block"
-      />
+
 
       {/* ── decorative crystals + planes, along the bottom ──
           hidden below sm: at narrow widths there is no side margin to hold
