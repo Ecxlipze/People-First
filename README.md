@@ -6,7 +6,7 @@ For a comprehensive technical handover, architectural deep-dive, and route refer
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.2.11 (App Router)
+- **Framework**: Next.js 16.3.0 (App Router)
 - **Library**: React 19.2.4
 - **Styling**: Tailwind CSS 4
 - **Icons**: Lucide React

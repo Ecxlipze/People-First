@@ -8,7 +8,7 @@ This document serves as the comprehensive technical handover for the People Firs
 People First is a design-led marketing website and venture ecosystem built on Next.js. The site heavily emphasizes visual aesthetics, typography, and motion to communicate the brand's identity, ventures, and partnership opportunities.
 
 ## Technology Stack
-- **Framework**: Next.js 16.2.11 (App Router)
+- **Framework**: Next.js 16.3.0 (App Router)
 - **Library**: React 19.2.4
 - **Styling**: Tailwind CSS 4
 - **Icons**: Lucide React

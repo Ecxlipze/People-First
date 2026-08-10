@@ -8,7 +8,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Project overview
 
-People First is a design-led marketing website built with Next.js 16.2.11,
+People First is a design-led marketing website built with Next.js 16.3.0,
 React 19, TypeScript, Tailwind CSS 4, and the App Router. It is intended for
 Vercel and currently has no database, authentication layer, or automated test
 suite.
