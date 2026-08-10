@@ -48,11 +48,11 @@ export default function Hero() {
           />
 
           <div className="animate-fade-in-up w-full min-w-0 max-w-[980px]">
-            <h1 className="font-display text-2xl font-extrabold leading-[1.18] tracking-tight text-[#6b215b] sm:text-3xl lg:text-[2.15rem]">
+            <h1 className="font-display text-2xl font-light leading-[1.18] tracking-tight text-[#6b215b] sm:text-3xl lg:text-[2.15rem]">
               Real{" "}
-              <span className="italic">Conversations.</span>{" "}
-              Real <span className="italic">Insights.</span> Real{" "}
-              <span className="italic">Growth.</span>
+              <span className="font-black italic">Conversations.</span>{" "}
+              Real <span className="font-black italic">Insights.</span> Real{" "}
+              <span className="font-black italic">Growth.</span>
             </h1>
             <p className="mt-6 max-w-[920px] text-[0.95rem] leading-relaxed text-[#6b215b] sm:text-lg">
               The People First Podcast brings together entrepreneurs, industry

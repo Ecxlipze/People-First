@@ -289,7 +289,7 @@ export default function EcosystemShowcase() {
                  i.e. 70pt leading, so ~46px type at a 1440 viewport. */
               className="text-2xl leading-tight tracking-tight text-black sm:text-3xl lg:text-[2.125rem] lg:leading-[1.35]"
             >
-              <span className="font-medium">Welcome to a</span>
+              <span className="font-bold">Welcome to a</span>
               <br />
               <span className="font-bold">Compounding Corporate</span>
               <br />

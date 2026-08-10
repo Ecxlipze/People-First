@@ -122,7 +122,7 @@ export default function HomePage() {
 
                 {/* #5661e8, sampled from the mockup's glyph interiors. The old
                     #4a65d6 was both darker and less saturated. */}
-                <p className="mt-5 text-base font-medium leading-relaxed text-[#5661e8] sm:mt-6 sm:text-lg lg:mt-6 lg:text-[15px] lg:leading-relaxed xl:text-base [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:text-sm">
+                <p className="mt-2 text-[16px] font-normal leading-relaxed text-[#5661e8] sm:mt-3 sm:text-[19px] lg:mt-3 lg:text-[15px] lg:leading-relaxed xl:text-[17px] [@media(max-height:500px)]:mt-1 [@media(max-height:500px)]:text-[14px]">
                   Isolation Breeds Failure. People First Rewrites the Script.
                   Together We <br className="hidden lg:block"/>Progress, Together We Win. Across your physical,
                   mind &amp; market journey
@@ -137,7 +137,7 @@ export default function HomePage() {
 
                     "Grow" is #e2fe74, not #cbf34d — the design's lime is
                     lighter and less saturated than the value that was here. */}
-                <p className="mt-4 flex items-center gap-1.5 whitespace-nowrap text-[15px] font-semibold text-[#feb7c1] sm:mt-5 sm:text-[17px] lg:mt-6 lg:text-lg xl:text-xl [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:text-sm">
+                <p className="mt-2 flex items-center gap-1.5 whitespace-nowrap text-[15px] font-semibold text-[#feb7c1] sm:mt-3 sm:text-[17px] lg:mt-3 lg:text-lg xl:text-xl [@media(max-height:500px)]:mt-2 [@media(max-height:500px)]:text-sm">
                   <span>Learn</span>
                   <span className="mx-0.5 text-[#e2fe74]">x</span>
                   <span className="text-[#e2fe74]">Grow</span>
