@@ -45,11 +45,11 @@ function Contours() {
 
 function VentureCard({ name, blurb }: { name: string; blurb: string }) {
   return (
-    <li className="pf-card rounded-md border border-[#60aaaa] bg-white/40 backdrop-blur-sm px-4 py-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:rounded-[0.93vh] xl:px-[1.3vw] xl:py-[1.05vh]">
-      <p className="text-[0.88rem] font-display font-bold leading-tight text-[#1a1a2e] xl:text-[1.163vh]">
+    <li className="pf-card rounded-md border border-[#60aaaa] bg-white/40 backdrop-blur-sm px-5 py-4 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:rounded-[0.93vh] xl:px-[1.5vw] xl:py-[1.4vh]">
+      <p className="text-[0.95rem] font-display font-bold leading-tight text-[#1a1a2e] xl:text-[1.4vh]">
         {name}
       </p>
-      <p className="mt-1.5 text-[0.74rem] leading-snug text-zinc-500 xl:mt-[0.35vh] xl:text-[0.93vh] xl:leading-[1.25]">
+      <p className="mt-1.5 text-[0.8rem] leading-snug text-zinc-500 xl:mt-[0.5vh] xl:text-[1.1vh] xl:leading-[1.25]">
         {blurb}
       </p>
     </li>
@@ -63,7 +63,7 @@ function StageColumn({ stage }: { stage: Stage }) {
     /* pf-card is safe here: <Reveal> writes its entrance transform to the grid
        wrapper above, not to these columns, so hover stays independent. */
     <div
-      className="pf-card flex h-full flex-col overflow-hidden rounded-lg border bg-white/70 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.4)] backdrop-blur-sm xl:h-[45.75vh] xl:rounded-[1.24vh] xl:bg-white/20 xl:shadow-none xl:backdrop-blur-sm"
+      className="pf-card flex h-full flex-col overflow-hidden rounded-lg border bg-white/70 shadow-[0_10px_30px_-18px_rgba(60,50,110,0.4)] backdrop-blur-sm xl:h-[52vh] xl:rounded-[1.24vh] xl:bg-white/20 xl:shadow-none xl:backdrop-blur-sm"
       style={{ borderColor: stage.accent }}
     >
       <div
@@ -82,29 +82,29 @@ function StageColumn({ stage }: { stage: Stage }) {
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-5 pb-6 pt-4 xl:px-[1.56vw] xl:pb-[1.4vh] xl:pt-[1.15vh]">
-        <p className="text-center text-[0.76rem] leading-relaxed text-zinc-500 xl:mx-auto xl:max-w-[18.75vw] xl:text-[1.085vh] xl:leading-[1.22]">
+        <p className="text-center text-[0.85rem] leading-relaxed text-zinc-500 xl:mx-auto xl:max-w-[18.75vw] xl:text-[1.3vh] xl:leading-[1.22]">
           {stage.intro}
         </p>
 
         {stage.feature ? (
           /* THE MIND STAGE — one feature card, centred in the column */
           <div
-            className="mt-5 rounded-lg border bg-white/40 backdrop-blur-sm px-5 py-6 text-center xl:mt-[2.5vh] xl:flex xl:h-[19.2vh] xl:flex-col xl:items-center xl:justify-center xl:rounded-[0.93vh] xl:bg-white/40 xl:px-[2vw] xl:py-[1.2vh]"
+            className="mt-5 rounded-lg border bg-white/40 backdrop-blur-sm px-5 py-6 text-center xl:mt-[2.5vh] xl:flex xl:h-[24vh] xl:flex-col xl:items-center xl:justify-center xl:rounded-[0.93vh] xl:bg-white/40 xl:px-[2vw] xl:py-[1.2vh]"
             style={{ borderColor: `${stage.accent}55` }}
           >
             <GraduationCap
-              className="mx-auto h-7 w-7 xl:h-[3.26vh] xl:w-[3.26vh]"
+              className="mx-auto h-8 w-8 xl:h-[4vh] xl:w-[4vh]"
               style={{ color: stage.accent }}
               strokeWidth={2}
               aria-hidden
             />
             <p
-              className="mt-3 text-[0.82rem] font-display font-bold leading-tight xl:mt-[1.2vh] xl:max-w-[15vw] xl:-translate-y-[0.5vh] xl:text-[1.163vh]"
+              className="mt-3 text-[0.9rem] font-display font-bold leading-tight xl:mt-[1.2vh] xl:max-w-[15vw] xl:-translate-y-[0.5vh] xl:text-[1.4vh]"
               style={{ color: stage.accent }}
             >
               {stage.feature.name}
             </p>
-            <p className="mt-3 text-[0.72rem] leading-relaxed text-zinc-500 xl:mt-[1.7vh] xl:max-w-[18.33vw] xl:-translate-y-[1.1vh] xl:text-[1.163vh] xl:leading-[1.35]">
+            <p className="mt-3 text-[0.8rem] leading-relaxed text-zinc-500 xl:mt-[1.7vh] xl:max-w-[18.33vw] xl:-translate-y-[1.1vh] xl:text-[1.2vh] xl:leading-[1.35]">
               {stage.feature.blurb}
             </p>
           </div>
@@ -128,7 +128,7 @@ function StageColumn({ stage }: { stage: Stage }) {
 
 export default function EcosystemStages() {
   return (
-    <section className="relative z-10 overflow-hidden rounded-t-[2rem] bg-[linear-gradient(160deg,#fdfbff_0%,#fbf8fe_55%,#f7f3fc_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-20 xl:min-h-[100svh] xl:rounded-none xl:bg-[#fbf4ff] xl:p-0 xl:shadow-none">
+    <section className="relative z-10 overflow-hidden bg-[linear-gradient(160deg,#fdfbff_0%,#fbf8fe_55%,#f7f3fc_100%)] pb-24 pt-8 sm:pb-28 sm:pt-12 xl:min-h-[100svh] xl:bg-[#fbf4ff] xl:p-0">
       <Contours />
 
       {/* cyan wash, upper-left — carries the tint through from section 1 */}
@@ -182,7 +182,7 @@ export default function EcosystemStages() {
           centre. Only the grid and CTAs need to clear the icon rail, so they
           reserve that space themselves. max-w-7xl so the columns run wide. */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 xl:h-[100svh] xl:max-w-none xl:px-0">
-        <Reveal className="text-center xl:pt-[17.67vh]">
+        <Reveal className="text-center xl:pt-[10vh]">
           <h2 className="text-xl font-display font-extrabold tracking-tight text-[#1a1a2e] sm:text-2xl lg:text-[1.75rem] xl:text-[3.1vh] xl:leading-none xl:text-black">
             <span className="inline-block xl:scale-x-[1.07]">
               THE PEOPLE FIRST ECOSYSTEM
@@ -198,7 +198,7 @@ export default function EcosystemStages() {
         {/* the grid and the CTAs below reserve just enough room for the icon
             rail, whose labels start around 1164px at a 1440 viewport */}
         <Stagger
-          className="mt-12 grid items-stretch gap-6 lg:grid-cols-3 lg:gap-5 lg:pr-[11rem] xl:absolute xl:left-[8.33vw] xl:top-[33.49vh] xl:mt-0 xl:w-[70.83vw] xl:gap-[1.08vw] xl:pr-0"
+          className="mt-10 grid items-stretch gap-6 lg:grid-cols-3 lg:gap-5 lg:pr-[11rem] xl:absolute xl:left-[6vw] xl:top-[26vh] xl:mt-0 xl:w-[76vw] xl:gap-[1.5vw] xl:pr-0"
           step={90}
         >
           {STAGES.map((s) => (

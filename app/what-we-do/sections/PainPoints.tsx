@@ -42,7 +42,7 @@ export default function PainPoints() {
       {/* The desktop mockup opens directly on the composition. Keep the logo as
           orientation for the mobile fallback, where the side rail becomes a
           closed drawer and no longer identifies the site at first glance. */}
-      <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
+      <header className="relative xl:absolute xl:left-0 xl:right-0 xl:top-0 z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
         <Link
           href="/"
           aria-label="People First — landing"

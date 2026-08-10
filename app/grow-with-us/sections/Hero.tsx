@@ -47,11 +47,11 @@ export default function Hero() {
           />
 
           <div className="animate-fade-in-up w-full max-w-[880px] lg:pt-4">
-            <h1 className="font-display text-3xl font-bold leading-[1.15] tracking-tight text-[#004f48] sm:text-4xl md:text-5xl lg:text-[3.25rem] lg:leading-[1.12]">
-              <span className="italic">Learn</span> Skills.{" "}
-              <span className="italic">Earn</span> Independently.
+            <h1 className="font-display text-3xl font-normal leading-[1.15] tracking-tight text-[#004f48] sm:text-4xl md:text-5xl lg:text-[3.25rem] lg:leading-[1.12]">
+              <span className="font-bold italic">Learn</span> Skills.{" "}
+              <span className="font-bold italic">Earn</span> Independently.
               <br className="hidden sm:block" />
-              <span className="italic">Build</span> Your Future.
+              <span className="font-bold italic">Build</span> Your Future.
             </h1>
             <p className="mt-4 w-full max-w-[800px] text-[0.95rem] font-normal leading-relaxed text-zinc-800 sm:text-lg lg:text-xl lg:leading-[1.7]">
               <strong className="font-bold text-[#004f48]">People First</strong> offers practical, income-generating skills training for youth and

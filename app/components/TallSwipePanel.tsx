@@ -160,7 +160,7 @@ export default function TallSwipePanel({
         !swipeOver
           ? leadIn === undefined
             ? "mt-16"
-            : "pf-lead-in"
+            : "max-xl:mt-0 xl:pf-lead-in"
           : usesDefaultHandoff
             ? "-mt-[100svh] md:-mt-[100vh]"
             : ""

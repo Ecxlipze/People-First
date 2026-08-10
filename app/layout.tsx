@@ -22,12 +22,14 @@ import { getBaseUrl } from "@/app/lib/seo";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 

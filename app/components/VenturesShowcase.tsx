@@ -106,7 +106,7 @@ export default function VenturesShowcase() {
              clean two-column grid there); the 5/4 design layout only applies
              from lg up, where there is room for five across. gap-4 on both axes
              keeps the horizontal and vertical gaps equal below xl. */
-          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-4 px-6 sm:mt-8 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.219vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.6vw] xl:max-w-none xl:gap-[2.708vw] xl:px-0 xl:pr-0"
+          className="mx-auto mt-6 grid w-full max-w-6xl grid-cols-2 gap-3 px-4 sm:gap-5 sm:px-6 sm:mt-8 lg:flex lg:flex-wrap lg:justify-center lg:gap-4 lg:pr-32 xl:absolute xl:left-[4.219vw] xl:top-[26.927vw] xl:mt-0 xl:w-[75.6vw] xl:max-w-none xl:gap-[2.708vw] xl:px-0 xl:pr-0"
           step={55}
         >
           {/* Wrapper carries an explicit basis at lg because the container is
@@ -121,7 +121,7 @@ export default function VenturesShowcase() {
             <a
               href={v.href}
               style={{ borderColor: v.accent }}
-              className="group relative flex h-full flex-col overflow-hidden rounded-xl border bg-[#9b86a8] p-4 transition-all duration-300 hover:-translate-y-1 xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
+              className="group relative flex h-full min-h-[190px] flex-col overflow-hidden rounded-xl border bg-[#9b86a8] p-3.5 sm:min-h-[220px] sm:p-5 lg:p-4 xl:min-h-0 transition-all duration-300 hover:-translate-y-1 xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
             >
               {/* Logo box — real logo once the file exists, else an empty plate.
                   #e9e9e9, sampled from HOME3.pdf: the grey plate IS in the
@@ -135,7 +135,7 @@ export default function VenturesShowcase() {
                   an inset ring of `v.accent` was drawing here. Plate height
                   checks out at 28% of the card (65px of 231px in the render),
                   which the xl track already matches. */}
-              <div className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-[#e9e9e9] px-4 py-2 sm:h-20 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[1vw] xl:py-[0.5vw]">
+              <div className="flex h-14 items-center justify-center overflow-hidden rounded-xl bg-[#e9e9e9] px-3 py-1.5 sm:h-16 sm:px-4 sm:py-2 lg:h-16 xl:h-[3.438vw] xl:shrink-0 xl:rounded-[0.36vw] xl:px-[1vw] xl:py-[0.5vw]">
                 {v.logo && v.hasLogo ? (
                   <Image
                     src={v.logo}
@@ -150,10 +150,10 @@ export default function VenturesShowcase() {
                 )}
               </div>
 
-              <h3 className="font-heading mt-3.5 text-sm font-semibold leading-tight text-white sm:text-base xl:mt-[0.73vw] xl:text-[0.938vw] xl:leading-none">
+              <h3 className="font-heading mt-3.5 text-[13px] font-semibold leading-tight text-white sm:text-base xl:mt-[0.73vw] xl:text-[0.938vw] xl:leading-none">
                 {v.name}
               </h3>
-              <p className="font-body mt-1 text-[11px] leading-tight text-white/70 sm:text-xs xl:mt-[0.52vw] xl:text-[0.625vw] xl:leading-[1.2]">
+              <p className="font-body mb-3 mt-1 text-[10.5px] leading-tight text-white/70 sm:text-xs xl:mb-0 xl:mt-[0.52vw] xl:text-[0.625vw] xl:leading-[1.2]">
                 {v.tagline}
               </p>
 
@@ -162,10 +162,10 @@ export default function VenturesShowcase() {
                 /* whitespace-nowrap + a smaller face below sm: at 390px the
                    two-column card is ~163px wide and "Explore Website" was
                    wrapping to two lines, which cramped the button. */
-                className="font-heading mt-auto flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[11px] font-medium text-white/80 sm:px-4 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:px-[1.04vw] xl:text-[0.573vw]"
+                className="font-heading mt-auto flex min-h-10 items-center justify-between whitespace-nowrap rounded-full border px-3 text-[10.5px] font-medium text-white/80 sm:min-h-11 sm:gap-1.5 sm:px-4 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:px-[1.04vw] xl:text-[0.573vw]"
               >
                 Explore Website
-                <ArrowRight className="ml-auto h-3.5 w-3.5 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
+                <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
               </span>
             </a>
             </div>

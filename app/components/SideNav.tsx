@@ -214,7 +214,7 @@ export default function SideNav({
            screen readers; the desktop rail always stays interactive. */
         inert={!isDesktop && !open && !dragging}
         style={{ translate: drag ? `${drag.x}px 0` : undefined }}
-        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col overflow-y-auto overscroll-contain rounded-l-2xl bg-transparent pb-[max(1.25rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.25rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] lg:right-8 xl:right-12 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:p-0 ${
+        className={`fixed right-0 top-0 z-[100] flex h-dvh max-w-[85vw] flex-col overflow-y-auto overscroll-contain pb-[max(1.25rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.25rem,env(safe-area-inset-right))] pt-[max(1.25rem,env(safe-area-inset-top))] max-lg:w-[320px] max-lg:rounded-l-3xl max-lg:bg-white/30 max-lg:backdrop-blur-[24px] max-lg:backdrop-saturate-[150%] max-lg:shadow-[-20px_0_40px_-15px_rgba(0,0,0,0.15)] max-lg:border-l max-lg:border-white/40 lg:right-8 xl:right-12 lg:top-1/2 lg:h-auto lg:max-w-none lg:overflow-visible lg:rounded-none lg:bg-transparent lg:p-0 ${
           dragging ? "" : "transition-[translate] duration-300 ease-out"
         } ${
           dragging
@@ -229,7 +229,7 @@ export default function SideNav({
         {/* `key` on `open` remounts the list each time the drawer opens, which
             restarts the per-item entrance animation below. Cheap: it is seven
             links, and only on mobile where the drawer exists. */}
-        <div key={isDesktop ? "rail" : `drawer-${open}`} className="my-auto flex flex-col gap-4">
+        <div key={isDesktop ? "rail" : `drawer-${open}`} className="my-auto flex flex-col gap-4 max-lg:w-full max-lg:gap-2">
           {navItems.map((item, i) => {
             const active = pathname === item.href;
             return (
@@ -237,39 +237,21 @@ export default function SideNav({
                 key={item.label}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                /* Mobile drawer only: items cascade in behind the sliding panel
-                   so opening reads as a considered reveal rather than a block of
-                   icons arriving at once. Keyed on `open` (below) so it replays
-                   each time the drawer opens. On lg+ the rail is always present,
-                   so there is nothing to animate — hence lg:animate-none. */
-                /* gap-5 on lg: HOME1.pdf puts the label text ending at x=1704
-                   with the icon centred near x=1812 on a 1920 frame, i.e. a
-                   clear ~40pt gap between chip and icon rather than the tight
-                   gap-3 (QA footer note: "padding issues.. also check the other
-                   icons as well"). */
-                className={`group relative flex animate-fade-in-up items-center justify-end gap-3 rounded-full focus-visible:outline-offset-4 lg:animate-none lg:gap-0 ${
-                  active ? "lg:my-2" : ""
-                }`}
+                className={`group relative flex animate-fade-in-up items-center rounded-full focus-visible:outline-offset-4 lg:justify-end lg:animate-none lg:gap-0 ${
+                  active ? "lg:my-2 max-lg:bg-pf-magenta/10" : "max-lg:hover:bg-zinc-100/80"
+                } max-lg:w-full max-lg:justify-between max-lg:px-5 max-lg:py-3 max-lg:rounded-2xl max-lg:transition-all max-lg:duration-300 max-lg:border max-lg:border-transparent ${active ? "max-lg:border-pf-magenta/10 max-lg:shadow-sm" : ""}`}
                 style={{ animationDelay: `${i * 45}ms`, animationDuration: "420ms" }}
               >
-              {/* Label chip. Light, brand-tinted surface instead of a heavy
-                  black slab; the active item carries the magenta CTA colour.
-                  On the lg+ rail it's revealed on hover/focus only (including
-                  the active item) so the rail stays a clean row of icons — but
-                  it stays visible in the mobile drawer, where there's no hover
-                  and the icons alone wouldn't be identifiable. */}
               <span
                 aria-hidden
-                className={`pointer-events-none whitespace-nowrap transition-all duration-200 uppercase tracking-wider lg:absolute lg:right-full lg:mr-4 lg:text-[13px] lg:bg-transparent lg:shadow-none lg:ring-0 lg:opacity-0 lg:-translate-x-2 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 lg:group-focus-visible:opacity-100 lg:group-focus-visible:translate-x-0 max-lg:opacity-100 max-lg:translate-x-0 max-lg:relative max-lg:px-4 max-lg:py-2 max-lg:rounded-full ${
+                className={`pointer-events-none transition-all duration-200 uppercase tracking-wider lg:absolute lg:right-full lg:mr-4 lg:text-[13px] lg:whitespace-nowrap lg:bg-transparent lg:shadow-none lg:ring-0 lg:opacity-0 lg:-translate-x-2 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 lg:group-focus-visible:opacity-100 lg:group-focus-visible:translate-x-0 max-lg:text-[0.95rem] max-lg:font-black max-lg:text-left ${
                   active
-                    ? "lg:font-black lg:text-black max-lg:bg-pf-magenta/15 max-lg:text-pf-magenta-dark max-lg:ring-1 max-lg:ring-pf-magenta/30"
-                    : `lg:font-medium ${onLight ? "lg:text-zinc-600" : "lg:text-[#b0b5c5]"} max-lg:bg-white/90 max-lg:text-zinc-700 max-lg:ring-1 max-lg:ring-black/5`
+                    ? "lg:font-black lg:text-black max-lg:text-pf-magenta-dark"
+                    : `lg:font-medium ${onLight ? "lg:text-zinc-600" : "lg:text-[#b0b5c5]"} max-lg:text-zinc-800`
                 }`}
               >
                 {item.label}
               </span>
-              {/* Wrapper is the positioning context for the pending ring and
-                  keeps the icon's own scale transition independent of it. */}
               <span className="relative flex shrink-0 items-center justify-center">
                 <Image
                   src={item.icon}
@@ -279,8 +261,8 @@ export default function SideNav({
                   priority
                   className={`shrink-0 rounded-full transition-all duration-300 group-hover:scale-110 group-active:scale-95 ${
                     active
-                      ? "h-14 w-14 shadow-xl shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-[50px] lg:w-[50px]"
-                      : "h-11 w-11 opacity-90 group-hover:opacity-100 lg:h-10 lg:w-10"
+                      ? "h-14 w-14 shadow-xl shadow-rose-900/30 ring-2 ring-rose-500/40 lg:h-[50px] lg:w-[50px] max-lg:ring-pf-magenta/30 max-lg:shadow-pf-magenta/20"
+                      : "h-11 w-11 opacity-90 group-hover:opacity-100 lg:h-10 lg:w-10 max-lg:opacity-100"
                   }`}
                 />
                 <NavPending />
