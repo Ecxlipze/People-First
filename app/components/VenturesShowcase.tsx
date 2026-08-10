@@ -69,7 +69,7 @@ export default function VenturesShowcase() {
             Container stays wide (62vw); at exactly the widest line's width
             there is zero slack and any metric difference forces a 5th line. */}
         <Reveal className="relative mx-auto max-w-3xl px-6 text-center xl:mx-0 xl:ml-[10.5vw] xl:mt-[4.79vw] xl:w-[68vw] xl:max-w-none xl:self-start xl:px-0">
-          <h2 className="font-heading text-xl font-normal leading-snug tracking-tight text-[#118d89] sm:text-2xl lg:text-[1.8rem] lg:leading-snug xl:text-[2.95vw] xl:leading-[1.2]">
+          <h2 className="font-heading text-xl font-light leading-snug tracking-tight text-[#118d89] sm:text-2xl lg:text-[1.8rem] lg:leading-snug xl:text-[2.95vw] xl:leading-[1.2]">
             We shape <strong className="font-black">capable</strong>,{" "}
             <strong className="font-black">confident</strong>, and{" "}
             <strong className="font-black">market-ready</strong> individuals
