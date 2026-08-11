@@ -118,11 +118,14 @@ export default function VenturesShowcase() {
               /* 12.917 × 12.031vw = the design's 248 × 231 card (aspect 1.074). */
               className="lg:w-[calc((100%-4*1rem)/5)] lg:shrink-0 xl:h-[12.031vw] xl:w-[12.917vw]"
             >
-            <a
-              href={v.href}
-              style={{ borderColor: v.accent }}
-              className="group relative flex h-full min-h-[190px] flex-col overflow-hidden rounded-xl border bg-[#9b86a8] p-3.5 sm:min-h-[220px] sm:p-5 lg:p-4 xl:min-h-0 transition-all duration-300 hover:-translate-y-1 xl:rounded-[0.78vw] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
+            <div
+              style={{ background: v.borderGradient }}
+              className="group relative flex h-full min-h-[190px] flex-col rounded-xl p-[0.8px] sm:min-h-[220px] xl:min-h-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 xl:rounded-[0.78vw]"
             >
+              <a
+                href={v.href}
+                className="flex h-full flex-col overflow-hidden rounded-[calc(0.75rem-1px)] bg-[#9b86a8] p-3.5 sm:p-5 lg:p-4 xl:rounded-[calc(0.78vw-1px)] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
+              >
               {/* Logo box — real logo once the file exists, else an empty plate.
                   #e9e9e9, sampled from HOME3.pdf: the grey plate IS in the
                   design (behind logos and on the logo-less cards alike), so
@@ -157,17 +160,17 @@ export default function VenturesShowcase() {
                 {v.tagline}
               </p>
 
-              <span
-                style={{ borderColor: v.accent }}
-                /* whitespace-nowrap + a smaller face below sm: at 390px the
-                   two-column card is ~163px wide and "Explore Website" was
-                   wrapping to two lines, which cramped the button. */
-                className="font-heading mt-auto flex min-h-10 items-center justify-between whitespace-nowrap rounded-full border px-3 text-[10.5px] font-medium text-white/80 sm:min-h-11 sm:gap-1.5 sm:px-4 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:px-[1.04vw] xl:text-[0.573vw]"
+              <div
+                style={{ background: v.borderGradient }}
+                className="font-heading mt-auto flex min-h-10 items-center justify-between whitespace-nowrap rounded-full p-[0.8px] text-[10.5px] font-medium text-white/80 sm:min-h-11 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:text-[0.573vw]"
               >
-                Explore Website
-                <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
-              </span>
+                <span className="flex h-full w-full items-center justify-between rounded-full bg-[#9b86a8] px-3 sm:gap-1.5 sm:px-4 xl:px-[1.04vw]">
+                  Explore Website
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
+                </span>
+              </div>
             </a>
+            </div>
             </div>
           ))}
         </Stagger>

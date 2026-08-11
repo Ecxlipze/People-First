@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { User, Briefcase, Network } from "lucide-react";
 import SiteFooter from "@/app/components/SiteFooter";
 import {
   prefersReducedMotion,
@@ -61,14 +60,14 @@ function Decor() {
 }
 
 const GAPS = [
-  { icon: User, plain: "A passionate young person", strong: "lacks guidance." },
+  { iconSrc: "/images/icons/user.svg", plain: "A passionate young person", strong: "lacks guidance." },
   {
-    icon: Briefcase,
+    iconSrc: "/images/icons/suitcase.svg",
     plain: "A skilled professional lacks a",
     strong: "Platform To Grow",
   },
   {
-    icon: Network,
+    iconSrc: "/images/icons/networking.svg",
     plain: "A business owner lacks the",
     strong: "Network to scale.",
   },
@@ -159,12 +158,14 @@ export default function StoryShowcase() {
                   the bubble edge and 22px ABOVE its top — about a 59px cap on the
                   1920 frame (~44px at 1440). Colour #481456, confirmed as the
                   modal glyph pixel. */}
-              <span
+              <Image
+                src="/images/icons/quotation-mark.svg"
+                alt=""
+                width={48}
+                height={42}
                 aria-hidden
-                className="absolute -left-3 -top-7 select-none font-serif text-[3rem] font-bold leading-none tracking-tighter text-[#481456]"
-              >
-                &ldquo;
-              </span>
+                className="absolute -left-5 -top-5 w-8 sm:w-10 select-none"
+              />
               <p className="inline-block rounded-xl bg-[#e6f4ff] px-6 py-4 text-base font-medium leading-snug text-[#491557] sm:text-[17px]">
                 Why do so many talented people fail, even when they have passion
                 and good intentions?
@@ -188,14 +189,17 @@ export default function StoryShowcase() {
                 phrase is noticeably LARGER than the sentence it sits in rather
                 than the same size (QA: "text color and icons not same"). */}
             <ul className="mt-8 flex flex-col gap-5">
-              {GAPS.map(({ icon: GapIcon, plain, strong }) => (
+              {GAPS.map(({ iconSrc, plain, strong }) => (
                 <li
                   key={strong}
                   className="group flex items-center gap-4"
                 >
-                  <GapIcon
-                    className="pf-pop h-6 w-6 flex-none text-[#481456] transition-colors duration-[var(--dur-base)] group-hover:text-[#6b2080] sm:h-7 sm:w-7"
-                    strokeWidth={1.5}
+                  <Image
+                    src={iconSrc}
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="pf-pop h-6 w-6 flex-none transition-transform duration-[var(--dur-base)] group-hover:scale-110 sm:h-7 sm:w-7"
                   />
                   <p className="text-[15px] text-black sm:text-[17px]">
                     {plain}{" "}
@@ -231,7 +235,7 @@ export default function StoryShowcase() {
                 with no intervening stroke (QA: "border not present in design"). */}
             <div className="relative aspect-square w-full overflow-hidden rounded-full shadow-[0_24px_60px_-20px_rgba(20,40,80,0.5)]">
               <Image
-                src="/images/story/founder-cliff.webp"
+                src="/images/icons/clif.svg"
                 alt="A person in a suit standing on a cliff edge, looking out over a mountain valley at sunrise"
                 fill
                 sizes="(max-width: 1024px) 90vw, 440px"
@@ -279,9 +283,13 @@ export default function StoryShowcase() {
               {/* Closing mark is a LEFT double-quote glyph in the design too (a
                   ‟ pair, not a ” — its ink box is 35×31 at x1236–1270), teal
                   #00747d, sitting under the paragraph inside the circle. */}
-              <span className="mt-2 select-none font-serif text-2xl font-bold leading-none text-[#00747d]">
-                &ldquo;
-              </span>
+              <Image
+                src="/images/icons/quotation-mark1.svg"
+                alt=""
+                width={28}
+                height={24}
+                className="mt-2 w-6 sm:w-7 select-none"
+              />
               </div>
             </div>
           </div>

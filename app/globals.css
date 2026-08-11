@@ -41,6 +41,7 @@
   --font-sans: var(--font-inter);
   --font-display: var(--font-montserrat);
   --font-nav: var(--font-poppins);
+  --font-cormorant: var(--font-cormorant);
 
   /* People First brand palette (used by the About page + future content pages).
      Tailwind v4 exposes each as a colour utility, e.g. bg-pf-purple or

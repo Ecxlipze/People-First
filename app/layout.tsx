@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat, Poppins } from "next/font/google";
+import { Inter, Montserrat, Poppins, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { ContactModalProvider } from "./contact/ContactModal";
 import { getBaseUrl } from "@/app/lib/seo";
@@ -37,6 +37,14 @@ const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["300"],
+  display: "swap",
+});
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -84,7 +92,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${montserrat.variable} ${poppins.variable} h-full antialiased`}
+      className={`${inter.variable} ${montserrat.variable} ${poppins.variable} ${cormorant.variable} h-full antialiased`}
     >
       {/* ContactModalProvider mounts the site-wide "Get in Touch" overlay and
           lets any CTA open it via useContactModal()/<ContactTrigger>. */}

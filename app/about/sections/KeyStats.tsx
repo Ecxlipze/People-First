@@ -7,10 +7,10 @@ import { CountUp, Reveal, Stagger } from "@/app/components/ScrollFx";
    continuously moving logo rail. */
 
 const STATS = {
-  big: { value: "100+", label: "Brands Supported" },
+  big: { value: "100+", boldText: "Brands", lightText: "Supported" },
   small: [
-    { value: "25+", label: "Years In Business" },
-    { value: "20+", label: "Certified Experts" },
+    { value: "25+", boldText: "Years", lightText: "In Business" },
+    { value: "20+", boldText: "Certified", lightText: "Experts" },
   ],
 };
 
@@ -59,18 +59,15 @@ export default function KeyStats() {
                 className="font-display block text-5xl font-bold text-[#67235c] sm:text-6xl lg:text-7xl"
               />
               <div className="flex flex-col text-left">
-                <span className="font-display text-sm font-bold uppercase leading-tight text-zinc-800 sm:text-base">Brands</span>
-                <span className="font-display text-sm font-bold uppercase leading-tight text-zinc-800 sm:text-base">Supported</span>
+                <span className="font-display text-sm font-bold uppercase leading-tight text-zinc-900 sm:text-base">{STATS.big.boldText}</span>
+                <span className="font-display text-sm font-medium uppercase leading-tight text-zinc-600 sm:text-base">{STATS.big.lightText}</span>
               </div>
             </div>
             <div className="grid gap-4 min-[420px]:grid-cols-2 sm:gap-6">
               {STATS.small.map((s) => {
-                const words = s.label.split(" ");
-                const firstPart = words.slice(0, words.length > 2 ? 2 : 1).join(" ");
-                const secondPart = words.slice(words.length > 2 ? 2 : 1).join(" ");
                 return (
                 <div
-                  key={s.label}
+                  key={s.boldText}
                   className="flex items-center justify-between gap-2 rounded-xl bg-white px-6 py-6 shadow-none sm:px-8 sm:py-8"
                 >
                   <CountUp
@@ -78,8 +75,8 @@ export default function KeyStats() {
                     className="font-display text-4xl font-bold text-[#18007a] sm:text-5xl"
                   />
                   <div className="flex flex-col text-left">
-                    <span className="font-display text-[11px] font-bold uppercase leading-tight text-zinc-800 sm:text-[13px]">{firstPart}</span>
-                    <span className="font-display text-[11px] font-bold uppercase leading-tight text-zinc-800 sm:text-[13px]">{secondPart}</span>
+                    <span className="font-display text-[11px] font-bold uppercase leading-tight text-zinc-900 sm:text-[13px]">{s.boldText}</span>
+                    <span className="font-display text-[11px] font-medium uppercase leading-tight text-zinc-600 sm:text-[13px]">{s.lightText}</span>
                   </div>
                 </div>
               )})}

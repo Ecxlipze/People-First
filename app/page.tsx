@@ -59,7 +59,7 @@ export default function Landing() {
             the icon ring. The artwork's own width is capped against svh (see the
             <Image> below), so on short windows it shrinks rather than colliding
             with the footer — that keeps this offset a single constant. */}
-        <div className="animate-fade-in-up absolute left-1/2 top-[calc(58%+0.75rem)] flex -translate-x-1/2 -translate-y-[47%] flex-col items-center sm:top-[58%] lg:top-[45.98svh] lg:-translate-y-[31.45%]">
+        <div className="pointer-events-none animate-fade-in-up absolute left-1/2 top-[calc(58%+0.75rem)] flex -translate-x-1/2 -translate-y-[47%] flex-col items-center sm:top-[58%] lg:top-[45.98svh] lg:-translate-y-[31.45%]">
           {/* soft pulsing glow behind the logo */}
           <div
             aria-hidden

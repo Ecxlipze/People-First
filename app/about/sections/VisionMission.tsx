@@ -1,12 +1,4 @@
 import Image from "next/image";
-import {
-  BookOpen,
-  TrendingUp,
-  Users,
-  Trophy,
-  ChevronRight,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* About → Vision & Mission. Two rows (Vision / Mission), each a circular icon +
@@ -14,14 +6,16 @@ import { Reveal, Stagger } from "@/app/components/ScrollFx";
    sits the Learn × Grow × Lead × Transform step row inside a lavender container.
    Origami paper-plane accents in the corners echo the mockup. */
 
-const STEPS: { label: string; sub: string; icon: LucideIcon }[] = [
-  { label: "LEARN", sub: "Build Knowledge. Sharpen Skills.", icon: BookOpen },
-  { label: "GROW", sub: "Fuel Growth. Create Impact.", icon: TrendingUp },
-  { label: "LEAD", sub: "Inspire Others. Drive Change.", icon: Users },
+import { ChevronRight } from "lucide-react";
+
+const STEPS: { label: string; sub: React.ReactNode; iconSrc: string }[] = [
+  { label: "LEARN", sub: <>Build Knowledge.<br />Sharpen Skills.</>, iconSrc: "/images/icons/learn.svg" },
+  { label: "GROW", sub: <>Fuel Growth.<br />Create Impact.</>, iconSrc: "/images/icons/earn.svg" },
+  { label: "LEAD", sub: <>Inspire Others.<br />Drive Change.</>, iconSrc: "/images/icons/lead.svg" },
   {
     label: "TRANSFORM",
-    sub: "Build World Class Market Leaders.",
-    icon: Trophy,
+    sub: <>Build World Class<br />Market Leaders.</>,
+    iconSrc: "/images/icons/transform.svg",
   },
 ];
 
@@ -99,6 +93,10 @@ export default function VisionMission() {
                 <h3 className="font-display text-2xl font-bold uppercase text-[#491557] sm:text-3xl">
                   OUR VISION
                 </h3>
+                <div
+                  aria-hidden
+                  className="mx-auto mt-2 h-[3px] w-32 bg-[linear-gradient(90deg,#491557_0%,rgba(73,21,87,0)_100%)] sm:mx-0 sm:w-40"
+                />
                 <p className="mt-4 text-sm font-normal leading-[1.7] text-zinc-800 sm:text-base sm:leading-[1.8] lg:text-lg lg:leading-[1.7]">
                   A compounding global ecosystem{" "}
                   <strong className="font-bold text-[#491557]">
@@ -131,6 +129,10 @@ export default function VisionMission() {
                 <h3 className="font-display text-2xl font-bold uppercase text-[#491557] sm:text-3xl">
                   OUR MISSION
                 </h3>
+                <div
+                  aria-hidden
+                  className="mx-auto mt-2 h-[3px] w-32 bg-[linear-gradient(90deg,#491557_0%,rgba(73,21,87,0)_100%)] sm:mx-0 sm:w-40"
+                />
                 <p className="mt-4 text-sm font-normal leading-[1.7] text-zinc-800 sm:text-base sm:leading-[1.8] lg:text-lg lg:leading-[1.7]">
                   We{" "}
                   <strong className="font-bold text-[#491557]">
@@ -139,7 +141,7 @@ export default function VisionMission() {
                   By uniting different sectors into one venture-building engine,
                   we empower people to{" "}
                   <strong className="font-bold text-[#491557]">
-                    Learn × Grow × Lead × Transform
+                    Learn × Grow × Lead × Transforming
                   </strong>{" "}
                   raw talent into world-class market leaders.
                 </p>
@@ -161,7 +163,7 @@ export default function VisionMission() {
         </Stagger>
 
         {/* ── Learn × Grow × Lead × Transform step row ── */}
-        <Reveal className="mx-auto mt-16 max-w-2xl rounded-2xl bg-[#d9cff7] px-4 py-6 shadow-[0_18px_30px_-18px_rgba(50,30,80,0.6)] sm:px-8 sm:py-8">
+        <Reveal className="mx-auto mt-16 max-w-3xl rounded-2xl bg-[#d9cff7] px-4 py-6 shadow-[0_18px_30px_-18px_rgba(50,30,80,0.6)] sm:px-8 sm:py-8">
           <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
             {STEPS.map((s, i) => (
               <div key={s.label} className="flex items-center gap-4 sm:flex-1">
@@ -169,23 +171,31 @@ export default function VisionMission() {
                     step lifts slightly, so the four stages of the model read as
                     individually explorable rather than as a printed diagram. */}
                 <div className="group flex flex-1 flex-col items-center rounded-lg px-2 py-1 text-center transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm sm:h-14 sm:w-14">
-                    <s.icon
-                      className="pf-pop h-6 w-6 text-pf-purple sm:h-7 sm:w-7"
-                      strokeWidth={2}
+                  <div className="flex items-center justify-center">
+                    <Image
+                      src={s.iconSrc}
+                      alt={s.label}
+                      width={64}
+                      height={64}
+                      className="pf-pop h-12 w-12 sm:h-14 sm:w-14"
+                      aria-hidden
                     />
                   </div>
                   <span className="mt-4 text-sm font-bold uppercase tracking-[0.12em] text-pf-purple">
                     {s.label}
                   </span>
-                  <span className="mt-1 max-w-[9rem] text-[11px] leading-tight text-zinc-500">
+                  <span className="mt-1 w-full max-w-[10rem] text-[11px] leading-[1.4] text-zinc-500">
                     {s.sub}
                   </span>
                 </div>
                 {i < STEPS.length - 1 && (
-                  <ChevronRight
+                  <Image
+                    src="/images/icons/close.svg"
+                    alt=""
                     aria-hidden
-                    className="hidden h-5 w-5 flex-none text-pf-lead/60 sm:block"
+                    width={20}
+                    height={20}
+                    className="hidden h-5 w-5 flex-none sm:block"
                   />
                 )}
               </div>

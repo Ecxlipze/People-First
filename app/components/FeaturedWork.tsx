@@ -46,13 +46,6 @@ export default function FeaturedWork() {
               src="/images/featured/feature2.webp"
               aspect="aspect-[0.8/1]"
               alt="Rai Salahuddin Ahmad in conversation with Khuram Schezad, Advisor to the Finance Minister, at a conference"
-              caption={
-                <>
-                  Khuram Schezad — Advisor to Finance Minister
-                  <br />
-                  Salahuddin Ahmad
-                </>
-              }
             />
             {/* home2.pdf reads "45% / Productivity events all over Pakistan" —
                 the site had "5% / activity events all Pakistan"; the photo

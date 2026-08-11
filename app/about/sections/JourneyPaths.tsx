@@ -76,7 +76,7 @@ export default function JourneyPaths() {
           {PATHS.map((p) => (
             <div key={p.title} className="h-full">
               <div
-                className={`group relative flex h-full min-h-[360px] flex-col overflow-hidden rounded-[0.625rem] border ${p.border} bg-transparent px-8 py-9 sm:px-10`}
+                className={`group relative flex h-full min-h-[360px] flex-col overflow-hidden rounded-[0.625rem] border ${p.border} bg-[linear-gradient(360deg,rgba(67,15,81,0.5)_0%,rgba(76,35,111,0.5)_100%)] backdrop-blur-md shadow-2xl shadow-black/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-black/40 px-8 py-9 sm:px-10`}
               >
                 <h3
                   className={`font-display text-center text-xl font-bold uppercase tracking-[0.08em] sm:text-2xl ${p.labelText}`}

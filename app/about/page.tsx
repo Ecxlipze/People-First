@@ -5,7 +5,7 @@ import Hero from "@/app/about/sections/Hero";
 import JourneyPaths from "@/app/about/sections/JourneyPaths";
 import KeyStats from "@/app/about/sections/KeyStats";
 import VisionMission from "@/app/about/sections/VisionMission";
-import CTABanner from "@/app/about/sections/CTABanner";
+import CTABanner from "@/app/components/CTABanner";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -30,10 +30,7 @@ export default function AboutPage() {
         <JourneyPaths />
         <KeyStats />
         <VisionMission />
-        <CTABanner />
-        {/* CTABanner above already provides the "Let's Get in Touch" band, so the
-            shared footer renders without its own duplicate band. */}
-        <SiteFooter showCta={false} />
+        <SiteFooter />
       </div>
     </>
   );

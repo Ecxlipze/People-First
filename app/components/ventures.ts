@@ -26,6 +26,7 @@ export type Venture = {
   hasLogo?: boolean;
   href: string;
   accent: string; // hex ring/border colour
+  borderGradient: string; // The specific radial gradient from the design
 };
 
 export const VENTURES: Venture[] = [
@@ -36,6 +37,7 @@ export const VENTURES: Venture[] = [
     hasLogo: true,
     href: "https://merchanity.com",
     accent: "#2c8e85",
+    borderGradient: "radial-gradient(52.47% 174.19% at 50% 50%, #39CABD 0%, #246D67 100%)",
   },
   {
     name: "Insights",
@@ -44,24 +46,28 @@ export const VENTURES: Venture[] = [
     hasLogo: true,
     href: "https://insights.peoplefirst.com",
     accent: "#a00017",
+    borderGradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },
   {
     name: "SME & Consumer",
     tagline: "Media & IT Intelligence",
     href: "#",
     accent: "#a00017",
+    borderGradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },
   {
     name: "Health care",
     tagline: "Media & IT Intelligence",
     href: "#",
     accent: "#a00017",
+    borderGradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },
   {
     name: "Technology",
     tagline: "Media & IT Intelligence",
     href: "#",
     accent: "#a00017",
+    borderGradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },
   {
     name: "Abaad.pk",
@@ -70,6 +76,7 @@ export const VENTURES: Venture[] = [
     hasLogo: true,
     href: "https://abaad.pk",
     accent: "#2e21b6",
+    borderGradient: "radial-gradient(109% 107% at 50% 50%, #FFFFFF 0%, #2E21B6 100%)",
   },
   {
     name: "Kissan Veer",
@@ -78,17 +85,20 @@ export const VENTURES: Venture[] = [
     hasLogo: true,
     href: "https://kissanveer.com",
     accent: "#2c8e85",
+    borderGradient: "radial-gradient(52.47% 174.19% at 50% 50%, #39CABD 0%, #246D67 100%)",
   },
   {
     name: "Renewable Energy",
     tagline: "Media & IT Intelligence",
     href: "#",
     accent: "#a00017",
+    borderGradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },
   {
     name: "Knowledge",
     tagline: "Media & IT Intelligence",
     href: "#",
     accent: "#a00017",
+    borderGradient: "radial-gradient(59.2% 63.52% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },
 ];

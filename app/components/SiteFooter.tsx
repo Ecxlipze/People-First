@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ContactTrigger from "@/app/contact/ContactTrigger";
 import { Reveal } from "@/app/components/ScrollFx";
+import CTABanner from "@/app/components/CTABanner";
 
 /* This lucide-react version dropped ALL brand glyphs (no Instagram/Facebook/
    LinkedIn/Twitter exports — the AGENTS.md deprecation warning in action), so
@@ -116,84 +117,9 @@ export default function SiteFooter({
     <footer
       className={`relative z-[70] bg-white ${swipeOver ? "-mt-8 rounded-t-[2rem] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] xl:-mt-[100vh]" : ""}`}
     >
+      {showCta && <CTABanner />}
+
       <div className="mx-auto w-full max-w-[1400px] px-6 py-14 sm:px-10 sm:py-16 lg:px-32 xl:px-36">
-        {/* ── CTA band ── short & wide; globe flush-left and clipped, copy
-            slightly right of it, CTAs pinned to the right. */}
-        {showCta && (
-          <Reveal
-            y={36}
-            scale={0.975}
-            /* Gradient sampled across the band in Footer.pdf: #150065 at the left
-               edge easing to #4f1a57 at the right (deep indigo → plum), where this
-               used #26095f→#3a1268→#5a1e6d. Corner radius measured at ~14px on
-               the 1920 frame → 10px at 1440, so rounded-[0.625rem] rather than
-               the 1.5rem here. */
-            className="relative overflow-hidden rounded-[0.625rem] bg-[linear-gradient(100deg,#150065_0%,#340d5e_55%,#4f1a57_100%)]"
-          >
-            {/* wireframe globe (real asset) — vertically centred, flush to the
-              left edge and clipped by the rounded corner, ~1.5× the band height.
-              The source art is magenta lines on transparency; the filter tints
-              it toward white and the low opacity gives the faint lavender
-              wireframe of the design. */}
-            <Image
-              src="/images/icons/globe.webp"
-              alt=""
-              aria-hidden
-              width={500}
-              height={500}
-              className="pointer-events-none absolute left-0 top-1/2 hidden h-[135%] w-auto -translate-x-[38%] -translate-y-1/2 select-none opacity-30 [filter:brightness(0)_invert(1)] sm:block"
-            />
-
-            <div className="relative flex flex-col gap-8 px-8 py-10 sm:px-12 xl:flex-row xl:items-center xl:justify-between xl:gap-10 xl:py-11">
-              {/* copy */}
-              <div className="text-center xl:pl-52 xl:text-left">
-                <h2 className="font-display text-[1.75rem] italic leading-tight text-white sm:text-[2rem]">
-                  Let&rsquo;s Get in Touch
-                </h2>
-                <p className="mt-2 text-base text-white sm:text-[1.0625rem]">
-                  Learn More about us and what you wanna do further.
-                </p>
-              </div>
-
-              {/* CTAs. All three buttons share ONE right edge in the design: the
-                  outlined button and "Partner With Us" both end at x1704 on the
-                  1920 frame, with the block running x1199→1704 = 506px (380px at
-                  1440) and sitting 54px inside the band's right edge. This was
-                  29rem/464px. Buttons are 50px tall → ~38px at 1440. */}
-              {/* `min-w-0` on the row + no `whitespace-nowrap` on the buttons.
-                  With nowrap AND flex-1, "Join a Training Program" forced itself
-                  wider than the 380px block, pushing the pair past the band's
-                  right edge — the buttons hanging outside the panel. The label is
-                  long, so the type steps down slightly at sm to keep it on one
-                  line inside the design's width instead of forcing an overflow. */}
-              <div className="mx-auto flex w-full flex-none flex-col gap-3.5 sm:w-[380px] xl:mx-0">
-                <div className="flex min-w-0 flex-col gap-3.5 sm:flex-row">
-                  <ContactTrigger
-                    href="/contact"
-                    className="pf-interactive min-w-0 flex-1 rounded-md bg-[#dcd4e1] px-3 py-3 text-center text-[0.95rem] font-medium leading-tight text-[#090c62] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg sm:text-[0.8125rem]"
-                  >
-                    Book a Consultation
-                  </ContactTrigger>
-                  <ContactTrigger
-                    href="/training"
-                    role="Student"
-                    className="pf-interactive min-w-0 flex-1 rounded-md border border-white/50 px-3 py-3 text-center text-[0.95rem] font-medium leading-tight text-white hover:-translate-y-0.5 hover:bg-white/10 sm:text-[0.8125rem]"
-                  >
-                    Join a Training Program
-                  </ContactTrigger>
-                </div>
-                <ContactTrigger
-                  href="/partner"
-                  role="Training Partner"
-                  className="pf-interactive w-full rounded-md bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-black hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
-                >
-                  Partner With Us
-                </ContactTrigger>
-              </div>
-            </div>
-          </Reveal>
-        )}
-
         {/* ── logo + socials + link columns ── */}
           <Reveal
             y={36}
