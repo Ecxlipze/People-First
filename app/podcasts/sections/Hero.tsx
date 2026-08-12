@@ -48,7 +48,10 @@ export default function Hero() {
           />
 
           <div className="animate-fade-in-up w-full min-w-0 max-w-[980px]">
-            <h1 className="font-display text-2xl font-light leading-[1.18] tracking-tight text-[#6b215b] sm:text-3xl lg:text-[2.15rem]">
+            <h1
+              className="font-display text-3xl leading-none tracking-normal text-[#612252] sm:text-4xl lg:text-[38px] xl:text-[42px]"
+              style={{ fontWeight: 700 }}
+            >
               Real{" "}
               <span className="font-black italic">Conversations.</span>{" "}
               Real <span className="font-black italic">Insights.</span> Real{" "}
@@ -69,7 +72,7 @@ export default function Hero() {
         <div className="flex w-full min-w-0 flex-col items-start gap-9 md:flex-row md:items-center md:gap-12">
           <div className="group relative shrink-0">
             {/* hidden below sm: no side margin to hold it, it would be clipped */}
-            <div className="relative z-10 aspect-[6/7] w-[15rem] overflow-hidden rounded-2xl border-4 border-white shadow-[0_20px_50px_-15px_rgba(40,30,50,0.15)] sm:w-[18rem]">
+            <div className="relative z-10 aspect-[6/7] w-[15rem] overflow-hidden rounded-2xl shadow-[0_20px_50px_-15px_rgba(40,30,50,0.15)] sm:w-[18rem]">
               <Image
                 src="/images/podcast/value-guest.webp"
                 alt="A guest recording an episode of the People First Podcast"

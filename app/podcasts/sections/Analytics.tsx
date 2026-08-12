@@ -30,7 +30,11 @@ export default function Analytics() {
             </p>
           </div>
 
-          <div className="group min-w-0 justify-self-end">
+          <div className="group relative min-w-0 justify-self-end">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute bottom-[2%] right-[1%] h-3 w-[48%] rounded-full bg-zinc-700/20 blur-md"
+            />
             <Image
               src="/images/podcast/analytics.webp"
               alt=""
@@ -38,7 +42,7 @@ export default function Analytics() {
               width={1200}
               height={683}
               sizes="(max-width: 768px) 100vw, 52vw"
-              className="pf-photo w-full min-w-0 max-w-full select-none md:max-w-[600px]"
+              className="pf-photo relative z-10 w-full min-w-0 max-w-full select-none md:max-w-[600px]"
             />
           </div>
         </Stagger>

@@ -106,7 +106,8 @@ export default function VenturesImpact() {
         {/* The mockup scatters these five rather than gridding them: the top
             row sits high, the bottom two are nudged inward and down. That
             composition needs the full reference width. Medium screens use a
-            balanced 2 + 2 + 1 grid, and phones use a readable stack. */}
+            balanced 2 + 2 + 1 grid. Phones use a bounded vertical list with a
+            fixed icon column so every text block starts on the same line. */}
         {/* The <li>s are one level down inside the <ul>, so the stagger targets
             them by their data attribute rather than the default direct-child
             selector. At 1536px+ they are absolutely positioned in a scatter; a
@@ -116,12 +117,12 @@ export default function VenturesImpact() {
           selector="[data-stagger]"
           step={45}
         >
-          <ul className="mx-auto grid max-w-5xl gap-x-8 gap-y-7 sm:grid-cols-2 sm:justify-items-center min-[1536px]:relative min-[1536px]:h-[12.7vw] min-[1536px]:max-w-none min-[1536px]:translate-x-[2vw] min-[1536px]:grid-cols-3 min-[1536px]:gap-0">
+          <ul className="mx-auto grid max-w-md gap-x-8 gap-y-7 sm:max-w-5xl sm:grid-cols-2 sm:justify-items-center min-[1536px]:relative min-[1536px]:h-[12.7vw] min-[1536px]:max-w-none min-[1536px]:translate-x-[2vw] min-[1536px]:grid-cols-3 min-[1536px]:gap-0">
             {RESULTS.map((r, i) => (
               <li
                 key={r.text}
                 data-stagger
-                className={`group flex w-full items-center justify-center gap-4 sm:justify-self-center min-[1536px]:absolute min-[1536px]:max-w-[20.833vw] min-[1536px]:items-start min-[1536px]:justify-start min-[1536px]:justify-self-auto ${
+                className={`group grid w-full grid-cols-[4rem_minmax(0,1fr)] items-center gap-4 text-left sm:flex sm:justify-center sm:justify-self-center min-[1536px]:absolute min-[1536px]:max-w-[20.833vw] min-[1536px]:items-start min-[1536px]:justify-start min-[1536px]:justify-self-auto ${
                   /* items 4 and 5 form the offset lower row */
                   i === 0
                     ? "min-[1536px]:left-[10.52vw] min-[1536px]:top-0 min-[1536px]:gap-[0.78vw]"
@@ -150,9 +151,9 @@ export default function VenturesImpact() {
                   aria-hidden
                   width={320}
                   height={320}
-                  className="pf-pop h-14 w-14 shrink-0 select-none object-contain min-[1536px]:mt-[1.2vw] min-[1536px]:h-[5.21vw] min-[1536px]:w-[5.21vw]"
+                  className="pf-pop mx-auto h-14 w-14 shrink-0 select-none object-contain sm:mx-0 min-[1536px]:mt-[1.2vw] min-[1536px]:h-[5.21vw] min-[1536px]:w-[5.21vw]"
                 />
-                <p className="max-w-72 text-[0.82rem] font-display font-bold leading-snug text-black min-[1536px]:max-w-[18vw] min-[1536px]:text-[1.146vw] min-[1536px]:leading-[1.25]">
+                <p className="min-w-0 max-w-72 text-[0.82rem] font-display font-bold leading-snug text-black min-[1536px]:max-w-[18vw] min-[1536px]:text-[1.146vw] min-[1536px]:leading-[1.25]">
                   {r.text}
                 </p>
               </li>
@@ -243,7 +244,7 @@ function ImpactCard({
         </div>
 
         <p
-          className={`relative z-10 mt-3 text-[0.76rem] leading-relaxed text-zinc-500 !transition-colors !duration-500 ease-out group-hover:text-white/85 xl:mt-0 xl:text-[0.938vw] xl:leading-[1.35] ${impactTextClasses[index]}`}
+          className={`relative z-10 mt-3 text-[0.76rem] leading-relaxed text-black !transition-colors !duration-500 ease-out group-hover:text-white/85 xl:mt-0 xl:text-[0.938vw] xl:leading-[1.35] ${impactTextClasses[index]}`}
         >
           {area.blurb}
         </p>

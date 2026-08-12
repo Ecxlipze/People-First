@@ -67,7 +67,7 @@ function StageColumn({ stage }: { stage: Stage }) {
       style={{ borderColor: stage.accent }}
     >
       <div
-        className="flex items-center gap-3 px-4 py-3 xl:h-[6.36vh] xl:gap-[0.73vw] xl:px-[3.28vw] xl:py-0"
+        className="flex items-center justify-center gap-3 px-4 py-3 xl:h-[6.36vh] xl:gap-[0.73vw] xl:px-4 xl:py-0"
         style={{ backgroundColor: stage.headerBg }}
       >
         <span
@@ -183,22 +183,21 @@ export default function EcosystemStages() {
           reserve that space themselves. max-w-7xl so the columns run wide. */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 xl:h-[100svh] xl:max-w-none xl:px-0">
         <Reveal className="text-center xl:pt-[10vh]">
-          <h2 className="text-xl font-display font-extrabold tracking-tight text-[#1a1a2e] sm:text-2xl lg:text-[1.75rem] xl:text-[3.1vh] xl:leading-none xl:text-black">
-            <span className="inline-block xl:scale-x-[1.07]">
-              THE PEOPLE FIRST ECOSYSTEM
-            </span>
+          <h2 className="font-display text-xl font-bold leading-none tracking-normal text-[#1a1a2e] sm:text-2xl lg:text-[1.875rem] xl:text-[37px] xl:text-black">
+            <span>THE PEOPLE FIRST ECOSYSTEM</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-[0.8rem] leading-relaxed text-zinc-600 sm:text-[0.85rem] xl:mt-[1.7vh] xl:max-w-[50vw] xl:text-[1.705vh] xl:leading-[1.23] xl:text-black">
+          <p className="mx-auto mt-3 max-w-3xl text-center font-display text-sm font-medium leading-none tracking-normal text-zinc-600 sm:mt-4 sm:text-base lg:mt-5 lg:text-lg xl:max-w-[50vw] xl:text-[22px] xl:text-black">
             The People First Evolution Model sequences human potential across
             Physical, Mind, and Market circles, deploying synchronized ventures
             and strategic JVs for rapid, self-sustaining growth.
           </p>
         </Reveal>
 
-        {/* the grid and the CTAs below reserve just enough room for the icon
-            rail, whose labels start around 1164px at a 1440 viewport */}
+        {/* Keep the grid in document flow so its spacing follows the description
+            even when that copy wraps. The cards and CTAs still reserve enough
+            room for the icon rail at desktop widths. */}
         <Stagger
-          className="mt-10 grid items-stretch gap-6 lg:grid-cols-3 lg:gap-5 lg:pr-[11rem] xl:absolute xl:left-[6vw] xl:top-[26vh] xl:mt-0 xl:w-[76vw] xl:gap-[1.5vw] xl:pr-0"
+          className="mt-12 grid items-stretch gap-6 sm:mt-14 lg:grid-cols-3 lg:gap-5 lg:pr-[11rem] xl:ml-[6vw] xl:mt-16 xl:w-[76vw] xl:gap-[1.5vw] xl:pr-0"
           step={90}
         >
           {STAGES.map((s) => (

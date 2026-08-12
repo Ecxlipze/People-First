@@ -34,7 +34,7 @@ export default function Hero() {
       </header>
 
       {/* ── headline row: desk illustration + copy ── */}
-      <div className="relative z-10 mx-auto max-w-[1440px] px-6 pt-16 sm:px-10 sm:pt-24 lg:px-16">
+      <div className="relative z-10 mx-auto max-w-[1440px] px-6 pt-16 sm:px-10 sm:pt-24 lg:px-16 [@media(max-height:500px)]:pt-8">
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:gap-12">
           <Image
             src="/images/grow/hero-desk.webp"
@@ -43,15 +43,18 @@ export default function Hero() {
             width={900}
             height={728}
             priority
-            className="animate-floaty hidden h-40 w-auto shrink-0 select-none sm:block sm:h-48 md:h-56 lg:h-64"
+            className="animate-floaty hidden h-40 w-auto shrink-0 select-none sm:block sm:h-48 md:h-56 lg:h-64 [@media(max-height:500px)]:hidden"
           />
 
           <div className="animate-fade-in-up w-full max-w-[880px] lg:pt-4">
-            <h1 className="font-display text-3xl font-normal leading-[1.15] tracking-tight text-[#004f48] sm:text-4xl md:text-5xl lg:text-[3.25rem] lg:leading-[1.12]">
-              <span className="font-bold italic">Learn</span> Skills.{" "}
-              <span className="font-bold italic">Earn</span> Independently.
-              <br className="hidden sm:block" />
-              <span className="font-bold italic">Build</span> Your Future.
+            <h1
+              className="font-display text-3xl leading-none tracking-normal text-[#004B42] sm:text-4xl lg:text-[38px] xl:text-[42px]"
+              style={{ fontWeight: 700 }}
+            >
+              <span className="font-black italic">Learn</span> Skills.{" "}
+              <span className="font-black italic">Earn</span> Independently.
+              <br />
+              <span className="font-black italic">Build</span> Your Future.
             </h1>
             <p className="mt-4 w-full max-w-[800px] text-[0.95rem] font-normal leading-relaxed text-zinc-800 sm:text-lg lg:text-xl lg:leading-[1.7]">
               <strong className="font-bold text-[#004f48]">People First</strong> offers practical, income-generating skills training for youth and
@@ -90,7 +93,10 @@ export default function Hero() {
             </p>
 
             {/* ── two CTAs + message icon, right-aligned below the text ── */}
-            <HeroCTA className="mt-10 lg:mt-16 justify-start lg:justify-end" />
+            <HeroCTA
+              className="mt-10 justify-start lg:mt-16 lg:justify-end"
+              primaryClassName="bg-[#2bc3c8] hover:bg-[#22adb2]"
+            />
           </div>
         </div>
       </Reveal>

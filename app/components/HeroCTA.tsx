@@ -5,9 +5,11 @@ import { Recede } from "@/app/components/ScrollFx";
 export default function HeroCTA({
   floating = false,
   className = "",
+  primaryClassName = "bg-[#a02f52] hover:bg-[#8c2946]",
 }: {
   floating?: boolean;
   className?: string;
+  primaryClassName?: string;
 }) {
   const content = (
     <>
@@ -15,7 +17,7 @@ export default function HeroCTA({
         <ContactTrigger
           href="/partner"
           role="Training Partner"
-          className="inline-flex min-h-12 flex-1 items-center justify-center whitespace-nowrap rounded-md bg-[#a02f52] px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-[#8c2946] sm:flex-none sm:px-5"
+          className={`inline-flex min-h-12 flex-1 items-center justify-center whitespace-nowrap rounded-md px-4 py-3 text-center text-sm font-medium text-white transition-colors sm:flex-none sm:px-5 ${primaryClassName}`}
         >
           Partner with Us
         </ContactTrigger>

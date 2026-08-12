@@ -11,8 +11,8 @@ import HeroCTA from "@/app/components/HeroCTA";
    the overlap and only recedes at the very end.
 
    Layout: logo top-left, three wavy journey lines crossing the full width,
-   floating crystals and paper planes scattered along them, then the headline
-   with the magnet illustration to its left, and the two CTAs bottom-right. */
+   floating crystals scattered along them, then the headline with the magnet
+   illustration to its left, and the two CTAs bottom-right. */
 export default function Hero() {
   return (
     <section className="sticky top-0 h-[100svh] overflow-hidden bg-white md:h-screen">
@@ -57,7 +57,7 @@ export default function Hero() {
         />
       </svg>
 
-      {/* ── floating crystals + paper planes along the lines ── */}
+      {/* ── floating crystals along the lines ── */}
       <Image
         src="/images/ideas-lab/crystal-red.webp"
         alt=""
@@ -65,16 +65,6 @@ export default function Hero() {
         width={259}
         height={300}
         className="animate-floaty pointer-events-none absolute left-[9%] top-[26%] hidden h-7 w-auto select-none sm:block"
-      />
-      <Image
-        src="/images/ideas-lab/plane-blue.webp"
-        alt=""
-        aria-hidden
-        width={253}
-        height={500}
-        priority
-        style={{ animationDelay: "-1.5s" }}
-        className="animate-floaty pointer-events-none absolute left-[24%] top-[26%] hidden h-[5.5rem] w-auto select-none sm:block lg:h-28"
       />
       <Image
         src="/images/ideas-lab/crystal-purple.webp"
@@ -85,17 +75,6 @@ export default function Hero() {
         style={{ animationDelay: "-3s" }}
         className="animate-floaty pointer-events-none absolute left-[44%] top-[39%] hidden h-6 w-auto select-none sm:block"
       />
-      <Image
-        src="/images/ideas-lab/plane-teal.webp"
-        alt=""
-        aria-hidden
-        width={253}
-        height={500}
-        priority
-        style={{ animationDelay: "-4.5s" }}
-        className="animate-floaty pointer-events-none absolute left-[60%] top-[17%] hidden h-24 w-auto select-none sm:block lg:h-32"
-      />
-
       {/* logo, top-left (links back to landing) */}
       <header className="relative z-20 mx-auto flex w-full max-w-[1600px] items-center justify-between px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
         <Link

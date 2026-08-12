@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Play } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
@@ -13,8 +12,7 @@ import { ARTICLES, type Article } from "@/app/ideas-lab/articles";
 
    Three rows alternate sides: copy left / media right, then media left / copy
    right. Each media block is a video still with a play button, a teal stat card
-   overlapping its lower-left, a soft rainbow glow behind it, and a paper-plane
-   accent at one corner.
+   overlapping one lower corner, and a soft rainbow glow behind it.
 
    The stills in /public/images/insights/ were extracted from the
    `insights 4.pdf` mockup. Their source frames have three different aspect
@@ -42,30 +40,14 @@ function RainbowGlow() {
 
 function Media({
   article,
-  plane,
+  statSide,
 }: {
   article: Article;
-  plane: "left" | "right";
+  statSide: "left" | "right";
 }) {
   return (
     <div className="relative mx-auto w-full max-w-md">
       <RainbowGlow />
-
-      {/* paper plane accent — sits above the frame, opposite the copy */}
-      <Image
-        src={
-          plane === "right"
-            ? "/images/ideas-lab/plane-teal.webp"
-            : "/images/ideas-lab/plane-blue.webp"
-        }
-        alt=""
-        aria-hidden
-        width={253}
-        height={500}
-        className={`animate-floaty pointer-events-none absolute -top-14 z-20 hidden h-20 w-auto select-none sm:block ${
-          plane === "right" ? "-right-4" : "-left-4"
-        }`}
-      />
 
       {/* video still + play button. The still fades up once decoded rather than
           snapping in — see SmartImage. The shadow deepens with the row's hover
@@ -90,11 +72,14 @@ function Media({
         </span>
       </div>
 
-      {/* Teal stat card, clipping the still's lower-left CORNER. It hangs below
-          the frame's bottom edge and well past its left edge on purpose: the
-          stills are photographs of people, and a card sitting inside the frame
-          covers the subjects' faces. */}
-      <div className="absolute -bottom-5 left-0 z-10 w-[8.5rem] bg-[#6cb5a6] px-4 py-4 text-white shadow-[0_14px_30px_-14px_rgba(40,80,70,0.7)] sm:w-[9.5rem] sm:py-5">
+      {/* Teal stat card clipping the still's lower corner. Alternating its side
+          with the media/copy layout preserves the mockup's first-row left and
+          second-row right placements without covering subjects' faces. */}
+      <div
+        className={`absolute -bottom-5 z-10 w-[8.5rem] rounded-lg bg-[#60aaaa] px-4 py-4 text-white shadow-[0_14px_30px_-14px_rgba(40,80,70,0.7)] sm:w-[9.5rem] sm:py-5 ${
+          statSide === "right" ? "right-0" : "left-0"
+        }`}
+      >
         <CountUp
           value={article.cardValue}
           className="block text-lg font-extrabold leading-none sm:text-xl"
@@ -156,7 +141,7 @@ export default function RecommendedArticles() {
                 <div className={mediaFirst ? "md:order-1" : ""}>
                   <Media
                     article={article}
-                    plane={mediaFirst ? "left" : "right"}
+                    statSide={mediaFirst ? "right" : "left"}
                   />
                 </div>
               </Link>
