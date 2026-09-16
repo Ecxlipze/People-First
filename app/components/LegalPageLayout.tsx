@@ -16,7 +16,7 @@ type LegalPath = "/privacy" | "/terms" | "/cookies";
    - BrandArchitecture identifies this exact registered entity name.
    - ContactPanel publishes this as the primary contact email. */
 export const LEGAL_OPERATOR_NAME = "People First (Pvt) Ltd";
-export const LEGAL_CONTACT_EMAIL = "info@techinsights.com";
+export const LEGAL_CONTACT_EMAIL = "info@peoplefirst.pk";
 
 const LEGAL_PAGES: { label: string; href: LegalPath }[] = [
   { label: "Privacy", href: "/privacy" },

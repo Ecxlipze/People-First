@@ -266,7 +266,7 @@ const sections: LegalSection[] = [
           </li>
           <li>
             <LegalPlaceholder>
-              [Registered or business address required]
+              Registered address 27 sohail block jamil park multan road Lahore.
             </LegalPlaceholder>
           </li>
         </ul>

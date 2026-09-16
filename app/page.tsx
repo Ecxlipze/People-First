@@ -98,7 +98,7 @@ export default function Landing() {
               0.727 ratio) and fitting the full string's 399.4px advance width
               gives 18.8px. The inherited text-sm (14px) was undersized. */}
           <p className="font-semibold text-white sm:text-[18px]">
-            58A2 Kickstart Tipu Road Gulberg, Lahore, PK
+            58A2 Kickstart Tipu Road Gulberg3, Lahore, PK
           </p>
           {/* Legal links. Each link keeps a 44px tap target, but the row itself
               must not wrap: below ~568px "Cookies" was dropping onto a second

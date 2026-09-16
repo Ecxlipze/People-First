@@ -112,8 +112,8 @@ function InstagramIcon({ className, idPrefix = "contact" }: IconProps) {
   );
 }
 
-const PHONES = ["+92 300 1231234", "+92 300 1231234"];
-const EMAILS = ["info@techinsights.com", "tech@insights.com"];
+const PHONES = ["03061113337", ""];
+const EMAILS = ["info@peoplefirst.pk", ""];
 
 const SOCIALS = [
   {

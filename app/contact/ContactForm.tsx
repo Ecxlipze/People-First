@@ -266,7 +266,7 @@ export default function ContactForm({
           type="tel"
           inputMode="tel"
           pattern="^[+()\d][\s()+\d-]{6,24}$"
-          title="Please enter a valid phone number (e.g., +92 300 1231234)"
+          title="Please enter a valid phone number (e.g., +923001231234)"
           maxLength={25}
           autoComplete="tel"
           placeholder="Phone Number"
