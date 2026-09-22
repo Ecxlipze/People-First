@@ -1,4 +1,6 @@
 export type Episode = {
+  id?: number;
+  slug?: string;
   /* `title` doubles as the React key, so keep it unique */
   title: string;
   /* Undefined for an API row whose thumbnail has not been uploaded yet; the
@@ -12,6 +14,9 @@ export type Episode = {
      Tailwind's build-time scan of the source. Applied as an inline style. */
   badgeColour: string;
   stats: { label: string; body: string }[];
+  videoUrl?: string;
+  isFeatured?: boolean;
+  description?: string;
 };
 
 /* The design runs teal → pink → purple down the page. An episode with no
@@ -36,10 +41,13 @@ export const EPISODES: Episode[] = [
        article on /insights, not to an episode. The mockup's own wording wins. */
     title:
       "Podcast 1 : world will know about the magic of digital world & its achievements.",
+    description:
+      "A deep dive into digital transformation, modern marketing strategy, and building sustainable tech businesses in Pakistan.",
     thumb: "/images/podcast/ep-itcn.webp",
     thumbAlt: "Episode still — the People First team on stage at ITCN Asia",
     badge: "Largest digital marketing conference",
     badgeColour: BADGE_PALETTE[0],
+    isFeatured: true,
     stats: [
       {
         label: "50+ clients",
@@ -54,10 +62,13 @@ export const EPISODES: Episode[] = [
   {
     title:
       "Podcast 2 : world will know about the magic of digital world & its achievements.",
+    description:
+      "A deep dive into digital transformation, modern marketing strategy, and building sustainable tech businesses in Pakistan.",
     thumb: "/images/podcast/ep-press.webp",
     thumbAlt: "Episode still — press conference at a technology launch",
     badge: "Largest digital marketing conference",
     badgeColour: BADGE_PALETTE[1],
+    isFeatured: true,
     stats: [
       {
         label: "50+ clients",
@@ -72,6 +83,8 @@ export const EPISODES: Episode[] = [
   {
     title:
       "Podcast 3: world will know about the magic of digital world & its achievements.",
+    description:
+      "A deep dive into digital transformation, modern marketing strategy, and building sustainable tech businesses in Pakistan.",
     /* Uses the 5G still that episode 1 previously carried — the ITCN frame moved
        up to episode 1 to match the Studio.pdf mockup, and two episodes sharing
        one still would read as a rendering bug. */
@@ -80,6 +93,7 @@ export const EPISODES: Episode[] = [
       "Episode still — Pakistan Raises $507 Million in Major 5G Spectrum Auction",
     badge: "Largest digital marketing conference",
     badgeColour: BADGE_PALETTE[2],
+    isFeatured: true,
     stats: [
       {
         label: "50+ clients",

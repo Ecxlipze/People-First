@@ -144,6 +144,8 @@ export async function getEpisodes(): Promise<Episode[]> {
     rows,
     (items) =>
       items.map((item, i) => ({
+        id: item.id,
+        slug: item.slug,
         title: item.title,
         thumb: item.thumbnail ?? undefined,
         thumbAlt: item.title,
@@ -158,6 +160,9 @@ export async function getEpisodes(): Promise<Episode[]> {
           { label: item.metric_value ?? "", body: item.metric_label ?? "" },
           { label: item.supporting_title ?? "", body: item.supporting_content ?? "" },
         ].filter((s) => s.label || s.body),
+        videoUrl: item.video_url || undefined,
+        isFeatured: Boolean(item.is_featured),
+        description: item.description,
       })),
     EPISODES,
   );

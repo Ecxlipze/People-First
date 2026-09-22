@@ -27,9 +27,12 @@ export const metadata: Metadata = {
    from the artwork), which the sections sit directly on. */
 export default async function InsightsPage() {
   const [insights, episodes] = await Promise.all([getInsights(), getEpisodes()]);
-  /* The closing card features the first episode — the one the Studio.pdf mockup
-     specifies — so /insights and /podcasts cannot show different episodes. */
-  const featuredEpisode = episodes[0];
+  /* Up to 3 featured episodes; if none or fewer are marked featured, fall back to top episodes. */
+  const explicitFeatured = episodes.filter((ep) => ep.isFeatured);
+  const featuredEpisodes =
+    explicitFeatured.length > 0
+      ? explicitFeatured.slice(0, 3)
+      : episodes.slice(0, 3);
 
   return (
     <>
@@ -59,9 +62,10 @@ export default async function InsightsPage() {
         <main>
           <h1 className="sr-only">Insights</h1>
           <InsightsBoard insights={insights} />
-          {/* Nothing to feature if the podcast list is empty and the local
-              fallback has been emptied too. */}
-          {featuredEpisode && <FeaturedPodcast episode={featuredEpisode} />}
+          {/* Featured podcasts section (up to 3 episodes) */}
+          {featuredEpisodes.length > 0 && (
+            <FeaturedPodcast episodes={featuredEpisodes} />
+          )}
         </main>
         <SiteFooter />
       </div>

@@ -23,8 +23,41 @@ export const metadata: Metadata = {
 export default async function PodcastsPage() {
   const episodes = await getEpisodes();
 
+  const videoEpisodes = episodes.filter((ep) => ep.videoUrl);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: videoEpisodes.map((ep, i) => {
+      const match = ep.videoUrl?.match(
+        /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+      );
+      const embedUrl = match
+        ? `https://www.youtube.com/embed/${match[1]}`
+        : ep.videoUrl;
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "VideoObject",
+          name: ep.title,
+          description: ep.description || ep.title,
+          thumbnailUrl: ep.thumb
+            ? [ep.thumb.startsWith("http") ? ep.thumb : `https://peoplefirst.com${ep.thumb}`]
+            : [],
+          contentUrl: ep.videoUrl,
+          embedUrl: embedUrl,
+          uploadDate: "2024-01-01T00:00:00Z",
+        },
+      };
+    }),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* right vertical icon navbar — fixed z-[100], must be outside overflow-x-clip */}
       <SideNav />
 

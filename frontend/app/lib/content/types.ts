@@ -58,6 +58,7 @@ export type ApiPodcast = {
   supporting_title: string | null;
   supporting_content: string | null;
   order: number;
+  is_featured: boolean;
   is_active: boolean;
 };
 

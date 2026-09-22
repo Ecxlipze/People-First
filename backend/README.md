@@ -437,6 +437,16 @@ GET /api/podcasts/latest/
 
 The latest endpoint returns the most recently created active podcast based on `created_at`.
 
+## YouTube Metadata Auto-Extraction
+
+When creating or editing a podcast in Django Admin:
+- Pasting a YouTube URL (`video_url`) and clicking **"⚡ Fetch from YouTube"** (or clicking away) automatically queries YouTube's oEmbed and OpenGraph metadata to populate:
+  - **Title** (and automatically updates the **Slug**)
+  - **Description** (if empty)
+  - **Thumbnail** (high-resolution thumbnail preview and download)
+- When saved, the highest resolution thumbnail (`maxresdefault.jpg` or `hqdefault.jpg`) is automatically downloaded and saved to Django's local media storage (`media/podcasts/thumbnails/`).
+- If a podcast is saved programmatically with a `video_url` but no `thumbnail`, `Podcast.save()` will automatically download and attach the thumbnail as a background fallback.
+
 ## Fields
 
 | Field | Type | Required | Description |
@@ -446,11 +456,14 @@ The latest endpoint returns the most recently created active podcast based on `c
 | `description` | string | Yes | Podcast description |
 | `thumbnail` | image | No | Podcast thumbnail |
 | `video_url` | URL | No | External video URL |
-| `metric_value` | string | No | Metric value, e.g. `50+` |
-| `metric_label` | string | No | Metric label, e.g. `clients` |
+| `metric_value` | string | No | Metric value, e.g. `50+ clients` |
+| `metric_label` | string | No | Metric label / body |
+| `badge` | string | No | Coloured pill text on the thumbnail |
+| `badge_colour` | string | No | Hex colour for badge, e.g. `#2dbe9e` |
 | `supporting_title` | string | No | Supporting section title, e.g. `Concept` |
 | `supporting_content` | string | No | Supporting section text |
 | `order` | integer | No | Display order |
+| `is_featured` | boolean | No | Pin this episode to the featured section on `/insights` (up to 3) |
 | `is_active` | boolean | No | Whether podcast is active |
 
 ## JSON Example
@@ -461,11 +474,14 @@ The latest endpoint returns the most recently created active podcast based on `c
   "slug": "future-of-artificial-intelligence",
   "description": "A discussion about the future of AI and emerging technologies.",
   "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
-  "metric_value": "50+",
-  "metric_label": "clients",
+  "badge": "Largest digital marketing conference",
+  "badge_colour": "#2dbe9e",
+  "metric_value": "50+ clients",
+  "metric_label": "Search Digital Agency New York...",
   "supporting_title": "Concept",
   "supporting_content": "For more than 50 years, global stage for innovation.",
   "order": 1,
+  "is_featured": true,
   "is_active": true
 }
 ```
