@@ -5,6 +5,7 @@ import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
 import InsightsBoard from "@/app/insights/sections/InsightsBoard";
 import FeaturedPodcast from "@/app/insights/sections/FeaturedPodcast";
+import { getEpisodes, getInsights } from "@/app/lib/content";
 
 export const metadata: Metadata = {
   title: "Insights",
@@ -24,7 +25,12 @@ export const metadata: Metadata = {
 
    The page tint is the mockup's own very pale lavender wash (#fcf8ff sampled
    from the artwork), which the sections sit directly on. */
-export default function InsightsPage() {
+export default async function InsightsPage() {
+  const [insights, episodes] = await Promise.all([getInsights(), getEpisodes()]);
+  /* The closing card features the first episode — the one the Studio.pdf mockup
+     specifies — so /insights and /podcasts cannot show different episodes. */
+  const featuredEpisode = episodes[0];
+
   return (
     <>
       {/* right vertical icon navbar — fixed z-[100], must be outside overflow-x-clip */}
@@ -52,8 +58,10 @@ export default function InsightsPage() {
 
         <main>
           <h1 className="sr-only">Insights</h1>
-          <InsightsBoard />
-          <FeaturedPodcast />
+          <InsightsBoard insights={insights} />
+          {/* Nothing to feature if the podcast list is empty and the local
+              fallback has been emptied too. */}
+          {featuredEpisode && <FeaturedPodcast episode={featuredEpisode} />}
         </main>
         <SiteFooter />
       </div>

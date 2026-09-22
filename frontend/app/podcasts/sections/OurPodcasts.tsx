@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Play, ChevronRight } from "lucide-react";
-import { EPISODES, TOTAL_PAGES } from "@/app/podcasts/episodes";
+import { TOTAL_PAGES, type Episode } from "@/app/podcasts/episodes";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* Podcasts → "Our Podcasts". Deep-purple band holding one wide white card per
@@ -14,7 +14,11 @@ import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
    Client component: the pager is interactive. Only page 1 has content in the
    design, so other pages show an empty-state note rather than pretending. */
-export default function OurPodcasts() {
+export default function OurPodcasts({
+  episodes,
+}: {
+  episodes: Episode[];
+}) {
   const [page, setPage] = useState(1);
 
   return (
@@ -32,7 +36,7 @@ export default function OurPodcasts() {
           step={90}
         >
           {page === 1 ? (
-            EPISODES.map((ep) => (
+            episodes.map((ep) => (
               <article
                 key={ep.title}
                 /* pf-card supplies the lift + timing; the explicit hover shadow
@@ -43,13 +47,17 @@ export default function OurPodcasts() {
                 {/* thumbnail + decorative play motif + corner badge */}
                 <div className="relative aspect-[590/443] w-full min-w-0 md:-ml-12 md:self-center lg:-ml-20">
                   <div className="absolute inset-0 overflow-hidden rounded-xl bg-zinc-900">
-                    <Image
-                      src={ep.thumb}
-                      alt={ep.thumbAlt}
-                      fill
-                      sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 28rem"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                    />
+                    {/* An episode added in the admin may not have a still
+                        yet; the dark plate and play motif stand on their own. */}
+                    {ep.thumb && (
+                      <Image
+                        src={ep.thumb}
+                        alt={ep.thumbAlt}
+                        fill
+                        sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 28rem"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
+                    )}
                     <span
                       aria-hidden
                       className="absolute inset-0 grid place-items-center"
@@ -63,7 +71,8 @@ export default function OurPodcasts() {
                     </span>
                   </div>
                   <span
-                    className={`absolute bottom-0 left-0 max-w-[14rem] px-5 py-4 font-display text-sm font-bold leading-tight text-white lg:-left-12 lg:max-w-[18rem] lg:px-8 lg:py-6 lg:text-xl ${ep.badgeBg}`}
+                    className="absolute bottom-0 left-0 max-w-[14rem] px-5 py-4 font-display text-sm font-bold leading-tight text-white lg:-left-12 lg:max-w-[18rem] lg:px-8 lg:py-6 lg:text-xl"
+                    style={{ backgroundColor: ep.badgeColour }}
                   >
                     {ep.badge}
                   </span>

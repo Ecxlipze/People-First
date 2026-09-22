@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { VENTURES } from "@/app/components/ventures";
+import type { Venture } from "@/app/components/ventures";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
@@ -12,7 +12,11 @@ import { Reveal, Stagger } from "@/app/components/ScrollFx";
    2. It PINS itself (via PinnedRecede) so the NEXT section (Gallery, 4) can in
       turn swipe up over it, exactly like 1→2 and 2→3.
    Heading + cards pop in as the block rises. */
-export default function VenturesShowcase() {
+export default function VenturesShowcase({
+  ventures,
+}: {
+  ventures: Venture[];
+}) {
   return (
     /* Outer track: negative margin + rounded opaque bg → swipes up over Featured
        Work. PinnedRecede inside gives Ventures its own pin so Gallery can later
@@ -112,7 +116,7 @@ export default function VenturesShowcase() {
           {/* Wrapper carries an explicit basis at lg because the container is
               flex there (see the justify-center note above): five per row once
               the four 1rem gaps are subtracted. */}
-          {VENTURES.map((v) => (
+          {ventures.map((v) => (
             <div
               key={v.name}
               /* 12.917 × 12.031vw = the design's 248 × 231 card (aspect 1.074). */

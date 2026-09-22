@@ -26,6 +26,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Read from .env further down, alongside SECRET_KEY and DEBUG. The literal
+# below only applies if that read is ever removed.
 ALLOWED_HOSTS = []
 
 from datetime import timedelta
@@ -94,13 +96,7 @@ WSGI_APPLICATION = 'people_first.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Configured below with decouple support for sqlite3 and postgresql.
 
 
 # Password validation
@@ -148,17 +144,31 @@ SECRET_KEY = config("SECRET_KEY")
 
 DEBUG = config("DEBUG", cast=bool)
 
+# .env already carried ALLOWED_HOSTS, but nothing read it — the literal []
+# above stood, which rejects every request as soon as DEBUG is off. Empty in
+# DEBUG is fine (Django then allows localhost), so the default stays empty.
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", cast=Csv())
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT"),
+
+DB_ENGINE = config("DB_ENGINE", default="sqlite3" if (BASE_DIR / "db.sqlite3").exists() else "postgresql")
+if DB_ENGINE == "sqlite3":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DB_NAME", default="people_first"),
+            "USER": config("DB_USER", default="postgres"),
+            "PASSWORD": config("DB_PASSWORD", default="admin"),
+            "HOST": config("DB_HOST", default="127.0.0.1"),
+            "PORT": config("DB_PORT", default="5432"),
+        }
+    }
 
 
 EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")

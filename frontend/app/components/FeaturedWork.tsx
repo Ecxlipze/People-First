@@ -3,16 +3,14 @@ import { CountUp } from "@/app/components/ScrollFx";
 import { MediaFrame, StatCard } from "@/app/components/media";
 import MediaShowcase from "@/app/components/MediaShowcase";
 import PinnedRecede from "@/app/components/PinnedRecede";
+import type { FeaturedWorkCopy } from "@/app/components/featured-work-copy";
 
-const SKILLS = [
-  "Seminars",
-  "Round Talks",
-  "Table Talks",
-  "Conferences",
-  "Tech Talks",
-];
-
-export default function FeaturedWork() {
+/* The words and numbers come from /api/featured-work/ (first row by `order`),
+   falling back to the design's copy — see app/lib/content. Everything else in
+   this section is the mockup's bespoke composition: the imagery, the measured
+   overhang, the pin and the glows are layout, not content, so they stay here
+   rather than becoming editable fields. */
+export default function FeaturedWork({ copy }: { copy: FeaturedWorkCopy }) {
   return (
     <section className="pf-seam relative z-10 max-md:-mt-8 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-24 md:-mt-[100vh]">
 
@@ -68,35 +66,41 @@ export default function FeaturedWork() {
                 bleed into, where this one has a text column beside it. */}
             <StatCard
               variant="compact"
-              value="45%"
+              value={copy.secondaryMetricValue}
               className="absolute -bottom-4 -right-4 z-20 md:-bottom-6 md:-right-8"
             >
-              Productivity events all over Pakistan
+              {copy.secondaryMetricLabel}
             </StatCard>
             </div>
           </div>
 
           {/* text */}
           <div className="order-2 lg:pl-4">
+            {/* Rendered line by line so the heading keeps the design's two-line
+                break, with the break itself carried in the content as a newline
+                rather than hardcoded markup. */}
             <h3 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl lg:text-[2.2rem]">
-              Tech Events<br />Management.
+              {copy.title.split("\n").map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
             </h3>
             <p className="mt-4 max-w-[18rem] text-[14px] leading-relaxed text-[#4e648c]">
-              We are strategy consultants who work with startup strategies and
-              help promote and sell your products, including helping marketing.
+              {copy.description}
             </p>
             <div className="mt-6 flex items-center gap-3">
               <CountUp
-                value="30%"
+                value={copy.metricValue}
                 className="font-heading text-4xl font-bold text-[#d73042] sm:text-4xl"
               />
               <span className="text-[12px] font-semibold leading-tight text-zinc-500">
-                management skills
+                {copy.metricLabel}
               </span>
             </div>
 
             <ul className="mt-8 grid max-w-md grid-cols-2 gap-x-8 gap-y-4">
-              {SKILLS.map((skill) => (
+              {copy.bullets.map((skill) => (
                 /* Each row nudges right on hover, so the list reads as content
                    rather than as a static caption block. */
                 <li

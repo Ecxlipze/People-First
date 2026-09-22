@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Image as ImageIcon } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
-import { GALLERY } from "@/app/components/gallery";
+import type { GalleryPhoto } from "@/app/components/gallery";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import { Reveal } from "@/app/components/ScrollFx";
 
@@ -16,9 +16,15 @@ import { Reveal } from "@/app/components/ScrollFx";
    The centrepiece is a coverflow-style carousel: the active photo sits centred
    and large, its neighbours peek in from the sides scaled down and dimmed.
    Advance by arrows, dots, drag/swipe, or the auto-timer. */
-export default function GalleryShowcase() {
+export default function GalleryShowcase({
+  /* Already repeated for the coverflow by the loader — the wrap maths below
+     reads this length directly. */
+  photos,
+}: {
+  photos: GalleryPhoto[];
+}) {
   const [active, setActive] = useState(0);
-  const n = GALLERY.length;
+  const n = photos.length;
 
   const go = useCallback(
     (dir: number) => setActive((i) => (i + dir + n) % n),
@@ -122,7 +128,7 @@ export default function GalleryShowcase() {
               1920), so they are meant to bleed. A max-w-5xl stage would pull them
               inside the container and lose that clipped-edge look. */}
           <div className="relative flex h-[clamp(300px,52vh,506px)] w-full items-center justify-center">
-            {GALLERY.map((photo, i) => {
+            {photos.map((photo, i) => {
               // signed distance from the active slide, wrapped to the short way
               // round the ring so slide 0 and slide n-1 are neighbours.
               let offset = i - active;

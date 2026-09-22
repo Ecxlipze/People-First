@@ -1,15 +1,26 @@
 export type Episode = {
   /* `title` doubles as the React key, so keep it unique */
   title: string;
-  thumb: string;
+  /* Undefined for an API row whose thumbnail has not been uploaded yet; the
+     card then shows its dark placeholder rather than a broken image. */
+  thumb?: string;
   thumbAlt: string;
   /* the coloured badge pinned to the thumbnail's bottom-left corner */
   badge: string;
-  badgeBg: string;
+  /* A hex value rather than a Tailwind class: the colour is editable per
+     episode in the admin, and a class name in a database row would not survive
+     Tailwind's build-time scan of the source. Applied as an inline style. */
+  badgeColour: string;
   stats: { label: string; body: string }[];
 };
 
-/* The mockup shows three episodes across four pages of pagination. Only the
+/* The design runs teal → pink → purple down the page. An episode with no
+   badge colour set in the admin keeps that rhythm by position. */
+export const BADGE_PALETTE = ["#2dbe9e", "#d92d5e", "#3f2a6b"] as const;
+
+/* Fallback used when the podcasts API is empty or unreachable.
+
+   The mockup shows three episodes across four pages of pagination. Only the
    first page's content is specified, so that is what ships; add further pages
    here and the pager below picks them up automatically.
 
@@ -28,7 +39,7 @@ export const EPISODES: Episode[] = [
     thumb: "/images/podcast/ep-itcn.webp",
     thumbAlt: "Episode still — the People First team on stage at ITCN Asia",
     badge: "Largest digital marketing conference",
-    badgeBg: "bg-pf-teal",
+    badgeColour: BADGE_PALETTE[0],
     stats: [
       {
         label: "50+ clients",
@@ -46,7 +57,7 @@ export const EPISODES: Episode[] = [
     thumb: "/images/podcast/ep-press.webp",
     thumbAlt: "Episode still — press conference at a technology launch",
     badge: "Largest digital marketing conference",
-    badgeBg: "bg-[#d92d5e]",
+    badgeColour: BADGE_PALETTE[1],
     stats: [
       {
         label: "50+ clients",
@@ -68,7 +79,7 @@ export const EPISODES: Episode[] = [
     thumbAlt:
       "Episode still — Pakistan Raises $507 Million in Major 5G Spectrum Auction",
     badge: "Largest digital marketing conference",
-    badgeBg: "bg-[#3f2a6b]",
+    badgeColour: BADGE_PALETTE[2],
     stats: [
       {
         label: "50+ clients",

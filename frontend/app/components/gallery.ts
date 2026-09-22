@@ -54,5 +54,14 @@ const PHOTOS: GalleryPhoto[] = [
    previews are always filled at any active index — the same trick the mockup
    uses. The carousel wraps, so this loops forever in either direction. Three
    copies give 15 slides: enough that the repeat is not obvious while scrolling
-   through, without inventing photos we do not have. */
-export const GALLERY: GalleryPhoto[] = [...PHOTOS, ...PHOTOS, ...PHOTOS];
+   through, without inventing photos we do not have.
+
+   Exported as a function because gallery rows now come from the API, and those
+   need the same treatment — the carousel's wrap maths reads the length of what
+   it is handed, so the repetition has to happen before it gets there. */
+export function repeatForCoverflow(photos: GalleryPhoto[]): GalleryPhoto[] {
+  return [...photos, ...photos, ...photos];
+}
+
+/* Fallback used when the gallery API is empty or unreachable. */
+export const GALLERY: GalleryPhoto[] = repeatForCoverflow(PHOTOS);

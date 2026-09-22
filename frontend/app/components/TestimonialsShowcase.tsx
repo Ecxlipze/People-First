@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { User } from "lucide-react";
-import { TESTIMONIALS, type Testimonial } from "@/app/components/testimonials";
+import type { Testimonial } from "@/app/components/testimonials";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
@@ -64,7 +64,11 @@ function Avatar({ t, i }: { t: Testimonial; i: number }) {
    Cards are laid out as a balanced 4-column masonry (CSS multi-column) so
    heights vary and columns stagger, matching the design. They scrub in as the
    block rises. */
-export default function TestimonialsShowcase() {
+export default function TestimonialsShowcase({
+  testimonials,
+}: {
+  testimonials: Testimonial[];
+}) {
   return (
     /* Outer track: swipes up over the pinned Gallery section. Light near-white
        background matches the design (distinct from the lavender sections). */
@@ -110,7 +114,7 @@ export default function TestimonialsShowcase() {
           step={45}
         >
           {/* mb-8 (32px) gives the vertical rhythm closer to the design's 29–37px column gaps */}
-          {TESTIMONIALS.map((t, i) => (
+          {testimonials.map((t, i) => (
             <div key={t.name} className="mb-8 break-inside-avoid">
               {/* rounded-xl (12px), down from rounded-2xl (16px) — QA #16.
                   Padding from the design: the avatar sits 26px in from the card's

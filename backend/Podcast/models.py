@@ -8,6 +8,16 @@ class Podcast(models.Model):
     video_url = models.URLField(blank=True, null=True)
     metric_value = models.CharField(max_length=100, blank=True, null=True)
     metric_label = models.CharField(max_length=255, blank=True, null=True)
+    # The coloured pill pinned to the episode thumbnail on /podcasts. Text is
+    # editorial copy; the colour is stored as a hex value because the site
+    # renders it as an inline style, not a Tailwind class name.
+    badge = models.CharField(max_length=255, blank=True)
+    badge_colour = models.CharField(
+        max_length=7,
+        blank=True,
+        help_text="Hex colour for the thumbnail badge, e.g. #2dbe9e. "
+                  "Leave blank to cycle the site's default palette.",
+    )
     supporting_title = models.CharField(max_length=255, blank=True, null=True)
     supporting_content = models.TextField(blank=True, null=True)
     order = models.PositiveIntegerField(default=0)

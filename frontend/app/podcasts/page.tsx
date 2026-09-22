@@ -5,6 +5,7 @@ import Hero from "@/app/podcasts/sections/Hero";
 import StudioSound from "@/app/podcasts/sections/StudioSound";
 import Analytics from "@/app/podcasts/sections/Analytics";
 import OurPodcasts from "@/app/podcasts/sections/OurPodcasts";
+import { getEpisodes } from "@/app/lib/content";
 
 export const metadata: Metadata = {
   title: "Podcasts",
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
    /about and /grow-with-us: the shared right-hand icon rail (SideNav) and
    shared footer bookend the page's own sections. The footer's built-in
    "Let's Get in Touch" band is the CTA the design calls for. */
-export default function PodcastsPage() {
+export default async function PodcastsPage() {
+  const episodes = await getEpisodes();
+
   return (
     <>
       {/* right vertical icon navbar — fixed z-[100], must be outside overflow-x-clip */}
@@ -29,7 +32,7 @@ export default function PodcastsPage() {
         <Hero />
         <StudioSound />
         <Analytics />
-        <OurPodcasts />
+        <OurPodcasts episodes={episodes} />
         <SiteFooter />
       </div>
     </>

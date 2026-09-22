@@ -991,4 +991,31 @@ Before frontend integration, confirm:
 
 ---
 
+## New fields
+
+`Podcast` carries `badge` and `badge_colour`; `Venture` carries `accent` and
+`border_gradient`. These back design details the site previously hardcoded — the
+coloured pill on an episode thumbnail, and a venture card's ring colour and
+border gradient. All four are optional: blank falls back to the site's default
+palette (episodes cycle teal → pink → purple by position, ventures default to
+crimson). `border_gradient` takes a full CSS value, e.g.
+`radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)`.
+
+Run `python manage.py migrate` after pulling: `Podcast.0004` and
+`ventures.0002` add them.
+
+## Public visibility
+
+Read endpoints hide rows the public should not see, unless the caller is
+authenticated staff:
+
+- `is_active=False` rows are omitted from gallery, testimonials, ventures,
+  podcasts and insight categories.
+- Insights with `publish_status="draft"` are omitted.
+
+`FeaturedWork` has no such flag, so every row is public. `/home` renders the
+first by `order`.
+
+---
+
 ## End of API Documentation

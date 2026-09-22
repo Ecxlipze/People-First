@@ -42,7 +42,7 @@ contact form today; every other page still renders from local content modules.
 cd backend
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env     # fill in SECRET_KEY and the DB_* values
+cp .env.example .env     # fill in SECRET_KEY; DB_ENGINE=sqlite3 needs nothing else
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
@@ -77,9 +77,16 @@ The site is then available at [http://localhost:3000](http://localhost:3000).
 
 ### `backend/.env`
 
-See [backend/.env.example](./backend/.env.example) for the full list:
-`SECRET_KEY`, `DEBUG`, the five `DB_*` values, `CORS_ALLOWED_ORIGINS`, and the
-`MAIL_*` / `EMAIL_BACKEND` mail settings.
+See [backend/.env.example](./backend/.env.example) for the full list.
+
+`DB_ENGINE` selects `sqlite3` or `postgresql`. Unset, it picks sqlite3 when
+`backend/db.sqlite3` exists and postgresql otherwise — convenient locally, but
+set it explicitly anywhere it matters, because the default then depends on
+whether a file happens to be on disk. The `DB_*` values are only read for
+postgresql.
+
+`ALLOWED_HOSTS` must be populated before `DEBUG=False`, or Django rejects every
+request.
 
 ## Validation commands
 
@@ -150,7 +157,34 @@ backend/
 | Area | Status |
 | :--- | :--- |
 | Contact form (`/contact`, `/partner`, `/training`, and the site-wide modal) | **Wired.** The server action POSTs to `/api/inquiries/`, mapping the "I am a" choice to `person_type` and the route to `inquiry_type`. The API persists the inquiry and emails the submitter a confirmation. |
-| Featured work, gallery, testimonials, ventures, insights, podcasts | **Not wired yet.** These still render from the local content modules beside each route. The matching API endpoints exist and are documented in `backend/README.md`. |
+| Gallery, testimonials, ventures, insights, podcasts | **Wired.** Loaded server-side by `frontend/app/lib/content`, passed as props into the showcase components. |
+| Featured Work section on `/home` | **Partly wired.** Its heading, body copy, both stat cards and the bullet list come from the first `/api/featured-work/` row by `order`. The imagery, measured geometry and scroll-pinning stay in the component — the mockup specifies one bespoke composition, not a repeating card list. |
+
+### Fallback behaviour
+
+Every content loader falls back to the local module beside its route when the
+API is **unreachable, unconfigured, erroring, or returns an empty list**. The
+content database starts empty, so a strict API-only read would blank `/home`,
+`/insights`, `/podcasts` and `/ideas-lab` on the first deploy. Each section
+switches over on its own as rows are added in the admin — there is no
+all-or-nothing cutover, and no step where the site is empty.
+
+This means an empty section in the admin is indistinguishable from a section
+nobody has migrated yet. When the content is fully entered, delete the local
+arrays to make the CMS authoritative.
+
+### Notes for editors
+
+- Content pages revalidate every 5 minutes (`REVALIDATE_SECONDS` in
+  `frontend/app/lib/content/index.ts`), so an admin change appears within that
+  window rather than needing a redeploy.
+- Uploaded images are served from Django's `MEDIA_URL` as absolute URLs.
+  `frontend/next.config.ts` derives `images.remotePatterns` from `API_BASE_URL`,
+  so a new environment needs no config edit — but `next/image` will refuse
+  media served from any other host.
+- Rows switched off with `is_active`, and insights still in `draft`, are hidden
+  from anonymous API callers and therefore from the site. Staff sessions still
+  see everything.
 
 ## Deployment basics
 

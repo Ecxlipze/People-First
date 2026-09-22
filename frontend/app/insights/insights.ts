@@ -12,10 +12,11 @@
    second hardcoded list, so a new article can never introduce a category the
    filter doesn't offer (or vice versa). */
 
-export type InsightCategory =
-  | "Digital Commerce"
-  | "Business Growth"
-  | "Skills & Training";
+/* Was a union of the three categories the mockup specifies. Categories are now
+   rows in the admin (InsightCategory), so the set is open and this is a plain
+   string; the filter's options are still derived from whatever is present
+   rather than hardcoded, so the two cannot drift apart. */
+export type InsightCategory = string;
 
 export type Insight = {
   title: string;
@@ -27,7 +28,8 @@ export type Insight = {
   /* the teal card overlapping the thumbnail's lower-left */
   cardValue: string;
   cardLabel: string;
-  thumb: string;
+  /* Undefined for an API row whose thumbnail has not been uploaded yet. */
+  thumb?: string;
   thumbAlt: string;
   /* Studio.pdf uses a different editorial still for the Insights feature than
      Ideas Lab uses for the same article. Keep both so matching one mockup does
@@ -40,6 +42,7 @@ export type Insight = {
   thumbPosition?: string;
 };
 
+/* Fallback used when the insights API is empty or unreachable. */
 export const INSIGHTS: Insight[] = [
   {
     title: "Reasons Pakistani Manufacturers Should Start Selling Online",
@@ -90,10 +93,18 @@ export const INSIGHTS: Insight[] = [
 
 /* The dropdown's options: "All Category" (the mockup's own default label)
    followed by each category that actually occurs, in first-appearance order.
-   Derived rather than hardcoded so the two can't drift apart. */
+   Derived rather than hardcoded so the two can't drift apart.
+
+   A function now, because the list it derives from arrives at request time. */
 export const ALL_CATEGORY = "All Category" as const;
 
-export const CATEGORY_OPTIONS: readonly [typeof ALL_CATEGORY, ...string[]] = [
-  ALL_CATEGORY,
-  ...Array.from(new Set(INSIGHTS.map((i) => i.category))),
-];
+export function categoryOptions(
+  insights: Insight[],
+): readonly [typeof ALL_CATEGORY, ...string[]] {
+  return [
+    ALL_CATEGORY,
+    /* An insight whose category was cleared in the admin serialises as null and
+       maps to "", which must not become a blank dropdown entry. */
+    ...Array.from(new Set(insights.map((i) => i.category).filter(Boolean))),
+  ];
+}

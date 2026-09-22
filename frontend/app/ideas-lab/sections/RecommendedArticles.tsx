@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Play } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import { CountUp, Reveal } from "@/app/components/ScrollFx";
-import { ARTICLES, type Article } from "@/app/ideas-lab/articles";
+import type { Article } from "@/app/ideas-lab/articles";
 
 /* Ideas Lab → "Recommended Article" (SECTION 2).
 
@@ -53,15 +53,19 @@ function Media({
           snapping in — see SmartImage. The shadow deepens with the row's hover
           so the whole card reads as one target. */}
       <div className="relative ml-auto aspect-[16/10] w-[85%] overflow-hidden bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
-        <SmartImage
-          src={article.thumb}
-          alt={article.thumbAlt}
-          fill
-          sizes="(max-width: 768px) 85vw, 24rem"
-          skeleton
-          style={{ objectPosition: article.thumbPosition ?? "center" }}
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-        />
+        {/* An article published from the admin may have no still yet; the
+            wrapper's dark plate and the play motif stand on their own. */}
+        {article.thumb && (
+          <SmartImage
+            src={article.thumb}
+            alt={article.thumbAlt}
+            fill
+            sizes="(max-width: 768px) 85vw, 24rem"
+            skeleton
+            style={{ objectPosition: article.thumbPosition ?? "center" }}
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          />
+        )}
         <span className="absolute inset-0 grid place-items-center">
           <span className="grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:ring-4 group-hover:ring-white/40">
             <Play
@@ -116,7 +120,11 @@ function Copy({ article }: { article: Article }) {
   );
 }
 
-export default function RecommendedArticles() {
+export default function RecommendedArticles({
+  articles,
+}: {
+  articles: Article[];
+}) {
   return (
     <section className="relative z-10 rounded-t-[2rem] bg-white pb-24 pt-20 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pb-28 sm:pt-24">
       <Reveal className="px-6 text-center">
@@ -126,7 +134,7 @@ export default function RecommendedArticles() {
       </Reveal>
 
       <div className="mx-auto mt-16 flex max-w-5xl flex-col gap-24 px-6 sm:mt-20 sm:gap-28 sm:px-10 lg:pr-28">
-        {ARTICLES.map((article, i) => {
+        {articles.map((article, i) => {
           /* rows alternate: even rows put the copy first, odd rows the media */
           const mediaFirst = i % 2 === 1;
           return (

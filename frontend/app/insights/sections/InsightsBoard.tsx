@@ -8,8 +8,7 @@ import HeroCTA from "@/app/components/HeroCTA";
 import { CountUp, Reveal, Stagger } from "@/app/components/ScrollFx";
 import {
   ALL_CATEGORY,
-  CATEGORY_OPTIONS,
-  INSIGHTS,
+  categoryOptions,
   type Insight,
 } from "@/app/insights/insights";
 
@@ -62,15 +61,20 @@ function Media({ insight }: { insight: Insight }) {
       {/* Tall editorial crop from Studio.pdf. This is an article image, not a
           video, so it intentionally has no play control. */}
       <div className="relative ml-auto aspect-[1.03/1] w-[87%] overflow-hidden rounded-2xl bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
-        <SmartImage
-          src={thumb}
-          alt={thumbAlt}
-          fill
-          sizes="(max-width: 768px) 87vw, (max-width: 1280px) 42vw, 34rem"
-          skeleton
-          style={{ objectPosition: insight.thumbPosition ?? "center" }}
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-        />
+        {/* An insight published from the admin may have no image yet; the
+            wrapper's dark plate stands in rather than next/image being pointed
+            at nothing. */}
+        {thumb && (
+          <SmartImage
+            src={thumb}
+            alt={thumbAlt}
+            fill
+            sizes="(max-width: 768px) 87vw, (max-width: 1280px) 42vw, 34rem"
+            skeleton
+            style={{ objectPosition: insight.thumbPosition ?? "center" }}
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          />
+        )}
       </div>
 
       {/* Teal card straddling the still's LEFT edge, roughly centred on it and
@@ -127,16 +131,24 @@ function Copy({ insight }: { insight: Insight }) {
   );
 }
 
-export default function InsightsBoard() {
+export default function InsightsBoard({
+  insights,
+}: {
+  insights: Insight[];
+}) {
   const [category, setCategory] = useState<string>(ALL_CATEGORY);
   const selectId = useId();
+
+  /* Options follow whatever is actually published, so the filter can never
+     offer a category with nothing behind it. */
+  const options = useMemo(() => categoryOptions(insights), [insights]);
 
   const visible = useMemo(
     () =>
       category === ALL_CATEGORY
-        ? INSIGHTS.slice(0, 1)
-        : INSIGHTS.filter((i) => i.category === category),
-    [category],
+        ? insights.slice(0, 1)
+        : insights.filter((i) => i.category === category),
+    [category, insights],
   );
 
   return (
@@ -164,7 +176,7 @@ export default function InsightsBoard() {
               onChange={(e) => setCategory(e.target.value)}
               className="pf-interactive min-h-11 cursor-pointer appearance-none rounded bg-transparent py-1.5 pl-9 pr-2 text-base font-display font-medium text-[#171922] hover:text-[#c64047] sm:text-xl lg:text-2xl"
             >
-              {CATEGORY_OPTIONS.map((option) => (
+              {options.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>

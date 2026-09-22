@@ -10,6 +10,12 @@ import StoryShowcase from "@/app/components/StoryShowcase";
 import { Recede } from "@/app/components/ScrollFx";
 import HeroCTA from "@/app/components/HeroCTA";
 import type { Metadata } from "next";
+import {
+  getFeaturedWorkCopy,
+  getGallery,
+  getTestimonials,
+  getVentures,
+} from "@/app/lib/content";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -19,7 +25,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  /* Server Component: the four content-backed sections are fetched here and
+     passed down, so the showcases below can stay client components for their
+     carousels and scroll effects without any of them touching the API.
+     Requested in parallel — they are independent. */
+  const [featuredWork, ventures, gallery, testimonials] = await Promise.all([
+    getFeaturedWorkCopy(),
+    getVentures(),
+    getGallery(),
+    getTestimonials(),
+  ]);
+
   return (
     <>
       {/* right vertical navbar — fixed z-[100], persists visibly across every section */}
@@ -154,22 +171,22 @@ export default function HomePage() {
 
         {/* ── SECTION 2: FEATURED WORK ──
           Higher z-index + opaque bg + rounded top → swipes up over the hero. */}
-        <FeaturedWork />
+        <FeaturedWork copy={featuredWork} />
 
         {/* ── SECTION 3: VENTURES ──
           Opaque rounded block with a negative margin → swipes up over Featured
           Work; pins itself so Gallery can swipe over it in turn. */}
-        <VenturesShowcase />
+        <VenturesShowcase ventures={ventures} />
 
         {/* ── SECTION 4: GALLERY ──
           Opaque rounded block, negative margin → swipes up over the pinned
           Ventures section. Same effect as 1→2 and 2→3. */}
-        <GalleryShowcase />
+        <GalleryShowcase photos={gallery} />
 
         {/* ── SECTION 5: TESTIMONIALS ──
           Opaque rounded block, negative margin → swipes up over the pinned
           Gallery section. Same swipe-over effect. */}
-        <TestimonialsShowcase />
+        <TestimonialsShowcase testimonials={testimonials} />
 
         {/* ── SECTION 6: ECOSYSTEM ──
           Opaque rounded block, negative margin → swipes up over the pinned

@@ -16,8 +16,7 @@ People First is a single repository holding two workspaces:
   django-cors-headers) serving the site's content models and the public inquiry
   endpoint. See `backend/README.md` for the endpoint reference.
 
-Neither workspace has an automated test suite. Only the contact form is wired
-between them today; every other route still renders from local content modules.
+Neither workspace has an automated test suite.
 
 The site is deliberately visual and motion-heavy. Preserve the existing brand,
 copy, typography, color palette, artwork, animation language, and page behavior.
@@ -54,6 +53,9 @@ All frontend paths below are relative to `frontend/`.
   It reads `API_BASE_URL` (server-only, deliberately not `NEXT_PUBLIC_*`) and
   throws typed `ApiError` / `ApiNotConfiguredError`. Route new API calls through
   it rather than calling `fetch` directly.
+- `app/lib/content/` holds the content loaders — one per content type, each
+  returning the shape the presentation components already consume. Add new
+  content here, not by fetching inside a component.
 - `app/contact/inquiry.ts` maps the form's human-readable choices onto the API's
   `person_type` / `inquiry_type` enums. It carries no `"use client"` or
   `"use server"` directive precisely so both boundaries can import it; keep it
@@ -61,9 +63,11 @@ All frontend paths below are relative to `frontend/`.
 
 Backend paths below are relative to `backend/`.
 
-- `people_first/settings.py` reads all configuration through `python-decouple`;
-  `SECRET_KEY`, `DEBUG` and the five `DB_*` values have no defaults, so a
-  missing `.env` is a hard failure. `.env.example` is the contract.
+- `people_first/settings.py` reads all configuration through `python-decouple`.
+  `SECRET_KEY` and `DEBUG` have no defaults, so a missing `.env` is a hard
+  failure. `DB_ENGINE` chooses sqlite3 or postgresql and, when unset, defaults
+  on whether `db.sqlite3` exists — so the engine can change with the contents of
+  the directory. `.env.example` is the contract.
 - Each content app (`featured_work`, `gallery`, `insight_category`, `Podcast`,
   `testimonial`, `ventures`) follows the same shape: `models.py`,
   `serializers.py`, `permissions.py`, `views.py` (a `ModelViewSet`), `urls.py`
@@ -130,6 +134,30 @@ Backend paths below are relative to `backend/`.
   keyboard parity for hover interactions.
 - For responsive or shared-component changes, use a route/component checklist;
   do not validate only `/` or `/home`.
+
+### Content loading
+
+- Content comes from the Django API through `app/lib/content`, with the local
+  module beside each route as the fallback. A loader falls back when the API is
+  unreachable, unconfigured, erroring **or returns an empty list** — the content
+  database starts empty, and a strict read would blank whole pages. Keep that
+  rule in `withFallback`; do not reimplement it per loader.
+- Pages stay Server Components and fetch with `Promise.all`, then pass plain
+  data into the `"use client"` showcases as props. A showcase must not import a
+  content module for its data — only for its types.
+- Uploaded images arrive as absolute URLs on the API's host.
+  `next.config.ts` derives `images.remotePatterns` from `API_BASE_URL`; media on
+  any other host will be refused by `next/image`.
+- Every API-backed image is optional, because a row can be created in the admin
+  before its file is uploaded. Guard the `<Image>`/`<SmartImage>` rather than
+  passing a possibly-undefined `src`.
+- Design constants that have no editorial meaning (measured geometry, the
+  coverflow repetition, `thumbPosition`) stay in the components. Values an
+  editor would reasonably want to change (badge text and colour, venture accent
+  colours) are model fields.
+- The public read endpoints hide `is_active=False` rows and `draft` insights
+  from non-staff via `people_first.visibility.PublicVisibilityMixin`. A new
+  content app should use it too.
 
 ### Contact flow
 

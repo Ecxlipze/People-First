@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Play } from "lucide-react";
 import { Reveal } from "@/app/components/ScrollFx";
-import { EPISODES } from "@/app/podcasts/episodes";
+import type { Episode } from "@/app/podcasts/episodes";
 
 /* Insights → the featured podcast card that closes the mockup
    (public/images/Studio.pdf).
@@ -11,20 +11,22 @@ import { EPISODES } from "@/app/podcasts/episodes";
    a teal corner badge on the left, title and two stat columns on the right —
    the same card /podcasts renders per episode.
 
-   The episode is imported from /podcasts' own EPISODES rather than restated
-   here. The two mockups specify the same episode, so duplicating its title,
+   The episode is the first one /podcasts renders, passed in by the page rather
+   than restated here. The two mockups specify the same episode, so duplicating its title,
    still, badge and stats would mean four strings that have to be kept in step by
    hand — and the copy on this page would silently go stale the first time
-   /podcasts was edited. EPISODES[0] is the mockup's episode; see episodes.ts.
+   /podcasts was edited. The page passes the first episode, which is the mockup's; see episodes.ts.
 
    A Server Component: unlike the /podcasts list this card has no pager, so
    nothing here needs client JS. The card is a Link to /podcasts rather than a
    play <button>, because there is no inline player on this page — it sends the
    reader to the full episode listing. */
 
-const FEATURED = EPISODES[0];
-
-export default function FeaturedPodcast() {
+export default function FeaturedPodcast({
+  episode: FEATURED,
+}: {
+  episode: Episode;
+}) {
   return (
     <section className="px-6 pb-28 sm:px-10 sm:pb-32 lg:px-20 xl:px-28 xl:pb-44">
       <Reveal className="mx-auto max-w-[70rem]">
@@ -36,13 +38,19 @@ export default function FeaturedPodcast() {
               pulls the still past the card's padding, as in the mockup. */}
           <div className="relative aspect-square w-full min-w-0 md:-ml-12 md:self-center lg:-ml-24">
             <div className="absolute inset-0 overflow-hidden bg-zinc-900">
-              <Image
-                src={FEATURED.thumb}
-                alt={FEATURED.thumbAlt}
-                fill
-                sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 27rem"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-              />
+              {/* An episode added in the admin may not have a still yet. The
+                  wrapper's dark plate and the play motif still read correctly
+                  on their own, so skip the image rather than pointing
+                  next/image at a missing file. */}
+              {FEATURED.thumb && (
+                <Image
+                  src={FEATURED.thumb}
+                  alt={FEATURED.thumbAlt}
+                  fill
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 27rem"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+              )}
               <span className="absolute inset-0 grid place-items-center">
                 <span className="grid h-16 w-16 place-items-center rounded-full bg-white/90 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:bg-white lg:h-20 lg:w-20">
                   <Play
@@ -53,7 +61,8 @@ export default function FeaturedPodcast() {
               </span>
             </div>
             <span
-              className={`absolute bottom-0 left-0 max-w-[14rem] px-5 py-4 text-sm font-bold leading-tight text-white lg:-left-12 lg:max-w-[17rem] lg:px-7 lg:py-7 lg:text-xl ${FEATURED.badgeBg}`}
+              className="absolute bottom-0 left-0 max-w-[14rem] px-5 py-4 text-sm font-bold leading-tight text-white lg:-left-12 lg:max-w-[17rem] lg:px-7 lg:py-7 lg:text-xl"
+              style={{ backgroundColor: FEATURED.badgeColour }}
             >
               {FEATURED.badge}
             </span>

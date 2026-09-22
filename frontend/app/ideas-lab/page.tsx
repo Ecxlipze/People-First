@@ -3,6 +3,7 @@ import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
 import Hero from "@/app/ideas-lab/sections/Hero";
 import RecommendedArticles from "@/app/ideas-lab/sections/RecommendedArticles";
+import { getArticles } from "@/app/lib/content";
 import TallSwipePanel from "@/app/components/TallSwipePanel";
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
    (`sticky top-0 h-screen`) and SECTION 2 rises up and over it, carrying the
    covering-block styling (opaque bg, rounded top, upward shadow, higher
    z-index, small negative top margin) the way FeaturedWork does on /home. */
-export default function IdeasLabPage() {
+export default async function IdeasLabPage() {
+  const articles = await getArticles();
+
   return (
     <>
       {/* right vertical icon navbar — fixed z-[100], must be outside overflow-x-clip */}
@@ -32,7 +35,7 @@ export default function IdeasLabPage() {
             Starts fully below the initial viewport, then swipes over the
             pinned hero once scrolling begins. */}
         <TallSwipePanel holdForNext={false}>
-          <RecommendedArticles />
+          <RecommendedArticles articles={articles} />
           {/* Footer belongs to section 2 and continues in the same white panel;
               it is not a separate swipe-over section. */}
           <SiteFooter />

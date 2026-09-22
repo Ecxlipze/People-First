@@ -29,6 +29,13 @@ export type Venture = {
   borderGradient: string; // The specific radial gradient from the design
 };
 
+/* Crimson is the colourway six of the nine mockup cards use, so it is what a
+   venture added through the admin without an explicit accent inherits. */
+export const DEFAULT_VENTURE_ACCENT = "#a00017";
+export const DEFAULT_VENTURE_GRADIENT =
+  "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)";
+
+/* Fallback used when the ventures API is empty or unreachable. */
 export const VENTURES: Venture[] = [
   {
     name: "Merchanity",
