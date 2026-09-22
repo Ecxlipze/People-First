@@ -42,9 +42,11 @@ import type { Article } from "@/app/ideas-lab/articles";
 import { FEATURED_WORK_COPY, type FeaturedWorkCopy } from "@/app/components/featured-work-copy";
 
 /* Content changes through the admin, not through a deploy, so pages are cached
-   and refreshed on a timer rather than rebuilt. Five minutes keeps an editor's
-   change visible quickly without hammering the API on every request. */
-const REVALIDATE_SECONDS = 300;
+   and refreshed on a timer rather than rebuilt. Five minutes in production keeps
+   an editor's change visible quickly without hammering the API on every request.
+   In development, caching is disabled (false) so admin edits appear immediately. */
+const REVALIDATE_SECONDS: number | false =
+  process.env.NODE_ENV === "development" ? false : 300;
 
 /* Returns null — distinct from [] — when the API could not answer at all. Both
    end up falling back, but only a genuine failure is worth logging. */
