@@ -88,6 +88,12 @@ postgresql.
 `ALLOWED_HOSTS` must be populated before `DEBUG=False`, or Django rejects every
 request.
 
+The `MAIL_*` keys use Laravel-style names and are translated to Django's:
+`MAIL_MAILER` (`smtp` | `log` | `file` | `array` | `null`) selects the backend,
+`MAIL_ENCRYPTION` (`tls` | `ssl` | `none`) picks the transport security, and
+`MAIL_FROM_NAME` supplies the display name in the From header. Setting
+`EMAIL_BACKEND` to a full import path overrides `MAIL_MAILER`.
+
 ## Validation commands
 
 Run these from `frontend/` before committing frontend changes:

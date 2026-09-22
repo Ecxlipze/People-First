@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+from email.utils import formataddr
 from pathlib import Path
+
 from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -171,7 +173,27 @@ else:
     }
 
 
-EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+# The MAIL_* names come from a Laravel-style .env. Django has its own names for
+# the same things, so each one is translated here rather than left unread.
+
+# MAIL_MAILER is Laravel's transport selector. Django expresses the same choice
+# as a backend import path, so it is mapped. An explicit EMAIL_BACKEND is more
+# specific and still wins; MAIL_MAILER only decides when EMAIL_BACKEND is unset.
+MAILER_BACKENDS = {
+    "smtp": "django.core.mail.backends.smtp.EmailBackend",
+    # Laravel's "log" writes mail to the log; the console backend is the
+    # closest equivalent and the usual choice for local development.
+    "log": "django.core.mail.backends.console.EmailBackend",
+    "file": "django.core.mail.backends.filebased.EmailBackend",
+    # "array" keeps sent mail in memory instead of delivering it.
+    "array": "django.core.mail.backends.locmem.EmailBackend",
+    "null": "django.core.mail.backends.dummy.EmailBackend",
+}
+_mailer = config("MAIL_MAILER", default="smtp").strip().lower()
+EMAIL_BACKEND = config("EMAIL_BACKEND", default=None) or MAILER_BACKENDS.get(
+    _mailer, MAILER_BACKENDS["smtp"]
+)
+
 EMAIL_FILE_PATH = BASE_DIR.parent / ".local" / "emails"
 EMAIL_TIMEOUT = 10
 
@@ -180,8 +202,24 @@ EMAIL_PORT = config("MAIL_PORT", default=587, cast=int)
 EMAIL_HOST_USER = config("MAIL_USERNAME", default="")
 EMAIL_HOST_PASSWORD = config("MAIL_PASSWORD", default="")
 
-EMAIL_USE_TLS = config(
-    "MAIL_ENCRYPTION", default="tls"
-).lower() == "tls"
+# Django refuses to start if both are true, so this is a three-way choice, not
+# two flags. "ssl" previously fell through to neither being set, which silently
+# sent over an unencrypted connection on what is normally port 465.
+_encryption = config("MAIL_ENCRYPTION", default="tls").strip().lower()
+EMAIL_USE_TLS = _encryption == "tls"
+EMAIL_USE_SSL = _encryption == "ssl"
 
-DEFAULT_FROM_EMAIL = config("MAIL_FROM_ADDRESS", default="noreply@sakafat.local")
+# MAIL_FROM_NAME is the display name shown to the recipient. Django has no
+# separate setting for it: the name and address are one "Name <addr>" string,
+# which formataddr quotes correctly when the name contains a comma or a quote.
+EMAIL_FROM_ADDRESS = config("MAIL_FROM_ADDRESS", default="noreply@sakafat.local")
+# decouple already strips surrounding quotes; this also handles a value that
+# was quoted twice, e.g. MAIL_FROM_NAME='"PEOPLE FIRST"'.
+EMAIL_FROM_NAME = config("MAIL_FROM_NAME", default="").strip().strip('"').strip("'")
+DEFAULT_FROM_EMAIL = (
+    formataddr((EMAIL_FROM_NAME, EMAIL_FROM_ADDRESS))
+    if EMAIL_FROM_NAME
+    else EMAIL_FROM_ADDRESS
+)
+# Error mail (Django's own) should come from the same identity.
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
