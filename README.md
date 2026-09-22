@@ -83,7 +83,9 @@ See [backend/.env.example](./backend/.env.example) for the full list.
 `backend/db.sqlite3` exists and postgresql otherwise — convenient locally, but
 set it explicitly anywhere it matters, because the default then depends on
 whether a file happens to be on disk. The `DB_*` values are only read for
-postgresql.
+postgresql, and `DB_PASSWORD` has no fallback — the key must be present, though
+an explicit empty value is fine for a server using trust or peer
+authentication.
 
 `ALLOWED_HOSTS` must be populated before `DEBUG=False`, or Django rejects every
 request.
