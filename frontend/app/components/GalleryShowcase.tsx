@@ -83,7 +83,16 @@ export default function GalleryShowcase({
       {/* No horizontal padding on the column itself — the carousel's ±2 slides
           must reach the viewport edges to be clipped like the design's. The
           heading and button carry their own px-6 instead. */}
-      <PinnedRecede className="pf-seam flex flex-col items-center justify-center overflow-hidden py-10 sm:py-14">
+      {/* `pinTallContent` only for SHORT viewports. This section measures 620px,
+          which clears the top pin's `viewportHeight * 1.02` fit test everywhere
+          except a viewport of ~608px or less — where it missed by 8px and fell
+          back to the flat stack while the sections around it still swiped. The
+          bottom pin is not used when the content fits, so on every other size
+          this changes nothing. */}
+      <PinnedRecede
+        pinTallContent
+        className="pf-seam flex flex-col items-center justify-center overflow-hidden py-10 sm:py-14"
+      >
         {/* heading */}
         <Reveal y={28} scale={0.98} className="px-6">
           <h2 className="font-heading text-center text-2xl font-extrabold tracking-tight text-black sm:text-3xl lg:text-[2.5rem]">

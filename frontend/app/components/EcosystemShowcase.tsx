@@ -263,9 +263,21 @@ export default function EcosystemShowcase() {
   // shadow, no negative pull); see globals.css. Safe alongside `overflow-clip`
   // because the joining hairline is drawn inside this box, not outside it.
   return (
-    <div className="pf-blend relative z-50 -mt-16 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] md:-mt-8 xl:-mt-[100vh]">
+    <div className="pf-blend relative z-50 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]">
       <PinnedRecede
-        overlapFrom="xl"
+        /* The swipe-over runs from `md`, like every section above this one. It
+           used to start at `xl` (with a token `md:-mt-8` below that), so on
+           tablets and small laptops the cinematic handoff played for sections
+           1–4 and then stopped dead here: Ecosystem and Story simply stacked.
+
+           `pinTallContent` is what makes that possible. This section's left
+           column plus its lg:pt-40 is taller than the viewport at every size
+           below ~1280x760 — and taller still below `xl`, where the orbit is
+           replaced by the seven-item stacked legend — so the default top pin
+           would measure it as not fitting and fall back to flow, which is the
+           flat stack again. Bottom-pinning lets the copy scroll normally and
+           then pins the final viewport for the handoff, as Ventures does. */
+        pinTallContent
         /* Extra top padding: in HOME6.pdf the "Welcome to a Compounding…"
            heading starts at y≈390 of a 1409-tall frame (~28% down), leaving room
            for the flanking crystal art above it. With py-10/12 the crystals sat

@@ -5,9 +5,10 @@ import MediaShowcase from "@/app/components/MediaShowcase";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import type { FeaturedWorkCopy } from "@/app/components/featured-work-copy";
 
-/* The words and numbers come from /api/featured-work/ (first row by `order`),
-   falling back to the design's copy — see app/lib/content. Everything else in
-   this section is the mockup's bespoke composition: the imagery, the measured
+/* The words, numbers, and images come from /api/featured-work/ (order 0 for
+   Block 1: Podcast, order 1 for Block 2: Tech Events), falling back to the
+   design's copy and stills — see app/lib/content. Everything else in this
+   section is the mockup's bespoke composition: the imagery, the measured
    overhang, the pin and the glows are layout, not content, so they stay here
    rather than becoming editable fields. */
 export default function FeaturedWork({ copy }: { copy: FeaturedWorkCopy }) {
@@ -15,7 +16,7 @@ export default function FeaturedWork({ copy }: { copy: FeaturedWorkCopy }) {
     <section className="pf-seam relative z-10 max-md:-mt-8 rounded-t-[2rem] bg-[linear-gradient(135deg,#eef1fb_0%,#f4f1fc_50%,#f8f6fd_100%)] pb-24 pt-16 shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] sm:rounded-t-[3rem] sm:pt-24 md:-mt-[100vh]">
 
       {/* ── Block 1: pinned cinematic stage (media scales through the pin) ── */}
-      <MediaShowcase />
+      <MediaShowcase copy={copy.podcast} />
 
       {/* ── Block 2: media left, text right ──
           Pinned full-viewport and recedes as Section 3 rises over it — same
@@ -41,7 +42,8 @@ export default function FeaturedWork({ copy }: { copy: FeaturedWorkCopy }) {
             {/* 0.8 aspect (384×480 in the render), against the podcast frame's
                 0.698 — the two frames are deliberately different shapes. */}
             <MediaFrame
-              src="/images/featured/feature2.webp"
+              src={copy.events.thumbnail || "/images/featured/feature2.webp"}
+              href={copy.events.videoUrl || undefined}
               aspect="aspect-[0.8/1]"
               alt="Rai Salahuddin Ahmad in conversation with Khuram Schezad, Advisor to the Finance Minister, at a conference"
             />
@@ -66,10 +68,10 @@ export default function FeaturedWork({ copy }: { copy: FeaturedWorkCopy }) {
                 bleed into, where this one has a text column beside it. */}
             <StatCard
               variant="compact"
-              value={copy.secondaryMetricValue}
+              value={copy.events.secondaryMetricValue}
               className="absolute -bottom-4 -right-4 z-20 md:-bottom-6 md:-right-8"
             >
-              {copy.secondaryMetricLabel}
+              {copy.events.secondaryMetricLabel}
             </StatCard>
             </div>
           </div>
@@ -80,27 +82,27 @@ export default function FeaturedWork({ copy }: { copy: FeaturedWorkCopy }) {
                 break, with the break itself carried in the content as a newline
                 rather than hardcoded markup. */}
             <h3 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl lg:text-[2.2rem]">
-              {copy.title.split("\n").map((line) => (
+              {copy.events.title.split("\n").map((line) => (
                 <span key={line} className="block">
                   {line}
                 </span>
               ))}
             </h3>
             <p className="mt-4 max-w-[18rem] text-[14px] leading-relaxed text-[#4e648c]">
-              {copy.description}
+              {copy.events.description}
             </p>
             <div className="mt-6 flex items-center gap-3">
               <CountUp
-                value={copy.metricValue}
+                value={copy.events.metricValue}
                 className="font-heading text-4xl font-bold text-[#d73042] sm:text-4xl"
               />
               <span className="text-[12px] font-semibold leading-tight text-zinc-500">
-                {copy.metricLabel}
+                {copy.events.metricLabel}
               </span>
             </div>
 
             <ul className="mt-8 grid max-w-md grid-cols-2 gap-x-8 gap-y-4">
-              {copy.bullets.map((skill) => (
+              {copy.events.bullets.map((skill) => (
                 /* Each row nudges right on hover, so the list reads as content
                    rather than as a static caption block. */
                 <li

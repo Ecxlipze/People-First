@@ -74,7 +74,15 @@ export default function TestimonialsShowcase({
        background matches the design (distinct from the lavender sections). */
     <div className="pf-blend relative z-40 rounded-t-[2rem] bg-[linear-gradient(180deg,#ffffff_0%,#f6faf8_100%)] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]">
       <PinnedRecede
-        overlapFrom="xl"
+        /* `pinTallContent` rather than the previous `overlapFrom="xl"`.
+           `overlapFrom` governs the section that follows: Ecosystem now pulls
+           -100vh from `md` up, so this one must pin (or compensate) from `md`
+           too, or that pull would cover this section's last viewport of cards.
+           The twelve-card grid is taller than a viewport at most sizes, so the
+           default top pin would bail out to flow; bottom-pinning lets the cards
+           scroll normally and then pins the final viewport for the handoff, the
+           same way Ventures does. */
+        pinTallContent
         className="pf-seam flex flex-col items-center justify-center py-10 sm:py-14"
       >
         {/* Previously both the heading and the cards were scrubbed to scroll

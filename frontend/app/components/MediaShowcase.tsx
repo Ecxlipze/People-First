@@ -2,14 +2,22 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { Reveal } from "@/app/components/ScrollFx";
+import { CountUp, Reveal } from "@/app/components/ScrollFx";
 import { MediaFrame, StatCard } from "@/app/components/media";
+import {
+  DEFAULT_PODCAST_BLOCK,
+  type FeaturedWorkBlock,
+} from "@/app/components/featured-work-copy";
 
 /* An Apple-style pinned scroll stage: the section holds in the middle of the
    viewport for a beat while, driven purely by scroll position, the media frame
    scales up, then the text and stat card fade/slide in as it settles. Releases
    into the next section once the track is scrolled through. */
-export default function MediaShowcase() {
+export default function MediaShowcase({
+  copy = DEFAULT_PODCAST_BLOCK,
+}: {
+  copy?: FeaturedWorkBlock;
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
@@ -68,24 +76,31 @@ export default function MediaShowcase() {
               {/* 35px/41px from the mockup: cap-height 33pt → ~24.8px @1440,
                   ÷0.71 ≈ 35px; baselines 535→590 = 55pt → 41px leading. */}
               <h3 className="text-[2rem] font-bold leading-[1.17] tracking-tight text-zinc-900 sm:text-[2.19rem]">
-                <span className="whitespace-nowrap">Podcast: market</span>
-                <br />
-                strategy
+                {copy.title.split("\n").map((line, idx) => (
+                  <span
+                    key={idx}
+                    className={idx === 0 ? "block whitespace-nowrap" : "block"}
+                  >
+                    {line}
+                  </span>
+                ))}
               </h3>
               {/* Paragraph baselines 669→693→716 = 24pt → 18px leading on a
                   ~14px face (1.28). */}
               <p className="mt-5 text-[14px] leading-[1.28] text-[#5b5b6b]">
-                We are strategy consultants who work with startup strategies and
-                help promote and sell your products, including helping marketing.
+                {copy.description}
               </p>
               <div className="mt-7 flex items-center gap-3">
-                <span className="text-[2rem] font-bold leading-none text-[#e23b4e]">
-                  80%
-                </span>
+                <CountUp
+                  value={copy.metricValue}
+                  className="font-heading text-[2rem] font-bold leading-none text-[#e23b4e]"
+                />
                 <span className="text-[12px] font-semibold leading-[1.3] text-zinc-600">
-                  Increased
-                  <br />
-                  Performance Rate
+                  {copy.metricLabel.split("\n").map((line, idx) => (
+                    <span key={idx} className="block">
+                      {line}
+                    </span>
+                  ))}
                 </span>
               </div>
             </div>
@@ -118,7 +133,8 @@ export default function MediaShowcase() {
             {/* 0.698 aspect */}
             <div ref={mediaRef} className="relative z-10">
               <MediaFrame
-                src="/images/featured/feature1.webp"
+                src={copy.thumbnail || "/images/featured/feature1.webp"}
+                href={copy.videoUrl || undefined}
                 alt="A man working on a laptop during a late-evening podcast recording session"
               />
             </div>
@@ -132,11 +148,11 @@ export default function MediaShowcase() {
               className="absolute bottom-0 -left-4 z-20 sm:-left-10 md:-left-16 lg:-left-[9.4rem]"
             >
               <StatCard
-                value="27%"
+                value={copy.secondaryMetricValue}
                 fluidWidth
                 className="w-[165px] sm:w-[190px] md:w-[220px] lg:w-[277px]"
               >
-                have knowledge about market strategies.
+                {copy.secondaryMetricLabel}
               </StatCard>
             </div>
           </Reveal>

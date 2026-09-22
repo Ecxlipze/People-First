@@ -11,6 +11,7 @@ export function MediaFrame({
   className = "",
   aspect = "aspect-[0.7/1]",
   sizes = "(max-width: 767px) calc(100vw - 3rem), (max-width: 1279px) 45vw, 520px",
+  href,
 }: {
   src?: string;
   alt?: string;
@@ -18,6 +19,7 @@ export function MediaFrame({
   className?: string;
   aspect?: string;
   sizes?: string;
+  href?: string;
 }) {
   return (
     /* `group` so the play button and image can respond to a hover anywhere on
@@ -54,14 +56,25 @@ export function MediaFrame({
         />
       )}
 
-      {/* Decorative play motif. No media URL or player exists for these frames,
-          so this must not be exposed as a nonfunctional button. */}
-      <span
-        aria-hidden
-        className="pf-interactive absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg ring-0 ring-white/40 hover:scale-110 hover:ring-8"
-      >
-        <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={0} />
-      </span>
+      {/* Decorative play motif. If a video URL exists, allow clicking to open it */}
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Watch video"
+          className="pf-interactive absolute left-1/2 top-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg ring-0 ring-white/40 hover:scale-110 hover:ring-8"
+        >
+          <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={0} />
+        </a>
+      ) : (
+        <span
+          aria-hidden
+          className="pf-interactive absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg ring-0 ring-white/40 hover:scale-110 hover:ring-8"
+        >
+          <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={0} />
+        </span>
+      )}
 
       {/* Optional caption — a SINGLE compact block pinned to the bottom-left.
           `right-24` keeps it clear of any overhanging stat card, and the fixed

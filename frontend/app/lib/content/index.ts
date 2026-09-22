@@ -39,7 +39,13 @@ import {
 } from "@/app/podcasts/episodes";
 import { INSIGHTS, type Insight } from "@/app/insights/insights";
 import type { Article } from "@/app/ideas-lab/articles";
-import { FEATURED_WORK_COPY, type FeaturedWorkCopy } from "@/app/components/featured-work-copy";
+import {
+  DEFAULT_EVENTS_BLOCK,
+  DEFAULT_PODCAST_BLOCK,
+  FEATURED_WORK_COPY,
+  type FeaturedWorkBlock,
+  type FeaturedWorkData,
+} from "@/app/components/featured-work-copy";
 
 /* Content changes through the admin, not through a deploy, so pages are cached
    and refreshed on a timer rather than rebuilt. Five minutes in production keeps
@@ -199,24 +205,40 @@ export async function getArticles(): Promise<Article[]> {
   return insights.map((insight) => ({ ...insight, href: "/insights" }));
 }
 
-/* /home's Featured Work section is a bespoke pinned layout, not a card list, so
-   only its editorial copy and the two stat cards come from the API — the first
-   row by `order`. Everything else (imagery, geometry, scroll behaviour) stays
-   in the component. */
-export async function getFeaturedWorkCopy(): Promise<FeaturedWorkCopy> {
+/* /home's Featured Work section consists of two blocks:
+   - Block 1 (order=0): Cinematic Podcast Stage
+   - Block 2 (order=1): Tech Events Management
+   Both blocks are fetched from /api/featured-work/ and mapped into FeaturedWorkData,
+   falling back to the design's copy and stills if unconfigured or empty. */
+export async function getFeaturedWorkCopy(): Promise<FeaturedWorkData> {
   const rows = await list<ApiFeaturedWork>("/api/featured-work/");
-  const row = rows?.[0];
-  if (!row) return FEATURED_WORK_COPY;
+  if (!rows || rows.length === 0) return FEATURED_WORK_COPY;
+
+  const podcastRow = rows.find((r) => r.order === 0) ?? rows[0];
+  const eventsRow = rows.find((r) => r.order === 1) ?? rows[1];
+
+  const mapRowToBlock = (
+    row: ApiFeaturedWork | undefined,
+    fallback: FeaturedWorkBlock,
+  ): FeaturedWorkBlock => {
+    if (!row) return fallback;
+    return {
+      title: row.title || fallback.title,
+      description: row.description || fallback.description,
+      metricValue: row.metric_value || fallback.metricValue,
+      metricLabel: row.metric_label || fallback.metricLabel,
+      secondaryMetricValue:
+        row.secondary_metric_value || fallback.secondaryMetricValue,
+      secondaryMetricLabel:
+        row.secondary_metric_label || fallback.secondaryMetricLabel,
+      bullets: row.bullets?.length ? row.bullets : fallback.bullets,
+      thumbnail: row.thumbnail || fallback.thumbnail,
+      videoUrl: row.video_url || fallback.videoUrl,
+    };
+  };
 
   return {
-    title: row.title || FEATURED_WORK_COPY.title,
-    description: row.description || FEATURED_WORK_COPY.description,
-    metricValue: row.metric_value || FEATURED_WORK_COPY.metricValue,
-    metricLabel: row.metric_label || FEATURED_WORK_COPY.metricLabel,
-    secondaryMetricValue:
-      row.secondary_metric_value || FEATURED_WORK_COPY.secondaryMetricValue,
-    secondaryMetricLabel:
-      row.secondary_metric_label || FEATURED_WORK_COPY.secondaryMetricLabel,
-    bullets: row.bullets?.length ? row.bullets : FEATURED_WORK_COPY.bullets,
+    podcast: mapRowToBlock(podcastRow, DEFAULT_PODCAST_BLOCK),
+    events: mapRowToBlock(eventsRow, DEFAULT_EVENTS_BLOCK),
   };
 }
