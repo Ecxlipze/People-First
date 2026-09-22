@@ -1,23 +1,31 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
-
 # People First repository guide
+
+> `frontend/AGENTS.md` is generated and re-added by `next dev`; it carries the
+> Next.js version warning and resolves `node_modules/next/dist/docs/` from its
+> own directory. Read it too before changing Next.js behavior, and commit it
+> alongside your work rather than deleting it.
 
 ## Project overview
 
-People First is a design-led marketing website built with Next.js 16.3.0,
-React 19, TypeScript, Tailwind CSS 4, and the App Router. It is intended for
-Vercel and currently has no database, authentication layer, or automated test
-suite.
+People First is a single repository holding two workspaces:
+
+- `frontend/` — a design-led marketing website built with Next.js 16.3.0,
+  React 19, TypeScript, Tailwind CSS 4, and the App Router. Intended for Vercel,
+  whose Root Directory must be set to `frontend`.
+- `backend/` — a Django 6.1 + Django REST Framework API (PostgreSQL, SimpleJWT,
+  django-cors-headers) serving the site's content models and the public inquiry
+  endpoint. See `backend/README.md` for the endpoint reference.
+
+Neither workspace has an automated test suite. Only the contact form is wired
+between them today; every other route still renders from local content modules.
 
 The site is deliberately visual and motion-heavy. Preserve the existing brand,
 copy, typography, color palette, artwork, animation language, and page behavior.
 Do not redesign the site while fixing a bug or adding content.
 
 ## Source map
+
+All frontend paths below are relative to `frontend/`.
 
 - `app/layout.tsx` owns global metadata, the three `next/font` declarations, and
   the site-wide `ContactModalProvider`.
@@ -42,13 +50,35 @@ Do not redesign the site while fixing a bug or adding content.
 - `public/images/` contains production assets as well as PDF/JPG design
   references and mockups. Do not delete or replace reference assets unless the
   task explicitly calls for it.
+- `app/lib/api.ts` is the only place the Next.js server talks to the Django API.
+  It reads `API_BASE_URL` (server-only, deliberately not `NEXT_PUBLIC_*`) and
+  throws typed `ApiError` / `ApiNotConfiguredError`. Route new API calls through
+  it rather than calling `fetch` directly.
+- `app/contact/inquiry.ts` maps the form's human-readable choices onto the API's
+  `person_type` / `inquiry_type` enums. It carries no `"use client"` or
+  `"use server"` directive precisely so both boundaries can import it; keep it
+  that way.
+
+Backend paths below are relative to `backend/`.
+
+- `people_first/settings.py` reads all configuration through `python-decouple`;
+  `SECRET_KEY`, `DEBUG` and the five `DB_*` values have no defaults, so a
+  missing `.env` is a hard failure. `.env.example` is the contract.
+- Each content app (`featured_work`, `gallery`, `insight_category`, `Podcast`,
+  `testimonial`, `ventures`) follows the same shape: `models.py`,
+  `serializers.py`, `permissions.py`, `views.py` (a `ModelViewSet`), `urls.py`
+  (a `DefaultRouter`). Match that shape when adding one.
+- `inquiry/` is the only app with a public write endpoint. Its
+  `IsAdminOrCreateOnly` permission and the confirmation email in
+  `perform_create` back the site contact form — changing either affects the
+  live form.
 
 ## Implementation rules
 
 ### Next.js and React
 
 - Read the relevant version-matched App Router guide under
-  `node_modules/next/dist/docs/01-app/` before changing Next.js behavior. The
+  `frontend/node_modules/next/dist/docs/01-app/` before changing Next.js behavior. The
   bundled docs, not remembered APIs, are authoritative.
 - Keep pages and layouts as Server Components by default. Add `"use client"`
   only at the smallest boundary that needs state, effects, event handlers, or
@@ -108,9 +138,16 @@ Do not redesign the site while fixing a bug or adding content.
 - Both the modal and standalone contact routes submit through
   `app/contact/actions.ts`. Keep server-side validation and the honeypot even if
   adding client-side validation.
-- The current action only logs the validated submission and returns success. Do
-  not claim messages are delivered until a real email or CRM integration is
-  implemented and verified.
+- The action POSTs the validated payload to the Django API's public
+  `POST /api/inquiries/`. The API persists the inquiry and emails the submitter
+  a confirmation; mail failures are logged server-side and do not fail the
+  request, because the inquiry is already saved by that point.
+- `inquiry_type` travels as a hidden form field, so it is client-supplied and
+  must stay re-validated against the enum in the action. Same for any future
+  hidden field.
+- A failed or unconfigured API call must return the error state, never a false
+  success. Do not claim a submission was delivered without checking the API
+  actually received it.
 
 ## Working practice
 
@@ -122,6 +159,11 @@ Do not redesign the site while fixing a bug or adding content.
   cannot be typed more narrowly.
 - Do not add dependencies, change deployment configuration, or modify external
   services unless the task requires it.
+- Run npm from `frontend/` and `manage.py` from `backend/`. There is no root
+  `package.json` and no workspace tooling; the two stacks are independent.
+- Model fields and serializer output are the contract between the workspaces.
+  When changing one, update the matching TypeScript types and
+  `backend/README.md` in the same change.
 - Use comments for non-obvious layout math, browser behavior, or architectural
   constraints. Avoid comments that merely restate the JSX.
 
@@ -129,10 +171,24 @@ Do not redesign the site while fixing a bug or adding content.
 
 For code changes, run the checks proportional to the affected scope:
 
+From `frontend/`:
+
 ```bash
 npm run lint
 npx tsc --noEmit
 npm run build
+```
+
+From `backend/` (inside its virtualenv):
+
+```bash
+python manage.py check
+python manage.py makemigrations --check --dry-run
+```
+
+From the repository root:
+
+```bash
 git diff --check
 ```
 

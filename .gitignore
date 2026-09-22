@@ -1,46 +1,21 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Repo-wide ignores. Stack-specific rules live in frontend/.gitignore and
+# backend/.gitignore so each workspace stays self-describing.
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# macOS
 .DS_Store
+
+# Editors / local tooling
 *.pem
+*.log
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
+# Secrets — every stack. Examples are committed, real values never are.
+.env
+.env.*
 !.env.example
 
-# vercel
-.vercel
+# Large binary drops that should not live in git history
+*.zip
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# ftp deploy
+# Standalone coming-soon page (FTP-deployed, outside the Next build)
 coming-soon/backups/
 coming-soon/.deploy.env
