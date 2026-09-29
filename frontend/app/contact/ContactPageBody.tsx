@@ -100,7 +100,7 @@ export default function ContactPageBody({
               <div>
                 <MapPin aria-hidden className="mb-4 h-5 w-5 text-pf-orange" />
                 <h2 className="text-base">Headquarters</h2>
-                <p className="mt-3 max-w-56 text-sm leading-relaxed text-zinc-700">27 Sohail Block, Jamil Park, Multan Road, Lahore</p>
+                <p className="mt-3 max-w-56 text-sm leading-relaxed text-zinc-700">58-A2 Kickstart, Tipu Road, Gulberg III, Lahore</p>
               </div>
               <div>
                 <Clock aria-hidden className="mb-4 h-5 w-5 text-pf-gold" />

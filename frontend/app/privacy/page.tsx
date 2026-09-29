@@ -336,11 +336,7 @@ const sections: LegalSection[] = [
             <strong>Phone / WhatsApp:</strong> +92 306 1113337
           </li>
           <li>
-            <strong>Registered Office:</strong> 27 Sohail Block, Jamil Park,
-            Multan Road, Lahore, Pakistan
-          </li>
-          <li>
-            <strong>Operational Studio:</strong> 58A2 Kickstart, Tipu Road,
+            <strong>Address:</strong> 58-A2 Kickstart, Tipu Road,
             Gulberg III, Lahore, Pakistan
           </li>
         </ul>
