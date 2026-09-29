@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from people_first.media_views import media_file
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -20,5 +21,7 @@ urlpatterns = [
 ]
 
 
-if settings.DEBUG:
+if hasattr(settings, "STORAGES") and settings.STORAGES["default"]["BACKEND"] == "people_first.storage.VercelBlobStorage":
+    urlpatterns += [path("media/<path:name>", media_file)]
+elif settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

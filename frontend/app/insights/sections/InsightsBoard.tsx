@@ -2,7 +2,7 @@
 
 import { useId, useMemo, useState } from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import HeroCTA from "@/app/components/HeroCTA";
 import { CountUp, Reveal, Stagger } from "@/app/components/ScrollFx";
@@ -20,13 +20,13 @@ import {
      · one editorial feature, copy left / media right
      · its media block: a rainbow glow, a tall still, a paper-plane accent,
        and a teal card clipping its lower-left corner
+     · pagination / carousel controls to browse all featured insights under
+       "All Category" (or within any multi-article category) while preserving
+       the magazine-feature layout.
 
-   Client component because the dropdown filters the list. The filtering is the
-   only state; everything below it is presentational.
-
-   The media/copy composition deliberately matches Ideas Lab's
-   RecommendedArticles — the mockups specify the same treatment, and a second
-   divergent implementation of it would be the thing that looks wrong. */
+   Client component because the dropdown and pagination filter/paginate the list.
+   The filtering and active slide index are the only state; everything below
+   is presentational. */
 
 /* The multi-hued wash behind each thumbnail. Four offset radial gradients read
    as one soft rainbow bloom, matching the mockup without needing a raster. */
@@ -55,8 +55,6 @@ function Media({ insight }: { insight: Insight }) {
   return (
     <div className="relative mx-auto w-full max-w-[38.75rem]">
       <RainbowGlow />
-
-
 
       {/* Tall editorial crop from Studio.pdf. This is an article image, not a
           video, so it intentionally has no play control. */}
@@ -91,13 +89,25 @@ function Media({ insight }: { insight: Insight }) {
           {insight.cardLabel}
         </p>
       </div>
-
-
     </div>
   );
 }
 
-function Copy({ insight }: { insight: Insight }) {
+function Copy({
+  insight,
+  total,
+  activeIndex,
+  onPrev,
+  onNext,
+  onSelectIndex,
+}: {
+  insight: Insight;
+  total: number;
+  activeIndex: number;
+  onPrev: () => void;
+  onNext: () => void;
+  onSelectIndex: (index: number) => void;
+}) {
   return (
     <div className="mx-auto w-full max-w-[29rem]">
       {/* Pencil-cup icon above the headline, as in the mockup. Extracted from
@@ -127,6 +137,65 @@ function Copy({ insight }: { insight: Insight }) {
           {insight.metricLabel}
         </span>
       </div>
+
+      {/* Pagination & Carousel Controls */}
+      {total > 1 && (
+        <div className="mt-8 flex items-center justify-between border-t border-zinc-200/80 pt-6 sm:mt-10">
+          {/* Counter & Interactive Dots */}
+          <div className="flex items-center gap-3">
+            <span className="font-display text-sm font-extrabold text-[#171922]">
+              {String(activeIndex + 1).padStart(2, "0")}
+            </span>
+            <span className="text-xs font-semibold text-zinc-300">/</span>
+            <span className="text-xs font-medium text-zinc-400">
+              {String(total).padStart(2, "0")}
+            </span>
+
+            {/* Interactive dot pills */}
+            <div
+              className="ml-2 flex items-center gap-1.5"
+              role="tablist"
+              aria-label="Insight slides"
+            >
+              {Array.from({ length: total }, (_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  role="tab"
+                  aria-selected={idx === activeIndex}
+                  aria-label={`Go to insight ${idx + 1}`}
+                  onClick={() => onSelectIndex(idx)}
+                  className={`h-2 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c64047] ${
+                    idx === activeIndex
+                      ? "w-6 bg-[#c64047]"
+                      : "w-2 bg-zinc-300 hover:bg-zinc-400"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Prev / Next buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onPrev}
+              aria-label="Previous insight"
+              className="pf-interactive grid h-11 w-11 place-items-center rounded-full border border-zinc-300 text-zinc-700 transition-colors hover:border-[#171922] hover:bg-[#171922] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c64047]"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={onNext}
+              aria-label="Next insight"
+              className="pf-interactive grid h-11 w-11 place-items-center rounded-full border border-zinc-300 text-zinc-700 transition-colors hover:border-[#171922] hover:bg-[#171922] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c64047]"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -137,19 +206,58 @@ export default function InsightsBoard({
   insights: Insight[];
 }) {
   const [category, setCategory] = useState<string>(ALL_CATEGORY);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
   const selectId = useId();
 
   /* Options follow whatever is actually published, so the filter can never
      offer a category with nothing behind it. */
   const options = useMemo(() => categoryOptions(insights), [insights]);
 
-  const visible = useMemo(
+  const filteredInsights = useMemo(
     () =>
       category === ALL_CATEGORY
-        ? insights.slice(0, 1)
+        ? insights
         : insights.filter((i) => i.category === category),
     [category, insights],
   );
+
+  const total = filteredInsights.length;
+  const currentInsight =
+    total > 0
+      ? (filteredInsights[Math.min(activeIndex, total - 1)] ?? filteredInsights[0])
+      : null;
+
+  const handleCategoryChange = (newCategory: string) => {
+    setCategory(newCategory);
+    setActiveIndex(0);
+  };
+
+  const handlePrev = () => {
+    if (total <= 1) return;
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : total - 1));
+  };
+
+  const handleNext = () => {
+    if (total <= 1) return;
+    setActiveIndex((prev) => (prev < total - 1 ? prev + 1 : 0));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    if (diff > 50) {
+      handleNext();
+    } else if (diff < -50) {
+      handlePrev();
+    }
+    setTouchStart(null);
+  };
 
   return (
     <section className="relative z-10 px-6 pb-24 pt-20 sm:px-10 sm:pb-28 sm:pt-24 lg:px-20 lg:pt-28 xl:px-28 xl:pb-40 xl:pt-32">
@@ -173,7 +281,7 @@ export default function InsightsBoard({
             <select
               id={selectId}
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => handleCategoryChange(e.target.value)}
               className="pf-interactive min-h-11 cursor-pointer appearance-none rounded bg-transparent py-1.5 pl-9 pr-2 text-base font-display font-medium text-[#171922] hover:text-[#c64047] sm:text-xl lg:text-2xl"
             >
               {options.map((option) => (
@@ -188,30 +296,34 @@ export default function InsightsBoard({
         </div>
 
         {/* ── editorial feature ──
-            `key={category}` remounts the list when the filter changes, which
-            replays the entrance animation for the new feature. Without it the
-            already-revealed article would swap content in place with no motion,
-            making the filter feel like nothing happened. */}
-        <Stagger
-          key={category}
-          className="mt-28 sm:mt-32 lg:mt-40 xl:mt-44"
-          step={80}
-        >
-          {visible.map((insight) => (
-            <div key={insight.title}>
+            `key={`${category}-${activeIndex}`}` remounts the article when the
+            filter or slide changes, which smoothly replays the entrance motion
+            for the newly active insight. */}
+        {currentInsight ? (
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="touch-pan-y"
+          >
+            <Stagger
+              key={`${category}-${activeIndex}`}
+              className="mt-28 sm:mt-32 lg:mt-40 xl:mt-44"
+              step={80}
+            >
               <article className="group grid items-center gap-14 md:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] md:gap-16 lg:gap-20 xl:grid-cols-[minmax(440px,0.76fr)_minmax(620px,1.24fr)] xl:gap-24">
-                <Copy insight={insight} />
-                <Media insight={insight} />
+                <Copy
+                  insight={currentInsight}
+                  total={total}
+                  activeIndex={activeIndex}
+                  onPrev={handlePrev}
+                  onNext={handleNext}
+                  onSelectIndex={setActiveIndex}
+                />
+                <Media insight={currentInsight} />
               </article>
-            </div>
-          ))}
-        </Stagger>
-
-        {/* Every category currently has at least one article, so this is a
-            safeguard for future data rather than a state the mockup shows —
-            but a filter that can silently yield a blank page is worse than one
-            that says so. */}
-        {visible.length === 0 && (
+            </Stagger>
+          </div>
+        ) : (
           <Reveal className="mt-20 text-center">
             <p className="text-sm text-zinc-500">
               No insights in this category yet.

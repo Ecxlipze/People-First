@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import LegalPageLayout, {
   LEGAL_CONTACT_EMAIL,
   LEGAL_OPERATOR_NAME,
-  LegalPlaceholder,
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
@@ -21,15 +20,17 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          These Terms & Conditions are intended to govern access to and use of
-          the People First website operated by {LEGAL_OPERATOR_NAME}.
-          By using the website after final terms are published, visitors will be
-          expected to comply with them.
+          These Terms &amp; Conditions govern access to and use of the People
+          First website (peoplefirst.pk) and related digital channels operated by{" "}
+          {LEGAL_OPERATOR_NAME} (&ldquo;People First&rdquo;, &ldquo;we&rdquo;,
+          &ldquo;us&rdquo;, or &ldquo;our&rdquo;), a registered venture builder
+          under the Securities and Exchange Commission of Pakistan (SECP).
         </p>
         <p>
-          The website identifies {LEGAL_OPERATOR_NAME} as a registered venture
-          builder under the Securities and Exchange Commission of Pakistan
-          (SECP). The effective date shown above applies to this version.
+          By accessing or using our website, submitting an inquiry, or
+          participating in any People First programs, you agree to comply with
+          and be bound by these Terms. If you do not agree with these Terms,
+          please discontinue use of the website immediately.
         </p>
       </>
     ),
@@ -39,10 +40,12 @@ const sections: LegalSection[] = [
     title: "Use of the Website",
     content: (
       <p>
-        You may use the website to learn about People First, its work, content,
-        programmes, podcasts, insights, and ways to make contact. You are
-        responsible for using the website lawfully and for ensuring that any
-        information you submit is accurate to the best of your knowledge.
+        You may use the website to explore our venture ecosystem, access
+        editorial insights and podcasts, submit partnership and training
+        inquiries, and learn about our collaborative programs. You agree to use
+        the website solely for lawful purposes, in compliance with all
+        applicable local and international laws, and you warrant that any
+        information you provide is accurate, complete, and current.
       </p>
     ),
   },
@@ -51,30 +54,34 @@ const sections: LegalSection[] = [
     title: "Permitted and Prohibited Conduct",
     content: (
       <>
-        <p>You must not use the website to:</p>
+        <p>You agree not to use the website to:</p>
         <ul>
-          <li>break applicable law or infringe another person&rsquo;s rights;</li>
           <li>
-            submit malicious code, spam, deceptive content, or material intended
-            to disrupt the website;
+            Violate any applicable federal, provincial, or international laws,
+            including the Prevention of Electronic Crimes Act, 2016 (PECA).
           </li>
           <li>
-            attempt to gain unauthorised access to the website, its supporting
-            systems, or information submitted by another person;
+            Transmit or inject viruses, trojans, worms, ransomware, or other
+            technologically harmful code.
           </li>
           <li>
-            misrepresent your identity or use the contact forms to impersonate
-            another person; or
+            Attempt to gain unauthorized access to, interfere with, damage, or
+            disrupt any part of the website, its hosting infrastructure, or
+            connected databases.
           </li>
           <li>
-            interfere with the website&rsquo;s availability, security, or normal
-            operation.
+            Employ automated scrapers, data miners, robots, or crawling spiders
+            without our express prior written permission.
+          </li>
+          <li>
+            Impersonate People First, its founders, officers, employees, or any
+            other individual or entity.
+          </li>
+          <li>
+            Engage in any conduct that restricts, inhibits, or degrades any
+            other user&rsquo;s ability to enjoy or interact with the website.
           </li>
         </ul>
-        <p>
-          Any additional restrictions, including rules for automated access or
-          reuse of published materials, require company confirmation.
-        </p>
       </>
     ),
   },
@@ -84,20 +91,19 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          The website contains branding, written content, artwork, photographs,
-          audio-related material, design elements, and software that may be
-          protected by intellectual-property laws. The project does not
-          establish the legal owner or licence status of every item.
+          All content, branding, logos, trademarks, visual artwork, photography,
+          audio recordings, podcast productions, editorial insights, and
+          proprietary code featured on this website are the exclusive
+          intellectual property of {LEGAL_OPERATOR_NAME} or its content
+          licensors, protected under the Copyright Ordinance, 1962 of Pakistan
+          and international intellectual property treaties.
         </p>
         <p>
-          Before this section is finalised, ownership, permitted reuse, brand
-          permissions, and any third-party credits or licences must be
-          confirmed:
-          {" "}
-          <LegalPlaceholder>
-            [Intellectual-property owner and licence terms required]
-          </LegalPlaceholder>
-          .
+          You are granted a limited, revocable, non-exclusive, non-transferable
+          license to view, read, and access website materials solely for your
+          personal, non-commercial informational use. No part of the website may
+          be reproduced, republished, distributed, broadcast, modified, or
+          publicly displayed without our prior written consent.
         </p>
       </>
     ),
@@ -108,27 +114,32 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          The website&rsquo;s contact forms allow you to provide your name,
-          email address, optional phone number, role, and a message. Submit only
-          information that you are authorised to provide and that is relevant to
-          your enquiry.
+          Our website provides contact forms and application channels for
+          partnerships, training programs, and venture consultations. By
+          submitting an inquiry or proposal, you acknowledge and agree that:
         </p>
-        <p>
-          A form submission does not by itself create a client, employment,
-          partnership, investment, advisory, or other formal relationship, and
-          it does not guarantee a response. Do not submit confidential,
-          financial, identification, or other sensitive material through the
-          general contact form.
-        </p>
-        <p>
-          The project does not yet confirm a delivery provider or formal
-          submission-handling workflow:
-          {" "}
-          <LegalPlaceholder>
-            [Authorised recipients and operational handling procedure required]
-          </LegalPlaceholder>
-          .
-        </p>
+        <ul>
+          <li>
+            Submissions are reviewed by our authorized partnerships, venture
+            development, and training teams.
+          </li>
+          <li>
+            Submitting an inquiry, pitch, or application does not create a
+            client, partnership, investment, advisory, employment, or
+            contractual relationship between you and People First.
+          </li>
+          <li>
+            While we treat submissions with care, general website contact forms
+            are not a secure channel for unreleased proprietary trade secrets.
+            Do not submit sensitive proprietary inventions or confidential
+            business plans without a mutually executed Non-Disclosure Agreement
+            (NDA).
+          </li>
+          <li>
+            You represent that you own or have the necessary rights and
+            permissions to submit the materials and information you provide.
+          </li>
+        </ul>
       </>
     ),
   },
@@ -137,11 +148,12 @@ const sections: LegalSection[] = [
     title: "Third-Party Links",
     content: (
       <p>
-        The website links to external social-media pages and websites associated
-        with featured ventures. Those destinations are operated independently
-        and may have their own terms, policies, content, and availability. A
-        link does not establish responsibility for an external site or its
-        practices.
+        The website contains links to external websites and services, including
+        portfolio ventures (such as Merchanity, Abaad.pk, and Kissan Veer),
+        social networks, and media platforms. These links are provided solely
+        for your convenience and reference. People First does not endorse,
+        control, or assume responsibility for the content, privacy practices,
+        availability, or accuracy of any third-party websites.
       </p>
     ),
   },
@@ -150,15 +162,12 @@ const sections: LegalSection[] = [
     title: "Website Availability",
     content: (
       <p>
-        Website content and features may be corrected, updated, suspended, or
-        withdrawn as the site develops. People First should confirm whether it
-        intends to make any specific availability, support, maintenance, or
-        notice commitments:
-        {" "}
-        <LegalPlaceholder>
-          [Availability and support commitments required, if any]
-        </LegalPlaceholder>
-        .
+        We strive to ensure continuous and reliable access to the website.
+        However, the site is provided on an &ldquo;as is&rdquo; and &ldquo;as
+        available&rdquo; basis. We do not warrant that the website will always
+        be available, uninterrupted, timely, secure, or bug-free. We reserve the
+        right to modify, suspend, or discontinue any feature, content, or
+        section of the website at any time without prior notice or liability.
       </p>
     ),
   },
@@ -168,18 +177,18 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          Website content is provided for general information. Visitors should
-          verify information relevant to their circumstances and obtain
-          appropriate professional advice where needed before acting on it.
+          All materials, podcasts, articles, and insights published on this
+          website are provided for general educational, informational, and
+          inspirational purposes only. Nothing on this website constitutes
+          financial, investment, legal, tax, or professional business advice.
         </p>
         <p>
-          The exact warranty exclusions and disclaimer language must be tailored
-          to the organisation, its published content, and applicable law:
-          {" "}
-          <LegalPlaceholder>
-            [Company-approved disclaimer wording required]
-          </LegalPlaceholder>
-          .
+          To the fullest extent permitted by applicable law, {LEGAL_OPERATOR_NAME}{" "}
+          disclaims all representations and warranties of any kind, whether
+          express, statutory, or implied, including but not limited to implied
+          warranties of merchantability, fitness for a particular purpose,
+          non-infringement, and freedom from computer viruses or security
+          defects.
         </p>
       </>
     ),
@@ -188,55 +197,58 @@ const sections: LegalSection[] = [
     id: "limitation-of-liability",
     title: "Limitation of Liability",
     content: (
-      <p>
-        No liability cap, category of excluded loss, indemnity, or other
-        limitation has been assumed in this draft. This provision must be
-        prepared for the correct legal entity, services, audience, and governing
-        law:
-        {" "}
-        <LegalPlaceholder>
-          [Legally reviewed limitation-of-liability wording required]
-        </LegalPlaceholder>
-      </p>
+      <>
+        <p>
+          To the maximum extent permitted by applicable law under the
+          jurisdiction of the Islamic Republic of Pakistan, in no event shall{" "}
+          {LEGAL_OPERATOR_NAME}, its directors, officers, employees, partners,
+          affiliates, or agents be liable for any indirect, consequential,
+          incidental, special, exemplary, or punitive damages, including loss of
+          profits, revenue, data, goodwill, or business opportunity, arising out
+          of or in connection with your access to, use of, or inability to use
+          the website or any content provided herein.
+        </p>
+        <p>
+          In all cases, our total cumulative liability arising out of or related
+          to these Terms or the website shall not exceed PKR 10,000 or the amount
+          you paid directly to us (if any) in the preceding 12 months, whichever
+          is lesser.
+        </p>
+      </>
     ),
   },
   {
     id: "changes-to-the-terms",
     title: "Changes to the Terms",
     content: (
-      <>
-        <p>
-          These terms may be revised when the website, People First&rsquo;s
-          activities, or applicable requirements change. The effective date at
-          the top of the page should be updated when revised terms are
-          published.
-        </p>
-        <p>
-          Any process for notifying users or obtaining renewed acceptance must
-          be confirmed:
-          {" "}
-          <LegalPlaceholder>
-            [Terms change-notification process required, if applicable]
-          </LegalPlaceholder>
-          .
-        </p>
-      </>
+      <p>
+        We reserve the right to revise, update, or replace these Terms &amp;
+        Conditions at our discretion. Any revisions will become effective
+        immediately upon posting to this page, and the effective date will be
+        updated accordingly. Your continued use of the website following the
+        posting of any changes constitutes your binding acceptance of those
+        changes.
+      </p>
     ),
   },
   {
     id: "governing-law",
     title: "Governing Law",
     content: (
-      <p>
-        The governing law, courts, venue, and any dispute-resolution process
-        cannot be determined from the current project and have not been
-        invented.
-        {" "}
-        <LegalPlaceholder>
-          [Jurisdiction and dispute process require company and legal
-          confirmation]
-        </LegalPlaceholder>
-      </p>
+      <>
+        <p>
+          These Terms &amp; Conditions, and any disputes or claims arising out of
+          or in connection with them, shall be governed by and construed in
+          accordance with the laws of the Islamic Republic of Pakistan.
+        </p>
+        <p>
+          In the event of any dispute, controversy, or claim arising out of or
+          relating to these Terms, the parties shall first attempt in good faith
+          to resolve the dispute amicably within thirty (30) days. If the
+          dispute cannot be settled amicably, it shall be subject to the
+          exclusive jurisdiction of the competent courts in Lahore, Pakistan.
+        </p>
+      </>
     ),
   },
   {
@@ -244,20 +256,25 @@ const sections: LegalSection[] = [
     title: "Contact",
     content: (
       <>
-        <p>Questions about these terms should be directed to:</p>
+        <p>Questions about these Terms should be directed to:</p>
         <ul>
           <li>
-            {LEGAL_OPERATOR_NAME}
+            <strong>Entity:</strong> {LEGAL_OPERATOR_NAME}
           </li>
           <li>
-            <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>
-              {LEGAL_CONTACT_EMAIL}
-            </a>
+            <strong>Email:</strong>{" "}
+            <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>{LEGAL_CONTACT_EMAIL}</a>
           </li>
           <li>
-            <LegalPlaceholder>
-              Registered address 27 sohail block jamil park multan road Lahore
-            </LegalPlaceholder>
+            <strong>Phone / WhatsApp:</strong> +92 306 1113337
+          </li>
+          <li>
+            <strong>Registered Office:</strong> 27 Sohail Block, Jamil Park,
+            Multan Road, Lahore, Pakistan
+          </li>
+          <li>
+            <strong>Operational Studio:</strong> 58A2 Kickstart, Tipu Road,
+            Gulberg III, Lahore, Pakistan
           </li>
         </ul>
       </>

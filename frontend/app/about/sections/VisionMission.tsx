@@ -6,7 +6,6 @@ import { Reveal, Stagger } from "@/app/components/ScrollFx";
    sits the Learn × Grow × Lead × Transform step row inside a lavender container.
    Origami paper-plane accents in the corners echo the mockup. */
 
-import { ChevronRight } from "lucide-react";
 
 const STEPS: { label: string; sub: React.ReactNode; iconSrc: string }[] = [
   { label: "LEARN", sub: <>Build Knowledge.<br />Sharpen Skills.</>, iconSrc: "/images/icons/learn.svg" },

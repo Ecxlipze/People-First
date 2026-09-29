@@ -1035,3 +1035,29 @@ first by `order`.
 ---
 
 ## End of API Documentation
+
+## Vercel deployment
+
+Insight slugs support up to 255 characters (still a TypeScript string). Migration
+`insight_category.0005` preserves existing long slugs when moving from SQLite,
+which does not enforce varchar limits, to PostgreSQL.
+
+Deploy this directory as the `people-first-backend` project. `pyproject.toml`
+selects the WSGI entrypoint and Python 3.14. Vercel collects admin static assets
+using `STATIC_ROOT`. Production requires `SECRET_KEY`, `DEBUG=False`,
+`ALLOWED_HOSTS`, `DATABASE_URL` (hosted PostgreSQL with TLS), and
+`BLOB_READ_WRITE_TOKEN` (private Blob). Set `CSRF_TRUSTED_ORIGINS` to the backend
+origin and `CORS_ALLOWED_ORIGINS` to the frontend origin. Existing `MAIL_*`
+variables configure confirmation emails.
+
+Run migrations explicitly before deploying with
+`vercel env run -e production -- venv/bin/python manage.py migrate --noinput`.
+Uploads use Blob when its token is present, otherwise local `media/`. The media
+route only serves files referenced by public content, or by content visible to
+an authenticated staff session. Local SQLite and uploads are excluded from
+deployments and must be transferred separately.
+
+Deploy `../frontend` as the existing `people-first` project with production
+`API_BASE_URL=https://people-first-backend.vercel.app`. This is a server-only
+variable. To manage hosted admin accounts, use
+`vercel env run -e production -- venv/bin/python manage.py createsuperuser`.

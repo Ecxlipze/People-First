@@ -19,6 +19,15 @@ export type ApiGalleryItem = {
   is_active: boolean;
 };
 
+export type GalleryItem = {
+  id: number;
+  src: string;
+  title: string;
+  caption: string;
+  alt: string;
+  displayOrder: number;
+};
+
 export type ApiTestimonial = {
   id: number;
   name: string;

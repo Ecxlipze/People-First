@@ -5,7 +5,6 @@ import Hero from "@/app/about/sections/Hero";
 import JourneyPaths from "@/app/about/sections/JourneyPaths";
 import KeyStats from "@/app/about/sections/KeyStats";
 import VisionMission from "@/app/about/sections/VisionMission";
-import CTABanner from "@/app/components/CTABanner";
 
 export const metadata: Metadata = {
   title: "About Us",

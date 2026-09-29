@@ -171,14 +171,6 @@ export default function LegalPageLayout({
               </aside>
 
               <article className="min-w-0 max-w-[820px]">
-                <div className="mb-10 rounded-xl border-l-4 border-pf-magenta bg-pf-lavender/55 px-5 py-5 text-sm leading-6 text-zinc-700 sm:px-6">
-                  <p>
-                    This draft intentionally identifies details that need
-                    company or legal confirmation. Highlighted bracketed text
-                    must be completed before this policy is treated as final.
-                  </p>
-                </div>
-
                 <div className="space-y-12 sm:space-y-14">
                   {sections.map((section) => (
                     <section

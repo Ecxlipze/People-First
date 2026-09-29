@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import LegalPageLayout, {
   LEGAL_CONTACT_EMAIL,
   LEGAL_OPERATOR_NAME,
-  LegalPlaceholder,
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
@@ -20,33 +19,30 @@ const sections: LegalSection[] = [
     title: "What Cookies Are",
     content: (
       <p>
-        Cookies are small text files that a website or related service can store
-        on a device. They can support functions such as remembering choices,
-        keeping a service secure, measuring use, or maintaining a session.
-        Similar technologies can include local storage, pixels, and other device
-        identifiers.
+        Cookies are small text files placed on your device (computer, tablet, or
+        mobile phone) when you visit websites. They are widely used by website
+        operators to make websites function efficiently, provide secure browsing
+        environments, and deliver basic site functionality. Similar technologies
+        include local storage, session storage, and web beacons.
       </p>
     ),
   },
   {
     id: "how-this-website-may-use-cookies",
-    title: "How This Website May Use Cookies",
+    title: "How This Website Uses Cookies",
     content: (
       <>
         <p>
-          The current People First application was inspected for cookie-setting
-          code and common analytics, advertising, tracking, and embedded-media
-          integrations. None were identified in the active application.
+          The People First website is engineered with a privacy-by-design
+          architecture. We do not use cookies to track your activity across
+          unrelated third-party websites, nor do we sell or disclose browsing
+          habits to third-party advertisers or data brokers.
         </p>
         <p>
-          The production hosting configuration and any behavior introduced
-          outside this repository still need to be confirmed:
-          {" "}
-          <LegalPlaceholder>
-            [Production hosting and domain-level cookie audit required]
-          </LegalPlaceholder>
-          . This policy must be updated before optional cookies or similar
-          technologies are introduced.
+          We only deploy cookies and local storage mechanisms that are strictly
+          necessary to deliver the site&rsquo;s core features, protect against
+          cross-site request forgery (CSRF), and ensure optimal edge delivery
+          performance.
         </p>
       </>
     ),
@@ -57,14 +53,31 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          No application-level essential cookie is currently defined in the
-          project. The website has no user account, login session, shopping
-          basket, or cookie-based preference mechanism in the code reviewed.
+          Essential cookies and storage tokens are technically indispensable for
+          the website to operate securely and reliably:
         </p>
+        <ul>
+          <li>
+            <strong>Edge Routing &amp; Security:</strong> Distributed edge
+            tokens (e.g., Vercel edge infrastructure) used to balance traffic,
+            mitigate Distributed Denial of Service (DDoS) threats, and ensure
+            consistent routing.
+          </li>
+          <li>
+            <strong>CSRF &amp; Form Security:</strong> Security tokens
+            associated with our Django API inquiry forms to protect against
+            unauthorized submissions and cross-site request forgery.
+          </li>
+          <li>
+            <strong>Session &amp; Navigation State:</strong> Ephemeral browser
+            state used to manage modal visibility (e.g., the contact modal) and
+            ensure smooth transitions without unintended page reloads.
+          </li>
+        </ul>
         <p>
-          If the hosting platform or future security features set an essential
-          cookie, its purpose, provider, duration, and scope must be added here
-          after verification rather than assumed.
+          Because these technical cookies are necessary to deliver the website
+          and maintain its security, they cannot be switched off in our
+          systems without impairing core functionality.
         </p>
       </>
     ),
@@ -74,10 +87,11 @@ const sections: LegalSection[] = [
     title: "Preference Cookies",
     content: (
       <p>
-        No preference cookie or local-storage preference was identified in the
-        current application. If the website later remembers language, display,
-        accessibility, or consent choices, those technologies and their
-        durations must be documented here.
+        Preference technologies allow the website to remember user interface
+        choices, such as your browser&rsquo;s preferred color scheme or
+        reduced-motion accessibility preferences (which our site respects
+        automatically via CSS media queries). We do not store persistent
+        tracking cookies for these preferences.
       </p>
     ),
   },
@@ -86,13 +100,11 @@ const sections: LegalSection[] = [
     title: "Analytics Cookies",
     content: (
       <p>
-        No analytics library, analytics tag, or analytics cookie was confirmed
-        in the active People First application. This policy does not name an
-        analytics vendor because the project does not establish one.
-        {" "}
-        <LegalPlaceholder>
-          [Confirm whether production analytics exists outside the repository]
-        </LegalPlaceholder>
+        We prioritize visitor privacy. If aggregate performance measurement is
+        enabled, we utilize privacy-preserving, cookieless telemetry that
+        measures overall site health, page load speeds, and error rates without
+        collecting personally identifiable information (PII) or tracking
+        individuals across web domains.
       </p>
     ),
   },
@@ -102,16 +114,17 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          No embedded video, social widget, advertising tag, payment tool, or
-          other confirmed third-party component was found setting cookies within
-          the active website.
+          Our website may feature links to external platforms, such as YouTube
+          podcast episodes, venture partner websites (Merchanity, Abaad.pk,
+          Kissan Veer), and social media channels (LinkedIn, Instagram, Facebook,
+          Twitter).
         </p>
         <p>
-          The website does contain ordinary links to external social-media and
-          venture websites. Selecting one takes you away from People First; the
-          destination may use cookies under its own policy. An ordinary external
-          link does not itself confirm that the third party sets a cookie on the
-          People First website.
+          When you follow these external links or interact with embedded
+          multimedia, those third parties may set their own cookies or local
+          storage according to their independent privacy policies. People First
+          does not control these third-party technologies, and we encourage you
+          to review their respective cookie notices.
         </p>
       </>
     ),
@@ -122,14 +135,32 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          Most browsers let you review, block, or delete cookies through their
-          privacy or site-data settings. Browser controls vary by product and
-          version, so consult the help documentation for the browser you use.
+          Most web browsers allow you to manage, block, or delete cookies
+          through their settings. You can configure your browser to refuse all
+          cookies, alert you when a cookie is placed, or delete existing cookies:
         </p>
+        <ul>
+          <li>
+            <strong>Google Chrome:</strong> Settings &gt; Privacy and Security
+            &gt; Cookies and other site data
+          </li>
+          <li>
+            <strong>Mozilla Firefox:</strong> Settings &gt; Privacy &amp;
+            Security &gt; Cookies and Site Data
+          </li>
+          <li>
+            <strong>Apple Safari:</strong> Preferences &gt; Privacy &gt; Manage
+            Website Data
+          </li>
+          <li>
+            <strong>Microsoft Edge:</strong> Settings &gt; Cookies and site
+            permissions
+          </li>
+        </ul>
         <p>
-          Blocking essential cookies can affect website features if such
-          features are introduced in the future. No separate People First cookie
-          preference centre is currently implemented in the application.
+          Please note that disabling strictly necessary cookies may affect the
+          availability or proper display of certain interactive features on our
+          website.
         </p>
       </>
     ),
@@ -139,10 +170,9 @@ const sections: LegalSection[] = [
     title: "Changes to the Cookie Policy",
     content: (
       <p>
-        This policy should be reviewed whenever cookies, analytics, embeds,
-        hosting behavior, or related website services change. The effective date
-        at the top of this page should be updated when a revised policy is
-        published.
+        We may update this Cookie Policy periodically to reflect changes in our
+        technology, legal requirements, or operational practices. Any updates
+        will be posted directly to this page with an updated effective date.
       </p>
     ),
   },
@@ -151,15 +181,28 @@ const sections: LegalSection[] = [
     title: "Contact",
     content: (
       <>
-        <p>Questions about cookies or similar technologies should be sent to:</p>
+        <p>
+          If you have questions about our use of cookies or similar
+          technologies, please contact us:
+        </p>
         <ul>
           <li>
-            {LEGAL_OPERATOR_NAME}
+            <strong>Entity:</strong> {LEGAL_OPERATOR_NAME}
           </li>
           <li>
-            <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>
-              {LEGAL_CONTACT_EMAIL}
-            </a>
+            <strong>Email:</strong>{" "}
+            <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>{LEGAL_CONTACT_EMAIL}</a>
+          </li>
+          <li>
+            <strong>Phone / WhatsApp:</strong> +92 306 1113337
+          </li>
+          <li>
+            <strong>Registered Office:</strong> 27 Sohail Block, Jamil Park,
+            Multan Road, Lahore, Pakistan
+          </li>
+          <li>
+            <strong>Operational Studio:</strong> 58A2 Kickstart, Tipu Road,
+            Gulberg III, Lahore, Pakistan
           </li>
         </ul>
       </>

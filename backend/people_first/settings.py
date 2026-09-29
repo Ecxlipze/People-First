@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from email.utils import formataddr
 from pathlib import Path
+from urllib.parse import parse_qs, unquote, urlparse
 
 from decouple import config, Csv
 
@@ -153,7 +155,22 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", cast=Csv())
 
 
 DB_ENGINE = config("DB_ENGINE", default="sqlite3" if (BASE_DIR / "db.sqlite3").exists() else "postgresql")
-if DB_ENGINE == "sqlite3":
+if database_url := config("DATABASE_URL", default=""):
+    parsed = urlparse(database_url)
+    if parsed.scheme not in {"postgres", "postgresql"}:
+        raise ValueError("DATABASE_URL must use PostgreSQL")
+    DATABASES = {"default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": unquote(parsed.path.lstrip("/")),
+        "USER": unquote(parsed.username or ""),
+        "PASSWORD": unquote(parsed.password or ""),
+        "HOST": parsed.hostname,
+        "PORT": parsed.port or 5432,
+        "CONN_MAX_AGE": 0,
+        "DISABLE_SERVER_SIDE_CURSORS": True,
+        "OPTIONS": {"sslmode": parse_qs(parsed.query).get("sslmode", ["require"])[0]},
+    }}
+elif DB_ENGINE == "sqlite3":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -227,3 +244,16 @@ DEFAULT_FROM_EMAIL = (
 )
 # Error mail (Django's own) should come from the same identity.
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Vercel's filesystem is ephemeral; uploaded artwork lives in private Blob.
+STATIC_ROOT = BASE_DIR / "staticfiles"
+if os.environ.get("BLOB_READ_WRITE_TOKEN"):
+    STORAGES = {
+        "default": {"BACKEND": "people_first.storage.VercelBlobStorage"},
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    }
+if os.environ.get("VERCEL"):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())

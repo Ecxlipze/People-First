@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import ContactTrigger from "@/app/contact/ContactTrigger";
 import { Reveal } from "@/app/components/ScrollFx";
 import CTABanner from "@/app/components/CTABanner";
 
@@ -75,6 +74,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     links: [
       { label: "About", href: "/about" },
       { label: "Services", href: "/what-we-do" },
+      { label: "Gallery", href: "/gallery" },
       { label: "Blog", href: "/insights" },
       { label: "Podcast", href: "/podcasts" },
       { label: "Contact", href: "/contact" },

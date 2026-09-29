@@ -1,0 +1,3 @@
+# Local source-asset archive exceeds Vercel's per-file limit.
+public/images.zip
+.env*

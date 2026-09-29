@@ -244,7 +244,7 @@ export default function GalleryShowcase({
 
         {/* CTA */}
         <Link
-          href="/home#gallery"
+          href="/gallery"
           /* Button fill #150065, sampled from HOME4.pdf. `mt-10` (was mt-6)
              gives the bottom margin QA asked for under the carousel. */
           className="font-heading pf-interactive mt-10 inline-flex min-h-11 items-center rounded-md bg-[#150065] px-8 py-2.5 text-sm font-medium text-white shadow-[0_10px_30px_-10px_rgba(21,0,101,0.7)] hover:-translate-y-0.5 hover:bg-[#0f0049] hover:shadow-[0_14px_34px_-10px_rgba(21,0,101,0.8)] sm:text-base"

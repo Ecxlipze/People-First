@@ -161,18 +161,23 @@ export default function ContactPanel({
   standalone?: boolean;
 }) {
   return (
-    /* Fluid padding/gaps throughout: this panel has to fit the viewport without
-       scrolling in both the modal and the page, so every vertical measurement
-       compresses on short screens rather than overflowing. */
-    <div className="grid min-h-0 min-w-0 gap-[clamp(0.75rem,3vh,2.5rem)] bg-[#69205b] px-[clamp(1rem,3.5vh,2.5rem)] py-[clamp(0.75rem,3.5vh,2.5rem)] lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12 lg:px-16 lg:py-[clamp(2rem,6vh,5rem)]">
+    /* Fluid padding/gaps throughout for modal mode to fit viewport without scrolling.
+       When standalone=true, comfortable fixed/fluid spacing is used for normal page flow. */
+    <div
+      className={`grid min-w-0 bg-[#69205b] ${
+        standalone
+          ? "gap-8 p-6 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-14 lg:p-14"
+          : "min-h-0 gap-[clamp(0.75rem,3vh,2.5rem)] px-[clamp(1rem,3.5vh,2.5rem)] py-[clamp(0.75rem,3.5vh,2.5rem)] lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12 lg:px-16 lg:py-[clamp(2rem,6vh,5rem)]"
+      }`}
+    >
       {/* Below lg: the visible heading alone. At lg it remains visually hidden
           so the modal keeps one stable accessible name while the styled copy
           in the details column supplies the visible desktop heading. Every row
           above the form costs a form row
           out of a short viewport, and the panel must fit without scrolling — so
-          the phone/email/social details drop out entirely on mobile rather than
-          being squeezed in. They live on in the full column at lg+, and in the
-          site footer everywhere.
+          the phone/email/social details drop out entirely on mobile in modal mode.
+          In standalone page mode, full contact details are also surfaced in the page's
+          own quick-channel cards.
 
           This owns `headingId` at every width — the modal's aria-labelledby must
           never point at a display:none element, or the dialog loses its name. */}

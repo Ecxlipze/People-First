@@ -20,7 +20,7 @@ class Insight(models.Model):
 
     category = models.ForeignKey(InsightCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='insights')
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
     summary = models.TextField()
     content = models.TextField()
     metric = models.CharField(max_length=100, blank=True, null=True)

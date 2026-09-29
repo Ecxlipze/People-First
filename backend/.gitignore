@@ -4,3 +4,9 @@ __pycache__/
 *.pyc
 db.sqlite3
 media/
+.vercel
+.env*
+!.env.example
+staticfiles/
+.agents/
+skills-lock.json

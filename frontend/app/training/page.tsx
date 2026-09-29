@@ -19,6 +19,7 @@ export default function TrainingPage() {
       defaultRole="Student"
       inquiryType="join_training"
       pageTitle="Join a People First Training Program"
+      pageDescription="Ready to level up your skills? Sign up for our industry-guided training programs designed to empower the next generation of builders, thinkers, and digital leaders."
     />
   );
 }

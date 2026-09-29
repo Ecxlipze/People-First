@@ -1,0 +1,17 @@
+[project]
+name = "people-first-api"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "Django>=6.1,<6.2",
+    "djangorestframework>=3.16",
+    "djangorestframework-simplejwt>=5.5",
+    "django-cors-headers>=4.7",
+    "python-decouple>=3.8",
+    "Pillow>=11.0",
+    "psycopg[binary]>=3.2",
+    "vercel==0.11.4",
+]
+
+[tool.vercel]
+entrypoint = "people_first.wsgi:application"

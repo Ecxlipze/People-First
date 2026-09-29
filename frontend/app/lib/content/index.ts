@@ -22,6 +22,7 @@ import type {
   ApiPodcast,
   ApiTestimonial,
   ApiVenture,
+  GalleryItem,
 } from "./types";
 
 import { GALLERY, repeatForCoverflow, type GalleryPhoto } from "@/app/components/gallery";
@@ -97,6 +98,62 @@ export async function getGallery(): Promise<GalleryPhoto[]> {
           })),
       ),
     GALLERY,
+  );
+}
+
+export const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
+  {
+    id: 1,
+    src: "/images/gallery/gallery1.webp",
+    title: "Studio Interview Session",
+    caption:
+      "Behind the scenes in the People First podcast studio with our guest speaker.",
+    alt: "Guest seated for a studio interview in the People First podcast space",
+    displayOrder: 1,
+  },
+  {
+    id: 2,
+    src: "/images/gallery/gallery2.webp",
+    title: "Partner Summit & Networking",
+    caption:
+      "Rai Salahuddin Ahmad engaging with ecosystem partners at our annual summit.",
+    alt: "Rai Salahuddin Ahmad at a People First partner event",
+    displayOrder: 2,
+  },
+  {
+    id: 3,
+    src: "/images/gallery/gallery3.webp",
+    title: "Executive Roundtable Discussion",
+    caption:
+      "Founders and industry leaders discussing market strategies and collaborative growth.",
+    alt: "Panel discussion at a People First roundtable",
+    displayOrder: 3,
+  },
+];
+
+/* /gallery page: returns distinct unrepeated photos with their titles,
+   captions, and display order for the full gallery view. */
+export async function getFullGallery(): Promise<GalleryItem[]> {
+  const rows = await list<ApiGalleryItem>("/api/gallery/");
+  return withFallback(
+    rows,
+    (items) =>
+      items
+        .filter((item) => item.image)
+        .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
+        .map((item) => ({
+          id: item.id,
+          src: item.image as string,
+          title: item.title || "People First Moment",
+          caption: item.caption || "",
+          alt:
+            item.alt_text ||
+            item.title ||
+            item.caption ||
+            "People First gallery photo",
+          displayOrder: item.display_order ?? 0,
+        })),
+    DEFAULT_GALLERY_ITEMS,
   );
 }
 

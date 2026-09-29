@@ -111,7 +111,7 @@ function Select({
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
         className={`${FIELD} peer cursor-pointer appearance-none pr-9 ${
-          standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""
+          standalone ? "h-11 min-h-11 sm:h-12" : ""
         } ${
           value === "" ? "text-zinc-400" : ""
         }`}
@@ -204,7 +204,7 @@ export default function ContactForm({
       action={formAction}
       className={`flex flex-col ${
         standalone
-          ? "gap-3 p-5 sm:p-7 lg:gap-[clamp(0.5rem,1.4vh,1rem)] lg:p-[clamp(1rem,3vh,2.5rem)]"
+          ? "gap-3.5 p-6 sm:p-8 lg:p-10"
           : "gap-[clamp(0.5rem,1.4vh,1rem)] p-[clamp(1rem,3vh,2.5rem)]"
       }`}
       noValidate
@@ -235,7 +235,7 @@ export default function ContactForm({
           defaultValue={v.fullName}
           aria-invalid={!!err.fullName}
           aria-describedby={err.fullName ? `${id("fullName")}-error` : undefined}
-          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""} ${err.fullName ? "border-red-400" : ""}`}
+          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12" : ""} ${err.fullName ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -251,7 +251,7 @@ export default function ContactForm({
           defaultValue={v.email}
           aria-invalid={!!err.email}
           aria-describedby={err.email ? `${id("email")}-error` : undefined}
-          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""} ${err.email ? "border-red-400" : ""}`}
+          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12" : ""} ${err.email ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -269,7 +269,7 @@ export default function ContactForm({
           defaultValue={v.phone}
           aria-invalid={!!err.phone}
           aria-describedby={err.phone ? `${id("phone")}-error` : undefined}
-          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12 lg:h-[clamp(2.125rem,4.6vh,3rem)] lg:min-h-0" : ""} ${err.phone ? "border-red-400" : ""}`}
+          className={`${FIELD} ${standalone ? "h-11 min-h-11 sm:h-12" : ""} ${err.phone ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -297,7 +297,7 @@ export default function ContactForm({
             fixed height with its own (taller, still fluid) box and re-adds the
             vertical padding the pills get from centring their text.
             `resize-none` because a user-dragged textarea would grow the panel
-            past the viewport — the very scrolling this layout avoids. */}
+            past the viewport in modal mode. */}
         <textarea
           id={id("message")}
           name="message"
@@ -307,7 +307,7 @@ export default function ContactForm({
           defaultValue={v.message}
           aria-invalid={!!err.message}
           aria-describedby={err.message ? `${id("message")}-error` : undefined}
-          className={`${FIELD} resize-none py-2 ${standalone ? "!h-28 lg:!h-[clamp(3.25rem,11vh,7rem)]" : "h-[clamp(3.25rem,11vh,7rem)]"} ${err.message ? "border-red-400" : ""}`}
+          className={`${FIELD} resize-none py-2.5 ${standalone ? "!h-32" : "h-[clamp(3.25rem,11vh,7rem)]"} ${err.message ? "border-red-400" : ""}`}
         />
       </Field>
 
@@ -331,7 +331,9 @@ export default function ContactForm({
         type="submit"
         disabled={pending}
         aria-busy={pending}
-        className={`pf-interactive mt-1 h-[clamp(2.5rem,4.4vh,3rem)] w-full shrink-0 rounded-lg bg-[#8f1d3f] px-5 text-sm font-semibold text-white hover:bg-[#7a1836] hover:shadow-lg hover:shadow-[#8f1d3f]/25 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none ${standalone ? "min-h-11 lg:min-h-0" : ""}`}
+        className={`pf-interactive mt-2 h-12 w-full shrink-0 rounded-lg bg-[#8f1d3f] px-5 text-sm font-semibold text-white hover:bg-[#7a1836] hover:shadow-lg hover:shadow-[#8f1d3f]/25 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none ${
+          standalone ? "min-h-11" : "h-[clamp(2.5rem,4.4vh,3rem)]"
+        }`}
       >
         {pending ? (
           <span className="inline-flex items-center justify-center gap-2">

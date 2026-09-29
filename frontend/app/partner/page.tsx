@@ -20,6 +20,7 @@ export default function PartnerPage() {
       defaultRole="Training Partner"
       inquiryType="partner_with_us"
       pageTitle="Partner with People First"
+      pageDescription="Join forces with People First. Tell us about your organisation and how we can co-create high-impact training, community programs, and innovative ventures."
     />
   );
 }
