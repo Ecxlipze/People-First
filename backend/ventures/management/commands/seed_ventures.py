@@ -17,7 +17,7 @@ VENTURES_SEED_DATA = [
         "name": "Insights",
         "subtitle": "Media & IT Intelligence",
         "logo_file": "insights.webp",
-        "website_url": "https://insights.peoplefirst.com",
+        "website_url": "https://peoples-first.vercel.app/insights",
         "accent": "#a00017",
         "border_gradient": "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
     },

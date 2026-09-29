@@ -35,6 +35,9 @@ export const DEFAULT_VENTURE_ACCENT = "#a00017";
 export const DEFAULT_VENTURE_GRADIENT =
   "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)";
 
+/* Plate artwork for a venture with no site yet (empty website_url). */
+export const COMING_SOON_IMAGE = "/images/home/ventures/coming-soon.webp";
+
 /* Fallback used when the ventures API is empty or unreachable. */
 export const VENTURES: Venture[] = [
   {
@@ -51,7 +54,7 @@ export const VENTURES: Venture[] = [
     tagline: "Media & IT Intelligence",
     logo: "/images/home/ventures/insights.webp",
     hasLogo: true,
-    href: "https://insights.peoplefirst.com",
+    href: "/insights",
     accent: "#a00017",
     borderGradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },

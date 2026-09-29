@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import type { Venture } from "@/app/components/ventures";
+import { COMING_SOON_IMAGE, type Venture } from "@/app/components/ventures";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
@@ -116,20 +116,15 @@ export default function VenturesShowcase({
           {/* Wrapper carries an explicit basis at lg because the container is
               flex there (see the justify-center note above): five per row once
               the four 1rem gaps are subtracted. */}
-          {ventures.map((v) => (
-            <div
-              key={v.name}
-              /* 12.917 × 12.031vw = the design's 248 × 231 card (aspect 1.074). */
-              className="lg:w-[calc((100%-4*1rem)/5)] lg:shrink-0 xl:h-[12.031vw] xl:w-[12.917vw]"
-            >
-            <div
-              style={{ background: v.borderGradient }}
-              className="group relative flex h-full min-h-[190px] flex-col rounded-xl p-[0.8px] sm:min-h-[220px] xl:min-h-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 xl:rounded-[0.78vw]"
-            >
-              <a
-                href={v.href}
-                className="flex h-full flex-col overflow-hidden rounded-[calc(0.75rem-1px)] bg-[#9b86a8] p-3.5 sm:p-5 lg:p-4 xl:rounded-[calc(0.78vw-1px)] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]"
-              >
+          {ventures.map((v) => {
+            /* No site yet (empty/"#" href): the card stays but is inert, shows the
+               "coming soon" plate instead of a logo, and drops the CTA. */
+            const live = v.href !== "#" && v.href !== "";
+            const external = /^https?:\/\//.test(v.href);
+            const cardClass =
+              "flex h-full flex-col overflow-hidden rounded-[calc(0.75rem-1px)] bg-[#9b86a8] p-3.5 sm:p-5 lg:p-4 xl:rounded-[calc(0.78vw-1px)] xl:px-[1.667vw] xl:pb-[1.04vw] xl:pt-[1.563vw]";
+            const body = (
+              <>
               {/* Logo box — real logo once the file exists, else an empty plate.
                   #e9e9e9, sampled from HOME3.pdf: the grey plate IS in the
                   design (behind logos and on the logo-less cards alike), so
@@ -152,6 +147,15 @@ export default function VenturesShowcase({
                     sizes="(min-width: 1280px) 10vw, (min-width: 640px) 25vw, 38vw"
                     className="h-full w-full object-contain"
                   />
+                ) : !live ? (
+                  <Image
+                    src={COMING_SOON_IMAGE}
+                    alt={`${v.name} — coming soon`}
+                    width={522}
+                    height={174}
+                    sizes="(min-width: 1280px) 10vw, (min-width: 640px) 25vw, 38vw"
+                    className="h-full w-full object-contain"
+                  />
                 ) : (
                   <span aria-hidden className="h-full w-full" />
                 )}
@@ -168,15 +172,42 @@ export default function VenturesShowcase({
                 style={{ background: v.borderGradient }}
                 className="font-heading mt-auto flex min-h-10 items-center justify-between whitespace-nowrap rounded-full p-[0.8px] text-[10.5px] font-medium text-white/80 sm:min-h-11 sm:text-xs xl:h-[1.823vw] xl:min-h-0 xl:text-[0.573vw]"
               >
-                <span className="flex h-full w-full items-center justify-between rounded-full bg-[#9b86a8] px-3 sm:gap-1.5 sm:px-4 xl:px-[1.04vw]">
-                  Explore Website
-                  <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
+                <span
+                  className={`flex h-full w-full items-center rounded-full bg-[#9b86a8] px-3 sm:gap-1.5 sm:px-4 xl:px-[1.04vw] ${live ? "justify-between" : "justify-center"}`}
+                >
+                  {live ? "Explore Website" : "Coming Soon"}
+                  {live && (
+                    <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 xl:h-[0.73vw] xl:w-[0.73vw]" />
+                  )}
                 </span>
               </div>
-            </a>
+              </>
+            );
+            return (
+            <div
+              key={v.name}
+              /* 12.917 × 12.031vw = the design's 248 × 231 card (aspect 1.074). */
+              className="lg:w-[calc((100%-4*1rem)/5)] lg:shrink-0 xl:h-[12.031vw] xl:w-[12.917vw]"
+            >
+            <div
+              style={{ background: v.borderGradient }}
+              className={`group relative flex h-full min-h-[190px] flex-col rounded-xl p-[0.8px] sm:min-h-[220px] xl:min-h-0 xl:rounded-[0.78vw] ${live ? "transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10" : ""}`}
+            >
+              {live ? (
+                <a
+                  href={v.href}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className={cardClass}
+                >
+                  {body}
+                </a>
+              ) : (
+                <div className={cardClass}>{body}</div>
+              )}
             </div>
             </div>
-          ))}
+            );
+          })}
         </Stagger>
       </PinnedRecede>
     </div>
