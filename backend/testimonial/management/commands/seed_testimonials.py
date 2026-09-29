@@ -1,102 +1,84 @@
-import os
-import shutil
-from pathlib import Path
 from django.core.management.base import BaseCommand
-from django.conf import settings
 from testimonial.models import Testimonial
+
+LEGACY_MOCKUP_NAMES = [
+    "Darrell Steward",
+    "Guy Hawkins",
+    "Leslie Alexander",
+    "Marvin McKinney",
+    "Jenny Wilson",
+    "Annette Black",
+    "Kristin Watson",
+    "Floyd Miles",
+]
 
 SEED_DATA = [
     {
-        "name": "Darrell Steward",
-        "handle": "@darrels",
-        "body": "You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change and click save.",
-        "tags": ["another"],
-        "avatar_file": "darrell-steward.webp",
+        "name": "Ayesha Khan",
+        "handle": "Trainee, Digital Skills Program",
+        "body": "The training was practical from day one. I learned skills I could use right away and now take on remote work with confidence.",
+        "tags": ["digital_skills", "training"],
     },
     {
-        "name": "Guy Hawkins",
-        "handle": "@jennywilson",
-        "body": "This is a top quality product. No need to think twice before making it live on web.",
-        "tags": ["make_it_fast"],
-        "avatar_file": "guy-hawkins.webp",
+        "name": "Hassan Raza",
+        "handle": "Small Business Owner",
+        "body": "People First helped us get online and reach customers directly. Fewer middlemen and better margins made a real difference.",
+        "tags": ["direct_commerce", "growth"],
     },
     {
-        "name": "Leslie Alexander",
-        "handle": "@lesslie",
-        "body": "Simply the best. Better than all the rest. I’d recommend this product to beginners and advanced users.",
-        "tags": ["postcrafts"],
-        "avatar_file": "leslie-alexander.webp",
+        "name": "Sana Malik",
+        "handle": "Freelancer",
+        "body": "A supportive team and a clear path from learning to earning. I would recommend it to anyone starting out.",
+        "tags": ["remote_work", "learning"],
     },
     {
-        "name": "Marvin McKinney",
-        "handle": "@jennywilson",
-        "body": "With Postcrafts, it’s quicker with the customer, the customer is more ensured of getting exactly what they ordered, and I’m all for the efficiency.",
-        "tags": ["dev", "tools"],
-        "avatar_file": "marvin-mckinney.webp",
+        "name": "Usman Tariq",
+        "handle": "Partner Organisation",
+        "body": "Working with the team was smooth and professional. They understand local needs and deliver on what they promise.",
+        "tags": ["partnership", "impact"],
     },
     {
-        "name": "Jenny Wilson",
-        "handle": "@jennywilson",
-        "body": "This is a top quality product. No need to think twice before making it live on web.",
-        "tags": ["make_it_fast"],
-        "avatar_file": "jenny-wilson.webp",
+        "name": "Fatima Zahra",
+        "handle": "University Graduate",
+        "body": "The programs bridge the gap between what we study and what industry needs. It gave me direction and real confidence.",
+        "tags": ["youth", "careers"],
     },
     {
-        "name": "Annette Black",
-        "handle": "@jennywilson",
-        "body": "You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change and click save.",
-        "tags": ["another"],
-        "avatar_file": "annette-black.webp",
+        "name": "Bilal Ahmed",
+        "handle": "Entrepreneur",
+        "body": "From idea to launch, the guidance was honest and useful. It feels like a team that genuinely wants you to succeed.",
+        "tags": ["startups", "mentorship"],
     },
     {
-        "name": "Kristin Watson",
-        "handle": "@kristinwatson2",
-        "body": "Finally, I’ve found a template that covers all bases for a bootstrapped startup. We were able to launch in days, not months.",
-        "tags": ["postcrafts"],
-        "avatar_file": "kristin-watson.webp",
+        "name": "Hira Nadeem",
+        "handle": "Content Creator",
+        "body": "The studio and podcast support helped me find my voice and grow an audience I am proud of.",
+        "tags": ["podcast", "creators"],
     },
     {
-        "name": "Floyd Miles",
-        "handle": "@jennywilson",
-        "body": "My new site is so much faster and easier to work with than my old site. I just choose the page, make the change and click save.",
-        "tags": ["postcrafts"],
-        "avatar_file": "floyd-miles.webp",
+        "name": "Imran Sheikh",
+        "handle": "Community Leader",
+        "body": "Digital tools are finally reaching people who were left behind. This work is opening real doors in our community.",
+        "tags": ["inclusion", "community"],
     },
 ]
 
 class Command(BaseCommand):
-    help = "Seed the initial 8 mockup testimonials into the database with avatars."
+    help = "Seed generic placeholder testimonials (replacing the legacy mockup set)."
 
     def handle(self, *args, **options):
-        # Determine source path for images in frontend
-        base_dir = Path(settings.BASE_DIR)
-        frontend_img_dir = base_dir.parent / "frontend" / "public" / "images" / "home" / "testimonials"
-        media_testimonials_dir = Path(settings.MEDIA_ROOT) / "testimonials"
-        media_testimonials_dir.mkdir(parents=True, exist_ok=True)
-
-        self.stdout.write(f"Copying avatars from {frontend_img_dir} to {media_testimonials_dir}...")
+        removed, _ = Testimonial.objects.filter(name__in=LEGACY_MOCKUP_NAMES).delete()
+        if removed:
+            self.stdout.write(self.style.WARNING(f"Removed {removed} legacy mockup testimonials."))
 
         seeded_count = 0
         for i, item in enumerate(SEED_DATA):
-            avatar_filename = item["avatar_file"]
-            src_file = frontend_img_dir / avatar_filename
-            dst_file = media_testimonials_dir / avatar_filename
-
-            avatar_rel_path = None
-            if src_file.exists():
-                shutil.copy2(src_file, dst_file)
-                avatar_rel_path = f"testimonials/{avatar_filename}"
-                self.stdout.write(self.style.SUCCESS(f"  ✓ Copied {avatar_filename}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"  ⚠ File {src_file} not found, avatar will be null"))
-
             testimonial, created = Testimonial.objects.update_or_create(
                 name=item["name"],
                 defaults={
                     "handle": item["handle"],
                     "body": item["body"],
                     "tags": item["tags"],
-                    "avatar": avatar_rel_path,
                     "display_order": i,
                     "is_active": True,
                 },
