@@ -252,7 +252,10 @@ if os.environ.get("BLOB_READ_WRITE_TOKEN"):
         "default": {"BACKEND": "people_first.storage.VercelBlobStorage"},
         "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
     }
-if os.environ.get("VERCEL"):
+# Behind any TLS-terminating proxy (Vercel, Plesk's nginx) the app sees plain
+# HTTP, so trust the proxy's X-Forwarded-Proto and mark cookies secure
+# whenever this is a real deployment rather than local DEBUG.
+if os.environ.get("VERCEL") or not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
