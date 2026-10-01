@@ -149,6 +149,7 @@ jobs:
             backend
 
           tar -czf frontend-deploy.tar.gz \
+            --exclude='frontend/.next/cache' \
             --exclude='frontend/node_modules' \
             --exclude='frontend/.env*' \
             frontend
