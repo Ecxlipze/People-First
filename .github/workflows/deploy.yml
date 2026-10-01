@@ -1,0 +1,169 @@
+name: CI & CD Deploy to Plesk
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Test & Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'backend/requirements.txt'
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run Django system checks
+        env:
+          SECRET_KEY: 'ci-secret-key-not-for-production'
+          DEBUG: 'False'
+          DB_ENGINE: 'sqlite3'
+        run: |
+          python backend/manage.py check
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Lint frontend
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Type check frontend
+        run: |
+          cd frontend
+          npx tsc --noEmit
+
+  deploy:
+    name: Deploy to Plesk
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies & build Next.js
+        env:
+          NEXT_PUBLIC_SITE_URL: https://peoplefirst.pk
+          API_BASE_URL: https://api.peoplefirst.pk
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+
+      - name: Install deployment tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Open SSH tunnel & run database migrations
+        env:
+          PLESK_HOST: ${{ secrets.PLESK_HOST }}
+          PLESK_USER: ${{ secrets.PLESK_USER }}
+          PLESK_PASSWORD: ${{ secrets.PLESK_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME || 'peoplefirst_db' }}
+          DB_USER: ${{ secrets.DB_USER || 'peoplefirst_user' }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          if [ -n "$PLESK_PASSWORD" ] && [ -n "$DB_PASSWORD" ]; then
+            echo "Starting SSH tunnel to PostgreSQL..."
+            sshpass -p "$PLESK_PASSWORD" ssh -o StrictHostKeyChecking=no -f -N -L 54329:127.0.0.1:5432 "$PLESK_USER@$PLESK_HOST"
+            
+            echo "Running Django migrations over SSH tunnel..."
+            SECRET_KEY='ci-secret-key-not-for-production' \
+            DEBUG='False' \
+            DB_ENGINE='postgresql' \
+            DB_NAME="$DB_NAME" \
+            DB_USER="$DB_USER" \
+            DB_PASSWORD="$DB_PASSWORD" \
+            DB_HOST='127.0.0.1' \
+            DB_PORT='54329' \
+            python backend/manage.py migrate --noinput
+            
+            echo "Collecting admin static assets..."
+            SECRET_KEY='ci-secret-key-not-for-production' \
+            DEBUG='False' \
+            DB_ENGINE='sqlite3' \
+            python backend/manage.py collectstatic --noinput
+          else
+            echo "Database credentials not provided, skipping automated migration step."
+          fi
+
+      - name: Package & Sync to Plesk Server
+        env:
+          PLESK_HOST: ${{ secrets.PLESK_HOST }}
+          PLESK_USER: ${{ secrets.PLESK_USER }}
+          PLESK_PASSWORD: ${{ secrets.PLESK_PASSWORD }}
+        run: |
+          echo "Creating deployment archives..."
+          tar -czf backend-deploy.tar.gz \
+            --exclude='backend/.env' \
+            --exclude='backend/media' \
+            --exclude='backend/venv' \
+            --exclude='backend/db.sqlite3' \
+            --exclude='backend/__pycache__' \
+            --exclude='*.pyc' \
+            backend
+
+          tar -czf frontend-deploy.tar.gz \
+            --exclude='frontend/node_modules' \
+            --exclude='frontend/.env*' \
+            frontend
+
+          echo "Transferring archives to Plesk via SCP..."
+          sshpass -p "$PLESK_PASSWORD" scp -o StrictHostKeyChecking=no backend-deploy.tar.gz frontend-deploy.tar.gz "$PLESK_USER@$PLESK_HOST":~/
+
+          echo "Extracting and restarting services on Plesk..."
+          sshpass -p "$PLESK_PASSWORD" ssh -o StrictHostKeyChecking=no "$PLESK_USER@$PLESK_HOST" "
+            tar -xzf backend-deploy.tar.gz
+            tar -xzf frontend-deploy.tar.gz
+            rm -f backend-deploy.tar.gz frontend-deploy.tar.gz
+            mkdir -p backend/tmp frontend/tmp
+            rm -rf frontend/.next/cache/fetch-cache/*
+            touch backend/tmp/restart.txt
+            touch frontend/tmp/restart.txt
+          "
+          echo "Deployment completed successfully!"
