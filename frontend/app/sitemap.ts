@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // and thin conversion routes (/partner, /training)
   const routes = [
     '/home',
+    '/kissan-veer',
     '/about',
     '/contact',
     '/grow-with-us',

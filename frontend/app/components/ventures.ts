@@ -93,7 +93,7 @@ export const VENTURES: Venture[] = [
     tagline: "Empowering Agriculture",
     logo: "/images/home/ventures/kissan-veer.webp",
     hasLogo: true,
-    href: "https://kissanveer.com",
+    href: "/kissan-veer",
     accent: "#2c8e85",
     borderGradient: "radial-gradient(52.47% 174.19% at 50% 50%, #39CABD 0%, #246D67 100%)",
   },

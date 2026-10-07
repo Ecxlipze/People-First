@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { COMING_SOON_IMAGE, type Venture } from "@/app/components/ventures";
+import Link from "next/link";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
@@ -193,7 +194,9 @@ export default function VenturesShowcase({
               style={{ background: v.borderGradient }}
               className={`group relative flex h-full min-h-[190px] flex-col rounded-xl p-[0.8px] sm:min-h-[220px] xl:min-h-0 xl:rounded-[0.78vw] ${live ? "transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10" : ""}`}
             >
-              {live ? (
+              {live && !external ? (
+                <Link href={v.href} className={cardClass}>{body}</Link>
+              ) : live ? (
                 <a
                   href={v.href}
                   {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
