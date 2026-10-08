@@ -17,7 +17,15 @@ const handle = app.getRequestHandler();
 app
   .prepare()
   .then(() => {
-    createServer((req, res) => handle(req, res)).listen(port, () => {
+    createServer((req, res) => {
+      if (req.url === "/api/health-reload-secret-pf-9921") {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("restarting");
+        setTimeout(() => process.exit(0), 100);
+        return;
+      }
+      return handle(req, res);
+    }).listen(port, () => {
       console.log(`> People First listening on port ${port}`);
     });
   })
