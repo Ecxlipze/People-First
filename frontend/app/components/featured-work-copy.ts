@@ -43,7 +43,7 @@ export const DEFAULT_PODCAST_BLOCK: FeaturedWorkBlock = {
   secondaryMetricLabel: "have knowledge about market strategies.",
   bullets: [],
   thumbnail: "/images/featured/feature1.webp",
-  videoUrl: "https://www.youtube.com/watch?v=QM_mLwuP8vs",
+  videoUrl: "https://www.youtube.com/@TheMindsBehindOfficial",
 };
 
 export const DEFAULT_EVENTS_BLOCK: FeaturedWorkBlock = {

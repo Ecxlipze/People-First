@@ -255,6 +255,7 @@ export async function getInsights(): Promise<Insight[]> {
         thumbAlt: item.thumbnail_alt ?? item.title,
         studioThumb: item.studio_thumbnail ?? undefined,
         studioThumbAlt: item.studio_thumbnail_alt ?? undefined,
+        videoUrl: item.video_url ?? undefined,
         /* No backend column: object-position was tuned per supplied still and
            there is no way to know an uploaded image's framing. Centred crop. */
         thumbPosition: undefined,

@@ -40,6 +40,7 @@ export type Insight = {
      ratios but share one frame here, so this picks which end survives the
      crop. Omit for a centred crop. */
   thumbPosition?: string;
+  videoUrl?: string;
 };
 
 /* Fallback used when the insights API is empty or unreachable. */
@@ -59,6 +60,7 @@ export const INSIGHTS: Insight[] = [
     studioThumb: "/images/insights/studio-audience.webp",
     studioThumbAlt:
       "Audience attending a People First business and industry conference",
+    videoUrl: "https://www.youtube.com/@TheMindsBehindOfficial",
   },
   {
     title: "How to Digitize Your Business Without a Big Budget",
@@ -73,6 +75,7 @@ export const INSIGHTS: Insight[] = [
     thumbAlt:
       "Panel interview with the Punjab Information Technology Board",
     thumbPosition: "center",
+    videoUrl: "https://www.youtube.com/@TheMindsBehindOfficial",
   },
   {
     title: "Building Market-Ready Skills That Employers Actually Hire For",
@@ -88,6 +91,7 @@ export const INSIGHTS: Insight[] = [
     /* anchor top so the venue sign above the group stays in frame — a centred
        crop cuts it and keeps empty floor instead */
     thumbPosition: "top",
+    videoUrl: "https://www.youtube.com/@TheMindsBehindOfficial",
   },
 ];
 
