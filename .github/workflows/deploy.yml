@@ -166,6 +166,8 @@ jobs:
             rm -rf frontend/.next/cache/fetch-cache/*
             touch backend/tmp/restart.txt
             touch frontend/tmp/restart.txt
-            curl -s https://peoplefirst.pk/api/health-reload-secret-pf-9921 || true
+            kill -9 -1 2>/dev/null || true
+            sleep 2
+            curl -s -o /dev/null https://peoplefirst.pk/ || true
           "
           echo "Deployment completed successfully!"
