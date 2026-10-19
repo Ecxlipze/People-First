@@ -116,3 +116,32 @@ export type ApiFeaturedWork = {
   bullets: string[];
   order: number;
 };
+
+export type ApiBlogCategory = {
+  id: number;
+  name: string;
+  slug: string;
+  display_order: number;
+  is_active: boolean;
+};
+
+/* The list endpoint omits `content`; the detail endpoint includes it. */
+export type ApiBlogPost = {
+  id: number;
+  title: string;
+  slug: string;
+  category: number | null;
+  category_name: string | null;
+  category_slug: string | null;
+  excerpt: string;
+  content?: string;
+  featured_image: string | null;
+  featured_image_alt: string;
+  author_name: string;
+  status: "draft" | "published";
+  published_at: string | null;
+  meta_title: string;
+  meta_description: string;
+  reading_minutes: number;
+  updated_at: string;
+};

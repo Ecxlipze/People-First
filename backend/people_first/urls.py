@@ -18,6 +18,8 @@ urlpatterns = [
     path('api/', include('insight_category.urls')),
     path('api/', include('inquiry.urls')),
     path('api/', include('Podcast.urls')),
+    path('api/', include('blog.urls')),
+    path('summernote/', include('django_summernote.urls')),
 ]
 
 

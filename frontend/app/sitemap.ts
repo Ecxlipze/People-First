@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import { getBaseUrl } from '@/app/lib/seo';
+import { getBlogPosts } from '@/app/lib/content/blog';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl();
 
   // Exclude non-canonical / (which points to /home) 
@@ -15,16 +16,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/ideas-lab',
     '/media-events',
     '/what-we-do',
+    '/blog',
     '/podcasts',
     '/privacy',
     '/terms',
     '/cookies'
   ];
 
-  return routes.map((route) => ({
+  const posts = await getBlogPosts();
+
+  const pages: MetadataRoute.Sitemap = routes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: route === '/home' ? 1 : 0.8,
   }));
+
+  const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  return [...pages, ...postPages];
 }

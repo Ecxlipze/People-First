@@ -1088,3 +1088,32 @@ Deploy `../frontend` as the existing `people-first` project with production
 `API_BASE_URL=https://people-first-backend.vercel.app`. This is a server-only
 variable. To manage hosted admin accounts, use
 `vercel env run -e production -- venv/bin/python manage.py createsuperuser`.
+
+---
+
+# 11. Blog CMS
+
+Posts are written in Django Admin (`/admin/` → **Blog → Blog posts**) with a rich text
+editor (django-summernote: headings, bold/italic/underline, colours, lists, links,
+tables, inline image upload). Only staff users can log in; create editors with
+**Users → Add** and tick *Staff status* plus the `blog` permissions.
+
+- **Draft / publish:** `status` is `draft` or `published`. Publishing stamps `published_at`;
+  a future `published_at` schedules the post. The list view has *Publish* / *Unpublish*
+  bulk actions. Delete from the list or edit page.
+- **SEO:** `slug` (the URL `/blog/<slug>`), `meta_title` (70 chars), `meta_description`
+  (160 chars). Both default to the title / excerpt when blank.
+- **Featured image** (`featured_image` + `featured_image_alt`) and **categories**
+  (`/admin/blog/blogcategory/`).
+- Post bodies are sanitised on save (scripts, iframes and event handlers are stripped).
+
+```http
+GET /api/blog-posts/                  # published only; no `content`; ?category=<slug>
+GET /api/blog-posts/{slug}/           # includes sanitised HTML `content`
+GET /api/blog-categories/
+POST/PUT/PATCH/DELETE ...             # staff (JWT) only
+```
+
+Drafts and scheduled posts are hidden from anonymous callers. Frontend routes: `/blog`
+(category filter + pagination via `?category=` / `?page=`) and `/blog/<slug>`. In
+production run `collectstatic` so the editor's assets are served.

@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'inquiry',
     'insight_category',
     'Podcast',
+    'blog',
+    'django_summernote',
     'testimonial',
     'ventures',
     'corsheaders',
@@ -268,3 +270,27 @@ YOUTUBE_API_KEY = config("YOUTUBE_API_KEY", default="")
 YOUTUBE_CHANNEL_ID = config("YOUTUBE_CHANNEL_ID", default="")
 YOUTUBE_CHANNEL_HANDLE = config("YOUTUBE_CHANNEL_HANDLE", default="")
 YOUTUBE_PLAYLIST_ID = config("YOUTUBE_PLAYLIST_ID", default="")
+
+# Blog editor (django-summernote). It renders inside an iframe on the same origin,
+# so the clickjacking header must allow SAMEORIGIN rather than DENY.
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SUMMERNOTE_CONFIG = {
+    "summernote": {
+        "width": "100%",
+        "height": "520",
+        "toolbar": [
+            ["style", ["style"]],
+            ["font", ["bold", "italic", "underline", "strikethrough", "clear"]],
+            ["color", ["color"]],
+            ["para", ["ul", "ol", "paragraph"]],
+            ["insert", ["link", "picture", "table", "hr"]],
+            ["view", ["fullscreen", "codeview"]],
+        ],
+    },
+    "attachment_filesize_limit": 5 * 1024 * 1024,
+}
+
+# django-summernote's shipped migrations predate Django's BigAutoField default and
+# would show as permanently unapplied model changes. Its migrations live in
+# blog/summernote_migrations instead, with the id change added as 0003.
+MIGRATION_MODULES = {"django_summernote": "blog.summernote_migrations"}

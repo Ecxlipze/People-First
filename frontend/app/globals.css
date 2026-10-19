@@ -986,3 +986,43 @@ optgroup {
     ),
     #fcf7ff;
 }
+
+/* Blog post body. The HTML comes from the admin's rich text editor and is
+   sanitised server-side, so it carries only plain tags — styled here rather
+   than per element. Brand colours match the rest of the site. */
+.pf-prose {
+  color: #3f3f46;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.pf-prose > * + * { margin-top: 1.25em; }
+.pf-prose h1, .pf-prose h2, .pf-prose h3, .pf-prose h4 {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #171922;
+}
+.pf-prose h1 { font-size: 2rem; margin-top: 2em; }
+.pf-prose h2 { font-size: 1.65rem; margin-top: 2em; }
+.pf-prose h3 { font-size: 1.35rem; margin-top: 1.75em; }
+.pf-prose h4 { font-size: 1.15rem; margin-top: 1.5em; }
+.pf-prose a { color: #a02f52; text-decoration: underline; text-underline-offset: 3px; }
+.pf-prose a:hover { color: #c64047; }
+.pf-prose ul, .pf-prose ol { padding-left: 1.5em; }
+.pf-prose ul { list-style: disc; }
+.pf-prose ol { list-style: decimal; }
+.pf-prose li + li { margin-top: 0.4em; }
+.pf-prose blockquote {
+  border-left: 4px solid #a02f52;
+  padding-left: 1.25em;
+  font-style: italic;
+  color: #52525b;
+}
+.pf-prose img { max-width: 100%; height: auto; border-radius: 0.75rem; }
+.pf-prose hr { border: 0; border-top: 1px solid #e4e4e7; }
+.pf-prose pre { overflow-x: auto; border-radius: 0.5rem; background: #18181b; color: #f4f4f5; padding: 1em; font-size: 0.9em; }
+.pf-prose code { font-size: 0.9em; }
+.pf-prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.pf-prose th, .pf-prose td { border: 1px solid #e4e4e7; padding: 0.5em 0.75em; text-align: left; }
+.pf-prose th { background: #f4f4f5; }

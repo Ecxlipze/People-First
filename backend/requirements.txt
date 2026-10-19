@@ -9,3 +9,6 @@ Pillow>=11.0
 # settings.py uses the postgresql engine.
 psycopg[binary]>=3.2
 vercel==0.11.4
+# Blog CMS: rich text editor in the admin, and server-side HTML sanitising of post bodies.
+django-summernote>=0.8.20
+nh3>=0.3
