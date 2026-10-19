@@ -157,7 +157,7 @@ jobs:
           echo "Transferring archives to Plesk via SCP..."
           sshpass -p "$PLESK_PASSWORD" scp -o StrictHostKeyChecking=no backend-deploy.tar.gz frontend-deploy.tar.gz "$PLESK_USER@$PLESK_HOST":~/
 
-          echo "Extracting and restarting services on Plesk..."
+          echo "Extracting archives on Plesk..."
           sshpass -p "$PLESK_PASSWORD" ssh -o StrictHostKeyChecking=no "$PLESK_USER@$PLESK_HOST" "
             tar -xzf backend-deploy.tar.gz
             tar -xzf frontend-deploy.tar.gz
@@ -166,8 +166,10 @@ jobs:
             rm -rf frontend/.next/cache/fetch-cache/*
             touch backend/tmp/restart.txt
             touch frontend/tmp/restart.txt
-            kill -9 -1 2>/dev/null || true
-            sleep 2
-            curl -s -o /dev/null https://peoplefirst.pk/ || true
           "
+
+          echo "Restarting application workers..."
+          sshpass -p "$PLESK_PASSWORD" ssh -o StrictHostKeyChecking=no "$PLESK_USER@$PLESK_HOST" "kill -9 -1" 2>/dev/null || true
+          sleep 2
+          curl -s -o /dev/null https://peoplefirst.pk/ || true
           echo "Deployment completed successfully!"
