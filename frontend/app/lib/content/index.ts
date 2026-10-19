@@ -38,7 +38,7 @@ import {
   EPISODES,
   type Episode,
 } from "@/app/podcasts/episodes";
-import { INSIGHTS, type Insight } from "@/app/insights/insights";
+import { INSIGHTS, type Insight } from "@/app/media-events/insights";
 import type { Article } from "@/app/ideas-lab/articles";
 import {
   DEFAULT_EVENTS_BLOCK,
@@ -269,7 +269,7 @@ export async function getInsights(): Promise<Insight[]> {
    the two pages cannot drift apart. */
 export async function getArticles(): Promise<Article[]> {
   const insights = await getInsights();
-  return insights.map((insight) => ({ ...insight, href: "/insights" }));
+  return insights.map((insight) => ({ ...insight, href: "/media-events" }));
 }
 
 /* /home's Featured Work section consists of two blocks:

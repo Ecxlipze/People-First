@@ -61,7 +61,7 @@ export default function RadialNav() {
                  itself matches the design. */
               className="h-10 w-10 drop-shadow-[0_0_0_rgba(43,191,196,0)] transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(43,191,196,0.65)] sm:h-11 sm:w-11 lg:h-[35px] lg:w-[35px]"
             />
-            {/* Labels must never wrap: "INSIGHTS BY PEOPLE FIRST" is the
+            {/* Labels must never wrap: "INSIGHTS BY PEOPLE FIRST" (now MEDIA / EVENTS) was the
                 longest one and sits at the far right of the arc, where it was
                 breaking onto a second line ("PEOPLE FIRST" dropping under
                 "INSIGHTS BY"). `whitespace-nowrap` alone wasn't enough because

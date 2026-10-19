@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/contact',
     '/grow-with-us',
     '/ideas-lab',
-    '/insights',
+    '/media-events',
     '/what-we-do',
     '/podcasts',
     '/privacy',

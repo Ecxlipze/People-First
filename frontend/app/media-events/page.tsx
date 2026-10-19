@@ -3,19 +3,19 @@ import Link from "next/link";
 import Image from "next/image";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
-import InsightsBoard from "@/app/insights/sections/InsightsBoard";
-import FeaturedPodcast from "@/app/insights/sections/FeaturedPodcast";
+import InsightsBoard from "@/app/media-events/sections/InsightsBoard";
+import FeaturedPodcast from "@/app/media-events/sections/FeaturedPodcast";
 import { getEpisodes, getInsights } from "@/app/lib/content";
 
 export const metadata: Metadata = {
-  title: "Insights",
-  description: "Featured insights and studio content from People First.",
+  title: "Media / Events",
+  description: "Featured media, events, and studio content from People First.",
   alternates: {
-    canonical: "/insights",
+    canonical: "/media-events",
   },
 };
 
-/* Insights by People First — built from public/images/Studio.pdf.
+/* Media / Events (formerly "Insights by People First", /insights) — built from public/images/Studio.pdf.
 
    A single flowing page rather than the swipe-over stack /home and /what-we-do
    use: the mockup is one continuous field with the logo, a filter toolbar, the
@@ -60,7 +60,7 @@ export default async function InsightsPage() {
         </header>
 
         <main>
-          <h1 className="sr-only">Insights</h1>
+          <h1 className="sr-only">Media / Events</h1>
           <InsightsBoard insights={insights} />
           {/* Featured podcasts section (up to 3 episodes) */}
           {featuredEpisodes.length > 0 && (

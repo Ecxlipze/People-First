@@ -54,7 +54,7 @@ export const VENTURES: Venture[] = [
     tagline: "Media & IT Intelligence",
     logo: "/images/home/ventures/insights.webp",
     hasLogo: true,
-    href: "/insights",
+    href: "/media-events",
     accent: "#a00017",
     borderGradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)",
   },

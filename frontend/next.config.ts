@@ -56,6 +56,12 @@ const nextConfig: NextConfig = {
         destination: "/contact",
         permanent: true,
       },
+      /* The page was renamed "Insights by People First" -> "Media / Events". */
+      {
+        source: "/insights",
+        destination: "/media-events",
+        permanent: true,
+      },
     ];
   },
 };

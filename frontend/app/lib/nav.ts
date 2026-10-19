@@ -17,7 +17,7 @@ export type NavItem = {
   /* Label placement, as an offset in design px from the icon's centre.
      The labels are NOT on a concentric ring: fitting one gives anchor radii
      scattered across 277–305px, and no single radial outset reproduces the
-     design (IDEAS LAB/INSIGHTS would need a *negative* one, and a uniform 72px
+     design (IDEAS LAB/MEDIA / EVENTS would need a *negative* one, and a uniform 72px
      outset misses the outer rows by 17px). They are hand-placed on four fixed
      baselines — y=169.5 / 232.5 / 320.5 / 433.5 — so `dy` is stored per item
      and is exactly symmetric across the arc: -72, -50, -24.5, +4.
@@ -86,8 +86,8 @@ export const navItems: NavItem[] = [
     labelDy: -24.5,
   },
   {
-    label: "INSIGHTS BY PEOPLE FIRST",
-    href: "/insights",
+    label: "MEDIA / EVENTS",
+    href: "/media-events",
     icon: "/images/insights.svg",
     angle: 79.6,
     side: "right",

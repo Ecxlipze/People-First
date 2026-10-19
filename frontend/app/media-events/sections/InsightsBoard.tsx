@@ -10,7 +10,7 @@ import {
   ALL_CATEGORY,
   categoryOptions,
   type Insight,
-} from "@/app/insights/insights";
+} from "@/app/media-events/insights";
 
 /* Insights by People First — the filterable article index.
 
