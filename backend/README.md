@@ -447,10 +447,37 @@ When creating or editing a podcast in Django Admin:
 - When saved, the highest resolution thumbnail (`maxresdefault.jpg` or `hqdefault.jpg`) is automatically downloaded and saved to Django's local media storage (`media/podcasts/thumbnails/`).
 - If a podcast is saved programmatically with a `video_url` but no `thumbnail`, `Podcast.save()` will automatically download and attach the thumbnail as a background fallback.
 
+## Automatic YouTube Sync
+
+`python manage.py sync_youtube_podcasts` creates an episode for every new video on the
+YouTube channel (or designated playlist). It is idempotent, keyed on `youtube_video_id`;
+hand-made episodes with the same video URL are adopted, not duplicated, and existing
+episodes keep their edited copy unless `--refresh` is passed. Shorts and non-public
+videos are skipped. Options: `--limit N`, `--refresh`, `--dry-run`.
+
+Configuration (`backend/.env`, see `.env.example`):
+
+| Variable | Effect |
+|---|---|
+| `YOUTUBE_PLAYLIST_ID` | If set, only this playlist is synced (a designated podcast playlist). |
+| `YOUTUBE_CHANNEL_ID` / `YOUTUBE_CHANNEL_HANDLE` | Otherwise all channel uploads are synced. The handle is resolved to an id on each run. |
+| `YOUTUBE_API_KEY` | YouTube Data API v3 key: full history plus episode durations. Without it the public RSS feed is used (newest 15 videos, no durations). |
+
+To publish new episodes automatically, schedule the command, e.g. hourly:
+
+```cron
+0 * * * * cd /path/to/backend && venv/bin/python manage.py sync_youtube_podcasts
+```
+
+The frontend refreshes its cached `/api/podcasts/` data on its own revalidation timer,
+so a new episode appears on `/podcasts` shortly after the next sync.
+
 ## Fields
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `youtube_video_id` | string | No | Set by the sync; unique |
+| `published_at` | datetime | No | YouTube publish time; episodes sort newest first within the same `order` |
 | `title` | string | Yes | Podcast title |
 | `slug` | string | Yes | URL-friendly unique slug |
 | `description` | string | Yes | Podcast description |

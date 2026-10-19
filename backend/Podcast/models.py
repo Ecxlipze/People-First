@@ -6,6 +6,13 @@ class Podcast(models.Model):
     description = models.TextField()
     thumbnail = models.ImageField(upload_to='podcasts/thumbnails/', null=True, blank=True)
     video_url = models.URLField(blank=True, null=True)
+    # Set by the YouTube sync (`manage.py sync_youtube_podcasts`); the key that
+    # keeps a re-run from creating duplicates. Blank for hand-made episodes.
+    youtube_video_id = models.CharField(max_length=11, unique=True, null=True, blank=True)
+    published_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text="YouTube publication date. Filled by the sync; used to sort newest first.",
+    )
     metric_value = models.CharField(max_length=100, blank=True, null=True)
     metric_label = models.CharField(max_length=255, blank=True, null=True)
     # The coloured pill pinned to the episode thumbnail on /podcasts. Text is
@@ -30,7 +37,7 @@ class Podcast(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['order', '-created_at']
+        ordering = ['order', '-published_at', '-created_at']
 
     def __str__(self):
         return self.title

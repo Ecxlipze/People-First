@@ -60,6 +60,9 @@ export type ApiPodcast = {
   description: string;
   thumbnail: string | null;
   video_url: string | null;
+  youtube_video_id: string | null;
+  /* ISO timestamp from the YouTube sync; null for hand-made episodes. */
+  published_at: string | null;
   metric_value: string | null;
   metric_label: string | null;
   badge: string;

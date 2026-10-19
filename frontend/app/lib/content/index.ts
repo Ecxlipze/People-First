@@ -221,6 +221,7 @@ export async function getEpisodes(): Promise<Episode[]> {
           { label: item.supporting_title ?? "", body: item.supporting_content ?? "" },
         ].filter((s) => s.label || s.body),
         videoUrl: item.video_url || undefined,
+        publishedAt: item.published_at ?? undefined,
         isFeatured: Boolean(item.is_featured),
         description: item.description,
       })),

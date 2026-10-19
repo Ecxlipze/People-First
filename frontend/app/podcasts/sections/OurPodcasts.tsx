@@ -135,6 +135,19 @@ export default function OurPodcasts({
                       <span className="rounded-md bg-zinc-100 px-2.5 py-0.5 font-display text-[11px] font-extrabold uppercase tracking-wider text-zinc-600">
                         Episode #{String(episodeNum).padStart(2, "0")}
                       </span>
+                      {ep.publishedAt && (
+                        <time
+                          dateTime={ep.publishedAt}
+                          className="font-display text-[11px] font-bold uppercase tracking-wider text-zinc-500"
+                        >
+                          {new Date(ep.publishedAt).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            timeZone: "UTC",
+                          })}
+                        </time>
+                      )}
                       {isLatest && (
                         <span className="inline-flex items-center gap-1.5 rounded-md bg-[#a02f52]/10 px-2.5 py-0.5 font-display text-[11px] font-extrabold uppercase tracking-wider text-[#a02f52]">
                           <span className="h-1.5 w-1.5 rounded-full bg-[#a02f52] animate-pulse" />

@@ -205,7 +205,7 @@ class PodcastAdminForm(forms.ModelForm):
 @admin.register(Podcast)
 class PodcastAdmin(admin.ModelAdmin):
     form = PodcastAdminForm
-    list_display = ("title", "badge", "is_featured", "metric_value", "metric_label", "supporting_title", "order", "is_active", "created_at")
+    list_display = ("title", "published_at", "badge", "is_featured", "metric_value", "metric_label", "supporting_title", "order", "is_active", "created_at")
     search_fields = ("title", "description", "badge", "metric_label", "supporting_title", "supporting_content")
     list_filter = ("is_featured", "is_active", "created_at")
     list_editable = ("is_featured", "order", "is_active")
@@ -218,7 +218,7 @@ class PodcastAdmin(admin.ModelAdmin):
             "description": "Basic details and summary. If you leave the highlights below blank, the summary is shown on the card.",
         }),
         ("Media & Visuals", {
-            "fields": ("thumbnail", "video_url", "badge", "badge_colour"),
+            "fields": ("thumbnail", "video_url", "youtube_video_id", "published_at", "badge", "badge_colour"),
             "description": "Upload a thumbnail image, specify an optional video URL, and customize the thumbnail badge.",
         }),
         ("Highlight / Key Takeaway 1 (Optional)", {

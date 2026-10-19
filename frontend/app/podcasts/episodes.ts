@@ -15,6 +15,8 @@ export type Episode = {
   badgeColour: string;
   stats: { label: string; body: string }[];
   videoUrl?: string;
+  /* ISO timestamp; only YouTube-synced episodes have one. */
+  publishedAt?: string;
   isFeatured?: boolean;
   description?: string;
 };

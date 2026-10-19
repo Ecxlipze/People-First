@@ -260,3 +260,11 @@ if os.environ.get("VERCEL") or not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
+
+
+# YouTube podcast sync (`manage.py sync_youtube_podcasts`). All optional: with
+# no API key the command reads the public RSS feed (latest 15 videos).
+YOUTUBE_API_KEY = config("YOUTUBE_API_KEY", default="")
+YOUTUBE_CHANNEL_ID = config("YOUTUBE_CHANNEL_ID", default="")
+YOUTUBE_CHANNEL_HANDLE = config("YOUTUBE_CHANNEL_HANDLE", default="")
+YOUTUBE_PLAYLIST_ID = config("YOUTUBE_PLAYLIST_ID", default="")

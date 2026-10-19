@@ -46,7 +46,7 @@ export default async function PodcastsPage() {
             : [],
           contentUrl: ep.videoUrl,
           embedUrl: embedUrl,
-          uploadDate: "2024-01-01T00:00:00Z",
+          ...(ep.publishedAt ? { uploadDate: ep.publishedAt } : {}),
         },
       };
     }),
