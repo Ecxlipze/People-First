@@ -14,7 +14,7 @@ const STATS = {
   ],
 };
 
-const PARTNERS: { name: string; logo: string }[] = [
+const PARTNERS: { name: string; logo: string; size?: [number, number] }[] = [
   {
     name: "National University of Computer & Emerging Sciences",
     logo: "/images/about-page/nu-logo.png",
@@ -25,6 +25,18 @@ const PARTNERS: { name: string; logo: string }[] = [
   },
   { name: "SkillX", logo: "/images/about-page/skiilx-logo.png" },
   { name: "KOT Enterprises", logo: "/images/about-page/kot-logo.png" },
+  {
+    name: "Deep Skills",
+    logo: "/images/about-page/deepskills-black-v3.png",
+    // Wide wordmark: its own aspect ratio lets it fill the same logo height
+    // as the others instead of shrinking to the default 337×97 box.
+    size: [340, 76],
+  },
+  {
+    name: "Scope Career Consultancy",
+    logo: "/images/about-page/scope-logo.png",
+    size: [380, 199],
+  },
 ];
 
 export default function KeyStats() {
@@ -110,8 +122,8 @@ export default function KeyStats() {
                       <Image
                         src={partner.logo}
                         alt={copy === 0 ? partner.name : ""}
-                        width={337}
-                        height={97}
+                        width={partner.size?.[0] ?? 337}
+                        height={partner.size?.[1] ?? 97}
                         className="max-h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:max-h-16"
                       />
                     </div>
@@ -139,8 +151,8 @@ export default function KeyStats() {
                         <Image
                           src={partner.logo}
                           alt=""
-                          width={337}
-                          height={97}
+                          width={partner.size?.[0] ?? 337}
+                          height={partner.size?.[1] ?? 97}
                           className="max-h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:max-h-16"
                         />
                       </div>

@@ -75,7 +75,7 @@ export default function Hero() {
         <div className="animate-fade-in-up group relative mx-auto w-full max-w-[390px]">
           <div className="relative aspect-[498/641] w-full overflow-hidden border-b-4 border-[#3f4bde] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.72)]">
             <Image
-              src="/images/about-page/founder.png"
+              src="/images/about-page/founder.webp"
               alt="Rai Salahuddin Ahmad, founder of People First"
               fill
               sizes="(max-width: 1024px) 90vw, 390px"
