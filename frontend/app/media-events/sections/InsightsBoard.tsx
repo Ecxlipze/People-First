@@ -2,7 +2,8 @@
 
 import { useId, useMemo, useState } from "react";
 import Image from "next/image";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import HeroCTA from "@/app/components/HeroCTA";
 import { CountUp, Reveal, Stagger } from "@/app/components/ScrollFx";
@@ -79,6 +80,7 @@ function Media({ insight }: { insight: Insight }) {
           clear of the frame's bottom — the mockup's placement. Sitting it
           outside the frame rather than inside is deliberate: the stills are
           photographs of people, and a card within the frame covers faces. */}
+      {insight.cardValue && (
       <div className="absolute left-0 top-[58%] z-10 w-[9rem] -translate-y-1/2 rounded-md rounded-tl-none bg-[#68a9a8] px-5 py-5 text-white shadow-[0_14px_30px_-14px_rgba(40,80,70,0.7)] sm:w-[11rem] sm:px-6 sm:py-7 lg:w-[13rem] lg:px-7 lg:py-8 xl:-left-12 xl:w-[15rem] xl:px-8 xl:py-10">
         <CountUp
           value={insight.cardValue}
@@ -89,6 +91,7 @@ function Media({ insight }: { insight: Insight }) {
           {insight.cardLabel}
         </p>
       </div>
+      )}
     </div>
   );
 }
@@ -128,15 +131,26 @@ function Copy({
       <p className="mt-5 max-w-md text-sm leading-relaxed text-zinc-500 lg:text-base">
         {insight.blurb}
       </p>
-      <div className="mt-10 flex items-center gap-4 lg:mt-14">
-        <CountUp
-          value={insight.metric}
-          className="text-3xl font-extrabold text-[#d72f40] sm:text-[2.25rem] lg:text-[2.65rem]"
-        />
-        <span className="whitespace-pre-line text-xs font-medium leading-tight text-zinc-500 lg:text-sm">
-          {insight.metricLabel}
-        </span>
-      </div>
+      {insight.metric && (
+        <div className="mt-10 flex items-center gap-4 lg:mt-14">
+          <CountUp
+            value={insight.metric}
+            className="text-3xl font-extrabold text-[#d72f40] sm:text-[2.25rem] lg:text-[2.65rem]"
+          />
+          <span className="whitespace-pre-line text-xs font-medium leading-tight text-zinc-500 lg:text-sm">
+            {insight.metricLabel}
+          </span>
+        </div>
+      )}
+      {insight.slug && (
+        <Link
+          href={`/media-events/${insight.slug}`}
+          className="pf-interactive mt-8 inline-flex min-h-11 items-center gap-2 font-display text-sm font-bold text-[#a02f52] hover:text-[#c64047]"
+        >
+          Read article
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </Link>
+      )}
 
       {/* Pagination & Carousel Controls */}
       {total > 1 && (

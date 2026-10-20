@@ -79,6 +79,7 @@ function Media({
       {/* Teal stat card clipping the still's lower corner. Alternating its side
           with the media/copy layout preserves the mockup's first-row left and
           second-row right placements without covering subjects' faces. */}
+      {article.cardValue && (
       <div
         className={`absolute -bottom-5 z-10 w-[8.5rem] rounded-lg bg-[#60aaaa] px-4 py-4 text-white shadow-[0_14px_30px_-14px_rgba(40,80,70,0.7)] sm:w-[9.5rem] sm:py-5 ${
           statSide === "right" ? "right-0" : "left-0"
@@ -92,6 +93,7 @@ function Media({
           {article.cardLabel}
         </p>
       </div>
+      )}
     </div>
   );
 }
@@ -107,15 +109,17 @@ function Copy({ article }: { article: Article }) {
       <p className="mt-3 text-[0.7rem] leading-relaxed text-zinc-500 sm:text-[0.75rem]">
         {article.blurb}
       </p>
-      <div className="mt-6 flex items-center gap-3">
-        <CountUp
-          value={article.metric}
-          className="text-2xl font-extrabold text-[#e0325a] sm:text-[1.75rem]"
-        />
-        <span className="whitespace-pre-line text-[0.65rem] font-medium leading-tight text-zinc-500">
-          {article.metricLabel}
-        </span>
-      </div>
+      {article.metric && (
+        <div className="mt-6 flex items-center gap-3">
+          <CountUp
+            value={article.metric}
+            className="text-2xl font-extrabold text-[#e0325a] sm:text-[1.75rem]"
+          />
+          <span className="whitespace-pre-line text-[0.65rem] font-medium leading-tight text-zinc-500">
+            {article.metricLabel}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
-/* Blog loaders. Unlike the marketing content there is no local fallback: an
-   unreachable or empty API simply means "no posts yet", and the pages render
-   an empty state. Only published posts are ever returned by the API. */
+/* Blog loaders (the CMS behind Media / Events, formerly Insights). Only
+   published posts are ever returned by the API. getInsights() in ./index adds
+   the local fallback for the listing; the detail loader has none. */
 
 import { ApiError, ApiNotConfiguredError, apiFetch } from "@/app/lib/api";
 import type { ApiBlogCategory, ApiBlogPost } from "./types";
@@ -18,6 +18,13 @@ export type BlogPost = {
   imageAlt: string;
   category?: { name: string; slug: string };
   author?: string;
+  metric: string;
+  metricLabel: string;
+  cardValue: string;
+  cardLabel: string;
+  studioImage?: string;
+  studioImageAlt?: string;
+  videoUrl?: string;
   publishedAt?: string;
   updatedAt: string;
   readingMinutes: number;
@@ -40,6 +47,13 @@ function mapPost(row: ApiBlogPost): BlogPost {
         ? { name: row.category_name, slug: row.category_slug }
         : undefined,
     author: row.author_name || undefined,
+    metric: row.metric,
+    metricLabel: row.metric_label,
+    cardValue: row.card_value,
+    cardLabel: row.card_label,
+    studioImage: row.studio_image ?? undefined,
+    studioImageAlt: row.studio_image_alt || undefined,
+    videoUrl: row.video_url || undefined,
     publishedAt: row.published_at ?? undefined,
     updatedAt: row.updated_at,
     readingMinutes: row.reading_minutes,

@@ -74,35 +74,6 @@ export type ApiPodcast = {
   is_active: boolean;
 };
 
-export type ApiInsightCategory = {
-  id: number;
-  name: string;
-  slug: string;
-  display_order: number;
-  is_active: boolean;
-};
-
-export type ApiInsight = {
-  id: number;
-  /* Foreign key id, not a nested object — resolved against the category list. */
-  category: number | null;
-  title: string;
-  slug: string;
-  summary: string;
-  content: string;
-  metric: string | null;
-  metric_label: string | null;
-  card_value: string | null;
-  card_label: string | null;
-  thumbnail: string | null;
-  thumbnail_alt: string | null;
-  studio_thumbnail: string | null;
-  studio_thumbnail_alt: string | null;
-  video_url: string | null;
-  order: number;
-  publish_status: "draft" | "published";
-};
-
 export type ApiFeaturedWork = {
   id: number;
   title: string;
@@ -138,6 +109,14 @@ export type ApiBlogPost = {
   featured_image: string | null;
   featured_image_alt: string;
   author_name: string;
+  metric: string;
+  metric_label: string;
+  card_value: string;
+  card_label: string;
+  studio_image: string | null;
+  studio_image_alt: string;
+  video_url: string;
+  order: number;
   status: "draft" | "published";
   published_at: string | null;
   meta_title: string;

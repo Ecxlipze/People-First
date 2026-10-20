@@ -15,7 +15,6 @@ urlpatterns = [
     path('api/', include('ventures.urls')),
     path('api/', include('gallery.urls')),
     path('api/', include('testimonial.urls')),
-    path('api/', include('insight_category.urls')),
     path('api/', include('inquiry.urls')),
     path('api/', include('Podcast.urls')),
     path('api/', include('blog.urls')),

@@ -89,7 +89,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "About", href: "/about" },
       { label: "Services", href: "/what-we-do" },
       { label: "Gallery", href: "/gallery" },
-      { label: "Blog", href: "/blog" },
+      { label: "Media / Events", href: "/media-events" },
       { label: "Podcast", href: "/podcasts" },
       { label: "Contact", href: "/contact" },
     ],

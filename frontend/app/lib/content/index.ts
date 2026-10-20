@@ -17,8 +17,6 @@ import { ApiNotConfiguredError, apiFetch } from "@/app/lib/api";
 import type {
   ApiFeaturedWork,
   ApiGalleryItem,
-  ApiInsight,
-  ApiInsightCategory,
   ApiPodcast,
   ApiTestimonial,
   ApiVenture,
@@ -40,6 +38,7 @@ import {
 } from "@/app/podcasts/episodes";
 import { INSIGHTS, type Insight } from "@/app/media-events/insights";
 import type { Article } from "@/app/ideas-lab/articles";
+import { getBlogPosts } from "./blog";
 import {
   DEFAULT_EVENTS_BLOCK,
   DEFAULT_PODCAST_BLOCK,
@@ -230,46 +229,38 @@ export async function getEpisodes(): Promise<Episode[]> {
 }
 
 export async function getInsights(): Promise<Insight[]> {
-  /* Two calls because Insight.category serialises as a bare foreign-key id.
-     Both are cached on the same timer, so this is one extra request per
-     revalidation window, not per visitor. */
-  const [rows, categories] = await Promise.all([
-    list<ApiInsight>("/api/insights/"),
-    list<ApiInsightCategory>("/api/insight-categories/"),
-  ]);
-
-  const categoryName = new Map((categories ?? []).map((c) => [c.id, c.name]));
-
-  return withFallback(
-    rows,
-    (items) =>
-      items.map((item) => ({
-        title: item.title,
-        blurb: item.summary,
-        category:
-          (item.category !== null ? categoryName.get(item.category) : undefined) ?? "",
-        metric: item.metric ?? "",
-        metricLabel: item.metric_label ?? "",
-        cardValue: item.card_value ?? "",
-        cardLabel: item.card_label ?? "",
-        thumb: item.thumbnail ?? undefined,
-        thumbAlt: item.thumbnail_alt ?? item.title,
-        studioThumb: item.studio_thumbnail ?? undefined,
-        studioThumbAlt: item.studio_thumbnail_alt ?? undefined,
-        videoUrl: item.video_url ?? undefined,
-        /* No backend column: object-position was tuned per supplied still and
-           there is no way to know an uploaded image's framing. Centred crop. */
+  /* Insights are blog posts now (Admin -> Blog). The local INSIGHTS remain the
+     fallback until the first post is published, per the rule above. */
+  const posts = await getBlogPosts();
+  return posts.length > 0
+    ? posts.map((post) => ({
+        slug: post.slug,
+        title: post.title,
+        blurb: post.excerpt,
+        category: post.category?.name ?? "",
+        metric: post.metric,
+        metricLabel: post.metricLabel,
+        cardValue: post.cardValue,
+        cardLabel: post.cardLabel,
+        thumb: post.image,
+        thumbAlt: post.imageAlt,
+        studioThumb: post.studioImage,
+        studioThumbAlt: post.studioImageAlt,
+        videoUrl: post.videoUrl,
+        /* No backend column: object-position was tuned per supplied still. */
         thumbPosition: undefined,
-      })),
-    INSIGHTS,
-  );
+      }))
+    : INSIGHTS;
 }
 
 /* Ideas Lab rows are the insights plus a link, exactly as before — derived so
    the two pages cannot drift apart. */
 export async function getArticles(): Promise<Article[]> {
   const insights = await getInsights();
-  return insights.map((insight) => ({ ...insight, href: "/media-events" }));
+  return insights.map((insight) => ({
+    ...insight,
+    href: insight.slug ? `/media-events/${insight.slug}` : "/media-events",
+  }));
 }
 
 /* /home's Featured Work section consists of two blocks:

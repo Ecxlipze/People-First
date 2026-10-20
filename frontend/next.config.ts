@@ -56,6 +56,9 @@ const nextConfig: NextConfig = {
         destination: "/contact",
         permanent: true,
       },
+      /* The standalone blog is now Media / Events. */
+      { source: "/blog", destination: "/media-events", permanent: true },
+      { source: "/blog/:slug", destination: "/media-events/:slug", permanent: true },
       /* The page was renamed "Insights by People First" -> "Media / Events". */
       {
         source: "/insights",

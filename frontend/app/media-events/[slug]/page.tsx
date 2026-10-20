@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
-import BlogHeader, { BLOG_PAGE_BG, formatPostDate } from "@/app/blog/BlogHeader";
+import BlogHeader, { BLOG_PAGE_BG, formatPostDate } from "@/app/media-events/ArticleChrome";
 import { getBlogPost } from "@/app/lib/content/blog";
 import { getBaseUrl } from "@/app/lib/seo";
 
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.metaTitle,
     description: post.metaDescription,
-    alternates: { canonical: `/blog/${post.slug}` },
+    alternates: { canonical: `/media-events/${post.slug}` },
     openGraph: {
       type: "article",
       title: post.metaTitle,
@@ -40,7 +40,7 @@ export default async function BlogPostPage({ params }: Props) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription,
-    mainEntityOfPage: `${getBaseUrl()}/blog/${post.slug}`,
+    mainEntityOfPage: `${getBaseUrl()}/media-events/${post.slug}`,
     ...(post.image ? { image: [post.image] } : {}),
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     dateModified: post.updatedAt,
@@ -60,20 +60,18 @@ export default async function BlogPostPage({ params }: Props) {
         <BlogHeader />
         <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-10 sm:px-10 lg:pr-24">
           <Link
-            href="/blog"
+            href="/media-events"
             className="pf-interactive inline-flex min-h-11 items-center gap-2 font-display text-sm font-bold text-[#a02f52] hover:text-[#c64047]"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
-            All posts
+            Media / Events
           </Link>
 
           <article className="mt-4">
             <header>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold uppercase tracking-wider text-zinc-500">
                 {post.category && (
-                  <Link href={`/blog?category=${post.category.slug}`} className="text-[#a02f52] hover:underline">
-                    {post.category.name}
-                  </Link>
+                  <span className="text-[#a02f52]">{post.category.name}</span>
                 )}
                 {post.publishedAt && (
                   <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt)}</time>

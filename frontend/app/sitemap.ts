@@ -16,7 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/ideas-lab',
     '/media-events',
     '/what-we-do',
-    '/blog',
     '/podcasts',
     '/privacy',
     '/terms',
@@ -33,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
+    url: `${baseUrl}/media-events/${post.slug}`,
     lastModified: new Date(post.updatedAt),
     changeFrequency: 'monthly',
     priority: 0.6,

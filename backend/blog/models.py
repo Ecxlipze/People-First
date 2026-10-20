@@ -67,6 +67,20 @@ class BlogPost(models.Model):
     featured_image_alt = models.CharField(max_length=255, blank=True)
     author_name = models.CharField(max_length=120, blank=True)
 
+    # Optional extras for the Media / Events feature layout (the red headline
+    # metric, the teal stat card, a wider editorial image, a video link). Blank
+    # on an ordinary article; the page simply omits what is blank.
+    metric = models.CharField(max_length=100, blank=True)
+    metric_label = models.CharField(max_length=255, blank=True)
+    card_value = models.CharField(max_length=100, blank=True)
+    card_label = models.CharField(max_length=255, blank=True)
+    studio_image = models.ImageField(upload_to="blog/studio/", null=True, blank=True)
+    studio_image_alt = models.CharField(max_length=255, blank=True)
+    video_url = models.URLField(blank=True)
+    order = models.PositiveIntegerField(
+        default=0, help_text="Lower numbers come first on Media / Events; ties go newest first.",
+    )
+
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
     published_at = models.DateTimeField(
         null=True, blank=True,
@@ -84,7 +98,7 @@ class BlogPost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["-published_at", "-created_at"]
+        ordering = ["order", "-published_at", "-created_at"]
 
     def __str__(self):
         return self.title

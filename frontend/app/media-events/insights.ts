@@ -19,6 +19,8 @@
 export type InsightCategory = string;
 
 export type Insight = {
+  /* Set for CMS posts, which have an article page at /media-events/<slug>. */
+  slug?: string;
   title: string;
   blurb: string;
   category: InsightCategory;

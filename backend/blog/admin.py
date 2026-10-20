@@ -27,7 +27,7 @@ def unpublish(modeladmin, request, queryset):
 @admin.register(BlogPost)
 class BlogPostAdmin(SummernoteModelAdmin):
     summernote_fields = ("content",)
-    list_display = ("title", "category", "status", "published_at", "updated_at")
+    list_display = ("title", "category", "status", "published_at", "order", "updated_at")
     list_filter = ("status", "category")
     search_fields = ("title", "excerpt", "content")
     prepopulated_fields = {"slug": ("title",)}
@@ -37,8 +37,15 @@ class BlogPostAdmin(SummernoteModelAdmin):
     fieldsets = (
         ("Post", {"fields": ("title", "slug", "category", "author_name", "excerpt", "content")}),
         ("Featured image", {"fields": ("featured_image", "featured_image_alt")}),
+        ("Media / Events feature card (optional)", {
+            "fields": ("metric", "metric_label", "card_value", "card_label",
+                       "studio_image", "studio_image_alt", "video_url"),
+            "classes": ("collapse",),
+            "description": "Optional. The red headline metric, teal stat card and wide image used in the "
+                           "Media / Events layout. Leave blank for an ordinary article.",
+        }),
         ("Publishing", {
-            "fields": ("status", "published_at"),
+            "fields": ("status", "published_at", "order"),
             "description": "Leave as Draft to save without publishing. Choosing Published makes the post live "
                            "on /blog within minutes; a future date schedules it.",
         }),

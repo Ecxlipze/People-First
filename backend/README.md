@@ -15,7 +15,7 @@ http://127.0.0.1:8000/api/
 Example:
 
 ```text
-http://127.0.0.1:8000/api/insights/
+http://127.0.0.1:8000/api/blog-posts/
 ```
 
 > Replace the base URL with the production API URL when the backend is deployed.
@@ -76,19 +76,6 @@ The other inquiry operations are admin-only.
 | Testimonials | PUT | `/api/testimonials/{id}/` | Admin |
 | Testimonials | PATCH | `/api/testimonials/{id}/` | Admin |
 | Testimonials | DELETE | `/api/testimonials/{id}/` | Admin |
-| Insight Categories | GET | `/api/insight-categories/` | Public |
-| Insight Categories Detail | GET | `/api/insight-categories/{id}/` | Public |
-| Insight Categories | POST | `/api/insight-categories/` | Admin |
-| Insight Categories | PUT | `/api/insight-categories/{id}/` | Admin |
-| Insight Categories | PATCH | `/api/insight-categories/{id}/` | Admin |
-| Insight Categories | DELETE | `/api/insight-categories/{id}/` | Admin |
-| Insights | GET | `/api/insights/` | Public |
-| Insight Detail | GET | `/api/insights/{id}/` | Public |
-| Insight Filter | GET | `/api/insights/?category={slug}` | Public |
-| Insights | POST | `/api/insights/` | Admin |
-| Insights | PUT | `/api/insights/{id}/` | Admin |
-| Insights | PATCH | `/api/insights/{id}/` | Admin |
-| Insights | DELETE | `/api/insights/{id}/` | Admin |
 | Podcasts | GET | `/api/podcasts/` | Public |
 | Podcast Detail | GET | `/api/podcasts/{id}/` | Public |
 | Latest Podcast | GET | `/api/podcasts/latest/` | Public |
@@ -273,7 +260,9 @@ If the backend serializer exposes `hasAvatar`, it is generated from the `avatar`
 
 ---
 
-# 8. Insight Categories API
+# 8. Insight Categories API (retired)
+
+> **Retired.** Insights are now blog posts (see section 11). These endpoints are no longer routed; the section is kept for reference.
 
 ## Endpoints
 
@@ -308,7 +297,9 @@ DELETE /api/insight-categories/{id}/
 
 ---
 
-# 9. Insights API
+# 9. Insights API (retired)
+
+> **Retired.** Insights are now blog posts (see section 11). These endpoints are no longer routed; the section is kept for reference.
 
 ## Endpoints
 
@@ -838,13 +829,13 @@ POST /api/inquiries/
 ## GET All Insights
 
 ```http
-GET http://127.0.0.1:8000/api/insights/
+GET http://127.0.0.1:8000/api/blog-posts/
 ```
 
 ## GET Category Insights
 
 ```http
-GET http://127.0.0.1:8000/api/insights/?category=ai
+GET http://127.0.0.1:8000/api/blog-posts/?category=ai
 ```
 
 ## GET Latest Podcast
@@ -1091,7 +1082,12 @@ variable. To manage hosted admin accounts, use
 
 ---
 
-# 11. Blog CMS
+# 11. Blog CMS (Media / Events)
+
+Blog posts **are** the site's Insights: the Media / Events page (`/media-events`) and Ideas Lab
+read from them. The old Insights admin and `/api/insights/` endpoints were removed; existing
+insights were copied into blog posts by migration `blog.0003_import_insights` (the old
+`insight_category` tables are kept untouched as a backup).
 
 Posts are written in Django Admin (`/admin/` → **Blog → Blog posts**) with a rich text
 editor (django-summernote: headings, bold/italic/underline, colours, lists, links,
@@ -1108,12 +1104,14 @@ tables, inline image upload). Only staff users can log in; create editors with
 - Post bodies are sanitised on save (scripts, iframes and event handlers are stripped).
 
 ```http
-GET /api/blog-posts/                  # published only; no `content`; ?category=<slug>
+GET /api/blog-posts/                  # published only; no `content`; ?category=<slug>; ordered by `order`, newest first
 GET /api/blog-posts/{slug}/           # includes sanitised HTML `content`
 GET /api/blog-categories/
 POST/PUT/PATCH/DELETE ...             # staff (JWT) only
 ```
 
-Drafts and scheduled posts are hidden from anonymous callers. Frontend routes: `/blog`
-(category filter + pagination via `?category=` / `?page=`) and `/blog/<slug>`. In
+Drafts and scheduled posts are hidden from anonymous callers. Frontend routes: `/media-events`
+(category filter, one feature at a time) and `/media-events/<slug>`; `/blog` and `/insights`
+redirect there. The optional *Media / Events feature card* fields (metric, stat card, wide
+image, video link) are shown on the feature layout when filled and hidden when blank. In
 production run `collectstatic` so the editor's assets are served.
