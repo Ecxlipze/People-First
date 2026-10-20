@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
 import BlogHeader, { BLOG_PAGE_BG, formatPostDate } from "@/app/media-events/ArticleChrome";
+import ShareButtons from "@/app/media-events/ShareButtons";
 import { getBlogPost } from "@/app/lib/content/blog";
 import { getBaseUrl } from "@/app/lib/seo";
 
@@ -58,7 +59,7 @@ export default async function BlogPostPage({ params }: Props) {
       <SideNav />
       <div className={BLOG_PAGE_BG}>
         <BlogHeader />
-        <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-10 sm:px-10 lg:pr-24">
+        <main className="mx-auto w-full max-w-5xl px-5 pb-24 pt-10 sm:px-8 lg:pl-8 lg:pr-24">
           <Link
             href="/media-events"
             className="pf-interactive inline-flex min-h-11 items-center gap-2 font-display text-sm font-bold text-[#a02f52] hover:text-[#c64047]"
@@ -102,6 +103,7 @@ export default async function BlogPostPage({ params }: Props) {
               className="pf-prose mt-10"
               dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
             />
+            <ShareButtons title={post.title} path={`/media-events/${post.slug}`} />
           </article>
         </main>
         <SiteFooter />

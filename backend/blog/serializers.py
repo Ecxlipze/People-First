@@ -1,4 +1,5 @@
 import re
+from html import unescape as html_unescape
 
 from django.conf import settings
 from rest_framework import serializers
@@ -6,11 +7,11 @@ from rest_framework import serializers
 from .models import BlogCategory, BlogPost
 
 
-def plain_text(html: str) -> str:
+def plain_text(text: str) -> str:
     # Block tags become spaces so a heading never runs into the paragraph after
     # it; inline tags (bold, links) vanish so "bold." keeps its full stop.
-    html = re.sub(r"</?(?:p|h[1-6]|li|ul|ol|div|br|hr|blockquote|pre|tr|td|th|figure|figcaption)\b[^>]*>", " ", html or "")
-    return " ".join(re.sub(r"<[^>]+>", "", html).split())
+    text = re.sub(r"</?(?:p|h[1-6]|li|ul|ol|div|br|hr|blockquote|pre|tr|td|th|figure|figcaption)\b[^>]*>", " ", text or "")
+    return " ".join(html_unescape(re.sub(r"<[^>]+>", "", text)).split())
 
 
 class BlogCategorySerializer(serializers.ModelSerializer):
@@ -34,7 +35,9 @@ class BlogPostListSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if not data.get("excerpt"):
+        request = self.context.get("request")
+        raw = request is not None and request.query_params.get("raw")  # the CMS wants the stored value
+        if not data.get("excerpt") and not raw:
             text = plain_text(instance.content)
             data["excerpt"] = text[:180].rsplit(" ", 1)[0] + "…" if len(text) > 180 else text
         return data

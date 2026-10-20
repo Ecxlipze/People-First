@@ -45,6 +45,10 @@ function mediaPatterns(): NonNullable<NextConfig["images"]>["remotePatterns"] {
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
+  /* Server Actions default to a 1 MB request cap, which rejects ordinary photos
+     from the CMS (featured images, podcast thumbnails, multi-photo gallery
+     uploads). The CMS enforces its own per-file limits. */
+  experimental: { serverActions: { bodySizeLimit: "60mb" } },
   images: {
     remotePatterns: mediaPatterns(),
     dangerouslyAllowLocalIP: true,

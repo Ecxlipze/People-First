@@ -5,11 +5,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from people_first.auth_views import ThrottledTokenObtainPairView
 from people_first.media_views import media_file
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', ThrottledTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/',include('featured_work.urls')),
     path('api/', include('ventures.urls')),

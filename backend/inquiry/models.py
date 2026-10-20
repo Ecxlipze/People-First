@@ -26,6 +26,17 @@ class Inquiry(models.Model):
     inquiry_type = models.CharField(max_length=30, choices=INQUIRY_TYPES, default="contact_us")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Handling state, set by staff in the CMS inbox. Never accepted from the
+    # public form (see InquirySerializer).
+    STATUSES = [
+        ("new", "New"),
+        ("read", "Read"),
+        ("replied", "Replied"),
+        ("archived", "Archived"),
+    ]
+    status = models.CharField(max_length=10, choices=STATUSES, default="new", db_index=True)
+    staff_notes = models.TextField(blank=True)
+
     class Meta:
         ordering = ["-created_at"]
 

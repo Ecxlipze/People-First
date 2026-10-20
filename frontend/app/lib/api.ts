@@ -40,13 +40,15 @@ function baseUrl(): string {
 export type ApiFetchOptions = Omit<RequestInit, "body"> & {
   /* JSON-serialised automatically; set Content-Type for you. */
   json?: unknown;
+  /* Multipart upload (files). The browser/runtime sets the boundary header. */
+  formData?: FormData;
   /* Seconds. Content reads should cache; mutations must not. */
   revalidate?: number | false;
 };
 
 export async function apiFetch<T>(
   path: string,
-  { json, revalidate, headers, ...init }: ApiFetchOptions = {},
+  { json, formData, revalidate, headers, ...init }: ApiFetchOptions = {},
 ): Promise<T> {
   const url = `${baseUrl()}${path.startsWith("/") ? path : `/${path}`}`;
 
@@ -57,7 +59,7 @@ export async function apiFetch<T>(
       ...(json !== undefined ? { "Content-Type": "application/json" } : null),
       ...headers,
     },
-    body: json !== undefined ? JSON.stringify(json) : undefined,
+    body: formData ?? (json !== undefined ? JSON.stringify(json) : undefined),
     /* A mutation must never be served from the Next data cache, and must never
        be revalidated into one. */
     cache: revalidate === false ? "no-store" : init.cache,

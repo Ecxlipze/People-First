@@ -1115,3 +1115,49 @@ Drafts and scheduled posts are hidden from anonymous callers. Frontend routes: `
 redirect there. The optional *Media / Events feature card* fields (metric, stat card, wide
 image, video link) are shown on the feature layout when filled and hidden when blank. In
 production run `collectstatic` so the editor's assets are served.
+
+## Content Studio (`/cms`)
+
+Editors who should not use Django Admin sign in at **`<site>/cms`** (e.g. `https://peoplefirst.example/cms`):
+a branded page to create, edit, publish/unpublish, schedule and delete posts, with a rich text
+editor (headings, bold/italic/underline, lists, quotes, links, inline images), featured image,
+categories, a Google-style SEO preview, and the Media / Events feature-card fields.
+
+- Sign in with a Django **staff** account (Admin -> Users -> *Staff status*). Non-staff accounts are
+  rejected. Django remains the authority: every write is made with the editor's own JWT.
+- The Next.js server holds the JWT pair in `httpOnly` cookies scoped to `/cms`; the browser never
+  sees `API_BASE_URL`. The page is `noindex` and not linked from the public site.
+- Publishing/unpublishing/deleting revalidates `/media-events`, `/ideas-lab` and the sitemap, so
+  changes show immediately rather than after the 5-minute content cache.
+- API additions: `GET /api/blog-session/` (staff check), `POST /api/blog-uploads/` (staff-only
+  inline image upload: JPEG/PNG/GIF/WebP, 5 MB), `GET /api/blog-posts/<slug>/?raw=1` (stored
+  excerpt, no auto-fill), and `/api/token/` is throttled to 20 requests/minute.
+- **Podcasts tab (`/cms/podcasts`):** add, edit, hide/show and delete episodes; "Fetch from YouTube"
+  fills title, thumbnail and duration from a link; "Sync from YouTube" runs the same import as
+  `manage.py sync_youtube_podcasts`. Backed by staff-only `POST /api/podcasts/sync/` and
+  `GET /api/podcasts/lookup/?url=`.
+- **Gallery tab (`/cms/gallery`):** upload several photos at once (10 MB each), reorder with the arrow
+  buttons, edit the screen-reader description / caption, hide/show, replace or delete. The home-page
+  carousel reads these via `/api/gallery/`. While the gallery is empty the site shows its built-in
+  photos; once one photo exists, only the CMS photos are shown.
+- Server Actions accept request bodies up to 60 MB (`serverActions.bodySizeLimit` in `next.config.ts`)
+  so photo uploads work; the CMS enforces its own per-file limits.
+- **Inquiries tab (`/cms/inquiries`):** the website forms' messages as an inbox. Each has a status
+  (New / Read / Replied / Archived; opening a new message marks it Read) and private staff notes.
+  Search by name, email, phone or message, filter by status and form type, reply by email / call /
+  WhatsApp links, delete, and **Export CSV** (respects the current filters; spreadsheet-formula
+  characters are neutralised). The nav shows the unread count.
+  API: `GET /api/inquiries/` is now paginated (`{count, results}`, 25/page, `?page=`, `?q=`, `?status=`,
+  `?type=`), plus `GET /api/inquiries/summary/` and `GET /api/inquiries/export/` (staff only).
+  `PUT` is no longer accepted; `PATCH` can change only `status` and `staff_notes`. The public
+  `POST /api/inquiries/` is unchanged and cannot set or see either field.
+- **Testimonials tab (`/cms/testimonials`):** add, edit (photo, role/handle, quote, comma-separated
+  tags, link), reorder, hide/show, delete. With no photo the site shows a coloured initial.
+- **Ventures tab (`/cms/ventures`):** add, edit (logo, tagline, website, colour), reorder, hide/show,
+  delete. Card colours are the three design-approved presets (Crimson, Teal, Indigo) or a custom
+  accent plus a plain CSS gradient (anything else is rejected, since it ends up in an inline style).
+  A venture with no website shows the "coming soon" card.
+- As with the gallery, the home page shows its built-in testimonials/ventures until the first one is
+  added in the CMS; after that only the CMS entries are shown.
+- Forms submit through `useCmsForm` (not `<form action>`), so a failed validation keeps what the
+  editor typed instead of resetting the fields.

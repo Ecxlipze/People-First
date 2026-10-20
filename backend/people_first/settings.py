@@ -45,6 +45,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    # Brute-force guard on /api/token/ (the CMS sign-in). The Next.js server is the
+    # only caller, so this is one shared bucket for the whole site.
+    'DEFAULT_THROTTLE_RATES': {'token': '20/min'},
 }
 
 # Application definition

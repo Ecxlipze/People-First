@@ -15,6 +15,7 @@
 
 # Large binary drops that should not live in git history
 *.zip
+*.tar.gz
 
 # Standalone coming-soon page (FTP-deployed, outside the Next build)
 coming-soon/backups/
