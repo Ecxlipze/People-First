@@ -259,10 +259,10 @@ export default function StoryShowcase() {
                   white silhouette, losing the fan colours and teal "First". */}
               <span className="flex aspect-square w-[29%] min-w-14 flex-none items-center justify-center rounded-full bg-[linear-gradient(135deg,#0286a4_0%,#035688_100%)]">
                 <Image
-                  src="/images/logo-light.webp"
+                  src="/images/logo-light.png"
                   alt="People First"
-                  width={800}
-                  height={184}
+                  width={1000}
+                  height={252}
                   className="w-[84%] object-contain"
                 />
               </span>

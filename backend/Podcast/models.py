@@ -33,6 +33,9 @@ class Podcast(models.Model):
         help_text="Pin this episode to the featured section on /insights (up to 3).",
     )
     is_active = models.BooleanField(default=True)
+    # YouTube's view count for the video, refreshed by the sync (hourly via the
+    # public list endpoint). Read-only in the API.
+    view_count = models.PositiveBigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

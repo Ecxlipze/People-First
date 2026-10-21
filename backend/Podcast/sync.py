@@ -50,6 +50,10 @@ def run_sync(*, limit=None, refresh=False, dry_run=False, log=lambda line: None)
             if existing.published_at is None or refresh:
                 existing.published_at = v["published_at"]
                 changed.append("published_at")
+            views = v.get("views")
+            if views is not None and existing.view_count != views:
+                existing.view_count = views
+                changed.append("view_count")
             if refresh:
                 existing.title, existing.description = v["title"], v["description"] or v["title"]
                 changed += ["title", "description"]
@@ -65,6 +69,7 @@ def run_sync(*, limit=None, refresh=False, dry_run=False, log=lambda line: None)
             video_url=f"https://www.youtube.com/watch?v={vid}",
             youtube_video_id=vid,
             published_at=v["published_at"],
+            view_count=v.get("views") or 0,
             supporting_title=v["published_at"].strftime("%b %Y"),
             supporting_content=f"Published by {v['author']}" if v["author"] else "Published",
         )

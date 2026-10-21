@@ -6,6 +6,7 @@ import { Play, ChevronLeft, ChevronRight, ExternalLink, Share2, Check } from "lu
 import { TOTAL_PAGES, type Episode } from "@/app/podcasts/episodes";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 import VideoModal from "@/app/components/VideoModal";
+import { formatViews } from "@/app/lib/format";
 
 /* Podcasts → "Our Podcasts". Deep-purple band holding one wide white card per
    episode: thumbnail with a play motif and a coloured corner badge on the
@@ -147,6 +148,11 @@ export default function OurPodcasts({
                             timeZone: "UTC",
                           })}
                         </time>
+                      )}
+                      {formatViews(ep.viewCount) && (
+                        <span className="font-display text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                          {formatViews(ep.viewCount)}
+                        </span>
                       )}
                       {isLatest && (
                         <span className="inline-flex items-center gap-1.5 rounded-md bg-[#a02f52]/10 px-2.5 py-0.5 font-display text-[11px] font-extrabold uppercase tracking-wider text-[#a02f52]">

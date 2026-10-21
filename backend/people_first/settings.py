@@ -47,7 +47,7 @@ REST_FRAMEWORK = {
     ),
     # Brute-force guard on /api/token/ (the CMS sign-in). The Next.js server is the
     # only caller, so this is one shared bucket for the whole site.
-    'DEFAULT_THROTTLE_RATES': {'token': '20/min'},
+    'DEFAULT_THROTTLE_RATES': {'token': '20/min', 'password': '10/min'},
 }
 
 # Application definition

@@ -4,6 +4,7 @@ import Image from "next/image";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
 import InsightsBoard from "@/app/media-events/sections/InsightsBoard";
+import BlogSidebar from "@/app/media-events/BlogSidebar";
 import FeaturedPodcast from "@/app/media-events/sections/FeaturedPodcast";
 import { getEpisodes, getInsights } from "@/app/lib/content";
 
@@ -49,10 +50,10 @@ export default async function InsightsPage() {
             className="group inline-flex min-h-11 items-center"
           >
             <Image
-              src="/images/logo.svg"
+              src="/images/logo.png"
               alt="People First"
-              width={398}
-              height={100}
+              width={1000}
+              height={252}
               priority
               className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
             />
@@ -60,8 +61,20 @@ export default async function InsightsPage() {
         </header>
 
         <main>
-          <h1 className="sr-only">Media / Events</h1>
-          <InsightsBoard insights={insights} />
+          <InsightsBoard
+            insights={insights}
+            sidebar={
+              <BlogSidebar
+                posts={insights.map((i) => ({
+                  slug: i.slug,
+                  title: i.title,
+                  image: i.thumb,
+                  imageAlt: i.thumbAlt,
+                  publishedAt: i.publishedAt,
+                }))}
+              />
+            }
+          />
           {/* Featured podcasts section (up to 3 episodes) */}
           {featuredEpisodes.length > 0 && (
             <FeaturedPodcast episodes={featuredEpisodes} />

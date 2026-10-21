@@ -19,8 +19,13 @@ export const metadata: Metadata = {
    (`sticky top-0 h-screen`) and SECTION 2 rises up and over it, carrying the
    covering-block styling (opaque bg, rounded top, upward shadow, higher
    z-index, small negative top margin) the way FeaturedWork does on /home. */
+/* "Recommended" is a short list, not the whole archive: the first few by the
+   editors' order (then newest). The rest live on /media-events, which the
+   section links to. */
+const RECOMMENDED_COUNT = 3;
+
 export default async function IdeasLabPage() {
-  const articles = await getArticles();
+  const articles = (await getArticles()).slice(0, RECOMMENDED_COUNT);
 
   return (
     <>

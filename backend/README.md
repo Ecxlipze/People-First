@@ -83,12 +83,39 @@ The other inquiry operations are admin-only.
 | Podcasts | PUT | `/api/podcasts/{id}/` | Admin |
 | Podcasts | PATCH | `/api/podcasts/{id}/` | Admin |
 | Podcasts | DELETE | `/api/podcasts/{id}/` | Admin |
+| Blog post view | POST | `/api/blog-posts/{slug}/view/` | Public |
+| Blog posts | POST | `/api/blog-posts/` | Admin, or Blog Author (saved as own draft) |
+| Blog post | PUT/PATCH | `/api/blog-posts/{slug}/` | Admin, or Blog Author on their own drafts only |
+| Blog post | DELETE | `/api/blog-posts/{slug}/` | Admin |
 | Inquiries | POST | `/api/inquiries/` | Public |
 | Inquiries | GET | `/api/inquiries/` | Admin |
 | Inquiry Detail | GET | `/api/inquiries/{id}/` | Admin |
 | Inquiries | PUT | `/api/inquiries/{id}/` | Admin |
 | Inquiries | PATCH | `/api/inquiries/{id}/` | Admin |
 | Inquiries | DELETE | `/api/inquiries/{id}/` | Admin |
+
+## Blog Authors role (CMS)
+
+A restricted CMS account for writers. In the Django admin create a user, leave
+**Staff status off**, keep **Active** on, and add them to the **Blog Authors**
+group (created by migration `blog.0006`). They can sign in to `/cms`, where they
+see only Blog posts. Over the API they may:
+
+- read published posts plus their own drafts (never anyone else's drafts);
+- create posts, always saved as `draft`, with `author` set to them and
+  `author_name` forced to their full name (or username);
+- edit only their own posts while they are still drafts (once an admin
+  publishes one it is read-only to them); `status`, `published_at`, `order` and
+  `author_name` are ignored if sent;
+- upload inline images (`/api/blog-uploads/`).
+
+They cannot delete, publish, create categories, or use any other endpoint.
+`GET /api/blog-session/` returns `{username, display_name, role}`; posts carry
+read-only `is_mine` and `editable` flags. `GET/PATCH /api/profile/` (first name,
+last name, email) and `POST /api/profile/password/` (`current_password`,
+`new_password`, validated and throttled to 10/min) let any CMS user manage
+their own account. Admins assign `author` on a post in
+the Django admin.
 
 ---
 
@@ -408,6 +435,19 @@ published
 ---
 
 # 10. Podcasts API
+
+## View and subscriber counts
+
+- `Podcast.view_count` is YouTube's view count for the episode. The sync
+  (`sync_youtube_podcasts`, and the hourly auto-sync on `GET /api/podcasts/`)
+  refreshes it. It comes from the channel RSS feed, which carries counts for the
+  15 newest videos only (older episodes keep their last value); if
+  `YOUTUBE_API_KEY` happens to be set, the API path covers every video.
+  Read-only in the API.
+- `BlogPost.view_count` is incremented by `POST /api/blog-posts/{slug}/view/`
+  (public, atomic, 404 for drafts and scheduled posts). The site calls it once
+  per reader per post per 24 hours. It is an unauthenticated counter, so treat
+  it as a popularity signal, not an audited metric. Read-only in the API.
 
 ## Endpoints
 

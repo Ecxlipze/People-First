@@ -112,7 +112,7 @@ export default function RootLayout({
                   "@type": "Organization",
                   name: "People First",
                   url: getBaseUrl(),
-                  logo: `${getBaseUrl()}/icon.svg`,
+                  logo: `${getBaseUrl()}/images/logo.png`,
                 },
               ],
             }),

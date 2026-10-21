@@ -24,10 +24,30 @@ class BlogPostListSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source="category.name", read_only=True, default=None)
     category_slug = serializers.CharField(source="category.slug", read_only=True, default=None)
     reading_minutes = serializers.SerializerMethodField()
+    is_mine = serializers.SerializerMethodField()
+    editable = serializers.SerializerMethodField()
 
     class Meta:
         model = BlogPost
-        exclude = ["content"]
+        exclude = ["content", "author"]
+        read_only_fields = ["view_count"]
+
+    def _user(self):
+        request = self.context.get("request")
+        return getattr(request, "user", None)
+
+    def get_is_mine(self, obj):
+        user = self._user()
+        return bool(user and user.is_authenticated and obj.author_id == user.id)
+
+    def get_editable(self, obj):
+        """Whether the CMS should offer to edit this post to the current user."""
+        user = self._user()
+        if not (user and user.is_authenticated):
+            return False
+        if user.is_staff:
+            return True
+        return obj.author_id == user.id and obj.status == BlogPost.Status.DRAFT
 
     def get_reading_minutes(self, obj):
         words = len(plain_text(obj.content).split())
@@ -46,7 +66,8 @@ class BlogPostListSerializer(serializers.ModelSerializer):
 class BlogPostSerializer(BlogPostListSerializer):
     class Meta:
         model = BlogPost
-        fields = "__all__"
+        exclude = ["author"]
+        read_only_fields = ["view_count"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

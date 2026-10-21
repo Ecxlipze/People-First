@@ -223,6 +223,7 @@ export async function getEpisodes(): Promise<Episode[]> {
         publishedAt: item.published_at ?? undefined,
         isFeatured: Boolean(item.is_featured),
         description: item.description,
+        viewCount: item.view_count ?? 0,
       })),
     EPISODES,
   );
@@ -247,6 +248,10 @@ export async function getInsights(): Promise<Insight[]> {
         studioThumb: post.studioImage,
         studioThumbAlt: post.studioImageAlt,
         videoUrl: post.videoUrl,
+        author: post.author,
+        publishedAt: post.publishedAt,
+        readingMinutes: post.readingMinutes,
+        viewCount: post.viewCount,
         /* No backend column: object-position was tuned per supplied still. */
         thumbPosition: undefined,
       }))

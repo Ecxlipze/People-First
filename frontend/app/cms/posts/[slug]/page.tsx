@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ApiError } from "@/app/lib/api";
-import { cmsFetch, requireSession } from "@/app/cms/session";
+import { cmsFetch, getDisplayName, getRole, requireSession } from "@/app/cms/session";
 import PostForm from "@/app/cms/posts/PostForm";
 import type { CmsCategory, CmsPost } from "@/app/cms/types";
 
@@ -25,6 +25,9 @@ export default async function EditPostPage({
     cmsFetch<CmsCategory[]>("/api/blog-categories/", {}, { render: here }),
   ]);
   if (!post) notFound();
+  const author = (await getRole()) !== "staff";
+  /* Authors may only open their own drafts; anything else goes back to the list. */
+  if (author && !post.editable) redirect("/cms");
 
   return (
     <>
@@ -32,7 +35,7 @@ export default async function EditPostPage({
       <h1 className="mt-1 break-words font-display text-3xl font-extrabold text-[#171922]">Edit post</h1>
       <div className="mt-6">
         {/* key: a rename redirects to a new slug and must remount with fresh data */}
-        <PostForm key={post.slug} post={post} categories={categories} notice={notice} />
+        <PostForm key={post.slug} post={post} categories={categories} notice={notice} authorMode={author} authorName={author ? await getDisplayName() : undefined} />
       </div>
     </>
   );

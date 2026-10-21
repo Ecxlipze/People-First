@@ -31,11 +31,12 @@ class BlogPostAdmin(SummernoteModelAdmin):
     list_filter = ("status", "category")
     search_fields = ("title", "excerpt", "content")
     prepopulated_fields = {"slug": ("title",)}
+    autocomplete_fields = ("author",)
     readonly_fields = ("created_at", "updated_at")
     date_hierarchy = "published_at"
     actions = [publish, unpublish]
     fieldsets = (
-        ("Post", {"fields": ("title", "slug", "category", "author_name", "excerpt", "content")}),
+        ("Post", {"fields": ("title", "slug", "category", "author_name", "author", "excerpt", "content")}),
         ("Featured image", {"fields": ("featured_image", "featured_image_alt")}),
         ("Media / Events feature card (optional)", {
             "fields": ("metric", "metric_label", "card_value", "card_label",

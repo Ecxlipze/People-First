@@ -23,10 +23,10 @@ export default function Hero() {
           className="group inline-flex min-h-11 items-center"
         >
           <Image
-            src="/images/logo.svg"
+            src="/images/logo.png"
             alt="People First"
-            width={398}
-            height={100}
+            width={1000}
+            height={252}
             priority
             className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
           />

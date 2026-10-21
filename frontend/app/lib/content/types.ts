@@ -72,6 +72,7 @@ export type ApiPodcast = {
   order: number;
   is_featured: boolean;
   is_active: boolean;
+  view_count: number;
 };
 
 export type ApiFeaturedWork = {
@@ -122,5 +123,6 @@ export type ApiBlogPost = {
   meta_title: string;
   meta_description: string;
   reading_minutes: number;
+  view_count: number;
   updated_at: string;
 };

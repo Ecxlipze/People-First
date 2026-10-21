@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import { CountUp, Reveal } from "@/app/components/ScrollFx";
 import type { Article } from "@/app/ideas-lab/articles";
@@ -11,7 +11,7 @@ import type { Article } from "@/app/ideas-lab/articles";
    over the pinned hero — the same treatment FeaturedWork uses on /home.
 
    Three rows alternate sides: copy left / media right, then media left / copy
-   right. Each media block is a video still with a play button, a teal stat card
+   right. Each media block is an article still, a teal stat card
    overlapping one lower corner, and a soft rainbow glow behind it.
 
    The stills in /public/images/insights/ were extracted from the
@@ -49,12 +49,13 @@ function Media({
     <div className="relative mx-auto w-full max-w-md">
       <RainbowGlow />
 
-      {/* video still + play button. The still fades up once decoded rather than
-          snapping in — see SmartImage. The shadow deepens with the row's hover
-          so the whole card reads as one target. */}
+      {/* article still (no play control: these are articles, not videos). The
+          still fades up once decoded rather than snapping in — see SmartImage.
+          The shadow deepens with the row's hover so the whole card reads as one
+          target. */}
       <div className="relative ml-auto aspect-[16/10] w-[85%] overflow-hidden bg-zinc-800 shadow-[0_20px_50px_-24px_rgba(40,40,80,0.6)] transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-22px_rgba(40,40,80,0.75)]">
         {/* An article published from the admin may have no still yet; the
-            wrapper's dark plate and the play motif stand on their own. */}
+            wrapper's dark plate stands in. */}
         {article.thumb && (
           <SmartImage
             src={article.thumb}
@@ -66,14 +67,6 @@ function Media({
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
         )}
-        <span className="absolute inset-0 grid place-items-center">
-          <span className="grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:ring-4 group-hover:ring-white/40">
-            <Play
-              className="ml-0.5 h-4 w-4 text-zinc-800"
-              fill="currentColor"
-            />
-          </span>
-        </span>
       </div>
 
       {/* Teal stat card clipping the still's lower corner. Alternating its side
@@ -161,6 +154,16 @@ export default function RecommendedArticles({
           );
         })}
       </div>
+
+      <Reveal className="mt-20 px-6 text-center sm:mt-24">
+        <Link
+          href="/media-events"
+          className="pf-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#a02f52] px-6 text-sm font-medium text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#8c2946] hover:shadow-lg"
+        >
+          View all articles
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </Link>
+      </Reveal>
     </section>
   );
 }

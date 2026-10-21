@@ -1,9 +1,8 @@
-import { Play } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import { CountUp } from "@/app/components/ScrollFx";
 
-/* A photo/video frame placeholder with a decorative play motif.
-   Drop a real thumbnail in by passing `src` once the asset exists. */
+/* A photo/video frame placeholder. Drop a real thumbnail in by passing `src`
+   once the asset exists; pass `href` to make the frame link to the video. */
 export function MediaFrame({
   src,
   alt = "",
@@ -22,8 +21,7 @@ export function MediaFrame({
   href?: string;
 }) {
   return (
-    /* `group` so the play button and image can respond to a hover anywhere on
-       the frame, which is a much larger target than the button alone. */
+    /* `group` so the image can respond to a hover anywhere on the frame. */
     /* Geometry measured off the home2.pdf render, NOT off the embedded bitmap
        dimensions — the 1736×1704 source JPEGs are cropped by their placement
        box, so their own aspect says nothing about the rendered frame. Scanning
@@ -56,24 +54,17 @@ export function MediaFrame({
         />
       )}
 
-      {/* Decorative play motif. If a video URL exists, allow clicking to open it */}
-      {href ? (
+      {/* No visible play control. When a video URL exists the whole frame is the
+          link (an invisible overlay, so the photo stays clean) and keeps a
+          keyboard focus ring. */}
+      {href && (
         <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Watch video"
-          className="pf-interactive absolute left-1/2 top-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg ring-0 ring-white/40 hover:scale-110 hover:ring-8"
-        >
-          <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={0} />
-        </a>
-      ) : (
-        <span
-          aria-hidden
-          className="pf-interactive absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg ring-0 ring-white/40 hover:scale-110 hover:ring-8"
-        >
-          <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={0} />
-        </span>
+          className="absolute inset-0 z-10 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
+        />
       )}
 
       {/* Optional caption — a SINGLE compact block pinned to the bottom-left.

@@ -1,4 +1,5 @@
 import nh3
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -66,6 +67,12 @@ class BlogPost(models.Model):
     featured_image = models.ImageField(upload_to="blog/featured/", null=True, blank=True)
     featured_image_alt = models.CharField(max_length=255, blank=True)
     author_name = models.CharField(max_length=120, blank=True)
+    # The account that wrote the post. Only set for posts written by a "Blog
+    # Authors" user, who may edit their own drafts and nothing else.
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name="blog_posts", editable=True,
+    )
 
     # Optional extras for the Media / Events feature layout (the red headline
     # metric, the teal stat card, a wider editorial image, a video link). Blank
@@ -93,6 +100,9 @@ class BlogPost(models.Model):
     meta_description = models.CharField(
         max_length=160, blank=True, help_text="Search-result description. Defaults to the excerpt.",
     )
+
+    # Incremented by POST /api/blog-posts/<slug>/view/ (see BlogPostViewSet.view).
+    view_count = models.PositiveBigIntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -12,6 +12,9 @@ export type CmsPost = {
   featured_image: string | null;
   featured_image_alt: string;
   author_name: string;
+  /* Computed by the API for the signed-in editor. */
+  editable?: boolean;
+  is_mine?: boolean;
   metric: string;
   metric_label: string;
   card_value: string;
@@ -137,3 +140,12 @@ export const VENTURE_PRESETS = [
   { key: "teal", label: "Teal", accent: "#2c8e85", gradient: "radial-gradient(52.47% 174.19% at 50% 50%, #39CABD 0%, #246D67 100%)" },
   { key: "indigo", label: "Indigo", accent: "#2e21b6", gradient: "radial-gradient(109% 107% at 50% 50%, #FFFFFF 0%, #2E21B6 100%)" },
 ] as const;
+
+export type CmsProfile = {
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  display_name: string;
+  role: "staff" | "author";
+};

@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { loginAction } from "@/app/cms/actions";
+import PasswordField from "@/app/cms/PasswordField";
 import { INITIAL_CMS_STATE } from "@/app/cms/types";
 
 const input =
@@ -18,7 +19,7 @@ export default function LoginForm() {
       </div>
       <div>
         <label htmlFor="password" className="text-sm font-bold text-zinc-800">Password</label>
-        <input id="password" name="password" type="password" autoComplete="current-password" required className={input} />
+        <PasswordField id="password" name="password" autoComplete="current-password" required className={input} />
       </div>
       {state.status === "error" && (
         <p role="alert" className="rounded-lg bg-red-50 px-3.5 py-3 text-sm font-medium text-red-700">

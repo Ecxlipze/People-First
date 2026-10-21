@@ -67,7 +67,7 @@ export const STAGES: Stage[] = [
     accent: "#014483",
     ventures: [],
     feature: {
-      name: "National Agaaz Readiness Programme (NARP)",
+      name: "People First Socio Economic Empowerment (PFSEE)",
       blurb:
         "A foundational learning initiative to educate, skills and build the strategic acumen of our people, transforming raw potential into market ready talent.",
     },

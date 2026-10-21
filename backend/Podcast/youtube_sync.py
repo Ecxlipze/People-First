@@ -84,7 +84,7 @@ def fetch_via_api(key: str, playlist_id: str, limit: int | None) -> list[dict]:
 
     videos = []
     for i in range(0, len(ids), 50):
-        data = _api("videos", key, part="snippet,contentDetails,status", id=",".join(ids[i:i + 50]))
+        data = _api("videos", key, part="snippet,contentDetails,status,statistics", id=",".join(ids[i:i + 50]))
         for item in data.get("items", []):
             if item.get("status", {}).get("privacyStatus") != "public":
                 continue
@@ -100,6 +100,7 @@ def fetch_via_api(key: str, playlist_id: str, limit: int | None) -> list[dict]:
                 "thumbnail_url": _best_thumb(sn.get("thumbnails", {})),
                 "duration": parse_iso_duration(item["contentDetails"].get("duration", "")),
                 "author": sn.get("channelTitle", ""),
+                "views": int(item.get("statistics", {}).get("viewCount", 0)),
             })
     return videos
 
@@ -135,6 +136,7 @@ def fetch_via_rss(channel_id: str, playlist_id: str) -> list[dict]:
         group = entry.find("media:group", NS)
         thumb = group.find("media:thumbnail", NS) if group is not None else None
         desc = group.find("media:description", NS) if group is not None else None
+        stats = group.find("media:community/media:statistics", NS) if group is not None else None
         videos.append({
             "video_id": video_id,
             "title": entry.findtext("a:title", namespaces=NS) or "",
@@ -143,6 +145,8 @@ def fetch_via_rss(channel_id: str, playlist_id: str) -> list[dict]:
             "thumbnail_url": thumb.get("url") if thumb is not None else "",
             "duration": "",
             "author": entry.findtext("a:author/a:name", namespaces=NS) or "",
+            # The feed carries a live view count for each of its 15 videos.
+            "views": int(stats.get("views", 0)) if stats is not None else None,
         })
     return videos
 

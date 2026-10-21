@@ -4,6 +4,8 @@ import { cmsFetch, requireSession } from "@/app/cms/session";
 import { deleteGalleryItemAction, moveGalleryAction, setGalleryActiveAction, uploadGalleryAction } from "@/app/cms/actions";
 import type { CmsGalleryItem } from "@/app/cms/types";
 import ConfirmDelete from "@/app/cms/ConfirmDelete";
+import Pagination from "@/app/cms/Pagination";
+import { paginate, parsePage } from "@/app/cms/paging";
 
 function notice(n?: string): { text: string; bad?: boolean } | null {
   if (!n) return null;
@@ -21,11 +23,15 @@ function notice(n?: string): { text: string; bad?: boolean } | null {
 const iconBtn =
   "pf-interactive inline-flex h-11 w-11 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 disabled:opacity-40";
 
-export default async function GalleryCms({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
-  const { notice: n } = await searchParams;
+export default async function GalleryCms({ searchParams }: { searchParams: Promise<{ notice?: string; page?: string }> }) {
+  const { notice: n, page: pageParam } = await searchParams;
   await requireSession();
-  const fetched = await cmsFetch<CmsGalleryItem[]>("/api/gallery/", {}, { render: "/cms/gallery" });
-  const items = [...fetched].sort((a, b) => a.display_order - b.display_order || a.id - b.id);
+  const requested = parsePage(pageParam);
+  const href = (n: number) => (n > 1 ? `/cms/gallery?page=${n}` : "/cms/gallery");
+  const fetched = await cmsFetch<CmsGalleryItem[]>("/api/gallery/", {}, { render: href(requested) });
+  const all = [...fetched].sort((a, b) => a.display_order - b.display_order || a.id - b.id);
+  /* 24 = whole rows in both the 2- and 3-column grids. */
+  const { items, offset, ...paging } = paginate(all, requested, 24);
   const msg = notice(n);
 
   return (
@@ -54,7 +60,7 @@ export default async function GalleryCms({ searchParams }: { searchParams: Promi
         </p>
       </form>
 
-      {items.length === 0 ? (
+      {all.length === 0 ? (
         <div className="mt-8 rounded-2xl bg-white px-6 py-16 text-center shadow-sm">
           <p className="font-display text-lg font-extrabold text-[#171922]">No photos added yet</p>
           <p className="mt-2 text-sm text-zinc-600">
@@ -63,7 +69,10 @@ export default async function GalleryCms({ searchParams }: { searchParams: Promi
         </div>
       ) : (
         <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item, i) => (
+          {items.map((item, idx) => {
+            /* Position within the whole gallery, not just this page. */
+            const i = offset + idx;
+            return (
             <li key={item.id} className="overflow-hidden rounded-2xl bg-white shadow-sm">
               <div className="relative aspect-[4/3] bg-zinc-100">
                 {item.image && (
@@ -87,7 +96,7 @@ export default async function GalleryCms({ searchParams }: { searchParams: Promi
                   <form action={moveGalleryAction}>
                     <input type="hidden" name="id" value={item.id} />
                     <input type="hidden" name="dir" value="down" />
-                    <button type="submit" disabled={i === items.length - 1} aria-label="Move later" title="Move later" className={iconBtn}><ArrowRight className="h-4 w-4" /></button>
+                    <button type="submit" disabled={i === all.length - 1} aria-label="Move later" title="Move later" className={iconBtn}><ArrowRight className="h-4 w-4" /></button>
                   </form>
                   <Link href={`/cms/gallery/${item.id}`} className="pf-interactive inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3.5 text-sm font-bold text-zinc-700 hover:bg-zinc-50">
                     <Pencil className="h-4 w-4" aria-hidden /> Edit
@@ -103,9 +112,11 @@ export default async function GalleryCms({ searchParams }: { searchParams: Promi
                 </div>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
+      <Pagination {...paging} hrefFor={href} label="Photo pages" />
     </>
   );
 }

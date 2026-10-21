@@ -117,7 +117,7 @@ export default function VenturesImpact() {
           selector="[data-stagger]"
           step={45}
         >
-          <ul className="mx-auto grid max-w-md gap-x-8 gap-y-7 sm:max-w-5xl sm:grid-cols-2 sm:justify-items-center min-[1536px]:relative min-[1536px]:h-[12.7vw] min-[1536px]:max-w-none min-[1536px]:translate-x-[2vw] min-[1536px]:grid-cols-3 min-[1536px]:gap-0">
+          <ul className="mx-auto grid max-w-md gap-x-8 gap-y-7 sm:max-w-5xl sm:grid-cols-2 sm:justify-items-center min-[1536px]:relative min-[1536px]:h-[12.7vw] min-[1536px]:max-w-none! min-[1536px]:translate-x-[2vw] min-[1536px]:grid-cols-3 min-[1536px]:gap-0">
             {RESULTS.map((r, i) => (
               <li
                 key={r.text}

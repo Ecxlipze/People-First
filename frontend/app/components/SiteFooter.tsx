@@ -49,7 +49,7 @@ function TikTokIcon({ className }: IconProps) {
   );
 }
 
-const SOCIALS = [
+export const SOCIALS = [
   { label: "YouTube", href: "https://www.youtube.com/@TheMindsBehindOfficial", icon: YoutubeIcon },
   { label: "Facebook", href: "https://www.facebook.com/share/1KEtAf91QJ/", icon: FacebookIcon },
   { label: "Instagram", href: "https://www.instagram.com/rai.salahuddin", icon: InstagramIcon },
@@ -124,10 +124,10 @@ export default function SiteFooter({
                 rendered h-11/44px. */}
             <Link href="/" aria-label="People First — home">
               <Image
-                src="/images/logo.svg"
+                src="/images/logo.png"
                 alt="People First"
-                width={398}
-                height={100}
+                width={1000}
+                height={252}
                 className="h-[50px] w-auto"
               />
             </Link>

@@ -4,17 +4,22 @@ import { cmsFetch, requireSession } from "@/app/cms/session";
 import { deleteTestimonialAction, moveTestimonialAction, setTestimonialActiveAction } from "@/app/cms/actions";
 import type { CmsTestimonial } from "@/app/cms/types";
 import ConfirmDelete from "@/app/cms/ConfirmDelete";
+import Pagination from "@/app/cms/Pagination";
+import { paginate, parsePage } from "@/app/cms/paging";
 
 const iconBtn =
   "pf-interactive inline-flex h-11 w-11 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 disabled:opacity-40";
 const textBtn =
   "pf-interactive inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3.5 text-sm font-bold text-zinc-700 hover:bg-zinc-50";
 
-export default async function TestimonialsCms({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
-  const { notice } = await searchParams;
+export default async function TestimonialsCms({ searchParams }: { searchParams: Promise<{ notice?: string; page?: string }> }) {
+  const { notice, page: pageParam } = await searchParams;
   await requireSession();
-  const fetched = await cmsFetch<CmsTestimonial[]>("/api/testimonials/", {}, { render: "/cms/testimonials" });
-  const items = [...fetched].sort((a, b) => a.display_order - b.display_order || a.id - b.id);
+  const requested = parsePage(pageParam);
+  const href = (n: number) => (n > 1 ? `/cms/testimonials?page=${n}` : "/cms/testimonials");
+  const fetched = await cmsFetch<CmsTestimonial[]>("/api/testimonials/", {}, { render: href(requested) });
+  const all = [...fetched].sort((a, b) => a.display_order - b.display_order || a.id - b.id);
+  const { items, offset, ...paging } = paginate(all, requested);
 
   return (
     <>
@@ -30,14 +35,17 @@ export default async function TestimonialsCms({ searchParams }: { searchParams: 
 
       {notice === "deleted" && <p role="status" className="mt-5 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">Testimonial deleted.</p>}
 
-      {items.length === 0 ? (
+      {all.length === 0 ? (
         <div className="mt-8 rounded-2xl bg-white px-6 py-16 text-center shadow-sm">
           <p className="font-display text-lg font-extrabold text-[#171922]">No testimonials added yet</p>
           <p className="mt-2 text-sm text-zinc-600">Until you add one, the home page shows the built-in testimonials. Once you add your first, only the ones listed here are shown.</p>
         </div>
       ) : (
         <ul className="mt-6 space-y-3">
-          {items.map((t, i) => (
+          {items.map((t, idx) => {
+            /* Position within the whole list, not just this page. */
+            const i = offset + idx;
+            return (
             <li key={t.id} className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
                 <div className="flex min-w-0 flex-1 basis-[16rem] gap-3">
@@ -67,7 +75,7 @@ export default async function TestimonialsCms({ searchParams }: { searchParams: 
                   </form>
                   <form action={moveTestimonialAction}>
                     <input type="hidden" name="id" value={t.id} /><input type="hidden" name="dir" value="down" />
-                    <button type="submit" disabled={i === items.length - 1} aria-label="Move later" title="Move later" className={iconBtn}><ArrowDown className="h-4 w-4" /></button>
+                    <button type="submit" disabled={i === all.length - 1} aria-label="Move later" title="Move later" className={iconBtn}><ArrowDown className="h-4 w-4" /></button>
                   </form>
                   <Link href={`/cms/testimonials/${t.id}`} className={textBtn}><Pencil className="h-4 w-4" aria-hidden /> Edit</Link>
                   <form action={setTestimonialActiveAction}>
@@ -78,9 +86,11 @@ export default async function TestimonialsCms({ searchParams }: { searchParams: 
                 </div>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
+      <Pagination {...paging} hrefFor={href} label="Testimonial pages" />
     </>
   );
 }

@@ -28,6 +28,7 @@ export type BlogPost = {
   publishedAt?: string;
   updatedAt: string;
   readingMinutes: number;
+  viewCount: number;
   metaTitle: string;
   metaDescription: string;
 };
@@ -57,6 +58,7 @@ function mapPost(row: ApiBlogPost): BlogPost {
     publishedAt: row.published_at ?? undefined,
     updatedAt: row.updated_at,
     readingMinutes: row.reading_minutes,
+    viewCount: row.view_count ?? 0,
     metaTitle: row.meta_title || row.title,
     metaDescription: row.meta_description || row.excerpt,
   };

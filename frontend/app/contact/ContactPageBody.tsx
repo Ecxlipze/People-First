@@ -59,7 +59,7 @@ export default function ContactPageBody({
       <div className="min-h-screen overflow-x-clip bg-[linear-gradient(165deg,#f7f6fd_0%,#f4f2fc_50%,#efeefb_100%)] text-zinc-800 selection:bg-pf-magenta selection:text-white">
         <header className="relative z-20 mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-4 px-6 pt-8 sm:px-10 sm:pt-10 lg:px-24 lg:pt-12 xl:px-28 xl:pt-14 [@media(max-height:500px)]:pt-4">
           <Link href="/" aria-label="People First — Home" className="pf-interactive inline-flex min-h-11 items-center rounded-sm">
-            <Image src="/images/logo.svg" alt="People First" width={398} height={100} priority className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9" />
+            <Image src="/images/logo.png" alt="People First" width={1000} height={252} priority className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9" />
           </Link>
         </header>
 

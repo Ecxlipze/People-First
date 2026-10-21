@@ -4,6 +4,8 @@ import { cmsFetch, requireSession } from "@/app/cms/session";
 import { deletePodcastAction, setPodcastActiveAction, syncPodcastsAction } from "@/app/cms/actions";
 import type { CmsPodcast } from "@/app/cms/types";
 import ConfirmDelete from "@/app/cms/ConfirmDelete";
+import Pagination from "@/app/cms/Pagination";
+import { paginate, parsePage } from "@/app/cms/paging";
 
 function notice(n?: string): { text: string; bad?: boolean } | null {
   if (!n) return null;
@@ -19,10 +21,13 @@ function fmt(iso: string | null): string {
   return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 }
 
-export default async function PodcastsCms({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
-  const { notice: n } = await searchParams;
+export default async function PodcastsCms({ searchParams }: { searchParams: Promise<{ notice?: string; page?: string }> }) {
+  const { notice: n, page: pageParam } = await searchParams;
   await requireSession();
-  const episodes = await cmsFetch<CmsPodcast[]>("/api/podcasts/", {}, { render: "/cms/podcasts" });
+  const requested = parsePage(pageParam);
+  const href = (n: number) => (n > 1 ? `/cms/podcasts?page=${n}` : "/cms/podcasts");
+  const all = await cmsFetch<CmsPodcast[]>("/api/podcasts/", {}, { render: href(requested) });
+  const { items: episodes, ...paging } = paginate(all, requested);
   const msg = notice(n);
 
   return (
@@ -50,7 +55,7 @@ export default async function PodcastsCms({ searchParams }: { searchParams: Prom
         </p>
       )}
 
-      {episodes.length === 0 ? (
+      {all.length === 0 ? (
         <div className="mt-8 rounded-2xl bg-white px-6 py-16 text-center shadow-sm">
           <p className="font-display text-lg font-extrabold text-[#171922]">No episodes yet</p>
           <p className="mt-2 text-sm text-zinc-600">Add one, or sync from the YouTube channel.</p>
@@ -98,6 +103,7 @@ export default async function PodcastsCms({ searchParams }: { searchParams: Prom
           ))}
         </ul>
       )}
+      <Pagination {...paging} hrefFor={href} label="Episode pages" />
     </>
   );
 }

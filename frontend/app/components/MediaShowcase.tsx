@@ -141,8 +141,7 @@ export default function MediaShowcase({
             {/* Card geometry from home2.pdf (@1440): 277×180, bottom edge
                 FLUSH with the photo's bottom, overhanging the photo's left edge
                 by ~151px of its 277px width (so ~126px sits over the photo).
-                bottom-0 + -left-[9.4rem] reproduces that; it clears the centred
-                play button and the subject's face. */}
+                bottom-0 + -left-[9.4rem] reproduces that; it clears the subject's face. */}
             <div
               ref={statRef}
               className="absolute bottom-0 -left-4 z-20 sm:-left-10 md:-left-16 lg:-left-[9.4rem]"

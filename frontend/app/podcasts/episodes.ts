@@ -19,6 +19,8 @@ export type Episode = {
   publishedAt?: string;
   isFeatured?: boolean;
   description?: string;
+  /* YouTube view count, refreshed hourly by the backend sync. */
+  viewCount?: number;
 };
 
 /* The design runs teal → pink → purple down the page. An episode with no

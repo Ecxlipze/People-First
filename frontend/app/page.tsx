@@ -66,27 +66,20 @@ export default function Landing() {
             className="animate-glow-pulse pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(43,191,196,0.25)_0%,rgba(43,191,196,0)_70%)] sm:h-[460px] sm:w-[460px]"
           />
           <Image
-            src="/images/peoplefirst.svg"
+            src="/images/peoplefirst-light.png"
             alt="People First"
-            width={619}
-            height={505}
+            width={1000}
+            height={875}
             priority
-            /* lg width from the mockup: the artwork's visible ink spans
-               x 434.1..1013.6 = 579.6px on the 1440-wide frame. This SVG is
-               93.63% ink and 6.37% transparent padding (the 1500×1500 source is
-               inset by its pattern transform), so the *element* must be
-               579.6 / 0.9363 = 619px — i.e. exactly the SVG's own intrinsic
-               size. The previous 583px was the ink figure used as the element
-               width, rendering the whole logo 5.8% small.
-
-               Both `min()` terms are load-bearing on short windows:
-               • 60.5svh keeps the fan clear of the icon ring (≥49px of air).
-               • calc(102.62svh - 281px) keeps the wordmark off the footer; it
-                 derives from ink_bottom ≤ viewport - footer, and is the binding
-                 term below ~700px tall. Verified 560→1400px: the icon gap never
-                 drops under 49px and footer clearance never under 8px, while
-                 1024px-tall viewports still get the exact 619px design size. */
-            className="animate-floaty w-[210px] max-w-[85vw] sm:w-[300px] lg:w-[min(619px,60.5svh,calc(102.62svh-281px))] [@media(max-height:500px)]:w-[150px]"
+            /* The PNG is trimmed to the artwork (no transparent padding), so
+               its element width equals the mockup's visible ink width:
+               579.6px at 1440 wide. The previous SVG was 93.63% ink, so every
+               width below is the old element width x 0.9363 to keep the same
+               rendered size:
+               • 60.5svh -> 56.6svh keeps the fan clear of the icon ring.
+               • calc(102.62svh - 281px) -> calc(96.08svh - 263px) keeps the
+                 wordmark off the footer on short windows. */
+            className="animate-floaty w-[197px] max-w-[85vw] sm:w-[281px] lg:w-[min(580px,56.6svh,calc(96.08svh-263px))] [@media(max-height:500px)]:w-[140px]"
           />
         </div>
       </main>

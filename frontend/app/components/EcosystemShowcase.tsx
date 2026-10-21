@@ -333,18 +333,18 @@ export default function EcosystemShowcase() {
                   #548fae.
                   The logo is the LIGHT-ON-DARK variant: in HOME6 "People" is
                   white and "First" teal, over the multicoloured fan. Neither
-                  peoplefirst.svg (the tall landing artwork) nor logo.svg (navy
+                  peoplefirst.png (the tall landing artwork) nor logo.png (navy
                   "People") reads on this fill — the navy text disappeared into
-                  the blue entirely. logo-light.webp is logo.svg's own bitmap with
+                  the blue entirely. logo-light.png is logo.png's own bitmap with
                   just the navy wordmark recoloured white, so the fan and "First"
                   keep their brand colours. As in the design it overflows the
                   circle's width rather than being padded inside it. */}
               <span className="relative flex h-14 w-14 flex-none items-center justify-center rounded-full bg-[#548fae] shadow-sm sm:h-[72px] sm:w-[72px]">
                 <Image
-                  src="/images/logo-light.webp"
+                  src="/images/logo-light.png"
                   alt="People First"
-                  width={800}
-                  height={184}
+                  width={1000}
+                  height={252}
                   className="w-[85%] object-contain"
                 />
               </span>
@@ -410,10 +410,10 @@ export default function EcosystemShowcase() {
                   on the old asset produced a flat white silhouette, losing the
                   fan's colours and the teal "First" that the design keeps. */}
               <Image
-                src="/images/logo-light.webp"
+                src="/images/logo-light.png"
                 alt="People First"
-                width={800}
-                height={184}
+                width={1000}
+                height={252}
                 className="w-[86%] object-contain"
               />
             </div>

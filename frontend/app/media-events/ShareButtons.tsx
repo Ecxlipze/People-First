@@ -14,7 +14,17 @@ const pill =
 
 const noopSubscribe = () => () => {};
 
-export default function ShareButtons({ title, path }: { title: string; path: string }) {
+/* "bar" is the compact row of square brand-coloured buttons that sits under an
+   article's byline; the default is the labelled row at the foot of the article. */
+export default function ShareButtons({
+  title,
+  path,
+  variant = "footer",
+}: {
+  title: string;
+  path: string;
+  variant?: "footer" | "bar";
+}) {
   const [copied, setCopied] = useState(false);
 
   /* The absolute address and native-share support are only known in the
@@ -43,11 +53,36 @@ export default function ShareButtons({ title, path }: { title: string; path: str
 
   const enc = encodeURIComponent;
   const links = [
-    { name: "WhatsApp", Icon: WhatsappIcon, href: `https://wa.me/?text=${enc(`${title} ${url}`)}` },
-    { name: "LinkedIn", Icon: LinkedinIcon, href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}` },
-    { name: "X", Icon: XIcon, href: `https://twitter.com/intent/tweet?text=${enc(title)}&url=${enc(url)}` },
-    { name: "Facebook", Icon: FacebookIcon, href: `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}` },
+    { name: "WhatsApp", Icon: WhatsappIcon, bg: "bg-[#25d366]", href: `https://wa.me/?text=${enc(`${title} ${url}`)}` },
+    { name: "LinkedIn", Icon: LinkedinIcon, bg: "bg-[#0a66c2]", href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}` },
+    { name: "X", Icon: XIcon, bg: "bg-black", href: `https://twitter.com/intent/tweet?text=${enc(title)}&url=${enc(url)}` },
+    { name: "Facebook", Icon: FacebookIcon, bg: "bg-[#1877f2]", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}` },
   ];
+
+  if (variant === "bar") {
+    const square = "pf-interactive grid h-11 w-11 place-items-center rounded-md text-white transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#171922] focus-visible:ring-offset-2";
+    return (
+      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Share this article">
+        {links.map((l) => (
+          <a
+            key={l.name}
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`Share on ${l.name}`}
+            aria-label={`Share on ${l.name}`}
+            className={`${square} ${l.bg}`}
+          >
+            <l.Icon className="h-5 w-5" />
+          </a>
+        ))}
+        <button type="button" onClick={copy} title="Copy link" aria-label="Copy link" className={`${square} bg-zinc-600`}>
+          {copied ? <Check className="h-5 w-5" aria-hidden /> : <Link2 className="h-5 w-5" aria-hidden />}
+        </button>
+        <span role="status" className="sr-only">{copied ? "Link copied to clipboard" : ""}</span>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-12 border-t border-zinc-200 pt-6">

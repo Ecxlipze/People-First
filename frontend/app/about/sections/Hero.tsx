@@ -21,13 +21,13 @@ export default function Hero() {
           aria-label="People First — landing"
           className="group inline-flex min-h-11 items-center"
         >
-          {/* About-page logo (already light/white — designed for the dark hero,
-              so no invert filter needed). */}
+          {/* Light variant of the logo (navy wordmark recoloured white — made
+              for the dark hero, so no invert filter needed). */}
           <Image
-            src="/images/about-page/logo.png"
+            src="/images/logo-light.png"
             alt="People First"
-            width={318}
-            height={91}
+            width={1000}
+            height={252}
             priority
             className="h-10 w-auto sm:h-12 lg:h-[52px] [@media(max-height:500px)]:h-9"
           />

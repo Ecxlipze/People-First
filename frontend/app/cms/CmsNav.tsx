@@ -13,22 +13,23 @@ const ITEMS = [
   { href: "/cms/inquiries", label: "Inquiries", match: (p: string) => p.startsWith("/cms/inquiries") },
 ];
 
-export default function CmsNav() {
+export default function CmsNav({ role }: { role: "staff" | "author" }) {
   const pathname = usePathname();
   const [unread, setUnread] = useState(0);
 
   /* Unread inquiries, refreshed on every navigation inside the CMS. */
   useEffect(() => {
+    if (role !== "staff") return;
     let live = true;
     fetch("/cms/inquiries/count", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : { new: 0 }))
       .then((d: { new?: number }) => live && setUnread(d.new ?? 0))
       .catch(() => {});
     return () => { live = false; };
-  }, [pathname]);
+  }, [pathname, role]);
   return (
     <nav aria-label="Content sections" className="flex flex-wrap items-center gap-1">
-      {ITEMS.map((item) => {
+      {(role === "staff" ? ITEMS : ITEMS.slice(0, 1)).map((item) => {
         const active = item.match(pathname);
         return (
           <Link

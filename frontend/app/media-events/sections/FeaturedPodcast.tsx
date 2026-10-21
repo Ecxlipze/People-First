@@ -1,119 +1,136 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Play, ChevronRight } from "lucide-react";
-import { Reveal } from "@/app/components/ScrollFx";
+import { ArrowRight, Play } from "lucide-react";
+import { Stagger } from "@/app/components/ScrollFx";
+import { SOCIALS } from "@/app/components/SiteFooter";
+import { formatPostDate } from "@/app/media-events/ArticleChrome";
+import { formatViews } from "@/app/lib/format";
 import type { Episode } from "@/app/podcasts/episodes";
 
-/* Insights → the featured podcast section that closes the insights page.
-   Displays up to 3 featured podcasts from the backend.
-   Each card links to /podcasts to listen or explore the full catalogue. */
+/* Featured podcasts — the section that closes the Media / Events page.
 
-export default function FeaturedPodcast({
-  episodes,
-}: {
-  episodes: Episode[];
-}) {
+   Styled to match the blog index above it: the same underlined section heading,
+   uniform cards (media on top, tag, title, meta, excerpt) and the same page
+   gutters, so the two read as one page. Up to three episodes from the backend;
+   every card links to /podcasts to listen or browse the full catalogue. */
+
+/* The channel the episodes are published on; the link and glyph come from the
+   footer's social list so there is a single source for the channel address. */
+const YOUTUBE = SOCIALS.find((s) => s.label === "YouTube");
+
+function isYouTube(url?: string): boolean {
+  return !!url && /(?:youtube\.com|youtu\.be)\//i.test(url);
+}
+
+function Card({ ep, latest }: { ep: Episode; latest: boolean }) {
+  return (
+    <Link
+      href={ep.slug ? `/podcasts#${ep.slug}` : "/podcasts"}
+      className="group flex h-full flex-col"
+    >
+      {/* Episode art is 16:9 video; a thumbnail can be missing on a row created
+          in the admin before its file is uploaded, so the plate stands in. */}
+      <div className="relative aspect-video w-full overflow-hidden rounded-md bg-zinc-900">
+        {ep.thumb && (
+          <Image
+            src={ep.thumb}
+            alt={ep.thumbAlt}
+            fill
+            sizes="(max-width: 640px) 92vw, (max-width: 1280px) 46vw, 26rem"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          />
+        )}
+        <span aria-hidden className="absolute inset-0 grid place-items-center bg-black/10 transition-colors group-hover:bg-black/25">
+          <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110">
+            <Play className="ml-0.5 h-6 w-6 text-[#2d0b4e]" fill="currentColor" />
+          </span>
+        </span>
+        {YOUTUBE && isYouTube(ep.videoUrl) && (
+          <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-sm bg-black/70 px-2 py-1 font-display text-[11px] font-bold text-white backdrop-blur-sm">
+            <YOUTUBE.icon className="h-3.5 w-3.5 text-[#ff0000]" />
+            YouTube
+          </span>
+        )}
+        {latest && (
+          <span className="absolute left-3 top-3 rounded-sm bg-[#a02f52] px-2.5 py-1 font-display text-[11px] font-extrabold uppercase tracking-wider text-white">
+            Latest
+          </span>
+        )}
+      </div>
+
+      <div className="mt-4 flex min-w-0 flex-1 flex-col gap-2">
+        <span className="font-display text-xs font-extrabold uppercase tracking-wider text-[#a02f52]">
+          Podcast
+        </span>
+        <h3 className="break-words font-display text-xl font-extrabold leading-snug tracking-tight text-[#171922] transition-colors duration-200 group-hover:text-[#c64047]">
+          {ep.title}
+        </h3>
+        {(ep.publishedAt || formatViews(ep.viewCount)) && (
+          <p className="flex flex-wrap items-center gap-x-3 text-xs font-bold uppercase tracking-wider text-zinc-500">
+            {ep.publishedAt && (
+              <time dateTime={ep.publishedAt}>{formatPostDate(ep.publishedAt)}</time>
+            )}
+            {formatViews(ep.viewCount) && <span>{formatViews(ep.viewCount)}</span>}
+          </p>
+        )}
+        {ep.description && (
+          <p className="line-clamp-3 text-sm leading-relaxed text-zinc-500">
+            {ep.description}
+          </p>
+        )}
+        <span className="mt-auto inline-flex min-h-11 items-center gap-2 pt-1 font-display text-sm font-bold text-[#a02f52] group-hover:text-[#c64047]">
+          Watch episode
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+export default function FeaturedPodcast({ episodes }: { episodes: Episode[] }) {
   if (!episodes || episodes.length === 0) return null;
 
   return (
-    <section className="px-6 pb-28 sm:px-10 sm:pb-32 lg:px-20 xl:px-28 xl:pb-44">
-      <div className="mx-auto max-w-[70rem]">
-        <Reveal y={24} className="mb-10 text-center sm:mb-14">
-          <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-zinc-950 sm:text-[2rem]">
+    <section
+      aria-labelledby="featured-podcasts"
+      className="px-6 pb-20 sm:px-10 sm:pb-24 lg:pl-16 lg:pr-24 xl:pl-24 xl:pb-32"
+    >
+      <div className="mx-auto max-w-[80rem]">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-zinc-200 pb-3">
+          <h2
+            id="featured-podcasts"
+            className="font-display text-2xl font-extrabold tracking-tight text-[#171922] after:mt-3 after:block after:h-0.5 after:w-14 after:bg-[#a02f52] sm:text-3xl"
+          >
             Featured Podcasts
           </h2>
-        </Reveal>
-
-        <div className="flex flex-col gap-10 sm:gap-14">
-          {episodes.map((ep, idx) => (
-            <Reveal key={ep.id ?? ep.title} y={32}>
-              <Link
-                href={ep.slug ? `/podcasts#${ep.slug}` : "/podcasts"}
-                className="group pf-card grid w-full min-w-0 gap-8 bg-white p-5 shadow-[0_18px_44px_-22px_rgba(80,80,120,0.3)] hover:shadow-[0_28px_60px_-22px_rgba(80,80,120,0.45)] md:grid-cols-[minmax(0,22rem)_1fr] md:items-center md:p-8 lg:min-h-[22rem] lg:grid-cols-[minmax(0,27rem)_1fr] lg:gap-16 lg:px-14 lg:py-12"
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link
+              href="/podcasts"
+              className="pf-interactive inline-flex min-h-11 items-center gap-2 font-display text-sm font-bold text-[#a02f52] hover:text-[#c64047]"
+            >
+              View all podcasts
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+            {YOUTUBE && (
+              <a
+                href={`${YOUTUBE.href}?sub_confirmation=1`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pf-interactive inline-flex min-h-11 items-center gap-2 rounded-md bg-[#a02f52] px-4 font-display text-sm font-bold text-white transition-colors hover:bg-[#8c2946] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a02f52]"
               >
-                {/* thumbnail + play overlay (no badge) */}
-                <div className="relative aspect-video w-full min-w-0 md:-ml-12 md:self-center lg:-ml-20">
-                  <div className="absolute inset-0 overflow-hidden rounded-xl bg-zinc-900 shadow-md">
-                    {ep.thumb && (
-                      <Image
-                        src={ep.thumb}
-                        alt={ep.thumbAlt}
-                        fill
-                        sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 27rem"
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                      />
-                    )}
-                    <span className="absolute inset-0 grid place-items-center">
-                      <span className="grid h-16 w-16 place-items-center rounded-full bg-white/90 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:bg-white lg:h-20 lg:w-20">
-                        <Play
-                          className="ml-1 h-7 w-7 text-[#2d0b4e] lg:h-9 lg:w-9"
-                          fill="currentColor"
-                        />
-                      </span>
-                    </span>
-                  </div>
-                </div>
+                <YOUTUBE.icon className="h-4 w-4" />
+                Subscribe on YouTube
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            )}
+          </div>
+        </div>
 
-                {/* Content: Badges -> Title -> Description -> Video Metrics -> Action */}
-                <div className="min-w-0 md:py-2">
-                  <div className="mb-2.5 flex flex-wrap items-center gap-2">
-                    <span className="rounded-md bg-zinc-100 px-2.5 py-0.5 font-display text-[11px] font-extrabold uppercase tracking-wider text-zinc-600">
-                      Featured
-                    </span>
-                    {idx === 0 && (
-                      <span className="inline-flex items-center gap-1.5 rounded-md bg-[#a02f52]/10 px-2.5 py-0.5 font-display text-[11px] font-extrabold uppercase tracking-wider text-[#a02f52]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#a02f52] animate-pulse" />
-                        Latest
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="max-w-[36rem] break-words font-display text-xl font-extrabold leading-snug text-[#171922] transition-colors duration-200 group-hover:text-[#c64047] sm:text-2xl lg:text-[1.85rem]">
-                    {ep.title}
-                  </h3>
-
-                  {ep.description && (
-                    <p className="mt-3.5 max-w-[36rem] text-sm leading-relaxed text-zinc-600 sm:text-base line-clamp-3">
-                      {ep.description}
-                    </p>
-                  )}
-
-                  {ep.stats.length > 0 && (
-                    <div className="mt-5 border-t border-zinc-100 pt-5 grid gap-6 sm:grid-cols-2">
-                      {ep.stats.map((s) => (
-                        <div key={s.label} className="min-w-0">
-                          <p className="font-display text-lg font-extrabold text-[#171922] lg:text-xl">
-                            {s.label}
-                          </p>
-                          <p className="mt-1 text-xs leading-relaxed text-zinc-500 sm:text-sm">
-                            {s.body}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="mt-6">
-                    <span className="inline-flex items-center gap-2 font-display text-sm font-bold text-[#a02f52] transition-colors group-hover:text-[#8c2946]">
-                      Watch Episode
-                      <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </Reveal>
+        <Stagger className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3" step={80}>
+          {episodes.map((ep, idx) => (
+            <Card key={ep.id ?? ep.title} ep={ep} latest={idx === 0} />
           ))}
-        </div>
-
-        <div className="mt-12 text-center sm:mt-16">
-          <Link
-            href="/podcasts"
-            className="pf-interactive inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#a02f52] px-6 py-3 text-center text-sm font-medium text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#8c2946] hover:shadow-lg"
-          >
-            <span>View All Podcasts</span>
-            <ChevronRight className="h-4 w-4" />
-          </Link>
-        </div>
+        </Stagger>
       </div>
     </section>
   );

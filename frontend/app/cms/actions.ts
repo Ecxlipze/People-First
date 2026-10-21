@@ -7,8 +7,8 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { ApiError, ApiNotConfiguredError, apiFetch } from "@/app/lib/api";
-import { clearTokens, cmsFetch, storeTokens } from "@/app/cms/session";
-import { SLUG_RE, VENTURE_PRESETS, type CmsCategory, type CmsFormState, type CmsGalleryItem, type CmsPost } from "@/app/cms/types";
+import { clearTokens, cmsFetch, getRole, setDisplayName, storeTokens } from "@/app/cms/session";
+import { SLUG_RE, VENTURE_PRESETS, type CmsCategory, type CmsFormState, type CmsGalleryItem, type CmsPost, type CmsProfile } from "@/app/cms/types";
 
 const GENERIC = "Something went wrong talking to the server. Please try again.";
 
@@ -44,12 +44,12 @@ export async function loginAction(_prev: CmsFormState, formData: FormData): Prom
       json: { username, password },
       revalidate: false,
     });
-    /* A valid login is not enough: only staff may use the CMS. */
-    await apiFetch("/api/blog-session/", {
+    /* A valid login is not enough: only staff and Blog Authors may use the CMS. */
+    const who = await apiFetch<{ role: "staff" | "author"; display_name: string }>("/api/blog-session/", {
       headers: { Authorization: `Bearer ${tokens.access}` },
       revalidate: false,
     });
-    await storeTokens(tokens.access, tokens.refresh);
+    await storeTokens(tokens.access, tokens.refresh, { role: who.role, name: who.display_name });
   } catch (error) {
     if (error instanceof ApiError && error.status === 429) {
       return { status: "error", message: "Too many attempts. Please wait a minute and try again." };
@@ -67,6 +67,47 @@ export async function loginAction(_prev: CmsFormState, formData: FormData): Prom
     return { status: "error", message: GENERIC };
   }
   redirect("/cms");
+}
+
+/* ── Profile ──────────────────────────────────────────────────────────────── */
+
+export async function saveProfileAction(_prev: CmsFormState, formData: FormData): Promise<CmsFormState> {
+  const get = (k: string) => (formData.get(k) ?? "").toString().trim();
+  try {
+    const saved = await cmsFetch<CmsProfile>(
+      "/api/profile/",
+      { method: "PATCH", json: { first_name: get("first_name"), last_name: get("last_name"), email: get("email") } },
+      "action",
+    );
+    await setDisplayName(saved.display_name);
+    revalidatePath("/cms", "layout");
+    return { status: "success", message: "Profile saved." };
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 400) {
+      return { status: "error", message: "Please fix the highlighted fields.", errors: fieldErrors(error.payload) };
+    }
+    return { status: "error", message: GENERIC };
+  }
+}
+
+export async function changePasswordAction(_prev: CmsFormState, formData: FormData): Promise<CmsFormState> {
+  const get = (k: string) => (formData.get(k) ?? "").toString();
+  const next = get("new_password");
+  if (next !== get("confirm_password")) {
+    return { status: "error", message: "Please fix the highlighted fields.", errors: { confirm_password: "The two new passwords don't match." } };
+  }
+  try {
+    await cmsFetch("/api/profile/password/", { method: "POST", json: { current_password: get("current_password"), new_password: next } }, "action");
+    return { status: "success", message: "Password changed. Use it next time you sign in." };
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 429) {
+      return { status: "error", message: "Too many attempts. Please wait a minute and try again." };
+    }
+    if (error instanceof ApiError && error.status === 400) {
+      return { status: "error", message: "Please fix the highlighted fields.", errors: fieldErrors(error.payload) };
+    }
+    return { status: "error", message: GENERIC };
+  }
 }
 
 export async function logoutAction() {
@@ -106,7 +147,9 @@ const TEXT_FIELDS = [
 export async function savePostAction(_prev: CmsFormState, formData: FormData): Promise<CmsFormState> {
   const get = (k: string) => (formData.get(k) ?? "").toString();
   const originalSlug = get("originalSlug");
-  const intent = get("intent");
+  /* Authors can only save drafts; Django enforces it, this just keeps the UI honest. */
+  const author = (await getRole()) !== "staff";
+  const intent = author ? "draft" : get("intent");
 
   const title = get("title").trim();
   const slug = get("slug").trim();
@@ -125,15 +168,15 @@ export async function savePostAction(_prev: CmsFormState, formData: FormData): P
   }
 
   const body = new FormData();
-  for (const key of TEXT_FIELDS) body.set(key, get(key));
+  for (const key of TEXT_FIELDS) if (!(author && key === "author_name")) body.set(key, get(key));
   body.set("title", title);
   body.set("slug", slug);
   body.set("category", get("category"));
-  body.set("order", get("order") || "0");
+  if (!author) body.set("order", get("order") || "0");
 
   /* The editor's current status is posted as `status`; the button decides. */
   const current = get("status") === "published" ? "published" : "draft";
-  const status = intent === "publish" ? "published" : intent === "unpublish" ? "draft" : current;
+  const status = author ? "draft" : intent === "publish" ? "published" : intent === "unpublish" ? "draft" : current;
   body.set("status", status);
   /* Empty publish date = "now" (the model stamps it on first publish). */
   const when = get("published_at");

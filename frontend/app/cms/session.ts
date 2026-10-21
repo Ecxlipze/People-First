@@ -15,9 +15,17 @@ import { ApiError, apiFetch, type ApiFetchOptions } from "@/app/lib/api";
 
 const ACCESS = "pf_cms_access";
 const REFRESH = "pf_cms_refresh";
+const ROLE = "pf_cms_role";
+const NAME = "pf_cms_name";
 const ONE_DAY = 60 * 60 * 24;
 
-export async function storeTokens(access: string, refresh: string) {
+/* "staff" manage everything; "author" only reads live posts and drafts their
+   own (Django group "Blog Authors"). These cookies only decide what the UI
+   offers — Django re-checks the role on every API call. A missing cookie
+   falls back to the narrower role. */
+export type CmsRole = "staff" | "author";
+
+export async function storeTokens(access: string, refresh: string, who?: { role: CmsRole; name: string }) {
   const jar = await cookies();
   const base = {
     httpOnly: true,
@@ -28,12 +36,35 @@ export async function storeTokens(access: string, refresh: string) {
   };
   jar.set(ACCESS, access, base);
   jar.set(REFRESH, refresh, base);
+  /* A token refresh passes no `who`: carry the cookies forward so they
+     expire together with the session instead of a day after sign-in. */
+  const role = who?.role ?? jar.get(ROLE)?.value;
+  const name = who ? encodeURIComponent(who.name) : jar.get(NAME)?.value;
+  if (role) jar.set(ROLE, role, base);
+  if (name) jar.set(NAME, name, base);
+}
+
+export async function setDisplayName(name: string) {
+  (await cookies()).set(NAME, encodeURIComponent(name), {
+    httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/cms", maxAge: ONE_DAY,
+  });
+}
+
+export async function getRole(): Promise<CmsRole> {
+  return (await cookies()).get(ROLE)?.value === "staff" ? "staff" : "author";
+}
+
+export async function getDisplayName(): Promise<string> {
+  const raw = (await cookies()).get(NAME)?.value ?? "";
+  try { return decodeURIComponent(raw); } catch { return raw; }
 }
 
 export async function clearTokens() {
   const jar = await cookies();
   jar.delete({ name: ACCESS, path: "/cms" });
   jar.delete({ name: REFRESH, path: "/cms" });
+  jar.delete({ name: ROLE, path: "/cms" });
+  jar.delete({ name: NAME, path: "/cms" });
 }
 
 export async function hasSession(): Promise<boolean> {
@@ -96,4 +127,10 @@ export async function cmsFetch<T>(
 /* Pages call this first so a signed-out visitor goes straight to the form. */
 export async function requireSession() {
   if (!(await hasSession())) redirect("/cms/login");
+}
+
+/* Pages outside the blog editor: authors go back to their posts. */
+export async function requireStaff() {
+  await requireSession();
+  if ((await getRole()) !== "staff") redirect("/cms");
 }

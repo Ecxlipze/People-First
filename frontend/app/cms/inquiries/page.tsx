@@ -2,12 +2,13 @@ import Link from "next/link";
 import { Download, Search } from "lucide-react";
 import { ApiError } from "@/app/lib/api";
 import { cmsFetch, requireSession } from "@/app/cms/session";
+import Pagination from "@/app/cms/Pagination";
 import {
   INQUIRY_STATUS_LABEL, INQUIRY_TYPE_OPTIONS,
   type CmsInquiryPage, type CmsInquirySummary, type InquiryStatus,
 } from "@/app/cms/types";
 
-const PER_PAGE = 25;
+import { CMS_PER_PAGE as PER_PAGE, parsePage } from "@/app/cms/paging";
 const STATUS_TABS: ("all" | InquiryStatus)[] = ["all", "new", "read", "replied", "archived"];
 
 const badge: Record<InquiryStatus, string> = {
@@ -32,7 +33,7 @@ export default async function InquiriesInbox({
   const status = STATUS_TABS.includes(sp.status as never) && sp.status !== "all" ? (sp.status as InquiryStatus) : undefined;
   const type = INQUIRY_TYPE_OPTIONS.some((o) => o.value === sp.type) ? sp.type : undefined;
   const q = (sp.q ?? "").trim().slice(0, 100);
-  const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
+  const page = parsePage(sp.page);
 
   const query = (over: Record<string, string | undefined> = {}) => {
     const p = new URLSearchParams();
@@ -130,16 +131,7 @@ export default async function InquiriesInbox({
         </ul>
       )}
 
-      {totalPages > 1 && (
-        <nav aria-label="Inquiry pages" className="mt-8 flex flex-wrap items-center justify-center gap-2">
-          {Array.from({ length: totalPages }, (_, k) => k + 1).map((n) => (
-            <Link key={n} href={href({ page: n > 1 ? String(n) : undefined })} aria-current={n === page ? "page" : undefined}
-              className={`grid h-11 w-11 place-items-center rounded-lg border font-display text-sm font-bold ${n === page ? "border-transparent bg-[#a02f52] text-white" : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"}`}>
-              {n}
-            </Link>
-          ))}
-        </nav>
-      )}
+      <Pagination page={page} totalPages={totalPages} total={list.count} perPage={PER_PAGE} hrefFor={(n) => href({ page: n > 1 ? String(n) : undefined })} label="Inquiry pages" />
     </>
   );
 }

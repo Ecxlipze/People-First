@@ -5,3 +5,4 @@ class PodcastSerializer(serializers.ModelSerializer):
     class Meta:
         model = Podcast
         fields = '__all__'
+        read_only_fields = ['view_count']

@@ -43,6 +43,11 @@ export type Insight = {
      crop. Omit for a centred crop. */
   thumbPosition?: string;
   videoUrl?: string;
+  /* Blog byline data; only CMS posts carry it. */
+  author?: string;
+  publishedAt?: string;
+  readingMinutes?: number;
+  viewCount?: number;
 };
 
 /* Fallback used when the insights API is empty or unreachable. */
