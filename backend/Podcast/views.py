@@ -1,4 +1,7 @@
+import os
+import threading
 import time
+from django.conf import settings
 from rest_framework import viewsets
 from django.core.cache import cache
 from .models import Podcast
@@ -13,8 +16,30 @@ from .sync import run_sync
 from .youtube import fetch_youtube_metadata
 from .youtube_sync import YouTubeSyncError
 
-PODCAST_SYNC_CACHE_KEY = "podcast_youtube_last_sync_time"
 PODCAST_SYNC_INTERVAL_SECONDS = 3600  # 1 hour
+
+def _async_sync():
+    try:
+        run_sync()
+    except Exception:
+        pass
+
+def _should_sync() -> bool:
+    sync_file = settings.BASE_DIR / 'tmp' / 'youtube_last_sync'
+    now = time.time()
+    try:
+        if sync_file.exists():
+            mtime = sync_file.stat().st_mtime
+            if (now - mtime) < PODCAST_SYNC_INTERVAL_SECONDS:
+                return False
+    except OSError:
+        pass
+    try:
+        sync_file.parent.mkdir(parents=True, exist_ok=True)
+        sync_file.touch()
+    except OSError:
+        pass
+    return True
 
 class PodcastViewSet(PublicVisibilityMixin, viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
@@ -22,16 +47,9 @@ class PodcastViewSet(PublicVisibilityMixin, viewsets.ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
 
     def list(self, request, *args, **kwargs):
-        # Auto-sync in code: check if 1 hour has passed since last sync
-        last_sync = cache.get(PODCAST_SYNC_CACHE_KEY)
-        now = time.time()
-        if not last_sync or (now - last_sync) > PODCAST_SYNC_INTERVAL_SECONDS:
-            # Set cache immediately to prevent concurrent requests from double-syncing
-            cache.set(PODCAST_SYNC_CACHE_KEY, now, timeout=PODCAST_SYNC_INTERVAL_SECONDS * 2)
-            try:
-                run_sync()
-            except Exception:
-                pass  # Graceful fallback: do not fail public listing if YouTube is unreachable
+        # Auto-sync in background thread: check if 1 hour has passed since last sync
+        if _should_sync():
+            threading.Thread(target=_async_sync, daemon=True).start()
 
         return super().list(request, *args, **kwargs)
 
