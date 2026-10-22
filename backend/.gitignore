@@ -8,5 +8,6 @@ media/
 .env*
 !.env.example
 staticfiles/
+tmp/
 .agents/
 skills-lock.json

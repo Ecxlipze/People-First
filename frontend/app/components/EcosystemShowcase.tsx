@@ -333,7 +333,7 @@ export default function EcosystemShowcase() {
                   #548fae.
                   The logo is the LIGHT-ON-DARK variant: in HOME6 "People" is
                   white and "First" teal, over the multicoloured fan. Neither
-                  peoplefirst.png (the tall landing artwork) nor logo.png (navy
+                  logo-stacked.png (the tall landing artwork) nor logo.png (navy
                   "People") reads on this fill — the navy text disappeared into
                   the blue entirely. logo-light.png is logo.png's own bitmap with
                   just the navy wordmark recoloured white, so the fan and "First"

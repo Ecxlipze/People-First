@@ -66,10 +66,10 @@ export default function Landing() {
             className="animate-glow-pulse pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(43,191,196,0.25)_0%,rgba(43,191,196,0)_70%)] sm:h-[460px] sm:w-[460px]"
           />
           <Image
-            src="/images/peoplefirst-light.png"
+            src="/images/logo-stacked-light.png"
             alt="People First"
             width={1000}
-            height={875}
+            height={852}
             priority
             /* The PNG is trimmed to the artwork (no transparent padding), so
                its element width equals the mockup's visible ink width:
