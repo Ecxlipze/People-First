@@ -14,6 +14,12 @@ that work in the initial HTML without JavaScript. Visible copy and layout are
 unchanged. Existing API records with the obsolete Insights URL are overridden
 by the frontend content loader; no database migration is required.
 
+The subsequent performance update preserves animations and adds responsive
+image sizing, lower-priority decorative/offscreen image loading, selective font
+preloads, and shared-frame stagger checks. Include the new lossless
+`public/images/bg-landing.webp` asset when deploying. Local measurements and
+the route/viewport checklist are recorded in PERFORMANCE-VERIFICATION.md.
+
 Deploy the complete `frontend/` changes, including `next.config.ts` and
 `public/images/og/people-first.png`, using the existing Plesk deployment process.
 Keep the production environment and uploaded media; do not upload `.env.local`,

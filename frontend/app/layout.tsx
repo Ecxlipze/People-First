@@ -38,6 +38,8 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300"],
   display: "swap",
+  // Only radial-nav labels use this face; other routes should not preload it.
+  preload: false,
 });
 
 const cormorant = Cormorant_Garamond({
@@ -46,6 +48,9 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600", "700"],
   style: ["normal", "italic"],
   display: "swap",
+  // The footer's italic CTA can request its face without preloading both styles
+  // on every route, including the standalone radial landing page.
+  preload: false,
 });
 
 const siteMetadata = createPageMetadata({

@@ -346,11 +346,12 @@ export function Stagger({
     const raf1 = requestAnimationFrame(() => {
       raf2 = requestAnimationFrame(sweep);
     });
-    window.addEventListener("resize", sweep, { passive: true });
     window.addEventListener("orientationchange", sweep, { passive: true });
     // A scroll is the other way a staged item can come on screen without the
     // observer firing (same pinned/absolute geometry as above).
-    window.addEventListener("scroll", sweep, { passive: true });
+    // Reuse the shared frame queue so multiple scroll events cannot run this
+    // geometry sweep repeatedly before the next paint. Timing/easing are unchanged.
+    const unsubscribe = subscribeScrollFrame(sweep);
 
     /* The two-frame sweep measures ONE moment. Anything that shifts layout
        afterwards — a web font swapping in, a logo decoding and resizing its
@@ -375,9 +376,8 @@ export function Stagger({
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
       ro?.disconnect();
-      window.removeEventListener("resize", sweep);
       window.removeEventListener("orientationchange", sweep);
-      window.removeEventListener("scroll", sweep);
+      unsubscribe();
     };
   }, [y, step, selector]);
 

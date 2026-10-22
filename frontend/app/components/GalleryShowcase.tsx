@@ -197,7 +197,6 @@ export default function GalleryShowcase({
                       sizes="(max-width: 639px) 62vw, (max-width: 1023px) 40vw, 19vw"
                       className="object-cover"
                       draggable={false}
-                      priority={i === 0}
                       skeleton
                     />
                   ) : (

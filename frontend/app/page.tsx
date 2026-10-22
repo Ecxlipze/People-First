@@ -17,7 +17,7 @@ export default function Landing() {
     <div className="relative flex min-h-svh flex-col overflow-hidden bg-[#0b0b0d]">
       <div 
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 bg-[url('/images/bg-landing.png')] bg-cover bg-center bg-no-repeat opacity-80 mix-blend-screen"
+        className="pointer-events-none absolute inset-0 z-0 bg-[url('/images/bg-landing.webp')] bg-cover bg-center bg-no-repeat opacity-80 mix-blend-screen"
       />
       {/* Subtle side patterns and dark gradients */}
       <div 
@@ -68,6 +68,7 @@ export default function Landing() {
             width={1000}
             height={852}
             priority
+            sizes="(max-height: 500px) 140px, (min-width: 1024px) min(580px, 56.6svh, calc(96.08svh - 263px)), (min-width: 640px) 281px, 197px"
             /* The PNG is trimmed to the artwork (no transparent padding), so
                its element width equals the mockup's visible ink width:
                579.6px at 1440 wide. The previous SVG was 93.63% ink, so every

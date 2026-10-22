@@ -97,7 +97,9 @@ export default async function HomePage() {
               aria-hidden
               width={1923}
               height={462}
-              priority
+              sizes="(min-width: 768px) min(100vw, 1350px), 160vw"
+              loading="eager"
+              fetchPriority="low"
               className="animate-fade-in-up pointer-events-none absolute bottom-[76px] left-1/2 z-0 w-[160%] max-w-none -translate-x-1/2 select-none md:bottom-auto md:top-[52%] md:w-full md:max-w-[1350px] lg:top-[47%] [@media(max-height:500px)]:hidden"
             />
 
