@@ -55,6 +55,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // TLS for www must also be configured on the host before this can run.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www\\.peoplefirst\\.pk" }],
+        destination: "https://peoplefirst.pk/:path*",
+        permanent: true,
+      },
       {
         source: "/contact-us",
         destination: "/contact",

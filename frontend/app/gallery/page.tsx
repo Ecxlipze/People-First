@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,14 +7,11 @@ import SiteFooter from "@/app/components/SiteFooter";
 import GalleryView from "./GalleryView";
 import { getFullGallery } from "@/app/lib/content";
 
-export const metadata: Metadata = {
-  title: "Gallery",
-  description:
-    "Explore visual moments, events, podcast studio sessions, and milestones from across the People First ecosystem.",
-  alternates: {
-    canonical: "/gallery",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Gallery: Events, Studio & Milestones",
+  description: "Explore photos of People First events, podcast studio sessions, community moments, and milestones from across our ecosystem.",
+  path: "/gallery",
+});
 
 export default async function GalleryPage() {
   const photos = await getFullGallery();

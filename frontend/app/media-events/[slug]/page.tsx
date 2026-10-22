@@ -11,7 +11,7 @@ import ShareButtons from "@/app/media-events/ShareButtons";
 import ViewBeacon from "@/app/media-events/ViewBeacon";
 import { formatViews } from "@/app/lib/format";
 import { getBlogPost, getBlogPosts, type BlogPost } from "@/app/lib/content/blog";
-import { getBaseUrl } from "@/app/lib/seo";
+import { absoluteSiteUrl, createPageMetadata, serializeJsonLd } from "@/app/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -19,17 +19,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPost(slug);
   if (!post) return { title: "Post not found", robots: { index: false } };
-  return {
-    title: post.metaTitle,
+  const metadata = createPageMetadata({
+    title: post.metaTitle || post.title,
     description: post.metaDescription,
-    alternates: { canonical: `/media-events/${post.slug}` },
+    path: `/media-events/${post.slug}`,
+    image: post.image ? { url: post.image, alt: post.imageAlt || post.title } : undefined,
+  });
+  return {
+    ...metadata,
     openGraph: {
+      ...metadata.openGraph,
       type: "article",
-      title: post.metaTitle,
-      description: post.metaDescription,
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
-      images: post.image ? [{ url: post.image, alt: post.imageAlt }] : undefined,
     },
   };
 }
@@ -42,14 +44,19 @@ export default async function BlogPostPage({ params }: Props) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "@id": absoluteSiteUrl(`/media-events/${post.slug}#article`),
+    url: absoluteSiteUrl(`/media-events/${post.slug}`),
     headline: post.title,
-    description: post.metaDescription,
-    mainEntityOfPage: `${getBaseUrl()}/media-events/${post.slug}`,
-    ...(post.image ? { image: [post.image] } : {}),
+    description: post.excerpt || post.metaDescription,
+    mainEntityOfPage: absoluteSiteUrl(`/media-events/${post.slug}`),
+    isPartOf: { "@id": absoluteSiteUrl("/#website") },
+    ...(post.image ? { image: [absoluteSiteUrl(post.image)] } : {}),
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     dateModified: post.updatedAt,
-    ...(post.author ? { author: { "@type": "Person", name: post.author } } : {}),
-    publisher: { "@type": "Organization", name: "People First" },
+    author: post.author
+      ? { "@type": "Person", name: post.author }
+      : { "@id": absoluteSiteUrl("/#organization") },
+    publisher: { "@id": absoluteSiteUrl("/#organization") },
   };
 
   /* Up to three other posts, same category first, so the reader has somewhere
@@ -64,8 +71,7 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        /* "<" escaped so a post title can never close the script tag */
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <SideNav />
       <ViewBeacon slug={post.slug} />
@@ -130,7 +136,7 @@ export default async function BlogPostPage({ params }: Props) {
                     </div>
                   </div>
                   <div className="mt-5">
-                    <ShareButtons variant="bar" title={post.title} path={`/media-events/${post.slug}`} />
+                    <ShareButtons variant="bar" title={post.title} url={absoluteSiteUrl(`/media-events/${post.slug}`)} />
                   </div>
                 </header>
 

@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
@@ -6,14 +7,11 @@ import JourneyPaths from "@/app/about/sections/JourneyPaths";
 import KeyStats from "@/app/about/sections/KeyStats";
 import VisionMission from "@/app/about/sections/VisionMission";
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description:
-    "Every movement begins with a question. The People First story, our journey paths, key stats, and our vision & mission.",
-  alternates: {
-    canonical: "/about",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Our Story, Vision & Mission",
+  description: "Meet People First and founder Rai Salahuddin Ahmad. Discover the story, vision, and mission behind an ecosystem built around people and opportunity.",
+  path: "/about",
+});
 
 /* About page — a single scrollable, top-to-bottom composition. The right-hand
    icon rail (SideNav) and the footer (SiteFooter) are shared with /home so the

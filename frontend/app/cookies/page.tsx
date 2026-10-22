@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import LegalPageLayout, {
   LEGAL_CONTACT_EMAIL,
@@ -5,13 +6,11 @@ import LegalPageLayout, {
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Cookies Policy",
-  description: "Information about how we use cookies and similar technologies.",
-  alternates: {
-    canonical: "/cookies",
-  },
-};
+  description: "Learn how the People First website uses cookies and similar technologies, including essential cookies, preferences, and browser controls.",
+  path: "/cookies",
+});
 
 const sections: LegalSection[] = [
   {

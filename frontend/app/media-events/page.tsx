@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,13 +9,11 @@ import BlogSidebar from "@/app/media-events/BlogSidebar";
 import FeaturedPodcast from "@/app/media-events/sections/FeaturedPodcast";
 import { getEpisodes, getInsights } from "@/app/lib/content";
 
-export const metadata: Metadata = {
-  title: "Media / Events",
-  description: "Featured media, events, and studio content from People First.",
-  alternates: {
-    canonical: "/media-events",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Media, Events & Stories",
+  description: "Explore People First media, events, and studio content. Read the latest stories and updates from across the People First ecosystem.",
+  path: "/media-events",
+});
 
 /* Media / Events (formerly "Insights by People First", /insights) — built from public/images/Studio.pdf.
 

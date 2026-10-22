@@ -1,16 +1,13 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import ContactPageBody from "@/app/contact/ContactPageBody";
 
-export const metadata: Metadata = {
-  title: "Join a Training Program",
-  description: "Sign up for skills and business training from People First.",
-  robots: {
-    index: false,
-  },
-  alternates: {
-    canonical: "/training",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Join a Skills Training Program",
+  description: "Inquire about People First skills training in freelancing, e-commerce, social media, AI tools, and business communication.",
+  path: "/training",
+  noIndex: true,
+});
 
 export default function TrainingPage() {
   return (

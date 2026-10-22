@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat, Poppins, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { ContactModalProvider } from "./contact/ContactModal";
-import { getBaseUrl } from "@/app/lib/seo";
+import { absoluteSiteUrl, createPageMetadata, getBaseUrl, serializeJsonLd } from "@/app/lib/seo";
 
 /* ---- The site's font setup ----
    Loaded once here, in the root layout, and handed to the rest of the site as
@@ -48,29 +48,22 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+const siteMetadata = createPageMetadata({
+  title: "Ventures, Partnerships & Growth",
+  description: "Discover People First: an ecosystem connecting people with ventures, partnerships, mentorship, training, and opportunities to learn, grow, and lead.",
+  path: "/",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseUrl()),
   title: {
     template: "%s | People First",
     default: "People First",
   },
-  description: "People First — putting people first.",
+  description: siteMetadata.description,
+  openGraph: siteMetadata.openGraph,
+  twitter: siteMetadata.twitter,
   applicationName: "People First",
-  openGraph: {
-    title: "People First",
-    description: "People First — putting people first.",
-    siteName: "People First",
-    locale: "en_US",
-    type: "website",
-    // TODO: A dedicated Open Graph image is required.
-    // Uncomment this line once /public/images/og/people-first-og.png is added.
-    // images: [{ url: '/images/og/people-first-og.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "People First",
-    description: "People First — putting people first.",
-  },
   robots: {
     index: true,
     follow: true,
@@ -100,19 +93,30 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: serializeJsonLd({
               "@context": "https://schema.org",
               "@graph": [
                 {
                   "@type": "WebSite",
+                  "@id": absoluteSiteUrl("/#website"),
                   name: "People First",
                   url: getBaseUrl(),
+                  publisher: { "@id": absoluteSiteUrl("/#organization") },
                 },
                 {
                   "@type": "Organization",
+                  "@id": absoluteSiteUrl("/#organization"),
                   name: "People First",
                   url: getBaseUrl(),
-                  logo: `${getBaseUrl()}/images/logo.png`,
+                  logo: {
+                    "@type": "ImageObject",
+                    "@id": absoluteSiteUrl("/#logo"),
+                    url: absoluteSiteUrl("/images/logo.png"),
+                  },
+                  founder: {
+                    "@type": "Person",
+                    name: "Rai Salahuddin Ahmad",
+                  },
                 },
               ],
             }),

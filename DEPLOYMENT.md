@@ -1,5 +1,57 @@
 # People First deployment
 
+## Current production and SEO release — 22 October 2026
+
+The current public frontend is **https://peoplefirst.pk**, served through
+nginx/Plesk. Public media is also served from https://api.peoplefirst.pk.
+The Vercel notes below are historical; the old frontend Vercel hostname now
+returns `DEPLOYMENT_NOT_FOUND`.
+
+This release contains metadata/social previews, structured-data corrections,
+self-canonicals for the distinct landing and home pages, sitemap corrections,
+the Insights venture link to `/media-events`, and absolute article share URLs
+that work in the initial HTML without JavaScript. Visible copy and layout are
+unchanged. Existing API records with the obsolete Insights URL are overridden
+by the frontend content loader; no database migration is required.
+
+Deploy the complete `frontend/` changes, including `next.config.ts` and
+`public/images/og/people-first.png`, using the existing Plesk deployment process.
+Keep the production environment and uploaded media; do not upload `.env.local`,
+the local database, local media fixtures, or macOS `node_modules`.
+
+Before building, verify production `NEXT_PUBLIC_SITE_URL=https://peoplefirst.pk`
+and retain the existing production `API_BASE_URL`. Install from the lockfile,
+run `npm run build` in the frontend application directory, and restart the
+existing application through its configured hosting process.
+
+### Hosting action still required
+
+The observed TLS certificate covers `peoplefirst.pk` but **not**
+`www.peoplefirst.pk`. Issue/renew the certificate to cover both names in Plesk.
+The application now permanently redirects the exact `www.peoplefirst.pk` host
+to `https://peoplefirst.pk`, preserving paths and query parameters. The www
+hostname must reach this app, or have an equivalent redirect configured on the
+web server. Application code cannot repair a TLS failure that occurs before
+the HTTP request reaches the app.
+
+### After deployment
+
+- Verify HTTPS works for both hostnames and www redirects to the apex domain.
+- Check `/home` Insights opens `https://peoplefirst.pk/media-events`.
+- Inspect an article's original HTML: social share URLs should contain the
+  full `https://peoplefirst.pk/media-events/...` destination before hydration.
+- Verify `/` and `/home` each declare their own canonical URL.
+- Check `/sitemap.xml` includes `/` and `/gallery`, excludes noindex routes,
+  omits static-page `lastmod`, and retains actual CMS article update dates.
+- Confirm the branded preview image loads and public pages remain crawlable.
+- Submit `https://peoplefirst.pk/sitemap.xml` in the domain's webmaster tools
+  and inspect indexing there. Actual indexing was not confirmed by this audit.
+
+The LinkedIn profile returned an automated-request block (HTTP 999); this is
+not a confirmed broken link and its destination was preserved.
+
+## Historical Vercel deployment
+
 Production verified on 2026-09-29:
 
 - Frontend: https://peoples-first.vercel.app

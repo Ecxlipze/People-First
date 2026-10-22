@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
@@ -6,14 +7,11 @@ import ProgramAreas from "@/app/grow-with-us/sections/ProgramAreas";
 import WhoCanJoin from "@/app/grow-with-us/sections/WhoCanJoin";
 import ProgramOutcomes from "@/app/grow-with-us/sections/ProgramOutcomes";
 
-export const metadata: Metadata = {
-  title: "Grow with Us",
-  description:
-    "Explore training programs, career paths, and business growth opportunities with People First.",
-  alternates: {
-    canonical: "/grow-with-us",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Skills Training & Growth Opportunities",
+  description: "Explore People First training in freelancing, e-commerce, social media, AI tools, and business communication, alongside career and growth opportunities.",
+  path: "/grow-with-us",
+});
 
 /* Grow With Us — a single scrollable, top-to-bottom composition, structured
    like /about: the shared right-hand icon rail (SideNav) and shared footer

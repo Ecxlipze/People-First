@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
@@ -8,14 +9,11 @@ import EvolutionPipeline from "@/app/what-we-do/sections/EvolutionPipeline";
 import BrandArchitecture from "@/app/what-we-do/sections/BrandArchitecture";
 import TallSwipePanel from "@/app/components/TallSwipePanel";
 
-export const metadata: Metadata = {
-  title: "What We Do",
-  description:
-    "Discover the People First services, ecosystem, ventures, impact, and brand architecture.",
-  alternates: {
-    canonical: "/what-we-do",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Our Ecosystem, Ventures & Impact",
+  description: "Discover how People First connects talent, learning, ventures, and partnerships through an ecosystem designed to support personal and business growth.",
+  path: "/what-we-do",
+});
 
 /* What We Do — a multi-section swipe-over page, same pattern as /home and
    /ideas-lab: SECTION 1 pins itself (`sticky top-0 h-screen`) and SECTION 2

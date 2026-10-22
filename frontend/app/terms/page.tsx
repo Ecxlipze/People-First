@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import LegalPageLayout, {
   LEGAL_CONTACT_EMAIL,
@@ -5,13 +6,11 @@ import LegalPageLayout, {
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Terms and Conditions",
-  description: "Terms and conditions governing the use of People First services.",
-  alternates: {
-    canonical: "/terms",
-  },
-};
+  description: "Read the terms governing your use of the People First website, including intellectual property, contact forms, third-party links, and responsibilities.",
+  path: "/terms",
+});
 
 const sections: LegalSection[] = [
   {

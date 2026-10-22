@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import SideNav from "@/app/components/SideNav";
@@ -17,13 +18,11 @@ import {
   getVentures,
 } from "@/app/lib/content";
 
-export const metadata: Metadata = {
-  title: "Home",
-  description: "Explore the People First ecosystem. Discover our ventures, featured work, community, and growth opportunities.",
-  alternates: {
-    canonical: "/home",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Ventures, Partnerships & Growth",
+  description: "Explore People First ventures, featured work, community, and opportunities for learning, collaboration, and business growth.",
+  path: "/home",
+});
 
 export default async function HomePage() {
   /* Server Component: the four content-backed sections are fetched here and

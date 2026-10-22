@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import RadialNav from "@/app/components/RadialNav";
@@ -5,15 +6,11 @@ import SayHelloIcon from "@/app/components/SayHelloIcon";
 import ContactTrigger from "@/app/contact/ContactTrigger";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: "People First",
-  },
-  description: "Enter the People First ecosystem. Putting people first in ventures, partnerships, and growth.",
-  alternates: {
-    canonical: "/home",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Ventures, Partnerships & Growth",
+  description: "Discover People First: an ecosystem connecting people with ventures, partnerships, mentorship, training, and opportunities to learn, grow, and lead.",
+  path: "/",
+});
 
 export default function Landing() {
   return (

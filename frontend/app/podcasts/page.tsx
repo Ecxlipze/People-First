@@ -1,3 +1,4 @@
+import { absoluteSiteUrl, createPageMetadata, serializeJsonLd } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
@@ -7,14 +8,11 @@ import Analytics from "@/app/podcasts/sections/Analytics";
 import OurPodcasts from "@/app/podcasts/sections/OurPodcasts";
 import { getEpisodes } from "@/app/lib/content";
 
-export const metadata: Metadata = {
-  title: "Podcasts",
-  description:
-    "Listen to People First podcasts, conversations, insights, and growth content.",
-  alternates: {
-    canonical: "/podcasts",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Podcasts & Conversations",
+  description: "Watch and listen to People First podcasts featuring conversations, ideas, insights, and perspectives on learning and growth.",
+  path: "/podcasts",
+});
 
 /* Podcasts — a single scrollable, top-to-bottom composition, structured like
    /about and /grow-with-us: the shared right-hand icon rail (SideNav) and
@@ -27,13 +25,13 @@ export default async function PodcastsPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    "@id": absoluteSiteUrl("/podcasts#episodes"),
+    url: absoluteSiteUrl("/podcasts"),
+    name: "Our Podcasts",
+    numberOfItems: videoEpisodes.length,
     itemListElement: videoEpisodes.map((ep, i) => {
-      const match = ep.videoUrl?.match(
-        /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-      );
-      const embedUrl = match
-        ? `https://www.youtube.com/embed/${match[1]}`
-        : ep.videoUrl;
+      // A watch page is not a video file; only known YouTube players get embedUrl.
+      const embedUrl = youtubeEmbedUrl(ep.videoUrl!);
       return {
         "@type": "ListItem",
         position: i + 1,
@@ -41,11 +39,9 @@ export default async function PodcastsPage() {
           "@type": "VideoObject",
           name: ep.title,
           description: ep.description || ep.title,
-          thumbnailUrl: ep.thumb
-            ? [ep.thumb.startsWith("http") ? ep.thumb : `https://peoplefirst.com${ep.thumb}`]
-            : [],
-          contentUrl: ep.videoUrl,
-          embedUrl: embedUrl,
+          ...(ep.thumb ? { thumbnailUrl: [absoluteSiteUrl(ep.thumb)] } : {}),
+          url: ep.videoUrl,
+          ...(embedUrl ? { embedUrl } : {}),
           ...(ep.publishedAt ? { uploadDate: ep.publishedAt } : {}),
         },
       };
@@ -56,7 +52,7 @@ export default async function PodcastsPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       {/* right vertical icon navbar — fixed z-[100], must be outside overflow-x-clip */}
       <SideNav />
@@ -70,4 +66,25 @@ export default async function PodcastsPage() {
       </div>
     </>
   );
+}
+
+function youtubeEmbedUrl(value: string): string | undefined {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return;
+    const host = url.hostname.replace(/^www\./, "");
+    let id: string | null | undefined;
+    if (host === "youtu.be") {
+      id = url.pathname.split("/")[1];
+    } else if (host === "youtube.com" || host === "m.youtube.com" || host === "youtube-nocookie.com") {
+      id = url.pathname === "/watch"
+        ? url.searchParams.get("v")
+        : url.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)\/?$/)?.[1];
+    }
+    if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) {
+      return `https://www.youtube.com/embed/${id}`;
+    }
+  } catch {
+    // An incomplete CMS URL must not break the page's structured data.
+  }
 }

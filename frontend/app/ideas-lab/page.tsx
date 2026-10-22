@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
@@ -6,14 +7,11 @@ import RecommendedArticles from "@/app/ideas-lab/sections/RecommendedArticles";
 import { getArticles } from "@/app/lib/content";
 import TallSwipePanel from "@/app/components/TallSwipePanel";
 
-export const metadata: Metadata = {
-  title: "Ideas Lab",
-  description:
-    "Discover insights, articles, and growth resources from the People First Ideas Lab.",
-  alternates: {
-    canonical: "/ideas-lab",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Ideas Lab: Insights & Growth Resources",
+  description: "Explore the People First Ideas Lab for articles, insights, and resources on learning, entrepreneurship, and personal and professional growth.",
+  path: "/ideas-lab",
+});
 
 /* Ideas Lab — built on the /home swipe-over pattern: SECTION 1 pins itself
    (`sticky top-0 h-screen`) and SECTION 2 rises up and over it, carrying the

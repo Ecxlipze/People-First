@@ -18,20 +18,18 @@ const noopSubscribe = () => () => {};
    article's byline; the default is the labelled row at the foot of the article. */
 export default function ShareButtons({
   title,
-  path,
+  url,
   variant = "footer",
 }: {
   title: string;
-  path: string;
+  /* Absolute canonical URL supplied by the Server Component for no-JS links. */
+  url: string;
   variant?: "footer" | "bar";
 }) {
   const [copied, setCopied] = useState(false);
 
-  /* The absolute address and native-share support are only known in the
-     browser; the server render falls back to the bare path and no Share button. */
-  const origin = useSyncExternalStore(noopSubscribe, () => window.location.origin, () => "");
+  /* Native sharing is browser-only; the destination is ready in the server HTML. */
   const canShare = useSyncExternalStore(noopSubscribe, () => typeof navigator.share === "function", () => false);
-  const url = `${origin}${path}`;
 
   const copy = async () => {
     try {

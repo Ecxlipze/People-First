@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import LegalPageLayout, {
@@ -6,13 +7,11 @@ import LegalPageLayout, {
   type LegalSection,
 } from "@/app/components/LegalPageLayout";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Privacy Policy",
-  description: "Information about how we collect, use, and share your data.",
-  alternates: {
-    canonical: "/privacy",
-  },
-};
+  description: "Read how People First collects, uses, and protects personal information, including contact form submissions, and learn about your privacy rights.",
+  path: "/privacy",
+});
 
 const sections: LegalSection[] = [
   {

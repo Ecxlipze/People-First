@@ -1,17 +1,13 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import ContactPageBody from "@/app/contact/ContactPageBody";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Partner with Us",
-  description:
-    "Partner with People First. Tell us about your organisation and how we can build together.",
-  robots: {
-    index: false,
-  },
-  alternates: {
-    canonical: "/partner",
-  },
-};
+  description: "Connect with People First about partnership opportunities. Tell us about your organisation and how we can learn, collaborate, and build together.",
+  path: "/partner",
+  noIndex: true,
+});
 
 export default function PartnerPage() {
   return (

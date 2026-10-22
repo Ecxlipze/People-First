@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/app/lib/seo";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowRight, GraduationCap, Cpu, PackageCheck, Sun, HandCoins, ChartNoAxesCombined, Handshake, Tractor, Sprout, ClipboardList, Users, TrendingUp } from "lucide-react";
@@ -6,11 +7,11 @@ import SiteFooter from "@/app/components/SiteFooter";
 import ContactTrigger from "@/app/contact/ContactTrigger";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "Kissan Veer",
-  description: "26 years of field experience. Building Pakistan’s agricultural future with technology, trust, and transparency.",
-  alternates: { canonical: "/kissan-veer" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Kissan Veer: Agriculture & Farmer Empowerment",
+  description: "Discover Kissan Veer: combining field experience, farmer training, technology, and agricultural support to build Pakistan’s farming future.",
+  path: "/kissan-veer",
+});
 
 const services = [
   { icon: GraduationCap, title: "Grassroots Training & Skill Building", body: "Hands-on programs that equip growers with modern cultivation, post-harvest preservation, and value-addition techniques." },

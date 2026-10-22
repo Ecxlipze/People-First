@@ -185,11 +185,13 @@ export async function getVentures(): Promise<Venture[]> {
         tagline: item.subtitle ?? "",
         logo: item.logo ?? undefined,
         hasLogo: Boolean(item.logo),
-        /* A venture with no site keeps the mockup's inert card. */
-        // This venture now has a first-party page, including for existing API rows.
-        href: /^kis+a+n\s*veer$/i.test(item.name.trim())
-          ? "/kissan-veer"
-          : item.website_url || "#",
+        /* First-party destinations also override stale external URLs in existing
+           API rows. A venture with no site keeps the mockup's inert card. */
+        href: item.name.trim().toLowerCase() === "insights"
+          ? "/media-events"
+          : /^kis+a+n\s*veer$/i.test(item.name.trim())
+            ? "/kissan-veer"
+            : item.website_url || "#",
         accent: item.accent || DEFAULT_VENTURE_ACCENT,
         borderGradient: item.border_gradient || DEFAULT_VENTURE_GRADIENT,
       })),
