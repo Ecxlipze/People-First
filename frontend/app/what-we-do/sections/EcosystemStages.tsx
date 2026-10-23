@@ -2,7 +2,6 @@ import Image from "next/image";
 import { GraduationCap } from "lucide-react";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
 import { STAGES, type Stage } from "@/app/what-we-do/stages";
-import ContactTrigger from "@/app/contact/ContactTrigger";
 
 /* What We Do → "The People First Ecosystem" (SECTION 2).
 
@@ -166,8 +165,6 @@ export default function EcosystemStages() {
         height={302}
         className="animate-floaty pointer-events-none absolute bottom-[7%] left-[45%] hidden h-6 w-auto select-none sm:block xl:bottom-[4.9%] xl:left-[62.1%] xl:h-[4.8vh]"
       />
-      {/* kept left of the CTA row: the buttons occupy the right half of this
-          band, and the plane is tall enough to cross them from anywhere nearer */}
       <Image
         src="/images/what-we-do/plane-teal.webp"
         alt=""
@@ -179,8 +176,8 @@ export default function EcosystemStages() {
 
       {/* No right padding on the container: it would shrink the content box
           from the right and pull the centred heading off the page's true
-          centre. Only the grid and CTAs need to clear the icon rail, so they
-          reserve that space themselves. max-w-7xl so the columns run wide. */}
+          centre. Only the grid needs to clear the icon rail, so it
+          reserves that space itself. max-w-7xl so the columns run wide. */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 xl:h-[100svh] xl:max-w-none xl:px-0">
         <Reveal className="text-center xl:pt-[10vh]">
           <h2 className="font-display text-xl font-bold leading-none tracking-normal text-[#1a1a2e] sm:text-2xl lg:text-[1.875rem] xl:text-[37px] xl:text-black">
@@ -188,13 +185,13 @@ export default function EcosystemStages() {
           </h2>
           <p className="mx-auto mt-3 max-w-3xl text-center font-display text-sm font-medium leading-none tracking-normal text-zinc-600 sm:mt-4 sm:text-base lg:mt-5 lg:text-lg xl:max-w-[50vw] xl:text-[22px] xl:text-black">
             The People First Evolution Model sequences human potential across
-            Physical, Mind, and Market circles, deploying synchronized ventures
+            Physical, Mind, and Market stages, deploying synchronized ventures
             and strategic JVs for rapid, self-sustaining growth.
           </p>
         </Reveal>
 
         {/* Keep the grid in document flow so its spacing follows the description
-            even when that copy wraps. The cards and CTAs still reserve enough
+            even when that copy wraps. The cards still reserve enough
             room for the icon rail at desktop widths. */}
         <Stagger
           className="mt-12 grid items-stretch gap-6 sm:mt-14 lg:grid-cols-3 lg:gap-5 lg:pr-[11rem] xl:ml-[6vw] xl:mt-16 xl:w-[76vw] xl:gap-[1.5vw] xl:pr-0"
@@ -205,40 +202,6 @@ export default function EcosystemStages() {
           ))}
         </Stagger>
 
-        {/* ── CTAs + say-hello glyph, bottom-right as in the mockup ──
-            Same right reservation as the grid above, so the buttons line up
-            with the right edge of THE MARKET STAGE column rather than floating
-            somewhere between it and the icon rail. z-20 keeps them above the
-            decorative planes, which drift through this band. */}
-        <div className="relative z-20 mt-10 flex w-full animate-fade-in-up flex-col items-stretch gap-3 min-[500px]:flex-row min-[500px]:flex-wrap min-[500px]:items-center min-[500px]:justify-center md:w-auto md:justify-end lg:pr-[11rem] xl:absolute xl:bottom-[6.4vh] xl:left-[60vw] xl:mt-0 xl:flex-nowrap xl:gap-3 xl:pr-0">
-          <ContactTrigger
-            href="/partner"
-            role="Training Partner"
-            className="flex w-full items-center justify-center rounded-md bg-[#9f4163] px-5 py-2 text-[0.8rem] font-display font-medium text-white transition-colors hover:bg-[#8e3a59] min-[500px]:inline-flex min-[500px]:w-auto xl:whitespace-nowrap"
-          >
-            Partner with Us
-          </ContactTrigger>
-          <ContactTrigger
-            href="/training"
-            role="Student"
-            className="flex w-full items-center justify-center rounded-md bg-[#dbdbdb] px-5 py-2 text-[0.8rem] font-display font-medium text-zinc-700 transition-colors hover:bg-[#cecece] min-[500px]:inline-flex min-[500px]:w-auto xl:whitespace-nowrap"
-          >
-            Join Training Program
-          </ContactTrigger>
-          <ContactTrigger
-            href="/contact"
-            aria-label="Say hello"
-            className="hidden sm:block mx-auto mt-2 transition-transform duration-300 hover:-translate-y-1 hover:scale-110 min-[500px]:mx-0 min-[500px]:mt-0"
-          >
-            <Image
-              src="/images/icons/messages.png"
-              alt=""
-              width={32}
-              height={32}
-              className="h-8 w-8 select-none xl:h-8 xl:w-8"
-            />
-          </ContactTrigger>
-        </div>
       </div>
     </section>
   );

@@ -91,11 +91,14 @@ function OrbitNode({ s }: { s: Sector }) {
   if (s.angle === 0) {
     placement =
       "bottom-full left-1/2 mb-2 -translate-x-1/2 text-center";
+  } else if (s.angle === 160) {
+    // Separate the two bottom captions so their text does not collide.
+    placement = "left-1/2 top-full mt-2 -translate-x-[calc(50%-1.5rem)] text-center";
   } else if (s.angle > 0 && s.angle < 180) {
     placement =
       "left-full top-1/2 ml-2 -translate-y-1/2 text-left 2xl:ml-3";
   } else if (s.angle > 180 && s.angle < 240) {
-    placement = "left-1/2 top-full mt-2 -translate-x-1/2 text-center";
+    placement = "left-1/2 top-full mt-2 -translate-x-[calc(50%+1.5rem)] text-center";
   } else {
     placement =
       "right-full top-1/2 mr-2 -translate-y-1/2 text-right 2xl:mr-3";
@@ -105,11 +108,9 @@ function OrbitNode({ s }: { s: Sector }) {
       data-node
       className="group absolute -translate-x-1/2 -translate-y-1/2"
       style={{
-        /* Each node carries its own radius multiplier — see the `r` note in
-           ecosystem.ts. The design's ring runs 138–187px around a 130px hub, so
-           a single shared radius flattens a deliberately uneven arrangement. */
-        left: `calc(50% + ${(x * s.r).toFixed(4)} * var(--orbit-r))`,
-        top: `calc(50% + ${(y * s.r).toFixed(4)} * var(--orbit-r))`,
+        /* Equal 40° steps on one shared radius keep all nine circle gaps equal. */
+        left: `calc(50% + ${x.toFixed(4)} * var(--orbit-r))`,
+        top: `calc(50% + ${y.toFixed(4)} * var(--orbit-r))`,
         opacity: 0,
         willChange: "transform, opacity",
       }}
@@ -135,7 +136,7 @@ function OrbitNode({ s }: { s: Sector }) {
             tagline 22.8pt on the 1920 frame → ~19px and ~13px at 1440, where
             these were 14px/12px. Taglines are BLACK in HOME6, not zinc-500. */}
         <div
-          className={`absolute w-32 min-[1400px]:w-36 2xl:w-44 ${placement}`}
+          className={`absolute ${s.angle === 160 || s.angle === 200 ? "w-32 2xl:w-36" : "w-32 min-[1400px]:w-36 2xl:w-44"} ${placement}`}
         >
           <p
             className="text-[15px] font-semibold leading-tight 2xl:text-[17px]"
@@ -152,7 +153,7 @@ function OrbitNode({ s }: { s: Sector }) {
   );
 }
 
-/* Ecosystem section (6). Swipes up over the pinned Testimonials section (5) —
+/* Ecosystem section (2). Swipes up over the pinned hero section (1) —
    outer track carries the negative margin + rounded opaque bg + upward shadow
    (the swipe-over recipe). PinnedRecede pins it too. Left column of copy, right
    column an orbit of sector nodes around a People First hub (desktop); the
@@ -263,8 +264,9 @@ export default function EcosystemShowcase() {
   // shadow, no negative pull); see globals.css. Safe alongside `overflow-clip`
   // because the joining hairline is drawn inside this box, not outside it.
   return (
-    <div className="pf-blend relative z-50 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]">
+    <div className="pf-blend relative z-10 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]">
       <PinnedRecede
+        mobileEntrance={false}
         /* The swipe-over runs from `md`, like every section above this one. It
            used to start at `xl` (with a token `md:-mt-8` below that), so on
            tablets and small laptops the cinematic handoff played for sections
@@ -288,9 +290,10 @@ export default function EcosystemShowcase() {
       >
         {/* decorative layer — pinned+receding with the content */}
         <Decor />
-        <div className="relative z-10 mx-auto grid w-full max-w-[1720px] grid-cols-1 items-center gap-8 px-8 sm:px-12 lg:px-16 lg:pr-32 xl:grid-cols-[560px_1fr] xl:gap-8 2xl:gap-12 xl:pr-[340px] min-[1400px]:pr-[380px] 2xl:pr-[420px]">
+        <div className="relative z-10 mx-auto grid w-full max-w-[1720px] grid-cols-1 items-center gap-8 px-8 sm:px-12 lg:px-16 lg:pr-32 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:gap-36 2xl:gap-44">
+          {/* The wide gutter reserves room for orbit labels beside the copy. */}
           {/* ── left column ── */}
-          <div ref={leftRef} className="max-w-none xl:mt-12">
+          <div ref={leftRef} className="min-w-0">
             <h2
               data-reveal
               style={{ opacity: 0, willChange: "transform, opacity" }}
@@ -384,26 +387,46 @@ export default function EcosystemShowcase() {
             ref={orbitRef}
             className="relative mx-auto hidden h-[460px] w-full max-w-[640px] [--orbit-r:115px] xl:block min-[1400px]:h-[500px] min-[1400px]:max-w-[720px] min-[1400px]:[--orbit-r:130px] 2xl:h-[540px] 2xl:max-w-[780px] 2xl:[--orbit-r:145px]"
           >
-            {/* faint ring */}
-            <span
-              aria-hidden
-              className="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-zinc-200"
-              style={{
-                width: "calc(var(--orbit-r) * 2)",
-                height: "calc(var(--orbit-r) * 2)",
-              }}
-            />
+            {/* Clockwise arrows occupy only the gaps between circles. The
+                shared radius keeps the arrows aligned at every desktop size. */}
+            <svg
+              aria-hidden="true"
+              viewBox="-120 -120 240 240"
+              className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible"
+              style={{ width: "calc(var(--orbit-r) * 2.4)", height: "calc(var(--orbit-r) * 2.4)" }}
+            >
+              <defs>
+                <marker id="ecosystem-clockwise-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+                  <path d="M 0 0 L 8 4 L 0 8 Z" fill="#7c99b9" />
+                </marker>
+              </defs>
+              {SECTORS.map((sector) => {
+                const start = ((sector.angle + 15) * Math.PI) / 180;
+                const end = ((sector.angle + 25) * Math.PI) / 180;
+                // JS engines can differ in trig's last decimal places; serialize
+                // fixed precision so SSR and browser hydration agree.
+                const startX = (Math.sin(start) * 100).toFixed(4);
+                const startY = (-Math.cos(start) * 100).toFixed(4);
+                const endX = (Math.sin(end) * 100).toFixed(4);
+                const endY = (-Math.cos(end) * 100).toFixed(4);
+                return (
+                  <path
+                    key={sector.label}
+                    d={`M ${startX} ${startY} A 100 100 0 0 1 ${endX} ${endY}`}
+                    fill="none"
+                    stroke="#7c99b9"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    markerEnd="url(#ecosystem-clockwise-arrow)"
+                  />
+                );
+              })}
+            </svg>
             {/* hub */}
-            {/* Hub fill sampled from HOME6.pdf: a teal-blue diagonal gradient,
-                #0286a4 at the top-left through #035688 at the bottom-right —
-                where this was a much darker navy (#1f6ea8 → #0f3d66).
-                Sized against the nodes at the design's ratio: hub 130px to node
-                82px = 0.63, so 64px nodes want a ~102px hub (h-24 ≈ 96, h-28 at
-                2xl) rather than the 112–128px used before, which made the ring
-                read as crowding a too-large centre. */}
+            {/* The reference uses a hub about 1.7 times the sector diameter. */}
             <div
               data-hub
-              className="animate-ring-pulse absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[linear-gradient(135deg,#0286a4_0%,#035688_100%)] shadow-[0_18px_40px_-14px_rgba(3,86,136,0.7)] 2xl:h-24 2xl:w-24"
+              className="animate-ring-pulse absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[linear-gradient(135deg,#0286a4_0%,#035688_100%)] shadow-[0_18px_40px_-14px_rgba(3,86,136,0.7)] 2xl:h-28 2xl:w-28"
               style={{ opacity: 0, willChange: "transform, opacity" }}
             >
               {/* Same light-on-dark logo as the callout. `brightness-0 invert`
@@ -424,9 +447,9 @@ export default function EcosystemShowcase() {
           </div>
 
           {/* ── right column: legend (mobile) ── */}
-          <ul className="flex flex-col gap-4 xl:hidden">
+          <ul className="grid gap-5 xl:hidden">
             {SECTORS.map((s) => (
-              <li key={s.label} className="group flex items-start gap-3 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1">
+              <li key={s.label} className="group flex min-h-12 items-center gap-4 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:translate-x-1">
                 {/* Same diagonal gradient as the desktop orbit nodes. */}
                 <span
                   className="pf-pop flex h-12 w-12 flex-none items-center justify-center rounded-full text-white"
@@ -436,14 +459,14 @@ export default function EcosystemShowcase() {
                 >
                   <SectorIcon sector={s} sizes="24px" className="h-6 w-6" />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <p
                     className="text-[15px] font-bold leading-tight"
                     style={{ color: s.color }}
                   >
                     {s.label}
                   </p>
-                  <p className="text-xs leading-snug text-black">{s.tagline}</p>
+                  <p className="mt-1 text-xs leading-snug text-black">{s.tagline}</p>
                 </div>
               </li>
             ))}

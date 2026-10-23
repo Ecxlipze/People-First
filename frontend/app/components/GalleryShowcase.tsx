@@ -8,7 +8,7 @@ import type { GalleryPhoto } from "@/app/components/gallery";
 import PinnedRecede from "@/app/components/PinnedRecede";
 import { Reveal } from "@/app/components/ScrollFx";
 
-/* Gallery section (4). Swipes up over the pinned Ventures section (3) — the
+/* Gallery section (6). Swipes up over the pinned Featured Work section (5) — the
    outer track carries the negative margin + rounded opaque bg + upward shadow
    (the swipe-over recipe). PinnedRecede inside pins it too, so a later section
    can swipe over Gallery in turn.
@@ -71,14 +71,14 @@ export default function GalleryShowcase({
   };
 
   return (
-    /* Outer track: swipes up over the pinned Ventures section.
+    /* Outer track: swipes up over the pinned Featured Work section.
        Background #f2f8f8, sampled from HOME4.pdf — the same pale mint the
        Ventures section uses, not the lavender gradient this carried. The whole
        block (heading, carousel, button) centres on one axis with no sidebar
        padding, matching the design's shared x≈931 centreline. */
     <div
       id="gallery"
-      className="pf-blend relative z-30 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]"
+      className="pf-blend relative z-50 rounded-t-[2rem] bg-[#f2f8f8] shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]"
     >
       {/* No horizontal padding on the column itself — the carousel's ±2 slides
           must reach the viewport edges to be clipped like the design's. The

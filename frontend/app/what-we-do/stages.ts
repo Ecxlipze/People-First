@@ -47,7 +47,7 @@ export const STAGES: Stage[] = [
           "Delivering high quality secure and affordable housing & property solutions",
       },
       {
-        name: "HealthCare & Wellness",
+        name: "Health & Wellness",
         blurb:
           "Advancing healthier lives through quality care and innovative wellness solutions.",
       },
@@ -81,24 +81,24 @@ export const STAGES: Stage[] = [
     accent: "#422d77",
     ventures: [
       {
-        name: "Merchanity",
-        blurb:
-          "An e-commerce platform connecting skilled talent with businesses to drive trade and growth.",
-      },
-      {
         name: "TECH SOLUTIONS",
         blurb:
           "Delivering accessible, innovative, and impactful tech solutions to empower every user.",
       },
       {
+        name: "E-commerce",
+        blurb:
+          "An e-commerce platform connecting skilled talent with businesses to drive trade and growth.",
+      },
+      {
+        name: "SMEs",
+        blurb:
+          "Enabling businesses to produce, innovate, and scale consumer products.",
+      },
+      {
         name: "Media & Marketing",
         blurb:
           "Empowering brands through creative media and strategic marketing solutions.",
-      },
-      {
-        name: "SMEs & Consumer Manufacturing",
-        blurb:
-          "Enabling businesses to produce, innovate, and scale consumer products.",
       },
     ],
   },

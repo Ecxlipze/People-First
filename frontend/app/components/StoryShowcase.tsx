@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import SiteFooter from "@/app/components/SiteFooter";
+import PinnedRecede from "@/app/components/PinnedRecede";
 import {
   prefersReducedMotion,
   subscribeScrollFrame,
@@ -73,9 +73,7 @@ const GAPS = [
   },
 ];
 
-/* Story section (7). Swipes up over the pinned Ecosystem section (6). It is the
-   terminal homepage panel, so the footer continues inside the same white panel
-   rather than becoming another pinned/swipe-over section. */
+/* Story follows Ecosystem and pins its final viewport for Ventures to swipe over. */
 export default function StoryShowcase() {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -128,12 +126,11 @@ export default function StoryShowcase() {
     };
   }, []);
 
-  // .pf-blend flattens the swipe-over dressing on mobile (square top, no
-  // shadow, no negative pull) so this reads as the next section in a flat stack
-  // rather than a rounded card floating over nothing. See globals.css.
+  // This panel has a small mobile overlap into Ecosystem’s trailing padding;
+  // desktop keeps the full pinned transition. See .pf-story-transition.
   return (
-    <div className="pf-blend relative z-[60] overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]">
-      <div className="pf-seam relative flex items-center py-10 sm:py-12 md:min-h-screen">
+    <div className="pf-blend pf-story-transition relative z-20 overflow-clip rounded-t-[2rem] bg-white shadow-[0_-24px_60px_-20px_rgba(80,80,120,0.35)] max-md:-mt-16 sm:rounded-t-[3rem] md:-mt-[100vh]">
+      <PinnedRecede mobileEntrance={false} pinTallContent className="pf-seam relative flex items-center py-10 sm:py-12 md:min-h-screen">
         {/* decorative layer — pinned+receding with the content */}
         <Decor />
         <div
@@ -294,11 +291,7 @@ export default function StoryShowcase() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* The footer is part of the terminal Story panel and follows it without
-          a separate overlap, pin, shadow, or rounded-section transition. */}
-      <SiteFooter />
+      </PinnedRecede>
     </div>
   );
 }

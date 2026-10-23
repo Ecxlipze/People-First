@@ -562,6 +562,18 @@ optgroup {
     pointer-events: none;
     background: rgba(80, 80, 120, 0.1);
   }
+
+  /* Story now follows Ecosystem. Pull only into its 4.5rem of trailing
+     padding, keeping every sector visible while covering the decorative seam.
+     This overlap uses normal flow, including with reduced motion. */
+  .pf-blend.pf-story-transition {
+    margin-top: -2rem !important;
+  }
+
+  .pf-story-transition::before {
+    content: none;
+  }
+
 }
 
 /* ---- .pf-lead-in: scroll room for a preceding pinned hero ----

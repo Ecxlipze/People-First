@@ -31,7 +31,7 @@ export const VENTURE_TIERS: VentureTier[] = [
     icon: "/images/what-we-do/s5/icon-joint.webp",
   },
   {
-    name: "AFFILIATED VENTURES",
+    name: "AFFILIATE VENTURES",
     blurb: "Groomed and aligned under People First",
     accent: "#aa37ff",
     icon: "/images/what-we-do/s3/tier-affiliated.webp",

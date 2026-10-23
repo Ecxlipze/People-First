@@ -3,7 +3,7 @@ import { Reveal, Stagger } from "@/app/components/ScrollFx";
 
 /* About → Vision & Mission. Two rows (Vision / Mission), each a circular icon +
    heading + rich copy, with a dotted world-map illustration flanking them. Below
-   sits the Learn × Grow × Lead × Transform step row inside a lavender container.
+   sits the Learn × Grow × Lead step row inside a lavender container.
    Origami paper-plane accents in the corners echo the mockup. */
 
 
@@ -11,11 +11,6 @@ const STEPS: { label: string; sub: React.ReactNode; iconSrc: string }[] = [
   { label: "LEARN", sub: <>Build Knowledge.<br />Sharpen Skills.</>, iconSrc: "/images/icons/learn.svg" },
   { label: "GROW", sub: <>Fuel Growth.<br />Create Impact.</>, iconSrc: "/images/icons/earn.svg" },
   { label: "LEAD", sub: <>Inspire Others.<br />Drive Change.</>, iconSrc: "/images/icons/lead.svg" },
-  {
-    label: "TRANSFORM",
-    sub: <>Build World Class<br />Market Leaders.</>,
-    iconSrc: "/images/icons/transform.svg",
-  },
 ];
 
 export default function VisionMission() {
@@ -101,7 +96,7 @@ export default function VisionMission() {
                   <strong className="font-bold text-[#491557]">
                     launching 100 market-ready brands
                   </strong>{" "}
-                  by the end of 2028 to{" "}
+                  by the end of 2030 to{" "}
                   <strong className="font-bold text-[#491557]">
                     eliminate
                   </strong>{" "}
@@ -140,9 +135,9 @@ export default function VisionMission() {
                   By uniting different sectors into one venture-building engine,
                   we empower people to{" "}
                   <strong className="font-bold text-[#491557]">
-                    Learn × Grow × Lead × Transforming
-                  </strong>{" "}
-                  raw talent into world-class market leaders.
+                    Learn × Grow × Lead
+                  </strong>
+                  , turning raw talent into world-class market leaders.
                 </p>
               </div>
             </div>
@@ -161,13 +156,13 @@ export default function VisionMission() {
           </div>
         </Stagger>
 
-        {/* ── Learn × Grow × Lead × Transform step row ── */}
+        {/* ── Learn × Grow × Lead step row ── */}
         <Reveal className="mx-auto mt-16 max-w-3xl rounded-2xl bg-[#d9cff7] px-4 py-6 shadow-[0_18px_30px_-18px_rgba(50,30,80,0.6)] sm:px-8 sm:py-8">
           <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
             {STEPS.map((s, i) => (
               <div key={s.label} className="flex items-center gap-4 sm:flex-1">
                 {/* Each step is its own hover group: the icon pops and the whole
-                    step lifts slightly, so the four stages of the model read as
+                    step lifts slightly, so the three stages of the model read as
                     individually explorable rather than as a printed diagram. */}
                 <div className="group flex flex-1 flex-col items-center rounded-lg px-2 py-1 text-center transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1">
                   <div className="flex items-center justify-center">

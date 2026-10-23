@@ -15,18 +15,10 @@ export default function HeroCTA({
     <>
       <div className="flex w-full flex-col gap-3 min-[450px]:flex-row sm:w-auto">
         <ContactTrigger
-          href="/partner"
-          role="Training Partner"
+          href="/contact"
           className={`inline-flex min-h-12 flex-1 items-center justify-center whitespace-nowrap rounded-md px-4 py-3 text-center text-sm font-medium text-white transition-colors sm:flex-none sm:px-5 ${primaryClassName}`}
         >
-          Partner with Us
-        </ContactTrigger>
-        <ContactTrigger
-          href="/training"
-          role="Student"
-          className="inline-flex min-h-12 flex-1 items-center justify-center rounded-md bg-zinc-200 px-4 py-3 text-center text-sm font-medium leading-tight text-zinc-700 transition-colors hover:bg-zinc-300 sm:flex-none sm:px-5"
-        >
-          Join Training Program
+          Contact us
         </ContactTrigger>
       </div>
       <ContactTrigger

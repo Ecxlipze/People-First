@@ -24,8 +24,11 @@ export default function PinnedRecede({
   overlapFrom = "md",
   pinTallContent = false,
   compactStage = false,
+  mobileEntrance = true,
 }: {
   children: React.ReactNode;
+  /* Disable reversible entrance motion where mobile panels must stay joined. */
+  mobileEntrance?: boolean;
   hold?: number;
   className?: string;
   /* By default the sticky stage is a full viewport tall and centres its content
@@ -142,6 +145,13 @@ export default function PinnedRecede({
         // So the flow path is an ENTRANCE ONLY, and it settles to exactly
         // opacity 1 / no transform / no blur, where content and background are
         // back in register. Sections never fade out on the way up.
+        if (!mobileEntrance && !tablet.matches) {
+          inner.style.opacity = "";
+          inner.style.transform = "";
+          inner.style.filter = "";
+          raf = 0;
+          return;
+        }
         const enter = clamp01((vh * 1.05 - r.top) / (vh * 0.5));
         const e = enter * enter * (3 - 2 * enter);
 
@@ -256,7 +266,7 @@ export default function PinnedRecede({
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf);
     };
-  }, [hold, overlapFrom, pinTallContent, compactStage]);
+  }, [hold, overlapFrom, pinTallContent, compactStage, mobileEntrance]);
 
   return (
     <div

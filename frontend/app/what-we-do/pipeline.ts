@@ -37,7 +37,7 @@ export const PIPELINE: PipelineStage[] = [
     label: "PHYSICAL STAGE",
     headline: "Securing the Foundation",
     rationale:
-      "A workforce cannot focus on growth or innovation if its foundational survival requirements are unmet. We secure the basics so our people can focus on building a better future.",
+      "We secure essential needs so our people can focus on growth, innovation, and building a better future.",
     ventures: STAGES[0].ventures,
     outcome: {
       title: "Financial Freedom & Stability",

@@ -61,7 +61,7 @@ export const PILLARS: Pillar[] = [
     icon: "icon-joint",
   },
   {
-    name: "AFFILIATED VENTURES",
+    name: "AFFILIATE VENTURES",
     definition:
       "Existing, fully operational organizations that voluntarily place their strategic direction and management protocols under the governance of the People First ecosystem.",
     purpose:

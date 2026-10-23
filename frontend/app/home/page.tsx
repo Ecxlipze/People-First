@@ -4,9 +4,11 @@ import Image from "next/image";
 import SideNav from "@/app/components/SideNav";
 import FeaturedWork from "@/app/components/FeaturedWork";
 import VenturesShowcase from "@/app/components/VenturesShowcase";
+import { VENTURES } from "@/app/components/ventures";
 import GalleryShowcase from "@/app/components/GalleryShowcase";
 import TestimonialsShowcase from "@/app/components/TestimonialsShowcase";
 import EcosystemShowcase from "@/app/components/EcosystemShowcase";
+import SiteFooter from "@/app/components/SiteFooter";
 import StoryShowcase from "@/app/components/StoryShowcase";
 import { Recede } from "@/app/components/ScrollFx";
 import HeroCTA from "@/app/components/HeroCTA";
@@ -15,7 +17,6 @@ import {
   getFeaturedWorkCopy,
   getGallery,
   getTestimonials,
-  getVentures,
 } from "@/app/lib/content";
 
 export const metadata: Metadata = createPageMetadata({
@@ -25,13 +26,12 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 export default async function HomePage() {
-  /* Server Component: the four content-backed sections are fetched here and
+  /* Server Component: the three API-backed sections are fetched here and
      passed down, so the showcases below can stay client components for their
      carousels and scroll effects without any of them touching the API.
      Requested in parallel — they are independent. */
-  const [featuredWork, ventures, gallery, testimonials] = await Promise.all([
+  const [featuredWork, gallery, testimonials] = await Promise.all([
     getFeaturedWorkCopy(),
-    getVentures(),
     getGallery(),
     getTestimonials(),
   ]);
@@ -44,7 +44,7 @@ export default async function HomePage() {
       <div className="relative overflow-x-clip bg-[linear-gradient(135deg,#e6ebfb_0%,#f1eefb_38%,#f6f3fc_70%,#f7f5fd_100%)]">
         {/* ── SECTION 1: HERO ──
           Pinned to the top so the next section slides up and overlaps it.
-          The tall track gives the sticky hero room to pin while FeaturedWork
+          The tall track gives the sticky hero room to pin while Ecosystem
           swipes up over it by one viewport at every responsive size. */}
         <div className="relative max-md:h-auto md:h-[200vh]">
           <section className="bg-hero-gradient max-md:relative md:sticky md:top-0 h-[100svh] overflow-hidden md:h-screen">
@@ -170,36 +170,17 @@ export default async function HomePage() {
           </section>
         </div>
 
-        {/* ── SECTION 2: FEATURED WORK ──
-          Higher z-index + opaque bg + rounded top → swipes up over the hero. */}
-        <FeaturedWork copy={featuredWork} />
-
-        {/* ── SECTION 3: VENTURES ──
-          Opaque rounded block with a negative margin → swipes up over Featured
-          Work; pins itself so Gallery can swipe over it in turn. */}
-        <VenturesShowcase ventures={ventures} />
-
-        {/* ── SECTION 4: GALLERY ──
-          Opaque rounded block, negative margin → swipes up over the pinned
-          Ventures section. Same effect as 1→2 and 2→3. */}
-        <GalleryShowcase photos={gallery} />
-
-        {/* ── SECTION 5: TESTIMONIALS ──
-          Opaque rounded block, negative margin → swipes up over the pinned
-          Gallery section. Same swipe-over effect. */}
-        <TestimonialsShowcase testimonials={testimonials} />
-
-        {/* ── SECTION 6: ECOSYSTEM ──
-          Opaque rounded block, negative margin → swipes up over the pinned
-          Testimonials section. Left copy + right radial orbit of sectors. */}
+        {/* Each overlapping panel has a higher stacking level than the one before it. */}
         <EcosystemShowcase />
-
-        {/* ── SECTION 7: THE STORY + FOOTER ──
-          Opaque rounded block, negative margin → swipes up over the pinned
-          Ecosystem section. Left founder story + right circular photo with an
-          overlapping "born out of a simple conclusion" callout. The footer
-          continues inside this final white panel. */}
         <StoryShowcase />
+        {/* Ecosystem cards use local content and are independent of admin edits. */}
+        <VenturesShowcase ventures={VENTURES} />
+        <FeaturedWork copy={featuredWork} />
+        <GalleryShowcase photos={gallery} />
+        <TestimonialsShowcase testimonials={testimonials} />
+        <div className="relative z-[70] bg-white">
+          <SiteFooter />
+        </div>
       </div>
     </>
   );

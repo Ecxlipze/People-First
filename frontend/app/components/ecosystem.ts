@@ -14,12 +14,7 @@ export type Sector = {
   from: string;
   to: string;
   angle: number; // degrees, 0 = top, clockwise
-  /* Distance from the hub as a fraction of the ring radius. The design's ring is
-     NOT a true circle: measuring the nine 82px circles against the 130px hub
-     centre gives radii from 138 to 187 (mean 169) at angles averaging 40° apart
-     (32.5–44.3°). The angles are regular enough to keep at an even 40°, but the
-     radii are visibly hand-nudged, so each node carries its own. */
-  r: number;
+
 };
 
 export const SECTORS: Sector[] = [
@@ -31,7 +26,6 @@ export const SECTORS: Sector[] = [
     from: "#22a800",
     to: "#125a00",
     angle: 0,
-    r: 1.065,
   },
   {
     label: "REAL ESTATE",
@@ -41,17 +35,24 @@ export const SECTORS: Sector[] = [
     from: "#009d78",
     to: "#005440",
     angle: 40,
-    r: 0.962,
   },
   {
-    label: "Health Care and Wellness",
+    label: "Health & Wellness",
     tagline: "Better health through innovation.",
     iconSrc: "/images/home/ecosystem/healthcare-wellness.webp",
     color: "#9d004b",
     from: "#9d004b",
     to: "#540023",
     angle: 80,
-    r: 0.941,
+  },
+  {
+    label: "RENEWABLE ENERGY",
+    tagline: "Connecting Markets, Creating Value",
+    iconSrc: "/images/home/ecosystem/renewable-energy.webp",
+    color: "#c01105",
+    from: "#c51206",
+    to: "#ab0c05",
+    angle: 120,
   },
   {
     label: "KNOWLEDGE CAPITAL",
@@ -60,18 +61,7 @@ export const SECTORS: Sector[] = [
     color: "#002d80",
     from: "#00379c",
     to: "#001f5a",
-    angle: 120,
-    r: 1.090,
-  },
-  {
-    label: "Media & Marketing",
-    tagline: "Creative solutions for brands.",
-    iconSrc: "/images/home/ecosystem/media-marketing.webp",
-    color: "#52008f",
-    from: "#58009d",
-    to: "#2d0054",
     angle: 160,
-    r: 1.095,
   },
   {
     label: "TECHNOLOGY",
@@ -81,36 +71,32 @@ export const SECTORS: Sector[] = [
     from: "#005183",
     to: "#002034",
     angle: 200,
-    r: 1.104,
   },
   {
-    label: "COMMERCE & TRADE",
+    label: "E-commerce",
     tagline: "Connecting Markets, Creating Value",
     iconSrc: "/images/home/ecosystem/commerce-trade.webp",
     color: "#b35400",
     from: "#c95e00",
     to: "#8d4200",
     angle: 240,
-    r: 0.938,
   },
   {
-    label: "SMEs & Consumer",
+    label: "SMEs",
     tagline: "Smarter business growth.",
     iconSrc: "/images/home/ecosystem/smes-consumer.webp",
     color: "#00838f",
     from: "#00949d",
     to: "#003e54",
     angle: 280,
-    r: 0.817,
   },
   {
-    label: "RENEWABLE ENERGY",
-    tagline: "Connecting Markets, Creating Value",
-    iconSrc: "/images/home/ecosystem/renewable-energy.webp",
-    color: "#c01105",
-    from: "#c51206",
-    to: "#ab0c05",
+    label: "Media & Marketing",
+    tagline: "Creative solutions for brands.",
+    iconSrc: "/images/home/ecosystem/media-marketing.webp",
+    color: "#52008f",
+    from: "#58009d",
+    to: "#2d0054",
     angle: 320,
-    r: 0.988,
   },
 ];

@@ -3,7 +3,7 @@ import ContactTrigger from "@/app/contact/ContactTrigger";
 import { Reveal } from "@/app/components/ScrollFx";
 
 /* About → CTA banner. Rounded deep-purple band with a faint wireframe globe on
-   the right; "Let's Get in Touch" copy on the left, the three CTAs on the right.
+   the right; "Let's Get in Touch" copy on the left, the contact CTA on the right.
    Styled to match the CTA band already inside SiteFooter so the page reads as
    one system. */
 export default function CTABanner() {
@@ -38,27 +38,11 @@ export default function CTABanner() {
 
             {/* CTAs */}
             <div className="flex w-full flex-none flex-col gap-3.5 sm:w-[380px]">
-              <div className="flex min-w-0 flex-col gap-3.5 sm:flex-row">
-                <ContactTrigger
-                  href="/contact"
-                  className="pf-interactive min-w-0 flex-1 rounded-md bg-[#dcd4e1] px-3 py-3 text-center text-[0.95rem] font-medium leading-tight text-[#090c62] hover:-translate-y-0.5 hover:bg-white hover:shadow-lg sm:text-[0.8125rem]"
-                >
-                  Book a Consultation
-                </ContactTrigger>
-                <ContactTrigger
-                  href="/training"
-                  role="Student"
-                  className="pf-interactive min-w-0 flex-1 rounded-md border border-white/50 px-3 py-3 text-center text-[0.95rem] font-medium leading-tight text-white hover:-translate-y-0.5 hover:bg-white/10 sm:text-[0.8125rem]"
-                >
-                  Join a Training Program
-                </ContactTrigger>
-              </div>
               <ContactTrigger
-                href="/partner"
-                role="Training Partner"
+                href="/contact"
                 className="pf-interactive w-full rounded-md bg-white px-5 py-3 text-center text-[0.95rem] font-bold text-black hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg"
               >
-                Partner With Us
+                Contact us
               </ContactTrigger>
             </div>
           </div>
