@@ -140,7 +140,7 @@ export default function PodcastForm({ episode, notice }: { episode?: CmsPodcast;
         </section>
       </div>
 
-      <aside className="space-y-6 lg:sticky lg:top-28 lg:self-start">
+      <aside className="space-y-6 lg:sticky lg:top-24 lg:max-h-[calc(100svh-7rem)] lg:self-start lg:overflow-y-auto lg:pb-1">
         <section className={card}>
           <h2 className="font-display text-lg font-extrabold text-[#171922]">Publish</h2>
           <label className="mt-4 flex min-h-11 items-center gap-3 text-sm font-bold text-zinc-800">
