@@ -20,11 +20,6 @@ class Testimonial(models.Model):
         blank=True,
         help_text="Keywords or hashtags. In admin, enter comma-separated values (e.g. dev, tools).",
     )
-    social_url = models.URLField(
-        blank=True,
-        null=True,
-        help_text="Direct link to the original tweet, post, or reviewer profile.",
-    )
     display_order = models.PositiveIntegerField(
         default=0,
         help_text="Determines card position in the masonry grid (0, 1, 2...).",

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import EpisodeThumb from "@/app/components/EpisodeThumb";
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
 import { Stagger } from "@/app/components/ScrollFx";
@@ -25,21 +25,19 @@ function isYouTube(url?: string): boolean {
 function Card({ ep, latest }: { ep: Episode; latest: boolean }) {
   return (
     <Link
-      href={ep.slug ? `/podcasts#${ep.slug}` : "/podcasts"}
+      href={ep.slug ? `/podcasts?play=${encodeURIComponent(ep.slug)}` : "/podcasts"}
       className="group flex h-full flex-col"
     >
       {/* Episode art is 16:9 video; a thumbnail can be missing on a row created
           in the admin before its file is uploaded, so the plate stands in. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-md bg-zinc-900">
-        {ep.thumb && (
-          <Image
-            src={ep.thumb}
-            alt={ep.thumbAlt}
-            fill
-            sizes="(max-width: 640px) 92vw, (max-width: 1280px) 46vw, 26rem"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-          />
-        )}
+        <EpisodeThumb
+          src={ep.thumb}
+          alt={ep.thumbAlt}
+          videoUrl={ep.videoUrl}
+          sizes="(max-width: 640px) 92vw, (max-width: 1280px) 46vw, 26rem"
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        />
         <span aria-hidden className="absolute inset-0 grid place-items-center bg-black/10 transition-colors group-hover:bg-black/25">
           <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110">
             <Play className="ml-0.5 h-6 w-6 text-[#2d0b4e]" fill="currentColor" />

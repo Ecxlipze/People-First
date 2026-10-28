@@ -116,30 +116,9 @@ export type CmsTestimonial = {
   handle: string | null;
   body: string;
   tags: string[];
-  social_url: string | null;
   display_order: number;
   is_active: boolean;
 };
-
-export type CmsVenture = {
-  id: number;
-  logo: string | null;
-  name: string;
-  subtitle: string | null;
-  website_url: string | null;
-  accent: string;
-  border_gradient: string;
-  display_order: number;
-  is_active: boolean;
-};
-
-/* The three design-approved venture colourways (mirrors backend/ventures/admin.py).
-   Anything else is "custom". */
-export const VENTURE_PRESETS = [
-  { key: "crimson", label: "Crimson", accent: "#a00017", gradient: "radial-gradient(118% 127% at 50% 50%, #FFFFFF 0%, #A00017 100%)" },
-  { key: "teal", label: "Teal", accent: "#2c8e85", gradient: "radial-gradient(52.47% 174.19% at 50% 50%, #39CABD 0%, #246D67 100%)" },
-  { key: "indigo", label: "Indigo", accent: "#2e21b6", gradient: "radial-gradient(109% 107% at 50% 50%, #FFFFFF 0%, #2E21B6 100%)" },
-] as const;
 
 export type CmsProfile = {
   username: string;

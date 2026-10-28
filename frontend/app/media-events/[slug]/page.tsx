@@ -131,7 +131,6 @@ export default async function BlogPostPage({ params }: Props) {
                       {post.publishedAt && (
                         <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt)}</time>
                       )}
-                      <span>{post.readingMinutes} min read</span>
                       {formatViews(post.viewCount) && <span>{formatViews(post.viewCount)}</span>}
                     </div>
                   </div>

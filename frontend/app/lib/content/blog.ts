@@ -3,10 +3,14 @@
    the local fallback for the listing; the detail loader has none. */
 
 import { ApiError, ApiNotConfiguredError, apiFetch } from "@/app/lib/api";
+import { contentTag } from "./tags";
 import type { ApiBlogCategory, ApiBlogPost } from "./types";
 
-const REVALIDATE_SECONDS: number | false =
-  process.env.NODE_ENV === "development" ? false : 300;
+const REVALIDATE_SECONDS: number | false = (() => {
+  if (process.env.NODE_ENV === "development") return false;
+  const parsed = Number(process.env.CONTENT_REVALIDATE_SECONDS);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : 30;
+})();
 
 export type BlogPost = {
   slug: string;
@@ -66,7 +70,7 @@ function mapPost(row: ApiBlogPost): BlogPost {
 
 async function read<T>(path: string): Promise<T | null> {
   try {
-    return await apiFetch<T>(path, { revalidate: REVALIDATE_SECONDS });
+    return await apiFetch<T>(path, { revalidate: REVALIDATE_SECONDS, tags: [contentTag(path)] });
   } catch (error) {
     if (error instanceof ApiNotConfiguredError) return null;
     if (error instanceof ApiError && error.status === 404) return null;

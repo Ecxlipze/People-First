@@ -44,11 +44,14 @@ export type ApiFetchOptions = Omit<RequestInit, "body"> & {
   formData?: FormData;
   /* Seconds. Content reads should cache; mutations must not. */
   revalidate?: number | false;
+  /* Data-cache tags, so a content type can be invalidated on demand (the
+     Django admin pings /api/revalidate when an editor saves or deletes). */
+  tags?: string[];
 };
 
 export async function apiFetch<T>(
   path: string,
-  { json, formData, revalidate, headers, ...init }: ApiFetchOptions = {},
+  { json, formData, revalidate, tags, headers, ...init }: ApiFetchOptions = {},
 ): Promise<T> {
   const url = `${baseUrl()}${path.startsWith("/") ? path : `/${path}`}`;
 
@@ -63,7 +66,10 @@ export async function apiFetch<T>(
     /* A mutation must never be served from the Next data cache, and must never
        be revalidated into one. */
     cache: revalidate === false ? "no-store" : init.cache,
-    next: typeof revalidate === "number" ? { revalidate } : undefined,
+    next:
+      typeof revalidate === "number" || tags
+        ? { ...(typeof revalidate === "number" ? { revalidate } : null), ...(tags ? { tags } : null) }
+        : undefined,
   });
 
   /* Read the body once, then decide — an error response may be JSON (DRF field

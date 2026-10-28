@@ -69,7 +69,7 @@ Backend paths below are relative to `backend/`.
   on whether `db.sqlite3` exists — so the engine can change with the contents of
   the directory. `.env.example` is the contract.
 - Each content app (`featured_work`, `gallery`, `insight_category`, `Podcast`,
-  `testimonial`, `ventures`) follows the same shape: `models.py`,
+  `testimonial`) follows the same shape: `models.py`,
   `serializers.py`, `permissions.py`, `views.py` (a `ModelViewSet`), `urls.py`
   (a `DefaultRouter`). Match that shape when adding one.
 - `inquiry/` is the only app with a public write endpoint. Its
@@ -153,8 +153,7 @@ Backend paths below are relative to `backend/`.
   passing a possibly-undefined `src`.
 - Design constants that have no editorial meaning (measured geometry, the
   coverflow repetition, `thumbPosition`) stay in the components. Values an
-  editor would reasonably want to change (badge text and colour, venture accent
-  colours) are model fields.
+  editor would reasonably want to change (badge text and colour) are model fields.
 - The public read endpoints hide `is_active=False` rows and `draft` insights
   from non-staff via `people_first.visibility.PublicVisibilityMixin`. A new
   content app should use it too.

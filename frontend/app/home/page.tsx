@@ -153,14 +153,19 @@ export default async function HomePage() {
                     the first is #e2fe74 (matching Grow), the second #ade2dc
                     (matching Lead). They were both text-zinc-300 here.
 
-                    "Grow" is #e2fe74, not #cbf34d — the design's lime is
+                    QA later flagged this line as unreadable on the pale hero
+                    (the lime was ~1.1:1), so the three words use darker shades
+                    of the same pink / lime / teal hues. The headline above
+                    keeps the original pastels: it is large display text.
+
+                    Original note — "Grow" is #e2fe74, not #cbf34d — the design's lime is
                     lighter and less saturated than the value that was here. */}
-                <p className="mt-2 flex items-center gap-1.5 whitespace-nowrap text-[15px] font-semibold text-[#feb7c1] sm:mt-3 sm:text-[17px] lg:mt-3 lg:text-lg xl:text-xl [@media(max-height:500px)]:mt-2 [@media(max-height:500px)]:text-sm">
+                <p className="mt-2 flex items-center gap-1.5 whitespace-nowrap text-[15px] font-semibold text-[#e0607a] sm:mt-3 sm:text-[17px] lg:mt-3 lg:text-lg xl:text-xl [@media(max-height:500px)]:mt-2 [@media(max-height:500px)]:text-sm">
                   <span>Learn</span>
-                  <span className="mx-0.5 text-[#e2fe74]">x</span>
-                  <span className="text-[#e2fe74]">Grow</span>
-                  <span className="mx-0.5 text-[#ade2dc]">x</span>
-                  <span className="text-[#ade2dc]">Lead</span>
+                  <span className="mx-0.5 text-[#8aa11a]">x</span>
+                  <span className="text-[#8aa11a]">Grow</span>
+                  <span className="mx-0.5 text-[#2f9a8c]">x</span>
+                  <span className="text-[#2f9a8c]">Lead</span>
                 </p>
               </main>
             </Recede>

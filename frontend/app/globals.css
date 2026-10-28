@@ -178,9 +178,12 @@ optgroup {
 /* Shared tactile feedback for the site's primary controls. Keeping it opt-in
    avoids disturbing positioned artwork and scroll-driven transforms. */
 .pf-interactive {
+  /* `translate` and `scale` are listed because Tailwind 4's translate and scale
+     utilities set those individual properties, not `transform`; without them
+     hover:-translate-y-* snapped instantly. */
   transition-property:
-    transform, color, background-color, border-color, box-shadow, opacity,
-    filter;
+    transform, translate, scale, color, background-color, border-color,
+    box-shadow, opacity, filter;
   transition-duration: var(--dur-base);
   transition-timing-function: var(--ease-out-soft);
 }
@@ -351,7 +354,11 @@ optgroup {
 .pf-media {
   transition:
     opacity 600ms var(--ease-out-soft),
-    transform 900ms var(--ease-out-soft);
+    transform 900ms var(--ease-out-soft),
+    /* Tailwind 4's scale-* utilities set the individual `scale` property, not
+       `transform`, so hover zooms (group-hover:scale-[1.04]) snapped instantly
+       until `scale` was listed here. */
+    scale 500ms var(--ease-out-soft);
 }
 
 .pf-media[data-loaded="false"] {

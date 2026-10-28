@@ -58,12 +58,6 @@ The other inquiry operations are admin-only.
 | Featured Work | PUT | `/api/featured-work/{id}/` | Admin |
 | Featured Work | PATCH | `/api/featured-work/{id}/` | Admin |
 | Featured Work | DELETE | `/api/featured-work/{id}/` | Admin |
-| Ventures | GET | `/api/ventures/` | Public |
-| Ventures Detail | GET | `/api/ventures/{id}/` | Public |
-| Ventures | POST | `/api/ventures/` | Admin |
-| Ventures | PUT | `/api/ventures/{id}/` | Admin |
-| Ventures | PATCH | `/api/ventures/{id}/` | Admin |
-| Ventures | DELETE | `/api/ventures/{id}/` | Admin |
 | Gallery | GET | `/api/gallery/` | Public |
 | Gallery Detail | GET | `/api/gallery/{id}/` | Public |
 | Gallery | POST | `/api/gallery/` | Admin |
@@ -171,46 +165,6 @@ For `thumbnail`, use `multipart/form-data`.
 
 ---
 
-# 5. Ventures API
-
-## Endpoints
-
-```http
-GET    /api/ventures/
-GET    /api/ventures/{id}/
-POST   /api/ventures/
-PUT    /api/ventures/{id}/
-PATCH  /api/ventures/{id}/
-DELETE /api/ventures/{id}/
-```
-
-## Fields
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `logo` | image | No | Venture logo |
-| `name` | string | Yes | Venture name |
-| `subtitle` | string | No | Short subtitle |
-| `website_url` | URL | No | Website URL |
-| `display_order` | integer | No | Display order |
-| `is_active` | boolean | No | Whether the venture is active |
-
-## JSON Example
-
-```json
-{
-  "name": "People First Ventures",
-  "subtitle": "Building innovative businesses",
-  "website_url": "https://example.com",
-  "display_order": 1,
-  "is_active": true
-}
-```
-
-For `logo`, use `multipart/form-data`.
-
----
-
 # 6. Gallery API
 
 ## Endpoints
@@ -261,7 +215,6 @@ DELETE /api/testimonials/{id}/
 | `handle` | string | No | Social handle or role text |
 | `body` | string | Yes | Testimonial text |
 | `tags` | array | No | List of tags |
-| `social_url` | URL | No | Social/profile URL |
 | `display_order` | integer | No | Display order |
 | `is_active` | boolean | No | Whether testimonial is active |
 
@@ -275,7 +228,6 @@ DELETE /api/testimonials/{id}/
   "tags": [
     "another"
   ],
-  "social_url": "https://linkedin.com/",
   "display_order": 1,
   "is_active": true
 }
@@ -697,7 +649,6 @@ The following fields are image uploads:
 
 ```text
 Featured Work → thumbnail
-Ventures → logo
 Gallery → image
 Testimonials → avatar
 Insights → thumbnail, studio_thumbnail
@@ -1052,7 +1003,6 @@ Before frontend integration, confirm:
 
 ```text
 /api/featured-work/
-/api/ventures/
 /api/gallery/
 /api/testimonials/
 /api/insight-categories/
@@ -1192,7 +1142,7 @@ categories, a Google-style SEO preview, and the Media / Events feature-card fiel
   `PUT` is no longer accepted; `PATCH` can change only `status` and `staff_notes`. The public
   `POST /api/inquiries/` is unchanged and cannot set or see either field.
 - **Testimonials tab (`/cms/testimonials`):** add, edit (photo, role/handle, quote, comma-separated
-  tags, link), reorder, hide/show, delete. With no photo the site shows a coloured initial.
+  tags), reorder, hide/show, delete. With no photo the site shows a coloured initial.
 - **Ventures tab (`/cms/ventures`):** add, edit (logo, tagline, website, colour), reorder, hide/show,
   delete. Card colours are the three design-approved presets (Crimson, Teal, Indigo) or a custom
   accent plus a plain CSS gradient (anything else is rejected, since it ends up in an inline style).

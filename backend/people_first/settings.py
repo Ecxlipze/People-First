@@ -67,8 +67,8 @@ INSTALLED_APPS = [
     'blog',
     'django_summernote',
     'testimonial',
-    'ventures',
     'corsheaders',
+    'people_first.apps.PeopleFirstConfig',
 ]
 
 MIDDLEWARE = [
@@ -143,6 +143,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # Email
@@ -297,3 +299,9 @@ SUMMERNOTE_CONFIG = {
 # would show as permanently unapplied model changes. Its migrations live in
 # blog/summernote_migrations instead, with the id change added as 0003.
 MIGRATION_MODULES = {"django_summernote": "blog.summernote_migrations"}
+
+# Optional: ping the Next.js site when content is saved or deleted in the admin
+# so it drops its cache at once (see people_first/revalidate.py). Both values
+# must match the frontend's REVALIDATE_SECRET; leave either blank to disable.
+FRONTEND_REVALIDATE_URL = config("FRONTEND_REVALIDATE_URL", default="")
+REVALIDATE_SECRET = config("REVALIDATE_SECRET", default="")

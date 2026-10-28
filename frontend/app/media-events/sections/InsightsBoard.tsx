@@ -35,9 +35,6 @@ function Meta({ insight }: { insight: Insight }) {
         {formatPostDate(insight.publishedAt)}
       </time>
     ) : null,
-    insight.readingMinutes ? (
-      <span key="r">{insight.readingMinutes} min read</span>
-    ) : null,
     insight.author ? <span key="a">By {insight.author}</span> : null,
     formatViews(insight.viewCount) ? <span key="v">{formatViews(insight.viewCount)}</span> : null,
   ].filter(Boolean);
@@ -62,7 +59,7 @@ function Cover({
   /* A post can exist before its image is uploaded; the plate stands in rather
      than next/image being pointed at nothing. */
   return (
-    <div className={`relative w-full overflow-hidden bg-zinc-200 ${className}`}>
+    <div className={`relative w-full overflow-hidden bg-zinc-200 transition-shadow duration-300 group-hover:shadow-[0_18px_40px_-18px_rgba(60,50,110,0.5)] ${className}`}>
       {insight.thumb && (
         <SmartImage
           src={insight.thumb}
@@ -216,7 +213,7 @@ export default function InsightsBoard({
                   type="button"
                   aria-pressed={active}
                   onClick={() => choose(option)}
-                  className={`pf-interactive min-h-11 rounded-md border px-5 font-display text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c64047] ${
+                  className={`pf-interactive min-h-11 rounded-md border px-5 font-display text-sm font-bold [@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c64047] ${
                     active
                       ? "border-[#a02f52] bg-[#a02f52] text-white"
                       : "border-zinc-300 bg-white/70 text-zinc-700 hover:border-[#a02f52]"

@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { ApiError, ApiNotConfiguredError, apiFetch } from "@/app/lib/api";
 import { clearTokens, cmsFetch, getRole, setDisplayName, storeTokens } from "@/app/cms/session";
-import { SLUG_RE, VENTURE_PRESETS, type CmsCategory, type CmsFormState, type CmsGalleryItem, type CmsPost, type CmsProfile } from "@/app/cms/types";
+import { SLUG_RE, type CmsCategory, type CmsFormState, type CmsGalleryItem, type CmsPost, type CmsProfile } from "@/app/cms/types";
 
 const GENERIC = "Something went wrong talking to the server. Please try again.";
 
@@ -288,7 +288,7 @@ export async function savePodcastAction(_prev: CmsFormState, formData: FormData)
     if (error instanceof ApiError) {
       const fields = fieldErrors(error.payload);
       if (error.status === 400 && Object.keys(fields).length > 0) {
-        if (fields.slug) fields.slug = "That URL is already used by another episode.";
+        if (fields.slug) fields.slug = "That URL is already used by another episode. It may have been imported from YouTube already — check the episode list, or change this URL.";
         return { status: "error", message: "Please fix the highlighted fields.", errors: fields };
       }
     }
@@ -462,13 +462,13 @@ export async function deleteInquiryAction(formData: FormData) {
   redirect("/cms/inquiries?notice=deleted");
 }
 
-/* ── Testimonials & ventures (same shape as the gallery) ──────────────────── */
+/* ── Testimonials (same shape as the gallery) ───────────────────────────── */
 
 type Orderable = { id: number; display_order: number };
 
 /* Swap an item with its neighbour, rewriting orders as 0..n-1 so gaps and ties
    in older data can't make a move look like it did nothing. */
-async function moveOrdered(resource: "testimonials" | "ventures", formData: FormData) {
+async function moveOrdered(resource: "testimonials", formData: FormData) {
   const id = Number((formData.get("id") ?? "").toString());
   const dir = formData.get("dir") === "up" ? -1 : 1;
   const items = await cmsFetch<Orderable[]>(`/api/${resource}/`, {}, "action");
@@ -485,7 +485,7 @@ async function moveOrdered(resource: "testimonials" | "ventures", formData: Form
   }
 }
 
-async function setActive(resource: "testimonials" | "ventures", formData: FormData) {
+async function setActive(resource: "testimonials", formData: FormData) {
   const id = (formData.get("id") ?? "").toString();
   if (!/^\d+$/.test(id)) return;
   const body = new FormData();
@@ -493,7 +493,7 @@ async function setActive(resource: "testimonials" | "ventures", formData: FormDa
   await cmsFetch(`/api/${resource}/${id}/`, { method: "PATCH", formData: body }, "action");
 }
 
-async function remove(resource: "testimonials" | "ventures", formData: FormData) {
+async function remove(resource: "testimonials", formData: FormData) {
   const id = (formData.get("id") ?? "").toString();
   if (!/^\d+$/.test(id)) return;
   await cmsFetch(`/api/${resource}/${id}/`, { method: "DELETE" }, "action");
@@ -507,8 +507,6 @@ function imageProblem(file: unknown): string | null {
   if (file.size > MAX_IMAGE_BYTES) return "Images must be 10 MB or smaller.";
   return null;
 }
-
-const HTTP_URL = /^https?:\/\/\S+$/i;
 
 export async function moveTestimonialAction(formData: FormData) {
   await moveOrdered("testimonials", formData);
@@ -533,7 +531,6 @@ export async function saveTestimonialAction(_prev: CmsFormState, formData: FormD
   const errors: Record<string, string> = {};
   if (!get("name")) errors.name = "Enter the person's name.";
   if (!get("body")) errors.body = "Enter what they said.";
-  if (get("social_url") && !HTTP_URL.test(get("social_url"))) errors.social_url = "Paste the full link, starting with https://";
   const avatarProblem = imageProblem(formData.get("avatar"));
   if (avatarProblem) errors.avatar = avatarProblem;
   if (Object.keys(errors).length > 0) return { status: "error", message: "Please fix the highlighted fields.", errors };
@@ -545,7 +542,6 @@ export async function saveTestimonialAction(_prev: CmsFormState, formData: FormD
   body.set("body", get("body"));
   /* A JSON field in a multipart request must be sent as a JSON string. */
   body.set("tags", JSON.stringify(tags));
-  body.set("social_url", get("social_url"));
   body.set("display_order", get("display_order") || "0");
   body.set("is_active", get("is_active") === "on" ? "true" : "false");
   const avatar = formData.get("avatar");
@@ -559,77 +555,6 @@ export async function saveTestimonialAction(_prev: CmsFormState, formData: FormD
     revalidatePath("/home");
     revalidatePath("/cms/testimonials");
     if (!id) redirect(`/cms/testimonials/${saved.id}?notice=saved`);
-    return { status: "success", message: "Saved." };
-  } catch (error) {
-    if (error instanceof ApiError && error.status === 400) {
-      const fields = fieldErrors(error.payload);
-      if (Object.keys(fields).length > 0) return { status: "error", message: "Please fix the highlighted fields.", errors: fields };
-    }
-    throw error;
-  }
-}
-
-export async function moveVentureAction(formData: FormData) {
-  await moveOrdered("ventures", formData);
-  revalidatePath("/home");
-  revalidatePath("/cms/ventures");
-}
-export async function setVentureActiveAction(formData: FormData) {
-  await setActive("ventures", formData);
-  revalidatePath("/home");
-  revalidatePath("/cms/ventures");
-}
-export async function deleteVentureAction(formData: FormData) {
-  await remove("ventures", formData);
-  revalidatePath("/home");
-  redirect("/cms/ventures?notice=deleted");
-}
-
-/* A custom gradient ends up in an inline style, so only plain CSS gradients
-   made of colours and percentages are accepted. */
-const GRADIENT_RE = /^(radial|linear)-gradient\([#0-9a-zA-Z%.,\s()-]{3,200}\)$/;
-
-export async function saveVentureAction(_prev: CmsFormState, formData: FormData): Promise<CmsFormState> {
-  const get = (k: string) => (formData.get(k) ?? "").toString().trim();
-  const id = get("id");
-  const preset = get("preset");
-
-  const errors: Record<string, string> = {};
-  if (!get("name")) errors.name = "Enter the venture's name.";
-  if (get("website_url") && !HTTP_URL.test(get("website_url"))) errors.website_url = "Paste the full link, starting with https://";
-  const logoProblem = imageProblem(formData.get("logo"));
-  if (logoProblem) errors.logo = logoProblem;
-
-  let accent = get("accent");
-  let gradient = get("border_gradient");
-  const chosen = VENTURE_PRESETS.find((p) => p.key === preset);
-  if (chosen) {
-    accent = chosen.accent;
-    gradient = chosen.gradient;
-  } else {
-    if (!/^#[0-9a-fA-F]{6}$/.test(accent)) errors.accent = "Use a colour like #a00017.";
-    if (gradient && !GRADIENT_RE.test(gradient)) errors.border_gradient = "Enter a CSS gradient such as radial-gradient(#fff, #a00017).";
-  }
-  if (Object.keys(errors).length > 0) return { status: "error", message: "Please fix the highlighted fields.", errors };
-
-  const body = new FormData();
-  body.set("name", get("name"));
-  body.set("subtitle", get("subtitle"));
-  body.set("website_url", get("website_url"));
-  body.set("accent", accent);
-  body.set("border_gradient", gradient);
-  body.set("display_order", get("display_order") || "0");
-  body.set("is_active", get("is_active") === "on" ? "true" : "false");
-  const logo = formData.get("logo");
-  if (logo instanceof File && logo.size > 0) body.set("logo", logo);
-
-  try {
-    const saved = id
-      ? await cmsFetch<{ id: number }>(`/api/ventures/${id}/`, { method: "PATCH", formData: body }, "action")
-      : await cmsFetch<{ id: number }>("/api/ventures/", { method: "POST", formData: body }, "action");
-    revalidatePath("/home");
-    revalidatePath("/cms/ventures");
-    if (!id) redirect(`/cms/ventures/${saved.id}?notice=saved`);
     return { status: "success", message: "Saved." };
   } catch (error) {
     if (error instanceof ApiError && error.status === 400) {

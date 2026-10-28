@@ -51,6 +51,9 @@ const nextConfig: NextConfig = {
   experimental: { serverActions: { bodySizeLimit: "60mb" } },
   images: {
     remotePatterns: mediaPatterns(),
+    /* Default is 4 hours, so an image an editor deletes in the CMS would keep
+       being served from the optimizer cache. Match the 5-minute content cache. */
+    minimumCacheTTL: 300,
     dangerouslyAllowLocalIP: true,
   },
   async redirects() {

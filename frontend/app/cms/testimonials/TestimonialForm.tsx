@@ -47,11 +47,6 @@ export default function TestimonialForm({ item, notice }: { item?: CmsTestimonia
           <label htmlFor="tags" className={label}>Tags</label>
           <input id="tags" name="tags" defaultValue={(item?.tags ?? []).join(", ")} className={field} placeholder="Separate with commas, e.g. training, growth" />
         </div>
-        <div>
-          <label htmlFor="social_url" className={label}>Link to the original post or profile (optional)</label>
-          <input id="social_url" name="social_url" defaultValue={item?.social_url ?? ""} aria-invalid={!!errors.social_url} className={field} placeholder="https://" />
-          <Err msg={errors.social_url} />
-        </div>
       </div>
 
       <aside className="space-y-6 lg:self-start">

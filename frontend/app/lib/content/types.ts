@@ -36,19 +36,6 @@ export type ApiTestimonial = {
   handle: string | null;
   body: string;
   tags: string[];
-  social_url: string | null;
-  display_order: number;
-  is_active: boolean;
-};
-
-export type ApiVenture = {
-  id: number;
-  logo: string | null;
-  name: string;
-  subtitle: string | null;
-  website_url: string | null;
-  accent: string;
-  border_gradient: string;
   display_order: number;
   is_active: boolean;
 };

@@ -27,12 +27,9 @@ export const metadata: Metadata = createPageMetadata({
    from the artwork), which the sections sit directly on. */
 export default async function InsightsPage() {
   const [insights, episodes] = await Promise.all([getInsights(), getEpisodes()]);
-  /* Up to 3 featured episodes; if none or fewer are marked featured, fall back to top episodes. */
-  const explicitFeatured = episodes.filter((ep) => ep.isFeatured);
-  const featuredEpisodes =
-    explicitFeatured.length > 0
-      ? explicitFeatured.slice(0, 3)
-      : episodes.slice(0, 3);
+  /* Only episodes an editor ticked as featured, up to 3. With none ticked the
+     section is omitted rather than padded with the latest episodes. */
+  const featuredEpisodes = episodes.filter((ep) => ep.isFeatured).slice(0, 3);
 
   return (
     <>

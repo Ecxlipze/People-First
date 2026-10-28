@@ -8,7 +8,6 @@ const ITEMS = [
   { href: "/cms", label: "Blog posts", match: (p: string) => p === "/cms" || p.startsWith("/cms/posts") },
   { href: "/cms/podcasts", label: "Podcasts", match: (p: string) => p.startsWith("/cms/podcasts") },
   { href: "/cms/testimonials", label: "Testimonials", match: (p: string) => p.startsWith("/cms/testimonials") },
-  { href: "/cms/ventures", label: "Ventures", match: (p: string) => p.startsWith("/cms/ventures") },
   { href: "/cms/gallery", label: "Gallery", match: (p: string) => p.startsWith("/cms/gallery") },
   { href: "/cms/inquiries", label: "Inquiries", match: (p: string) => p.startsWith("/cms/inquiries") },
 ];

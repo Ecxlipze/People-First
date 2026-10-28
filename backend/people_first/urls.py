@@ -13,7 +13,6 @@ urlpatterns = [
     path('api/token/', ThrottledTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/',include('featured_work.urls')),
-    path('api/', include('ventures.urls')),
     path('api/', include('gallery.urls')),
     path('api/', include('testimonial.urls')),
     path('api/', include('inquiry.urls')),

@@ -120,7 +120,7 @@ export default function TestimonialsShowcase({
                   Padding from the design: the avatar sits 26px in from the card's
                   left edge on the 1920 frame → ~20px at 1440, so p-5 not p-4. */}
               <article className="pf-card group flex flex-col rounded-[4px] border border-black/10 bg-white p-6">
-                {/* header: avatar + name/handle + twitter icon */}
+                {/* header: avatar + name/handle + decorative twitter badge */}
                 <div className="flex items-start gap-2">
                   <Avatar t={t} i={i} />
                   <div className="min-w-0 flex-1">
@@ -131,7 +131,7 @@ export default function TestimonialsShowcase({
                       {t.handle}
                     </p>
                   </div>
-                  <TwitterBird className="pf-pop h-4 w-4 flex-none text-[#0ea5e9]" />
+                  <TwitterBird className="pf-pop pointer-events-none h-4 w-4 flex-none select-none text-[#0ea5e9]" />
                 </div>
 
                 <p className="font-body mt-4 text-[15px] leading-[1.6] text-[#3f3f46]">

@@ -53,7 +53,7 @@ class TestimonialAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Reviewer Info", {
-            "fields": ("name", "handle", "avatar", "avatar_preview", "social_url"),
+            "fields": ("name", "handle", "avatar", "avatar_preview"),
         }),
         ("Testimonial Content", {
             "fields": ("body", "tags"),

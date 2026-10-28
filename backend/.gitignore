@@ -3,6 +3,9 @@ venv/
 __pycache__/
 *.pyc
 db.sqlite3
+*.bak
+*.sql
+live_content_dump.json
 media/
 .vercel
 .env*

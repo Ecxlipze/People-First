@@ -117,7 +117,7 @@ export default function ContactPageBody({
             </div>
             <div className="min-w-0 border-t border-pf-purple/15">
               {FAQS.map((faq, index) => (
-                <details key={faq.question} className="group border-b border-pf-purple/15 py-2">
+                <details key={faq.question} name="contact-faq" className="group border-b border-pf-purple/15 py-2">
                   <summary className="flex min-h-16 cursor-pointer list-none items-center gap-4 rounded-sm py-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pf-purple [&::-webkit-details-marker]:hidden">
                     <span aria-hidden className="text-xs text-pf-magenta-dark">0{index + 1}</span>
                     <span className="flex-1 text-sm font-semibold sm:text-base">{faq.question}</span>

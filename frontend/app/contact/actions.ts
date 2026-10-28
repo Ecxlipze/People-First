@@ -25,6 +25,9 @@ import {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 /* Digits, spaces and + ( ) - are all fine; Pakistani numbers here are
    typically "+92 300 1231234". */
+/* Names: letters (any script, so Urdu works), combining marks, spaces and the
+   punctuation real names use. Digits and symbols are rejected. */
+const NAME_RE = /^[\p{L}\p{M}][\p{L}\p{M} .'’-]*$/u;
 const PHONE_RE = /^[+()\d][\s()+\d-]{6,24}$/;
 
 /* Shown when the API is unreachable or errors. Deliberately vague about the
@@ -79,6 +82,8 @@ export async function submitContact(
   if (!values.fullName) errors.fullName = "Please tell us your name.";
   else if (values.fullName.length > 120)
     errors.fullName = "That name is too long.";
+  else if (!NAME_RE.test(values.fullName))
+    errors.fullName = "Please use letters only in your name.";
 
   if (!values.email) errors.email = "We need an email to reply to.";
   else if (values.email.length > 254)

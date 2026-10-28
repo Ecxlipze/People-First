@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import EpisodeThumb from "@/app/components/EpisodeThumb";
 import { Play, ChevronLeft, ChevronRight, ExternalLink, Share2, Check } from "lucide-react";
 import { TOTAL_PAGES, type Episode } from "@/app/podcasts/episodes";
 import { Reveal, Stagger } from "@/app/components/ScrollFx";
@@ -42,6 +42,23 @@ export default function OurPodcasts({
   const [page, setPage] = useState(1);
   const [activeVideo, setActiveVideo] = useState<{ url: string; title: string } | null>(null);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+
+  /* Deep link from the Featured Podcasts cards (/podcasts?play=<slug>): jump to
+     the page holding that episode and open its video straight away. */
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("play");
+    if (!slug) return;
+    const index = episodes.findIndex((ep) => ep.slug === slug);
+    if (index < 0) return;
+    const ep = episodes[index];
+    /* Deferred a tick: the query string is only readable after hydration. */
+    const t = window.setTimeout(() => {
+      setPage(Math.floor(index / EPISODES_PER_PAGE) + 1);
+      if (ep.videoUrl) setActiveVideo({ url: ep.videoUrl, title: ep.title });
+    }, 0);
+    return () => window.clearTimeout(t);
+  }, [episodes]);
+
   const totalPages = Math.max(TOTAL_PAGES, Math.ceil(episodes.length / EPISODES_PER_PAGE));
   const startIndex = (page - 1) * EPISODES_PER_PAGE;
   const currentEpisodes = episodes.slice(startIndex, startIndex + EPISODES_PER_PAGE);
@@ -89,15 +106,13 @@ export default function OurPodcasts({
                     <div className="absolute inset-0 overflow-hidden rounded-xl bg-zinc-900 shadow-md">
                       {/* An episode added in the admin may not have a still
                           yet; the dark plate and play motif stand on their own. */}
-                      {ep.thumb && (
-                        <Image
-                          src={ep.thumb}
-                          alt={ep.thumbAlt}
-                          fill
-                          sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 28rem"
-                          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                        />
-                      )}
+                      <EpisodeThumb
+                        src={ep.thumb}
+                        alt={ep.thumbAlt}
+                        videoUrl={ep.videoUrl}
+                        sizes="(max-width: 768px) 90vw, (max-width: 1024px) 22rem, 28rem"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
                       {ep.videoUrl ? (
                         <button
                           type="button"
@@ -255,15 +270,16 @@ export default function OurPodcasts({
 
         {/* ── pager ── */}
         <Reveal className="mt-14 flex justify-center lg:ml-20" y={28} scale={0.98}>
-          <nav aria-label="Podcast pages" className="flex flex-wrap items-center gap-2">
+          <nav aria-label="Podcast pages" className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
             <button
               type="button"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="pf-interactive mr-1 inline-flex min-h-11 items-center gap-1 rounded-lg border border-white/20 bg-transparent px-4 font-display text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Previous page"
+              className="pf-interactive inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg border border-white/20 bg-transparent px-3 sm:mr-1 sm:px-4 font-display text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
             >
-              <ChevronLeft className="h-3.5 w-3.5" />
-              Prev
+              <ChevronLeft className="h-3.5 w-3.5" aria-hidden />
+              <span className="hidden sm:inline">Prev</span>
             </button>
 
             {getPageNumbers(page, totalPages).map((n, idx) =>
@@ -281,7 +297,7 @@ export default function OurPodcasts({
                   type="button"
                   onClick={() => setPage(n)}
                   aria-current={n === page ? "page" : undefined}
-                  className={`pf-interactive h-11 w-11 rounded-lg border font-display text-sm font-bold transition-colors ${
+                  className={`pf-interactive h-11 w-11 flex-none rounded-lg border font-display text-sm font-bold transition-colors ${
                     n === page
                       ? "border-transparent bg-pf-magenta text-white"
                       : "border-white/20 bg-transparent text-white/70 hover:bg-white/10 hover:text-white"
@@ -296,10 +312,11 @@ export default function OurPodcasts({
               type="button"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="pf-interactive ml-1 inline-flex min-h-11 items-center gap-1 rounded-lg border border-white/20 bg-transparent px-4 font-display text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Next page"
+              className="pf-interactive inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg border border-white/20 bg-transparent px-3 sm:ml-1 sm:px-4 font-display text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
             >
-              Next
-              <ChevronRight className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Next</span>
+              <ChevronRight className="h-3.5 w-3.5" aria-hidden />
             </button>
           </nav>
         </Reveal>

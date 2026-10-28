@@ -71,15 +71,19 @@ export default function MediaShowcase({
           {/* text */}
           <Reveal className="order-2 md:order-1">
             <div ref={textRef} className="max-w-[320px] md:max-w-[293px]">
-              {/* Exactly two lines: the first is held together by
-                  whitespace-nowrap, the break before "strategy" is explicit. */}
+              {/* Exactly two lines on md+: the first is held together by
+                  whitespace-nowrap, the break before "strategy" is explicit.
+                  Below md the 320px column is narrower than the line at this
+                  size (and an API title may carry no newline at all), so
+                  nowrap clipped "Market Strategy" off the right edge on
+                  phones; there it wraps instead. */}
               {/* 35px/41px from the mockup: cap-height 33pt → ~24.8px @1440,
                   ÷0.71 ≈ 35px; baselines 535→590 = 55pt → 41px leading. */}
-              <h3 className="text-[2rem] font-bold leading-[1.17] tracking-tight text-zinc-900 sm:text-[2.19rem]">
+              <h3 className="break-words text-[2rem] font-bold leading-[1.17] tracking-tight text-zinc-900 sm:text-[2.19rem]">
                 {copy.title.split("\n").map((line, idx) => (
                   <span
                     key={idx}
-                    className={idx === 0 ? "block whitespace-nowrap" : "block"}
+                    className={idx === 0 ? "block md:whitespace-nowrap" : "block"}
                   >
                     {line}
                   </span>

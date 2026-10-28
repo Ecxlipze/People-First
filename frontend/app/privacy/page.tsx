@@ -332,11 +332,18 @@ const sections: LegalSection[] = [
             <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>{LEGAL_CONTACT_EMAIL}</a>
           </li>
           <li>
-            <strong>Phone / WhatsApp:</strong> +92 306 1113337
+            <strong>Phone / WhatsApp:</strong>{" "}
+            <a href="https://wa.me/923061113337">+92 306 1113337</a>
           </li>
           <li>
-            <strong>Address:</strong> 58-A2 Kickstart, Tipu Road,
-            Gulberg III, Lahore, Pakistan
+            <strong>Address:</strong>{" "}
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=58-A2+Kickstart+Tipu+Road+Gulberg+III+Lahore+Pakistan"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              58-A2 Kickstart, Tipu Road, Gulberg III, Lahore, Pakistan
+            </a>
           </li>
         </ul>
       </>

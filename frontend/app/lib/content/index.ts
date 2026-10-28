@@ -14,23 +14,17 @@
    Components and pass plain data down to the "use client" showcases. */
 
 import { ApiNotConfiguredError, apiFetch } from "@/app/lib/api";
+import { contentTag } from "./tags";
 import type {
   ApiFeaturedWork,
   ApiGalleryItem,
   ApiPodcast,
   ApiTestimonial,
-  ApiVenture,
   GalleryItem,
 } from "./types";
 
 import { GALLERY, repeatForCoverflow, type GalleryPhoto } from "@/app/components/gallery";
 import { TESTIMONIALS, type Testimonial } from "@/app/components/testimonials";
-import {
-  DEFAULT_VENTURE_ACCENT,
-  DEFAULT_VENTURE_GRADIENT,
-  VENTURES,
-  type Venture,
-} from "@/app/components/ventures";
 import {
   BADGE_PALETTE,
   EPISODES,
@@ -48,17 +42,21 @@ import {
 } from "@/app/components/featured-work-copy";
 
 /* Content changes through the admin, not through a deploy, so pages are cached
-   and refreshed on a timer rather than rebuilt. Five minutes in production keeps
-   an editor's change visible quickly without hammering the API on every request.
+   and refreshed on a timer rather than rebuilt.
+   Default is 30 seconds in production (configurable via CONTENT_REVALIDATE_SECONDS)
+   so editor changes appear quickly without hammering the API on every request.
    In development, caching is disabled (false) so admin edits appear immediately. */
-const REVALIDATE_SECONDS: number | false =
-  process.env.NODE_ENV === "development" ? false : 300;
+const REVALIDATE_SECONDS: number | false = (() => {
+  if (process.env.NODE_ENV === "development") return false;
+  const parsed = Number(process.env.CONTENT_REVALIDATE_SECONDS);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : 30;
+})();
 
 /* Returns null — distinct from [] — when the API could not answer at all. Both
    end up falling back, but only a genuine failure is worth logging. */
 async function list<T>(path: string): Promise<T[] | null> {
   try {
-    const rows = await apiFetch<T[]>(path, { revalidate: REVALIDATE_SECONDS });
+    const rows = await apiFetch<T[]>(path, { revalidate: REVALIDATE_SECONDS, tags: [contentTag(path)] });
     return Array.isArray(rows) ? rows : null;
   } catch (error) {
     if (error instanceof ApiNotConfiguredError) {
@@ -172,30 +170,6 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         hasAvatar: Boolean(item.avatar),
       })),
     TESTIMONIALS,
-  );
-}
-
-export async function getVentures(): Promise<Venture[]> {
-  const rows = await list<ApiVenture>("/api/ventures/");
-  return withFallback(
-    rows,
-    (items) =>
-      items.map((item) => ({
-        name: item.name,
-        tagline: item.subtitle ?? "",
-        logo: item.logo ?? undefined,
-        hasLogo: Boolean(item.logo),
-        /* First-party destinations also override stale external URLs in existing
-           API rows. A venture with no site keeps the mockup's inert card. */
-        href: item.name.trim().toLowerCase() === "insights"
-          ? "/media-events"
-          : /^kis+a+n\s*veer$/i.test(item.name.trim())
-            ? "/kissan-veer"
-            : item.website_url || "#",
-        accent: item.accent || DEFAULT_VENTURE_ACCENT,
-        borderGradient: item.border_gradient || DEFAULT_VENTURE_GRADIENT,
-      })),
-    VENTURES,
   );
 }
 

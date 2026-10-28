@@ -134,7 +134,7 @@ frontend/
 ```text
 backend/
 ├── people_first/   settings, root urls, wsgi/asgi
-├── featured_work/  gallery/  insight_category/  Podcast/  testimonial/  ventures/
+├── featured_work/  gallery/  insight_category/  Podcast/  testimonial/
 │                   Public read APIs; admin-only writes
 ├── inquiry/        Public POST /api/inquiries/ — backs the site contact form
 ├── requirements.txt
@@ -165,7 +165,7 @@ backend/
 | Area | Status |
 | :--- | :--- |
 | Contact form (`/contact`, `/partner`, `/training`, and the site-wide modal) | **Wired.** The server action POSTs to `/api/inquiries/`, mapping the "I am a" choice to `person_type` and the route to `inquiry_type`. The API persists the inquiry and emails the submitter a confirmation. |
-| Gallery, testimonials, ventures, insights, podcasts | **Wired.** Loaded server-side by `frontend/app/lib/content`, passed as props into the showcase components. |
+| Gallery, testimonials, insights, podcasts | **Wired.** Loaded server-side by `frontend/app/lib/content`, passed as props into the showcase components. |
 | Featured Work section on `/home` | **Partly wired.** Its heading, body copy, both stat cards and the bullet list come from the first `/api/featured-work/` row by `order`. The imagery, measured geometry and scroll-pinning stay in the component — the mockup specifies one bespoke composition, not a repeating card list. |
 
 ### Fallback behaviour
