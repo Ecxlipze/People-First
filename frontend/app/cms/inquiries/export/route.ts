@@ -1,9 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { redirectTo } from "@/app/cms/redirect";
 import { cmsFetch, hasSession } from "@/app/cms/session";
 
 /* CSV download of the inquiries matching the inbox's current filters. */
 export async function GET(request: NextRequest) {
-  if (!(await hasSession())) return NextResponse.redirect(new URL("/cms/login", request.url));
+  if (!(await hasSession())) return redirectTo("/cms/login");
 
   const params = new URLSearchParams();
   for (const key of ["status", "type", "q"]) {
@@ -21,6 +22,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch {
-    return NextResponse.redirect(new URL("/cms/inquiries?notice=export-failed", request.url));
+    return redirectTo("/cms/inquiries?notice=export-failed");
   }
 }

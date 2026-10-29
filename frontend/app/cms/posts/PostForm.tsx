@@ -3,6 +3,7 @@
 import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { createCategoryAction, savePostAction } from "@/app/cms/actions";
+import ImageDropzone from "@/app/cms/ImageDropzone";
 import RichTextEditor from "@/app/cms/posts/Editor";
 import { useCmsForm } from "@/app/cms/useCmsForm";
 import { INITIAL_CMS_STATE, type CmsCategory, type CmsPost } from "@/app/cms/types";
@@ -90,6 +91,7 @@ export default function PostForm({
   const [catError, setCatError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(post?.featured_image ?? null);
   const [removeImage, setRemoveImage] = useState(false);
+  const [dropzoneKey, setDropzoneKey] = useState(0);
   const [publishedAt, setPublishedAt] = useState(toLocalInput(post?.published_at ?? null));
 
   const isPublished = post?.status === "published";
@@ -218,7 +220,7 @@ export default function PostForm({
             ))}
             <div>
               <label htmlFor="studio_image" className={label}>Wide image</label>
-              <input id="studio_image" name="studio_image" type="file" accept="image/*" className="mt-1.5 block w-full text-sm" />
+              <ImageDropzone id="studio_image" name="studio_image" />
             </div>
             <div>
               <label htmlFor="studio_image_alt" className={label}>Wide image description</label>
@@ -276,25 +278,15 @@ export default function PostForm({
 
         <section className={card}>
           <h2 className="font-display text-lg font-extrabold text-[#171922]">Featured image</h2>
-          {preview && !removeImage ? (
-            <div className="relative mt-3 aspect-video overflow-hidden rounded-lg bg-zinc-100">
-              {/* blob: previews and API-hosted images are not in next/image's allow-list at build time */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={preview} alt="" className="h-full w-full object-cover" />
-            </div>
-          ) : (
-            <p className="mt-3 rounded-lg border border-dashed border-zinc-300 px-4 py-8 text-center text-sm text-zinc-500">No image yet</p>
-          )}
-          <input
-            id="featured_image" name="featured_image" type="file" accept="image/*"
-            className="mt-3 block w-full text-sm"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) { setPreview(URL.createObjectURL(f)); setRemoveImage(false); }
-            }}
+          {/* Remounted on "Remove image" so a file picked earlier is dropped too. */}
+          <ImageDropzone
+            key={dropzoneKey}
+            id="featured_image" name="featured_image"
+            preview={removeImage ? null : preview}
+            onFile={(f) => { setPreview(URL.createObjectURL(f)); setRemoveImage(false); }}
           />
           {post?.featured_image && (
-            <button type="button" onClick={() => { setRemoveImage(true); setPreview(null); }} className="mt-2 min-h-11 text-sm font-bold text-red-700">
+            <button type="button" onClick={() => { setRemoveImage(true); setPreview(null); setDropzoneKey((k) => k + 1); }} className="mt-2 min-h-11 text-sm font-bold text-red-700">
               Remove image
             </button>
           )}

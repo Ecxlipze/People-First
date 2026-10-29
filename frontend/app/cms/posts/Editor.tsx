@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent, type Editor as TiptapEditor } from "@tiptap/react";
+import type { EditorView } from "@tiptap/pm/view";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import { useRef, useState } from "react";
@@ -11,6 +12,10 @@ import {
 
 /* The rich text field. The saved value is plain HTML in a hidden input named
    `content`; the server sanitises it again, so this only has to be convenient. */
+
+const UPLOAD_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+const firstImage = (files: FileList | undefined | null) =>
+  Array.from(files ?? []).find((f) => UPLOAD_TYPES.includes(f.type));
 
 const btn =
   "inline-flex h-11 min-w-11 items-center justify-center rounded-md px-2 text-zinc-700 hover:bg-zinc-100 disabled:opacity-40";
@@ -47,6 +52,31 @@ export default function RichTextEditor({
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  /* Uploads, asks for alt text, then inserts the image at `pos`. Takes the view
+     rather than the editor so the drop/paste handlers, which are captured when
+     the editor is created, can use it too; it only closes over state setters. */
+  const uploadInto = async (view: EditorView, file: File, pos: number) => {
+    setUploadError(null);
+    setUploading(true);
+    try {
+      const body = new FormData();
+      body.set("file", file);
+      const res = await fetch("/cms/upload", { method: "POST", body });
+      const data = (await res.json().catch(() => ({}))) as { url?: string; detail?: string };
+      if (!res.ok || !data.url) throw new Error(data.detail ?? "Upload failed.");
+      const alt = window.prompt("Describe this image for people who can't see it (alt text):", "") ?? "";
+      const node = view.state.schema.nodes.image.create({ src: data.url, alt });
+      // The document may have changed during the upload; clamp to its current end.
+      const at = Math.min(pos, view.state.doc.content.size);
+      view.dispatch(view.state.tr.replaceRangeWith(at, at, node));
+      view.focus();
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ heading: { levels: [2, 3] }, link: { openOnClick: false, autolink: true } }),
@@ -59,6 +89,20 @@ export default function RichTextEditor({
       attributes: {
         "aria-label": "Post body",
         class: "pf-prose min-h-[22rem] px-4 py-4 outline-none sm:px-6",
+      },
+      handleDrop: (view, event, _slice, moved) => {
+        const file = moved ? undefined : firstImage(event.dataTransfer?.files);
+        if (!file) return false;
+        event.preventDefault();
+        const pos = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from;
+        void uploadInto(view, file, pos);
+        return true;
+      },
+      handlePaste: (view, event) => {
+        const file = firstImage(event.clipboardData?.files);
+        if (!file) return false;
+        void uploadInto(view, file, view.state.selection.from);
+        return true;
       },
     },
     onUpdate: ({ editor: e }) => onChange(e.isEmpty ? "" : e.getHTML()),
@@ -80,24 +124,6 @@ export default function RichTextEditor({
       editor.chain().focus().extendMarkRange("link").setLink({ href }).run();
     }
     setLinkOpen(false);
-  };
-
-  const upload = async (file: File) => {
-    setUploadError(null);
-    setUploading(true);
-    try {
-      const body = new FormData();
-      body.set("file", file);
-      const res = await fetch("/cms/upload", { method: "POST", body });
-      const data = (await res.json().catch(() => ({}))) as { url?: string; detail?: string };
-      if (!res.ok || !data.url) throw new Error(data.detail ?? "Upload failed.");
-      const alt = window.prompt("Describe this image for people who can't see it (alt text):", "") ?? "";
-      editor.chain().focus().setImage({ src: data.url, alt }).run();
-    } catch (e) {
-      setUploadError(e instanceof Error ? e.message : "Upload failed.");
-    } finally {
-      setUploading(false);
-    }
   };
 
   const c = (fn: (chain: ReturnType<TiptapEditor["chain"]>) => ReturnType<TiptapEditor["chain"]>) => () =>
@@ -122,21 +148,21 @@ export default function RichTextEditor({
         {editor.isActive("link") && (
           <ToolButton label="Remove link" onClick={c((x) => x.extendMarkRange("link").unsetLink())}><Unlink className="h-5 w-5" /></ToolButton>
         )}
-        <ToolButton label={uploading ? "Uploading image…" : "Insert image"} disabled={uploading} onClick={() => fileRef.current?.click()}><ImageIcon className="h-5 w-5" /></ToolButton>
+        <ToolButton label={uploading ? "Uploading image…" : "Insert image (or drag one into the text)"} disabled={uploading} onClick={() => fileRef.current?.click()}><ImageIcon className="h-5 w-5" /></ToolButton>
         <span className="mx-1 h-6 w-px bg-zinc-300" aria-hidden />
         <ToolButton label="Undo" disabled={!editor.can().undo()} onClick={c((x) => x.undo())}><Undo2 className="h-5 w-5" /></ToolButton>
         <ToolButton label="Redo" disabled={!editor.can().redo()} onClick={c((x) => x.redo())}><Redo2 className="h-5 w-5" /></ToolButton>
         <input
           ref={fileRef}
           type="file"
-          accept="image/jpeg,image/png,image/gif,image/webp"
+          accept={UPLOAD_TYPES.join(",")}
           className="sr-only"
           tabIndex={-1}
           aria-hidden
           onChange={(e) => {
             const f = e.target.files?.[0];
             e.target.value = "";
-            if (f) void upload(f);
+            if (f) void uploadInto(editor.view, f, editor.state.selection.from);
           }}
         />
       </div>
