@@ -1,7 +1,8 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import SmartImage from "@/app/components/SmartImage";
 import HeroCTA from "@/app/components/HeroCTA";
@@ -21,7 +22,10 @@ import {
    fallback has no slugs, so those cards render without a link rather than
    pointing at a page that does not exist.
 
-   Client component only because the category chips and pagination are state. */
+   Client component only because the category chips and pagination are state.
+   That state lives in the URL (?category=…&page=…) rather than useState, so
+   opening an article and coming back lands on the same page of results instead
+   of resetting to page 1. */
 
 const PAGE_SIZE = 8;
 /* Up to this many options render as chips; beyond it they would wrap onto
@@ -133,20 +137,66 @@ function PostCard({ insight }: { insight: Insight }) {
 const pageBtn =
   "pf-interactive grid h-11 min-w-11 place-items-center rounded-md border px-3 font-display text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c64047] disabled:pointer-events-none disabled:opacity-40";
 
-export default function InsightsBoard({
-  insights,
-  sidebar,
-}: {
+type BoardProps = {
   insights: Insight[];
   sidebar?: React.ReactNode;
+};
+
+/* Reads the filter and page from the URL. useSearchParams makes this subtree
+   client-rendered on a prerendered route, so the page wraps it in Suspense with
+   <InsightsBoardFallback> (page 1, all categories) as the static HTML. */
+export default function InsightsBoard(props: BoardProps) {
+  const params = useSearchParams();
+  const category = params.get("category") ?? ALL_CATEGORY;
+  const page = Number.parseInt(params.get("page") ?? "", 10);
+
+  /* replaceState rather than pushState: paging should not add a back-button
+     step per page, only make the current entry remember where the reader was.
+     Next.js syncs useSearchParams with native history calls. */
+  const update = (nextCategory: string, nextPage: number) => {
+    const next = new URLSearchParams(params.toString());
+    if (nextCategory === ALL_CATEGORY) next.delete("category");
+    else next.set("category", nextCategory);
+    if (nextPage > 1) next.set("page", String(nextPage));
+    else next.delete("page");
+    const query = next.toString();
+    window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
+  };
+
+  return (
+    <Board
+      {...props}
+      category={category}
+      page={Number.isFinite(page) ? page : 1}
+      onChange={update}
+    />
+  );
+}
+
+export function InsightsBoardFallback(props: BoardProps) {
+  return <Board {...props} category={ALL_CATEGORY} page={1} onChange={() => {}} />;
+}
+
+function Board({
+  insights,
+  sidebar,
+  category: requestedCategory,
+  page: requestedPage,
+  onChange,
+}: BoardProps & {
+  category: string;
+  page: number;
+  onChange: (category: string, page: number) => void;
 }) {
-  const [category, setCategory] = useState<string>(ALL_CATEGORY);
-  const [page, setPage] = useState(1);
   const selectId = useId();
 
   /* Options follow whatever is actually published, so the filter can never
      offer a category with nothing behind it. */
   const options = useMemo(() => categoryOptions(insights), [insights]);
+
+  /* A stale or hand-edited URL can name a category that no longer has posts or
+     a page past the end; fall back rather than render an empty board. */
+  const category = options.includes(requestedCategory) ? requestedCategory : ALL_CATEGORY;
 
   const filtered = useMemo(
     () =>
@@ -157,15 +207,13 @@ export default function InsightsBoard({
   );
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const page = Math.min(Math.max(1, requestedPage), pageCount);
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const choose = (option: string) => {
-    setCategory(option);
-    setPage(1);
-  };
+  const choose = (option: string) => onChange(option, 1);
 
   const goTo = (next: number) => {
-    setPage(next);
+    onChange(category, next);
     document.getElementById("posts")?.scrollIntoView({ block: "start" });
   };
 

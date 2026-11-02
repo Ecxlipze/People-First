@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import SideNav from "@/app/components/SideNav";
 import SiteFooter from "@/app/components/SiteFooter";
-import InsightsBoard from "@/app/media-events/sections/InsightsBoard";
+import { Suspense } from "react";
+import InsightsBoard, { InsightsBoardFallback } from "@/app/media-events/sections/InsightsBoard";
 import BlogSidebar from "@/app/media-events/BlogSidebar";
 import FeaturedPodcast from "@/app/media-events/sections/FeaturedPodcast";
 import { getEpisodes, getInsights } from "@/app/lib/content";
@@ -30,6 +31,17 @@ export default async function InsightsPage() {
   /* Only episodes an editor ticked as featured, up to 3. With none ticked the
      section is omitted rather than padded with the latest episodes. */
   const featuredEpisodes = episodes.filter((ep) => ep.isFeatured).slice(0, 3);
+  const sidebar = (
+    <BlogSidebar
+      posts={insights.map((i) => ({
+        slug: i.slug,
+        title: i.title,
+        image: i.thumb,
+        imageAlt: i.thumbAlt,
+        publishedAt: i.publishedAt,
+      }))}
+    />
+  );
 
   return (
     <>
@@ -57,20 +69,11 @@ export default async function InsightsPage() {
         </header>
 
         <main>
-          <InsightsBoard
-            insights={insights}
-            sidebar={
-              <BlogSidebar
-                posts={insights.map((i) => ({
-                  slug: i.slug,
-                  title: i.title,
-                  image: i.thumb,
-                  imageAlt: i.thumbAlt,
-                  publishedAt: i.publishedAt,
-                }))}
-              />
-            }
-          />
+          {/* The board reads ?category/?page from the URL; the fallback is the
+              same board at page 1 so the static HTML still carries the posts. */}
+          <Suspense fallback={<InsightsBoardFallback insights={insights} sidebar={sidebar} />}>
+            <InsightsBoard insights={insights} sidebar={sidebar} />
+          </Suspense>
           {/* Featured podcasts section (up to 3 episodes) */}
           {featuredEpisodes.length > 0 && (
             <FeaturedPodcast episodes={featuredEpisodes} />

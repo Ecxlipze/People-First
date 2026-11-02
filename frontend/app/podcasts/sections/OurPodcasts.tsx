@@ -43,23 +43,48 @@ export default function OurPodcasts({
   const [activeVideo, setActiveVideo] = useState<{ url: string; title: string } | null>(null);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
-  /* Deep link from the Featured Podcasts cards (/podcasts?play=<slug>): jump to
-     the page holding that episode and open its video straight away. */
+  const totalPages = Math.max(TOTAL_PAGES, Math.ceil(episodes.length / EPISODES_PER_PAGE));
+
+  /* Restores state from the query string:
+     - ?play=<slug>, the deep link from the Featured Podcasts cards: jump to the
+       page holding that episode and open its video straight away.
+     - ?page=<n>, written by goTo below, so leaving the page and coming back
+       lands on the same page of episodes instead of page 1. */
   useEffect(() => {
-    const slug = new URLSearchParams(window.location.search).get("play");
-    if (!slug) return;
-    const index = episodes.findIndex((ep) => ep.slug === slug);
-    if (index < 0) return;
-    const ep = episodes[index];
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("play");
+    const index = slug ? episodes.findIndex((ep) => ep.slug === slug) : -1;
+    const requested = Number.parseInt(params.get("page") ?? "", 10);
+    if (index < 0 && !(requested > 1)) return;
     /* Deferred a tick: the query string is only readable after hydration. */
     const t = window.setTimeout(() => {
-      setPage(Math.floor(index / EPISODES_PER_PAGE) + 1);
-      if (ep.videoUrl) setActiveVideo({ url: ep.videoUrl, title: ep.title });
+      if (index >= 0) {
+        const ep = episodes[index];
+        setPage(Math.floor(index / EPISODES_PER_PAGE) + 1);
+        if (ep.videoUrl) setActiveVideo({ url: ep.videoUrl, title: ep.title });
+      } else {
+        setPage(Math.min(requested, totalPages));
+      }
     }, 0);
     return () => window.clearTimeout(t);
-  }, [episodes]);
+  }, [episodes, totalPages]);
 
-  const totalPages = Math.max(TOTAL_PAGES, Math.ceil(episodes.length / EPISODES_PER_PAGE));
+  /* replaceState rather than pushState, as on the blog index: the current
+     history entry remembers the page without adding a back-button step per
+     click. ?play is dropped so coming back does not reopen a video. */
+  const goTo = (next: number) => {
+    setPage(next);
+    const params = new URLSearchParams(window.location.search);
+    params.delete("play");
+    if (next > 1) params.set("page", String(next));
+    else params.delete("page");
+    const query = params.toString();
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
+    );
+  };
   const startIndex = (page - 1) * EPISODES_PER_PAGE;
   const currentEpisodes = episodes.slice(startIndex, startIndex + EPISODES_PER_PAGE);
 
@@ -273,7 +298,7 @@ export default function OurPodcasts({
           <nav aria-label="Podcast pages" className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
             <button
               type="button"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              onClick={() => goTo(Math.max(1, page - 1))}
               disabled={page === 1}
               aria-label="Previous page"
               className="pf-interactive inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg border border-white/20 bg-transparent px-3 sm:mr-1 sm:px-4 font-display text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
@@ -295,7 +320,7 @@ export default function OurPodcasts({
                 <button
                   key={n}
                   type="button"
-                  onClick={() => setPage(n)}
+                  onClick={() => goTo(n)}
                   aria-current={n === page ? "page" : undefined}
                   className={`pf-interactive h-11 w-11 flex-none rounded-lg border font-display text-sm font-bold transition-colors ${
                     n === page
@@ -310,7 +335,7 @@ export default function OurPodcasts({
 
             <button
               type="button"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => goTo(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
               aria-label="Next page"
               className="pf-interactive inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg border border-white/20 bg-transparent px-3 sm:ml-1 sm:px-4 font-display text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
